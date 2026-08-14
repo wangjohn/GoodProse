@@ -157,6 +157,14 @@ ENV/
 env.bak/
 venv.bak/
 
+# Generated RFClear data and evaluation artifacts
+data/derived/*
+!data/derived/README.md
+evals/private/*
+!evals/private/README.md
+evals/results/*
+!evals/results/README.md
+
 # Spyder project settings
 .spyderproject
 .spyproject
