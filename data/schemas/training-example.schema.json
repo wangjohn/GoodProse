@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rfclear.dev/schemas/training-example.schema.json",
+  "title": "RFClear supervised training example",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "id", "split", "input", "output", "provenance", "review"],
+  "properties": {
+    "version": {"const": 1},
+    "id": {"type": "string", "minLength": 1},
+    "split": {"enum": ["train", "validation"]},
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_output"],
+      "properties": {
+        "user_request": {"type": "string"},
+        "agent_output": {"type": "string", "minLength": 1},
+        "context": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "content"],
+            "properties": {
+              "kind": {"enum": ["file", "diff", "issue", "constraint", "other"]},
+              "path": {"type": "string"},
+              "content": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spec_markdown"],
+      "properties": {
+        "spec_markdown": {"type": "string", "minLength": 1}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["creation_method", "lineage_group", "source_document_ids", "license_ids"],
+      "properties": {
+        "creation_method": {
+          "enum": ["human_revision", "paired_history", "synthetic_degradation"]
+        },
+        "lineage_group": {"type": "string", "minLength": 1},
+        "source_document_ids": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "license_ids": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "source_url": {"type": "string", "format": "uri"},
+        "source_revision": {"type": "string"}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["privacy", "factuality", "spec_quality"],
+      "properties": {
+        "privacy": {"enum": ["pending", "passed", "failed"]},
+        "factuality": {"enum": ["pending", "passed", "failed"]},
+        "spec_quality": {"enum": ["pending", "passed", "failed"]},
+        "reviewer": {"type": "string"},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}
