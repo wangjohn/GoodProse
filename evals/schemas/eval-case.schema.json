@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rfclear.dev/schemas/eval-case.schema.json",
+  "title": "RFClear evaluation case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "id", "split", "input", "expected", "provenance"],
+  "properties": {
+    "version": {"const": 1},
+    "id": {"type": "string", "minLength": 1},
+    "split": {"enum": ["dev", "test", "private_test"]},
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_output"],
+      "properties": {
+        "user_request": {"type": "string"},
+        "agent_output": {"type": "string", "minLength": 1},
+        "context": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "content"],
+            "properties": {
+              "kind": {"enum": ["file", "diff", "issue", "constraint", "other"]},
+              "path": {"type": "string"},
+              "content": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_facts", "forbidden_claims"],
+      "properties": {
+        "gold_spec_path": {"type": "string"},
+        "required_facts": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "optional_facts": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "forbidden_claims": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "acceptable_variations": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lineage_group", "target_document_ids", "input_origin"],
+      "properties": {
+        "lineage_group": {"type": "string", "minLength": 1},
+        "target_document_ids": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "input_origin": {
+          "enum": ["real_agent_output", "paired_history", "synthetic_degradation"]
+        },
+        "reviewers": {
+          "type": "array",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}
