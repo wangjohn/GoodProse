@@ -1,9 +1,16 @@
-# GoodProse Executive-Writing Model Goal
+# GoodProse Executive-Writing Research Contract
 
-Paste the following into Codex as a `/goal` command.
+This is the versioned execution and completion contract for
+[`launch-executive-writing-model.md`](launch-executive-writing-model.md). Keep
+the `/goal` launcher short; make substantive scope, scientific-method, safety,
+or stopping-condition changes here and commit them before a run relies on them.
 
-```text
-/goal Build GoodProse into a provenance-aware, reproducible system for evaluating, training, and iteratively improving language models that turn authentic rough source material into exceptionally clear executive emails, internal memos, strategy documents, engineering documents, blog posts, and short-form posts.
+OBJECTIVE
+
+Build GoodProse into a provenance-aware, reproducible system for evaluating,
+training, and iteratively improving language models that turn authentic rough
+source material into exceptionally clear executive emails, internal memos,
+strategy documents, engineering documents, blog posts, and short-form posts.
 
 Work autonomously and persistently in /Users/wangjohn/GoodProse. Do not stop after producing a plan or prototype. Continue through implementation, data preparation, baseline evaluation, real training runs, evaluation, failure analysis, and multiple improvement iterations.
 
@@ -30,7 +37,7 @@ Treat the following as hard gates rather than compensating score components:
 - No rights violation, train/evaluation leakage, or unacceptable memorization.
 - The candidate fits the documented latency, memory, inference-cost, and deployment envelope.
 
-The final primary endpoint is blinded human pairwise preference among candidates that pass the hard gates. Automated metrics and LLM judges are development proxies, not substitutes for the final human comparison.
+The final primary human endpoint is publish-ready acceptance: the proportion of outputs judged `publishable` or requiring only `minor_edits`, together with the complementary `substantive_edits` and `unacceptable` rates. A critical factual error is a veto regardless of writing quality. Blinded pairwise preference is a secondary discriminative endpoint among candidates that pass the hard gates. Automated metrics and LLM judges are development proxies, not substitutes for this human endpoint.
 
 The system must support:
 
@@ -44,16 +51,17 @@ The system must support:
 - Revision of existing drafts for clarity, coherence, and concision
 - Transformation of rough notes, transcripts, bullet points, or source documents into polished writing
 
-Compare this architecture ladder rather than assuming fine-tuning or one adapter per source is best:
+Compare this architecture ladder rather than assuming fine-tuning, direct generation, or one adapter per source is best:
 
 1. Strong prompt-only profile cards.
 2. Prompting plus retrieval of approved examples.
 3. A unified controllable fine-tune that switches among writing profiles, genres, audiences, and levels of formality.
 4. Clustered, composable, or low-rank-basis adapters for groups of compatible writing characteristics.
 5. Separate source-specific or profile-specific LoRA/adaptor models when the evidence and approved data support them.
-6. A hybrid of retrieval, unified training, and adapters.
+6. A structured `plan -> write -> verify/revise` system that extracts a claims and decision ledger, creates an audience-aware outline, renders under the selected profile, verifies every fact, number, attribution, caveat, and action against the ledger, and makes the smallest revision needed to fix failures.
+7. A hybrid of retrieval, structured generation, unified training, and adapters.
 
-Choose the final architecture from evaluation evidence. It may be a unified model, separate adapters, or a hybrid.
+Compare structured generation directly with single-pass generation so any quality gain is attributable rather than assumed. Choose the final architecture from evaluation evidence. It may be a unified model, separate adapters, structured multi-pass system, or a hybrid.
 
 NAMED RESEARCH SOURCES
 
@@ -95,7 +103,7 @@ Production-facing profiles should preferably have descriptive names such as “c
 
 For every named person, create a source audit, profile specification, data-availability report, provisional rights assessment, content-controlled evaluation subset, and training configuration.
 
-Preserve experiment coverage for all eleven people, but do not force eleven statistically weak production adapters. Before a standalone source-specific run, define and apply a documented sufficiency threshold based on data quality, diversity, and evaluation power. The default threshold is at least 50,000 clean training-approved author tokens, at least 100 independent examples, coverage across at least three relevant genres or clearly documented genre limitations, and at least 30 independent content-controlled held-out cases. Change these defaults only before seeing comparative results and record the rationale.
+Preserve experiment coverage for all eleven people, but do not force eleven statistically weak production adapters. Before a standalone source-specific run, define and apply a documented sufficiency threshold based on data quality, diversity, task fit, and evaluation power. The default threshold is at least 50,000 effective clean training-approved author tokens after deduplication and boilerplate removal, at least 100 genuinely independent examples, coverage across at least three relevant genres or clearly documented genre limitations, and at least 30 independent content-controlled held-out cases. Raw token volume alone does not satisfy the threshold. Change these defaults only before seeing comparative results and record the rationale.
 
 When a source does not meet the standalone threshold, still run the best scientifically valid low-cost coverage experiment available, such as a conditioned unified-model run, leave-one-source-in or leave-one-source-out ablation, mixture-weight ablation, profile-card baseline, or retrieval baseline. Mark a standalone adapter as blocked by rights or statistical insufficiency rather than manufacturing permission, data, or confidence.
 
@@ -127,11 +135,15 @@ The OpenRouter authentication used by Ori is already configured. Do not display,
 Before the first Ox Alpha task:
 
 - Inspect `ori --help`, `ori opencode --help`, and relevant OpenCode help.
-- Resolve the exact currently available OpenRouter model identifier for Ox Alpha.
+- Read and execute `programs/executive-writing/configs/HARNESS_PREFLIGHT.md`.
+- Verify that the official, Ori-compatible OpenCode executable is installed and record its resolved path and version. Do not infer that `ori opencode --help` proves the downstream harness is installed.
+- Query the current OpenRouter Models API and resolve the exact currently available model identifier for Ox Alpha. The verified identifier at contract revision time is `stealth/ox-alpha`, but this is a discovery hint rather than a permanent alias, availability, or pricing guarantee.
 - Explicitly configure OpenCode to use Ox Alpha through OpenRouter.
 - Do not silently substitute another model.
-- Verify the selected model in the task output or metadata.
-- Treat Ox Alpha as free only after checking its current price. If it is no longer free, obtain approval before using the project budget for it.
+- Record the Ori and OpenCode versions and run a harmless, read-only repository tool-use smoke task. Verify the selected model, provider, successful tool call, and no file changes in its output or metadata before delegating substantive work.
+- Run a small artifact-contract test that checks required output fields and provenance metadata. If either test fails, Codex takes over the work directly and continues the goal.
+- Treat Ox Alpha as free only after checking its current prompt, completion, request, and related prices. If any applicable price is nonzero or ambiguous, obtain approval before using the project budget for it.
+- Do not auto-upgrade Ori or OpenCode during an active experiment. Upgrade only for a recorded compatibility or security reason, pin the new versions, and rerun both tests before resuming delegation.
 
 Give Ox Alpha concrete, scoped assignments with expected artifacts and validation requirements. Do not delegate the entire project in one vague prompt.
 
@@ -163,6 +175,8 @@ Only the user or qualified counsel may promote material to `training_approved`. 
 Batch rights questions into concise, evidence-backed decision packets after exhausting primary-source research. Do not interrupt the user for source-by-source preliminary questions, and continue every unaffected workstream while a rights decision is pending.
 
 If Ox Alpha returns a rate-limit response, repeated timeout, provider outage, or explicit quota error, make at most one bounded retry. Then Codex must immediately take over the relevant research, coding, or analysis directly. Do not pause the whole goal waiting for Ox Alpha to become available.
+
+The harness capability gate is an optimization gate, not a project gate. Missing OpenCode, changed model identifiers, failed authentication, changed pricing, contract-test failures, or incompatible versions never justify idling the goal when Codex can perform the same safe work directly.
 
 REPOSITORY AND ENGINEERING RULES
 
@@ -216,27 +230,49 @@ GATED EXPERIMENTAL PROGRAM
 
 Execute the work in the following phases. Maintain a short phase ledger in `programs/executive-writing/reports/PROGRESS.md` with hypotheses, evidence produced, exit criteria, decisions, next actions, and unresolved risks. Phase gates constrain expensive or validity-sensitive work; they do not require the user to steer routine implementation.
 
+FIRST-EVIDENCE MILESTONE
+
+Produce a complete, inexpensive vertical slice before exhaustive benchmark integration, corpus expansion, or public-email research becomes a critical path:
+
+1. Create 20 to 50 rights-safe, task-aligned search-development cases spanning the highest-value email, memo, document, and revision tasks. Prefer authentic permissioned or project-authored material. Clearly labeled synthetic cases may validate plumbing but cannot establish model quality.
+2. Run an untuned baseline, the strongest practical prompt baseline, and a retrieval/example-conditioned baseline on the same cases.
+3. Complete one end-to-end smoke fine-tune through dataset compilation, training, inference, evaluation, and run-manifest generation. A small model and a small rights-safe synthetic or project-authored corpus are acceptable for this plumbing test; label the result as a smoke test rather than a quality claim.
+4. Publish one shared machine-readable and human-readable results table containing quality, hard-gate, latency, and cost fields.
+5. Publish one failure analysis using the registered error taxonomy and select the next hypothesis from evidence.
+
+Begin this milestone in Phase 0 and complete it as early as technical feasibility and rights-safe starter data permit. Work on imported benchmarks, full source audits, and litigation emails in parallel only when it cannot delay this first closed loop. Do not wait for an exhaustive survey to learn whether the training and evaluation plumbing works.
+
+OPERATING CONSTRAINTS
+
+- Keep at most two active research workstreams and one active training run unless the progress ledger records a clear expected-value case for more parallelism.
+- Never leave paid compute or storage idle or orphaned. Use automatic shutdowns, bounded jobs, resumable checkpoints, and post-run resource checks.
+- Use a two-fidelity selection loop: run deterministic hard gates and a cheap stratified screen for every candidate; run the full development suite only for candidates that pass the screen or for scheduled calibration checks.
+- Use successive halving for sweeps. Allocate full-suite evaluation and longer training only to candidates that remain competitive on paired evidence.
+- Maintain bounded exploration, but do not keep dominated branches alive solely for symmetry.
+
 Phase 0: feasibility, environment, and rights; target spend $0
 
-- Audit the repository, hardware, model caches, tools, Ori/OpenCode/Ox Alpha access, exact provider pricing, licenses, and source availability.
+- Audit the repository, hardware, model caches, tools, Ori/OpenCode/Ox Alpha access, exact provider pricing, licenses, and source availability. Run the harness capability gate before the first Ox delegation; if it fails, record the reason and continue directly with Codex.
 - Establish provisional rights classifications and identify the authority required for promotion to `training_approved`.
 - Produce a data-volume and genre-diversity estimate for every profile.
-- Exit when the project has a technically feasible local or approved external path, a rights-safe starter corpus, and a documented zero-cost work plan.
+- Start the first-evidence milestone immediately rather than waiting for exhaustive rights and source surveys.
+- Exit when the project has a technically feasible local or approved external path, a rights-safe starter corpus, a documented zero-cost work plan, and either a completed first-evidence milestone or a precise external blocker that does not prevent other useful work.
 - If fine-tuning is infeasible, continue with prompt, retrieval, evaluation, data, and reproducibility work while documenting the blocker and best alternative.
 
 Phase 1: evaluation validity and baselines; target spend $0 or minimal approved evaluation cost
 
 - Implement the evaluation hierarchy, frozen benchmark schemas, contamination controls, baseline inference, automated development scorecard, and human-evaluation protocol.
 - Run untuned, prompt-engineered, and retrieval/example-conditioned baselines.
+- Establish a strong accessible frontier-model teacher or quality-ceiling baseline when it is free or covered by an approved budget envelope. Treat it as an upper-bound comparison and potential independent teacher, not automatically as a deployable candidate.
 - Characterize evaluator reliability, position sensitivity, verbosity sensitivity, and disagreement on a fixed reference or previously human-labeled calibration set when one is legally available.
-- Exit when there is a reproducible task-aligned development benchmark, an untouched sealed holdout, credible baselines, and enough signal to distinguish meaningful changes.
+- Exit when the first-evidence milestone is complete, there is a reproducible task-aligned development benchmark, a genuinely separated sealed holdout or honestly labeled procedurally held-out set, credible baselines, and enough signal to distinguish meaningful changes.
 - Do not request new human ratings merely to pass this phase; prepare the protocol and continue with automated and deterministic evidence.
 
 Phase 2: unified pilot and architecture decision
 
-- Build the three-corpus training pipeline and complete an end-to-end smoke run.
+- Harden the three-corpus training pipeline proven by the first-evidence smoke run.
 - Train at least one genuine unified profile-conditioned candidate on the smallest base model that can answer the architectural question credibly.
-- Compare prompting, retrieval, unified fine-tuning, and at least one justified adapter or composition strategy.
+- Compare prompting, retrieval, direct single-pass generation, structured plan-write-verify/revise generation, unified fine-tuning, and at least one justified adapter or composition strategy.
 - Exit when the entire training/evaluation path is reproducible and evidence identifies the most promising model families, data mixtures, and architecture branches.
 - Do not spend materially or multiply profile adapters if the unified pilot cannot beat or complement the strongest non-training baseline on the preregistered development criteria.
 
@@ -249,6 +285,7 @@ Phase 3: autonomous optimization and profile coverage
 Phase 4: frozen finalists and human confirmation
 
 - Freeze the strongest diverse set of three to five candidates, including the strongest prompt/retrieval baseline whenever it remains competitive.
+- Select the best two or three of those frozen candidates for the human packet using only preregistered automated evidence and diversity constraints.
 - Run the sealed automated holdout exactly once for that benchmark version after all candidate, prompt, data, decoding, and selection decisions are frozen.
 - Only then request the final blinded human evaluation.
 - Human evaluation determines the final production recommendation among hard-gate-passing candidates. Continue autonomous, non-leaking work while ratings are pending as specified below.
@@ -282,9 +319,13 @@ Use the public suites according to their demonstrated scope:
 Organize evaluation evidence into four tiers:
 
 1. Tier A: pinned public legacy benchmarks for compatibility and regression tracking.
-2. Tier B: the GoodProse authentic-task development benchmark used for iteration.
+2. Tier B: the GoodProse authentic-task development benchmark, divided before experimentation into:
+   - Tier B1 search-development: frequent item-level feedback for hypothesis formation and candidate screening.
+   - Tier B2 shadow-development: periodic aggregate-only feedback, with no item-level outputs, rationales, or per-slice optimization until the benchmark version is retired.
 3. Tier C: a sealed, private, time-stamped GoodProse holdout used exactly once per benchmark version after finalist decisions are frozen.
-4. Tier D: a final blinded human pairwise evaluation of the strongest frozen candidates.
+4. Tier D: a final blinded intended-audience human evaluation of the strongest frozen candidates.
+
+Do not run Tier B2 on every iteration. Establish a preregistered cadence or promotion rule from Tier B1, use B2 only to detect search overfitting, and preserve aggregate-only access. A candidate that improves B1 but repeatedly regresses B2 should not advance without a documented explanation.
 
 Every evaluation result must record:
 
@@ -316,7 +357,7 @@ Before material experimentation, preregister the primary metric, hard gates, min
 
 Never expose reference answers, target continuations, hidden test cases, or grader rubrics to the model under evaluation or to Ox Alpha.
 
-CUSTOM RFCLEAR EVALUATION
+CUSTOM GOODPROSE EVALUATION
 
 Create a versioned GoodProse custom benchmark that fits cleanly into the repository’s existing evaluation abstractions.
 
@@ -365,11 +406,15 @@ Build source-informed evaluation slices for all eleven named research sources. T
 
 Create an explicit error taxonomy and report errors by type, including fabrication, numerical mutation, omission, caveat loss, intent reversal, overcompression, unnecessary expansion, poor actionability, audience mismatch, tone failure, structural failure, topic leakage, profile overfitting, and excessive rewriting.
 
-Keep an immutable final holdout. Use a development split for iteration. Group examples by original document, thread, source, person, publication, topic, and time period so closely related material cannot cross train, development, and test splits.
+Keep an immutable final holdout. Use the B1 search-development split for frequent iteration and the B2 shadow-development split for periodic aggregate-only checks. Group examples by original document, thread, source, person, publication, topic, and time period so closely related material cannot cross train, development, and test splits.
 
 The sealed final holdout must be newly authored or privately assembled where practical, time-stamped, content-hashed, access-controlled, and withheld from Ox Alpha, teacher models, synthetic-data generators, tuning jobs, retrieval indexes, prompt construction, and development judges. Add canary fingerprints plus exact, n-gram, and embedding-based contamination scans. Public benchmarks are never substitutes for this private holdout.
 
-Open the sealed holdout exactly once per benchmark version, only after finalists and every behavior-affecting configuration are frozen. After inspecting item-level results, retire that holdout version from future model selection. Aggregate results may remain in reports, but examples and rubrics must not flow back into training or prompt development.
+Codex may implement and test the Tier C schema, one-shot runner, cryptographic receipt, and synthetic fixtures, but after benchmark registration or finalist-selection work begins it must not author, inspect, transform, or retrieve the true Tier C content or rubrics. The user or a separately quarantined process must supply and retain the holdout outside the agent-readable repository, or behind encryption and an access boundary unavailable to the training and orchestration agents.
+
+The one-shot Tier C runner must return only preregistered aggregate results, content and configuration hashes, execution timestamp, and an immutable run receipt. It must not return item-level inputs, outputs, rationales, slice values that reveal examples, or grader rubrics until the holdout version is formally retired. Open the holdout exactly once per benchmark version, only after finalists and every behavior-affecting configuration are frozen.
+
+If genuine access separation cannot be established, label the set `procedurally_held_out`, never `sealed`, state that limitation prominently, and do not treat its result as equivalent evidence. After authorized item-level inspection, retire that holdout version from future model selection. Aggregate results may remain in reports, but examples and rubrics must not flow back into training or prompt development.
 
 Never move an example between splits to improve a score.
 
@@ -384,7 +429,11 @@ Design the final human-evaluation protocol during Phase 1, but do not ask the us
 - The candidates pass automated fidelity, privacy, rights, leakage, and deployment hard gates.
 - The candidate set is small, diverse, versioned, frozen, and accompanied by a concise evaluation packet.
 
-Use approximately 50 to 100 difficult, representative pairwise cases, adjusted by a documented power analysis. Seek three blinded ratings per comparison where feasible. Permit `preferred A`, `preferred B`, `tie`, and `both unacceptable`; collect a short structured reason and error labels. Randomize and balance answer position. Measure inter-rater agreement, preference rates, confidence intervals, unacceptable-output rates, and subgroup results. Do not tell raters which named source, model, provider, or training method produced an answer.
+Recruit intended-audience raters rather than a generic undifferentiated crowd: founders or executives for decision communications, technical leaders for engineering documents, and experienced business editors across the task mix. Record rater qualification and analyze material subgroup differences without revealing candidate identity.
+
+Use approximately 50 to 100 difficult, representative cases, adjusted by a documented power analysis. Show raters the source material, intended audience, communication objective, and constraints. For each output, require one operational label: `publishable`, `minor_edits`, `substantive_edits`, or `unacceptable`; collect a critical-factual-error veto, structured error labels, and estimated editing burden or editing time. The primary endpoint is publish-ready acceptance and substantive-edit burden among hard-gate-passing outputs.
+
+Use blinded pairwise preference as a secondary discriminative endpoint, permitting `preferred A`, `preferred B`, `tie`, and `both unacceptable`. Freeze three to five diverse finalists, then select two or three for the human packet using the preregistered automated selection rule. Use a balanced incomplete-block design rather than all-pairs comparison when scale requires it. Seek three blinded ratings per assigned case or comparison where feasible, randomize and balance answer position, and measure inter-rater agreement, preference rates, confidence intervals, unacceptable-output rates, critical-error rates, editing burden, and subgroup results. Do not tell raters which named source, model, provider, or training method produced an answer.
 
 Human evaluation is the final confirmation and production-selection authority, but it must not make the rest of the agentic loop idle:
 
@@ -394,6 +443,7 @@ Human evaluation is the final confirmation and production-selection authority, b
 - Challenger experiments started after the freeze must use a new candidate lineage and may not inspect the current sealed holdout or human results. If a challenger clears the preregistered development margin before ratings arrive, freeze and version it separately; add it to the current human packet only if this does not compromise blinding or invalidate completed ratings, otherwise reserve it for the next confirmation round.
 - Never change a frozen finalist in place. Any prompt, decoding, retrieval, data, or checkpoint change creates a new candidate identifier.
 - Do not repeatedly ask the user for partial judgments. Submit one compact, decision-ready human-evaluation request containing the best candidates and clear instructions.
+- Do not block autonomous work while recruiting qualified raters or collecting results. Continue the highest-value non-leaking work and next-version challenger program without modifying the frozen evaluation packet.
 - If human results become the sole remaining completion condition and no other evidence-bearing work remains, record that state accurately and wait without fabricating, inferring, or replacing the human result.
 
 Do not make an unqualified final production claim before human confirmation. Automated results may support a clearly labeled provisional leader while human evaluation is pending.
@@ -401,6 +451,8 @@ Do not make an unqualified final production claim before human confirmation. Aut
 PUBLIC EMAIL AND LITIGATION-EXHIBIT WORKSTREAM
 
 Audit publicly accessible, author-verified emails for every named research source.
+
+This is a bounded supporting workstream, not the critical path. Until the first-evidence milestone is complete, allocate no more than 15% of active agent effort to public-email and litigation-exhibit discovery, and do not let it delay the initial baselines, smoke fine-tune, shared results table, or failure analysis. After the first complete loop, expand this work only when expected information value exceeds the next model or dataset experiment. Litigation email remains a supplemental genre even when plentiful.
 
 For each candidate email source, record:
 
@@ -561,6 +613,18 @@ Synthetic data must be labeled as synthetic, traceable to its generating prompt 
 
 Any data, rubric, rewrite, preference, or annotation generated by Ox Alpha or another model must be labeled with generator provenance and isolated so experiments can measure performance with and without it. A generator must not have access to sealed evaluation material.
 
+When using Ox Alpha or another model for best-of-N distillation or rejection sampling:
+
+1. Use only sanitized, rights-safe inputs that are permitted for the selected external provider. Never send private, unsanitized, B2 item-level, or Tier C material.
+2. Generate multiple candidates with the exact generator, prompt, decoding, and seed provenance recorded.
+3. Reject candidates that fail deterministic fidelity, privacy, placeholder, numerical, attribution, or format checks before model judging.
+4. Rank survivors with independent judges or rubrics. Ox Alpha must not be the sole generator and sole judge for the same example.
+5. Preserve every acceptance or rejection reason, candidate hash, generator identifier, judge identifier, and intended dataset use.
+6. Distill only accepted outputs into an explicitly synthetic student-training collection.
+7. Run an ablation with and without the synthetic teacher data and report whether gains survive the authentic-task development benchmark.
+
+Do not treat synthetic volume as independent evidence. Measure effective sample size after near-duplicate, prompt-template, and semantic-cluster analysis.
+
 TRAINING PROGRAM
 
 Begin with environment discovery:
@@ -576,9 +640,11 @@ Establish at least these baselines:
 1. Untuned base-model baseline.
 2. Strong prompt-engineered baseline.
 3. Retrieval or example-conditioned baseline if appropriate.
-4. Unified profile-conditioned fine-tune.
-5. Source-specific LoRA or adapter experiments where approved data exists.
-6. Optional preference optimization after a successful supervised fine-tune.
+4. Strong accessible frontier-model teacher or quality-ceiling baseline when free or approved.
+5. Direct single-pass and structured plan-write-verify/revise inference variants.
+6. Unified profile-conditioned fine-tune.
+7. Source-specific LoRA or adapter experiments where approved data exists.
+8. Optional best-of-N distillation, rejection sampling, or preference optimization after a successful supervised fine-tune.
 
 Do not assume fine-tuning will beat prompting. Measure it.
 
@@ -595,12 +661,23 @@ Training should support:
 - Data ablations
 - Hyperparameter sweeps within budget
 - Optional DPO or another justified preference method
+- Provenance-aware best-of-N distillation and rejection-sampling datasets
 - Model and dataset cards
 - Complete run manifests
 - Explicit sampling ratios for `task_pairs`, `style_targets`, and `preference_pairs`
 - Clustered or composable profile controls where the base model and framework permit them
 - Checkpoint selection rules chosen before the final comparison
 - Throughput, peak memory, latency, and inference-cost measurement
+
+Implement the structured generation candidate with explicit, inspectable boundaries:
+
+1. Extract a claims and decision ledger from the source, preserving uncertainty, attribution, numbers, caveats, and requested actions.
+2. Build an audience-aware outline that contains only ledger-supported content.
+3. Render the draft under the selected descriptive profile and channel constraints.
+4. Verify each factual claim, number, date, name, attribution, caveat, and action against the ledger with deterministic checks wherever possible.
+5. Revise only the failed spans, then rerun the verifier.
+
+Record intermediate artifact hashes and verifier outcomes without exposing private content in committed logs. Compare quality, factual-gate rate, latency, and cost against matched direct single-pass generation.
 
 Do not commit large model weights to git. Store paths, hashes, configurations, metrics, and reproducible retrieval instructions.
 
@@ -620,17 +697,18 @@ AUTONOMOUS IMPROVEMENT LOOP
 
 After establishing baselines:
 
-1. Run the full development evaluation suite.
+1. Run deterministic hard gates and the cheap stratified Tier B1 screen.
 2. Analyze failures by genre, profile, length, source, grader, and error type.
 3. Form explicit improvement hypotheses.
-4. Rank hypotheses by expected quality gain, cost, and risk.
+4. Rank hypotheses by expected quality gain, cost, risk, and information value.
 5. Change one major experimental factor at a time where practical.
-6. Train or configure the next candidate.
-7. Re-run development evaluations.
-8. Compare against all relevant baselines.
-9. Record paired effect sizes, stratified confidence intervals, multiple-comparison caveats, wins, regressions, costs, and qualitative examples.
-10. Keep or revert the hypothesis based on evidence.
-11. Repeat until the stopping conditions are satisfied or a genuine external blocker remains.
+6. Train or configure the next candidate with bounded resources and early stopping.
+7. Rerun hard gates and the same B1 screen; prune failing or clearly dominated candidates.
+8. Promote only passing, competitive candidates to the full Tier B1 development suite, and query aggregate-only Tier B2 at its preregistered cadence.
+9. Compare against all relevant baselines, including the strongest non-training and quality-ceiling baselines.
+10. Record paired effect sizes, stratified confidence intervals, selection and multiple-comparison caveats, wins, regressions, costs, and qualitative examples from permitted splits.
+11. Keep or revert the hypothesis based on evidence.
+12. Repeat until the stopping conditions are satisfied or a genuine external blocker remains.
 
 Maintain a hypothesis registry so unsuccessful ideas are not unknowingly repeated. Prefer one major causal change at a time, but allow clearly labeled multi-factor engineering changes when isolation would be prohibitively expensive. Do not select winners from a broad sweep and report them as confirmatory evidence without accounting for the selection process.
 
@@ -654,6 +732,9 @@ Potential iteration levers include:
 - Fidelity training
 - Inference decoding
 - Output-length control
+- Structured claims-ledger extraction and verification
+- Best-of-N candidate generation and rejection thresholds
+- Synthetic-teacher data inclusion and mixture weight
 
 Do not optimize against the final holdout. Open it exactly once per benchmark version only after the candidate set, architecture, data mixture, prompt, retrieval corpus, checkpoint, decoding, and main hyperparameters are frozen. Viewing item-level final-holdout results retires that benchmark version from future selection.
 
@@ -742,22 +823,25 @@ DELIVERABLES
 The repository must contain, at minimum:
 
 - A documented architecture
+- A completed first-evidence vertical slice with 20 to 50 task-aligned cases, three baselines, a smoke fine-tune, a shared results table, and a failure analysis
 - Reproducible source and rights manifests
 - Data ingestion and sanitization code
 - Train/eval contamination checks
 - Adapters for the requested external evaluations
 - A versioned GoodProse custom benchmark
-- Four-tier evaluation handling, including sealed holdout lifecycle and a final human-evaluation protocol
+- Four-tier evaluation handling, including B1 search-development, B2 aggregate-only shadow-development, a one-shot Tier C holdout lifecycle, and an intended-audience human-evaluation protocol
 - Baseline configurations and results
 - Fine-tuning configurations
 - At least one completed real fine-tuning run
 - Source-specific run configurations for all eleven named people
 - Actual standalone source-specific runs wherever approved data is sufficient, plus real lower-cost experiment coverage for every other profile
 - A unified-model training run
+- A matched direct-generation versus structured plan-write-verify/revise comparison
+- A provenance-aware best-of-N distillation or rejection-sampling experiment when rights-safe teacher access is available, including a with/without-synthetic-data ablation
 - Evaluation reports comparing candidates with paired effect sizes, confidence intervals, judge-bias diagnostics, and explicit confirmatory versus exploratory labels
 - A three-corpus training data model covering task pairs, style targets, and preference pairs
 - Content-controlled style evaluation, adversarial fidelity cases, and memorization checks
-- A frozen finalist set and compact blinded human-evaluation packet
+- A frozen set of three to five finalists and an automatically selected, compact two- or three-candidate blinded human-evaluation packet
 - Final human results and judge-human calibration when ratings are returned; until then, a clearly labeled provisional report and active continuation plan
 - Experiment history
 - Cost and hardware analysis
@@ -805,17 +889,18 @@ Completion requires all of the following:
 
 - The requested external evaluations are integrated or have documented, tested adapters and reproducible acquisition steps where licensing prevents inclusion.
 - The four-tier GoodProse evaluation program is implemented, versioned, documented, and split safely.
+- The first-evidence vertical slice is complete and its shared results and failure analysis are committed.
 - All eleven named research sources have source audits, rights classifications, profile specifications, evaluation coverage, and run configurations.
 - Every profile with sufficient training-approved data has received a real standalone training run; every other profile has meaningful lower-cost experiment coverage and an explicit blocker or insufficiency record.
 - At least one unified controllable model has completed a real training run.
-- Prompt, retrieval, unified fine-tune, and justified adapter alternatives have been compared without assuming the fine-tune must win.
+- Prompt, retrieval, direct and structured generation, unified fine-tune, and justified adapter alternatives have been compared without assuming the fine-tune must win.
 - The selected candidate passes every hard gate and does not achieve its gain through unacceptable regressions in factual fidelity, unsupported claims, intent preservation, privacy, rights, memorization, or train/evaluation leakage.
 - At least two evidence-driven improvement iterations have been completed after the first baseline.
 - The preregistered statistical analysis, effect sizes, confidence intervals, repeated-comparison caveats, and negative results are reported.
 - Relevant tests, lint, formatting, and type checking pass.
-- The sealed final holdout has been run exactly once for its benchmark version after the complete finalist configuration and selection procedure were frozen.
-- The strongest three to five candidates have been packaged for blinded human evaluation only after the finalist-readiness gate was satisfied.
-- Final human evaluation has been completed and used for the production recommendation. If ratings are still pending, the system may publish only a clearly labeled provisional leader and the goal remains active while useful autonomous work continues.
+- A genuinely access-separated Tier C holdout has been run exactly once for its benchmark version after the complete finalist configuration and selection procedure were frozen, with only aggregate results and an immutable receipt returned. A merely procedurally held-out result must be reported but does not satisfy this sealed-evidence condition.
+- Three to five strong, diverse candidates have been frozen and the preregistered rule has selected the best two or three for blinded human evaluation only after the finalist-readiness gate was satisfied.
+- Final intended-audience human evaluation has been completed, including publish-readiness, critical-error veto, editing burden, and pairwise results, and has been used for the production recommendation. If ratings are still pending, the system may publish only a clearly labeled provisional leader and the goal remains active while useful autonomous work continues.
 - Results are reproducible from committed code and manifests.
 - Costs, unresolved rights issues, limitations, and blocked profile runs are reported honestly.
 - All paid resources have been shut down, settled project spend is at or below $100, and the remaining budget is documented.
@@ -836,4 +921,3 @@ If a source lacks training permission, that source’s run may remain explicitly
 Keep working through recoverable errors, failed experiments, rate limits, suboptimal results, pending approvals, and pending human ratings. Preserve evidence from failed runs. Prefer the best-performing model families while maintaining bounded exploration. Ask the user only when new authority or uniquely human judgment is genuinely required, including approving a scoped spending envelope, securely providing the agent credit card, promoting data to `training_approved`, obtaining restricted data, accepting a material scope change, resolving an unavoidable legal-rights decision, or performing the final blinded human evaluation.
 
 When asking for the final human evaluation, present only the best frozen, hard-gate-passing candidate set after automated optimization has saturated. Do not use human attention for routine iteration that deterministic metrics, LLM judges, ablations, or failure analysis can resolve. After asking, do not idle: follow the continued-autonomy rules until human results are the sole remaining condition and no other evidence-bearing work remains.
-```

@@ -63,8 +63,12 @@ src/goodprose/executive_writing/ program-specific training, evaluation, and infe
 tests/                     deterministic unit and schema tests
 ```
 
-The autonomous research contract is
+To start the autonomous research program, paste the command from
+[`docs/goals/launch-executive-writing-model.md`](docs/goals/launch-executive-writing-model.md)
+into Codex. The short launcher points to the versioned scientific, safety,
+budget, autonomy, and completion contract in
 [`docs/goals/executive-writing-model.md`](docs/goals/executive-writing-model.md).
+Review and commit contract changes before starting or resuming a run.
 Program-specific work should stay inside the namespaces above unless a shared
 contract genuinely needs to change.
 

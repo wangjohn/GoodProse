@@ -3,6 +3,9 @@
 This directory is the control plane for GoodProse's long-running model research
 program. The durable objective and completion contract live in
 [`../../docs/goals/executive-writing-model.md`](../../docs/goals/executive-writing-model.md).
+Start it with the concise command in
+[`../../docs/goals/launch-executive-writing-model.md`](../../docs/goals/launch-executive-writing-model.md)
+after reviewing the contract and the harness preflight.
 
 ## Ownership boundary
 
