@@ -150,6 +150,8 @@ activemq-data/
 # Environments
 .env
 .envrc
+infra/argilla/.env*
+!infra/argilla/.env.example
 .venv
 env/
 venv/
@@ -157,7 +159,7 @@ ENV/
 env.bak/
 venv.bak/
 
-# Generated RFClear data and evaluation artifacts
+# Generated GoodProse data and evaluation artifacts
 data/derived/*
 !data/derived/README.md
 evals/private/*

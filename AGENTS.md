@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This project is building a fine-tuned LLM that turns coding-agent output into clear, high-quality technical specs.
+This project builds provenance-aware data and evaluations for models that turn rough source material into clear executive emails, internal memos, and blog posts.
 
 ## Python
 

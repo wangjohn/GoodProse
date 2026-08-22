@@ -1,41 +1,69 @@
-# RFClear
+# GoodProse
 
-RFClear turns coding-agent output into clear, decision-ready technical specifications.
+GoodProse builds provenance-aware datasets and evaluations for models that turn rough source material into clear executive emails, internal memos, and blog posts.
 
-This repository currently contains the foundation for a provenance-aware dataset and an honest evaluation suite. The seed corpus includes selected Go, React, and Rust documents as training references; public development holdouts; and a Bytecode Alliance source-family holdout. Teleport RFD candidates are recorded but gated on a separate license review.
+The project focuses on transformation rather than named-person imitation. Each example specifies an audience, channel, objective, constraints, and an original versioned voice profile. Factual fidelity, privacy, and uncertainty preservation are independent gates from writing quality.
 
 ## Quick start
 
 ```bash
+uv sync
 make corpus
 make validate
+make test
 ```
 
-The fetcher downloads exact upstream revisions and verifies every file against the SHA-256 recorded in [`data/sources.json`](data/sources.json). It does not fetch manual-review sources unless explicitly requested.
+The current raw corpus is the technical-source collection created before the GoodProse pivot. It remains useful for testing factual compression and audience adaptation, but it is not a representative executive-writing dataset. Add permissioned rough-to-final executive revisions before training a production model.
+
+## Training task
+
+```text
+source material + audience + channel + objective + constraints + voice profile
+    -> factual, channel-appropriate executive communication
+```
+
+Supported channels are `email`, `internal_memo`, and `blog_post`. A canonical record uses the schemas under [`data/schemas/`](data/schemas/) and records source lineage, licensing, review status, and the exact voice profile.
+
+## Annotation and dataset compilation
+
+GoodProse includes a pinned local Argilla workflow with separate authoring and review queues, deterministic secret and personally identifiable information scans, typed JSONL boundaries, lineage-leakage checks, token reports, and immutable content-addressed snapshots.
+
+```bash
+make argilla-up
+set -a
+source infra/argilla/.env
+set +a
+uv run goodprose annotation setup
+```
+
+Open `http://127.0.0.1:6900`, then follow [`docs/ANNOTATION_WORKFLOW.md`](docs/ANNOTATION_WORKFLOW.md). Existing RFClear Argilla datasets are intentionally not reused because their questions describe a different task.
 
 ## Repository map
 
 ```text
 data/
-  raw/                    exact, pinned upstream documents and licenses
-  derived/                generated supervised examples (not committed by default)
-  schemas/                canonical, provider-neutral record formats
+  raw/                    exact, pinned upstream source documents and licenses
+  content-foundation/     source documents with useful reasoning and decision content
+  style-references/       approved examples, candidate references, and house-style rules
+  voice-profiles/         versioned original voice definitions
+  derived/                generated supervised examples and immutable snapshots
+  schemas/                canonical provider-neutral record formats
   sources.json            provenance, checksums, splits, and selection rationale
-evals/
-  cases/                  runnable agent-output-to-spec cases
-  private/                non-public final holdout (not committed)
-  results/                generated evaluation runs (not committed)
-  targets.json            public held-out reference targets
-  RUBRIC.md                scoring dimensions and failure gates
-scripts/
-  fetch_corpus.py          reproducible downloader
-  validate_corpus.py       checksum and split-leakage checks
 docs/
   DATASET_STRATEGY.md      collection, pairing, splitting, and evaluation plan
+  ANNOTATION_WORKFLOW.md   privacy, authoring, review, and snapshot runbook
+evals/                    public development and protected final evaluations
+infra/argilla/             pinned local annotation stack
+src/goodprose/             typed data, privacy, annotation, and snapshot tooling
+tests/                     deterministic unit and schema tests
 ```
 
-The upstream specifications are reference material, not supervised examples by themselves. A useful training record must pair a messy but truthful coding-agent output with a human-approved specification. See [`docs/DATASET_STRATEGY.md`](docs/DATASET_STRATEGY.md) for the recommended path from this corpus to a fine-tuning dataset.
+## Evaluation philosophy
 
-## Licensing
+Start with a strong prompted frontier-model baseline. Fine-tune only when a fixed, human-calibrated eval shows a meaningful improvement in consistency, editing effort, cost, latency, or local-model quality. See [`evals/RUBRIC.md`](evals/RUBRIC.md).
 
-RFClear's own code is MIT-licensed. Files under `data/raw/` retain their upstream licenses; the root MIT license does not relicense them. Review [`data/NOTICE.md`](data/NOTICE.md) and the copied license in each source directory before redistributing a derived dataset or trained model.
+## Licensing and privacy
+
+GoodProse's code is MIT-licensed. Files under `data/raw/` retain their upstream licenses; the root license does not relicense them. Public availability alone does not establish permission to redistribute text, derived datasets, or trained weights. Review [`data/NOTICE.md`](data/NOTICE.md), preserve source metadata, and prefer permissioned or organization-owned rough-to-final writing pairs.
+
+Internal notes, emails, and memos can contain credentials, personal data, financial information, and confidential strategy. Scan both annotation seeds and reviewed exports, and never commit private derived data.

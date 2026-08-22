@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "goodprose"
+version = "0.1.0"
+description = "Build provenance-aware datasets and evaluations for GoodProse."
+readme = "README.md"
+requires-python = ">=3.12"
+license = {file = "LICENSE"}
+dependencies = [
+  "argilla==2.8.0",
+  "jsonschema>=4.23,<5",
+  "pydantic>=2.11,<3",
+]
+
+[project.optional-dependencies]
+privacy = [
+  "presidio-analyzer>=2.2.358,<3",
+  "presidio-anonymizer>=2.2.358,<3",
+]
+tokenizers = ["transformers>=4.51,<6"]
+
+[dependency-groups]
+dev = [
+  "pyright>=1.1.400,<2",
+  "pytest>=8.3,<9",
+  "ruff>=0.11,<1",
+]
+
+[project.scripts]
+goodprose = "goodprose.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/goodprose"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.pyright]
+include = ["src", "tests"]
+pythonVersion = "3.12"
+typeCheckingMode = "standard"
