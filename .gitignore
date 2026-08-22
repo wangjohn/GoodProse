@@ -166,6 +166,14 @@ evals/private/*
 !evals/private/README.md
 evals/results/*
 !evals/results/README.md
+evals/executive-writing/private/*
+!evals/executive-writing/private/README.md
+evals/executive-writing/results/*
+!evals/executive-writing/results/README.md
+programs/executive-writing/artifacts/
+programs/executive-writing/checkpoints/
+data/executive-writing/private/
+data/executive-writing/cache/
 
 # Spyder project settings
 .spyderproject

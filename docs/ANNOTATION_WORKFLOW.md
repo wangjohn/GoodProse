@@ -35,7 +35,7 @@ Create the versioned `goodprose-authoring-v1` and `goodprose-review-v1` datasets
 uv run goodprose annotation setup
 ```
 
-An existing pre-pivot `.env` may still set `ARGILLA_WORKSPACE=rfclear`. Update that value privately or create a new environment file before setup. Do not print or commit its credentials. The old RFClear datasets can remain as an archive; GoodProse uses new dataset names and schemas.
+An existing pre-pivot `.env` may still use a legacy workspace name. Update that value privately or create a new environment file before setup. Do not print or commit its credentials. Legacy datasets can remain as an archive; GoodProse uses new dataset names and schemas.
 
 ## 2. Prepare annotation seeds
 

@@ -36,12 +36,13 @@ set +a
 uv run goodprose annotation setup
 ```
 
-Open `http://127.0.0.1:6900`, then follow [`docs/ANNOTATION_WORKFLOW.md`](docs/ANNOTATION_WORKFLOW.md). Existing RFClear Argilla datasets are intentionally not reused because their questions describe a different task.
+Open `http://127.0.0.1:6900`, then follow [`docs/ANNOTATION_WORKFLOW.md`](docs/ANNOTATION_WORKFLOW.md). Legacy pre-pivot Argilla datasets are intentionally not reused because their questions describe a different task.
 
 ## Repository map
 
 ```text
 data/
+  executive-writing/      program-specific data manifests and collection boundaries
   raw/                    exact, pinned upstream source documents and licenses
   content-foundation/     source documents with useful reasoning and decision content
   style-references/       approved examples, candidate references, and house-style rules
@@ -52,11 +53,20 @@ data/
 docs/
   DATASET_STRATEGY.md      collection, pairing, splitting, and evaluation plan
   ANNOTATION_WORKFLOW.md   privacy, authoring, review, and snapshot runbook
-evals/                    public development and protected final evaluations
+  goals/                   durable autonomous research goal
+evals/
+  executive-writing/      program-specific public, private, and human eval definitions
 infra/argilla/             pinned local annotation stack
-src/goodprose/             typed data, privacy, annotation, and snapshot tooling
+programs/executive-writing/ configs, manifests, experiment registry, and reports
+src/goodprose/             shared typed data, privacy, annotation, and snapshot tooling
+src/goodprose/executive_writing/ program-specific training, evaluation, and inference code
 tests/                     deterministic unit and schema tests
 ```
+
+The autonomous research contract is
+[`docs/goals/executive-writing-model.md`](docs/goals/executive-writing-model.md).
+Program-specific work should stay inside the namespaces above unless a shared
+contract genuinely needs to change.
 
 ## Evaluation philosophy
 

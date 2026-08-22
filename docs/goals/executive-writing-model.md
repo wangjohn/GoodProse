@@ -1,11 +1,11 @@
-# RFClear Executive-Writing Model Goal
+# GoodProse Executive-Writing Model Goal
 
 Paste the following into Codex as a `/goal` command.
 
 ```text
-/goal Build RFClear into a provenance-aware, reproducible system for evaluating, training, and iteratively improving language models that turn authentic rough source material into exceptionally clear executive emails, internal memos, strategy documents, engineering documents, blog posts, and short-form posts.
+/goal Build GoodProse into a provenance-aware, reproducible system for evaluating, training, and iteratively improving language models that turn authentic rough source material into exceptionally clear executive emails, internal memos, strategy documents, engineering documents, blog posts, and short-form posts.
 
-Work autonomously and persistently in /Users/wangjohn/RFClear. Do not stop after producing a plan or prototype. Continue through implementation, data preparation, baseline evaluation, real training runs, evaluation, failure analysis, and multiple improvement iterations.
+Work autonomously and persistently in /Users/wangjohn/GoodProse. Do not stop after producing a plan or prototype. Continue through implementation, data preparation, baseline evaluation, real training runs, evaluation, failure analysis, and multiple improvement iterations.
 
 Operate this as one durable objective with gated experimental phases, explicit evidence artifacts, and a verifiable stopping condition. Do not treat it as a loose backlog. The goal is complete only when the repository contains a tested and documented end-to-end system, real benchmark results, reproducible training configurations, at least one genuinely fine-tuned candidate model, source-specific experiment coverage wherever permitted, and a defensible human-confirmed recommendation about the best production architecture. A provisional recommendation is a progress artifact, not completion.
 
@@ -15,7 +15,7 @@ Maximize blinded preference on authentic rough-material-to-executive-writing tas
 
 The production objective is excellent business-writing behavior, not identity imitation. Style resemblance is a secondary research diagnostic. Do not reward a model merely for using recognizable phrases, discussing topics associated with a named person, or triggering an authorship classifier.
 
-Use this automated development scorecard unless a preregistered RFClear benchmark version justifies a change before results are observed:
+Use this automated development scorecard unless a preregistered GoodProse benchmark version justifies a change before results are observed:
 
 - 35% source fidelity and factual correctness
 - 20% clarity and coherence
@@ -166,7 +166,17 @@ If Ox Alpha returns a rate-limit response, repeated timeout, provider outage, or
 
 REPOSITORY AND ENGINEERING RULES
 
-Work only within /Users/wangjohn/RFClear, except for ignored temporary files, local model caches, and external training output directories.
+Work only within /Users/wangjohn/GoodProse, except for ignored temporary files, local model caches, and external training output directories.
+
+Keep program-specific work inside the repository ownership boundaries:
+
+- Control-plane configs, manifests, experiments, and reports: `programs/executive-writing/`
+- Python implementation: `src/goodprose/executive_writing/`
+- Tests: `tests/executive_writing/`
+- Program data metadata: `data/executive-writing/`
+- Program evaluations: `evals/executive-writing/`
+
+Treat the modules directly under `src/goodprose/`, provider-neutral schemas, annotation infrastructure, root build files, and general documentation as shared infrastructure. Modify them only for a demonstrated cross-cutting requirement, explain the dependency, and isolate the shared change in a coherent commit.
 
 Before making changes:
 
@@ -204,7 +214,7 @@ Run relevant focused checks before each commit and the complete appropriate suit
 
 GATED EXPERIMENTAL PROGRAM
 
-Execute the work in the following phases. Maintain a short phase ledger in `docs/PROGRESS.md` with hypotheses, evidence produced, exit criteria, decisions, next actions, and unresolved risks. Phase gates constrain expensive or validity-sensitive work; they do not require the user to steer routine implementation.
+Execute the work in the following phases. Maintain a short phase ledger in `programs/executive-writing/reports/PROGRESS.md` with hypotheses, evidence produced, exit criteria, decisions, next actions, and unresolved risks. Phase gates constrain expensive or validity-sensitive work; they do not require the user to steer routine implementation.
 
 Phase 0: feasibility, environment, and rights; target spend $0
 
@@ -259,7 +269,7 @@ Pin every imported evaluation to an exact version, commit, release, or dataset r
 
 Pin all behavior-affecting components, not only the dataset: task instances, instance-specific criteria, evaluation prompt, judge model and exact version, decoding configuration, metric implementation, and code revision. Audit the license of every underlying component separately; a repository license does not automatically grant the same rights for every bundled dataset.
 
-Do not blindly copy datasets. Create adapters that fit RFClear’s evaluation structure. If redistribution is not permitted, provide reproducible download/build instructions and keep restricted inputs out of git.
+Do not blindly copy datasets. Create adapters that fit GoodProse’s evaluation structure. If redistribution is not permitted, provide reproducible download/build instructions and keep restricted inputs out of git.
 
 Use the public suites according to their demonstrated scope:
 
@@ -272,8 +282,8 @@ Use the public suites according to their demonstrated scope:
 Organize evaluation evidence into four tiers:
 
 1. Tier A: pinned public legacy benchmarks for compatibility and regression tracking.
-2. Tier B: the RFClear authentic-task development benchmark used for iteration.
-3. Tier C: a sealed, private, time-stamped RFClear holdout used exactly once per benchmark version after finalist decisions are frozen.
+2. Tier B: the GoodProse authentic-task development benchmark used for iteration.
+3. Tier C: a sealed, private, time-stamped GoodProse holdout used exactly once per benchmark version after finalist decisions are frozen.
 4. Tier D: a final blinded human pairwise evaluation of the strongest frozen candidates.
 
 Every evaluation result must record:
@@ -308,7 +318,7 @@ Never expose reference answers, target continuations, hidden test cases, or grad
 
 CUSTOM RFCLEAR EVALUATION
 
-Create a versioned RFClear custom benchmark that fits cleanly into the repository’s existing evaluation abstractions.
+Create a versioned GoodProse custom benchmark that fits cleanly into the repository’s existing evaluation abstractions.
 
 The benchmark must cover:
 
@@ -694,7 +704,7 @@ Use the following planning allocation as a default, not as permission to spend a
 
 Reallocate within an approved envelope only when evidence shows a higher expected value and the envelope permits it. Prefer early stopping, successive halving, stratified evaluation subsets, and one high-quality confirmation run over repeated full benchmark or training runs. Repeated full WritingBench runs and eleven independent large fine-tunes are not presumed feasible within $100.
 
-Maintain an auditable budget ledger in `docs/COSTS.md` containing proposed, approved, attempted, settled, refunded, and remaining amounts, but never payment credentials. Include timestamps, provider, purpose, experiment identifier, and supporting receipt or transaction reference when available.
+Maintain an auditable budget ledger in `programs/executive-writing/reports/COSTS.md` containing proposed, approved, attempted, settled, refunded, and remaining amounts, but never payment credentials. Include timestamps, provider, purpose, experiment identifier, and supporting receipt or transaction reference when available.
 
 Do not exceed $100 total settled project spend. Include taxes, fees, storage, data transfer, idle compute, API evaluation, and recurring charges in the ceiling. Configure provider-side hard spending limits wherever possible. Disable auto-recharge and automatic renewal. Shut down paid compute immediately after the approved experiment. Verify afterward that no paid resources remain running.
 
@@ -706,11 +716,11 @@ Do not purchase or pay for:
 - A subscription when a one-time purchase suffices
 - Paid Ox Alpha/OpenRouter usage if Codex can take over directly at comparable quality
 - Repeated training runs without evidence from the preceding run
-- Anything outside the RFClear objective
+- Anything outside the GoodProse objective
 
 Continue all useful zero-cost work before and while waiting for a budget decision.
 
-Create `docs/COSTS.md` with at least:
+Create `programs/executive-writing/reports/COSTS.md` with at least:
 
 - What can be completed for $0
 - Expected local-training feasibility
@@ -736,7 +746,7 @@ The repository must contain, at minimum:
 - Data ingestion and sanitization code
 - Train/eval contamination checks
 - Adapters for the requested external evaluations
-- A versioned RFClear custom benchmark
+- A versioned GoodProse custom benchmark
 - Four-tier evaluation handling, including sealed holdout lifecycle and a final human-evaluation protocol
 - Baseline configurations and results
 - Fine-tuning configurations
@@ -759,10 +769,10 @@ The repository must contain, at minimum:
 
 Maintain:
 
-- `docs/PROGRESS.md`
-- `docs/EXPERIMENTS.md`
-- `docs/COSTS.md`
-- `docs/SOURCE_AUDIT.md`
+- `programs/executive-writing/reports/PROGRESS.md`
+- `programs/executive-writing/reports/EXPERIMENTS.md`
+- `programs/executive-writing/reports/COSTS.md`
+- `programs/executive-writing/reports/SOURCE_AUDIT.md`
 - A machine-readable experiment registry
 - A machine-readable latest-results artifact
 - A human-readable final report
@@ -776,7 +786,7 @@ Commit small, coherent, reviewed milestones as work progresses. Use the followin
 1. Architecture, environment audit, and experiment plan
 2. External evaluation adapters
 3. Source manifests and rights system
-4. Custom RFClear benchmark
+4. Custom GoodProse benchmark
 5. Dataset ingestion, sanitization, and contamination checks
 6. Baseline inference and results
 7. Training pipeline
@@ -794,7 +804,7 @@ Do not mark this goal complete merely because the pipeline exists.
 Completion requires all of the following:
 
 - The requested external evaluations are integrated or have documented, tested adapters and reproducible acquisition steps where licensing prevents inclusion.
-- The four-tier RFClear evaluation program is implemented, versioned, documented, and split safely.
+- The four-tier GoodProse evaluation program is implemented, versioned, documented, and split safely.
 - All eleven named research sources have source audits, rights classifications, profile specifications, evaluation coverage, and run configurations.
 - Every profile with sufficient training-approved data has received a real standalone training run; every other profile has meaningful lower-cost experiment coverage and an explicit blocker or insufficiency record.
 - At least one unified controllable model has completed a real training run.

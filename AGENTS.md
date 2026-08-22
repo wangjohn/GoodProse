@@ -4,6 +4,24 @@
 
 This project builds provenance-aware data and evaluations for models that turn rough source material into clear executive emails, internal memos, and blog posts.
 
+## Program boundaries
+
+The long-running executive-writing model program is rooted at
+`programs/executive-writing/`. Put program-specific configurations, source
+manifests, experiment records, and reports there.
+
+Use these dedicated namespaces for implementation artifacts:
+
+- Python code: `src/goodprose/executive_writing/`
+- Tests: `tests/executive_writing/`
+- Program data metadata: `data/executive-writing/`
+- Program evaluations: `evals/executive-writing/`
+
+The existing annotation, privacy, JSONL, and dataset modules under
+`src/goodprose/` are shared infrastructure. Change shared files only when a
+concrete program requirement cannot be met within the dedicated namespaces,
+and keep those changes in a separate coherent commit.
+
 ## Python
 
 - Use Python 3.12+.
