@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "description": "Versioned, original voice profiles available to GoodProse training and evaluation records.",
+  "profiles": [
+    {
+      "id": "executive-house-v1",
+      "name": "Executive house voice",
+      "description": "Direct, thoughtful, high-information-density writing for technology leaders.",
+      "traits": [
+        "decision-or-thesis-first",
+        "first-principles-reasoning",
+        "concrete-evidence",
+        "low-jargon",
+        "calibrated-confidence",
+        "clear-next-step"
+      ],
+      "avoid": [
+        "unsupported-certainty",
+        "generic-inspiration",
+        "manufactured-aphorisms",
+        "distinctive-phrase-copying",
+        "named-person-impersonation"
+      ],
+      "status": "active"
+    }
+  ]
+}

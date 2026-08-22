@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://rfclear.dev/schemas/eval-case.schema.json",
-  "title": "RFClear evaluation case",
+  "$id": "urn:goodprose:schema:eval-case:v1",
+  "title": "GoodProse evaluation case",
   "type": "object",
   "additionalProperties": false,
   "required": ["version", "id", "split", "input", "expected", "provenance"],
@@ -12,10 +12,14 @@
     "input": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["agent_output"],
+      "required": ["source_material", "channel", "audience", "objective", "voice_profile_id"],
       "properties": {
-        "user_request": {"type": "string"},
-        "agent_output": {"type": "string", "minLength": 1},
+        "source_material": {"type": "string", "minLength": 1},
+        "channel": {"enum": ["email", "blog_post", "internal_memo"]},
+        "audience": {"type": "string", "minLength": 1},
+        "objective": {"type": "string", "minLength": 1},
+        "voice_profile_id": {"type": "string", "minLength": 1},
+        "constraints": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
         "context": {
           "type": "array",
           "items": {
@@ -23,8 +27,8 @@
             "additionalProperties": false,
             "required": ["kind", "content"],
             "properties": {
-              "kind": {"enum": ["file", "diff", "issue", "constraint", "other"]},
-              "path": {"type": "string"},
+              "kind": {"enum": ["notes", "reference", "policy", "constraint", "other"]},
+              "label": {"type": "string"},
               "content": {"type": "string"}
             }
           }
@@ -36,27 +40,12 @@
       "additionalProperties": false,
       "required": ["required_facts", "forbidden_claims"],
       "properties": {
-        "gold_spec_path": {"type": "string"},
-        "required_facts": {
-          "type": "array",
-          "items": {"type": "string"},
-          "uniqueItems": true
-        },
-        "optional_facts": {
-          "type": "array",
-          "items": {"type": "string"},
-          "uniqueItems": true
-        },
-        "forbidden_claims": {
-          "type": "array",
-          "items": {"type": "string"},
-          "uniqueItems": true
-        },
-        "acceptable_variations": {
-          "type": "array",
-          "items": {"type": "string"},
-          "uniqueItems": true
-        }
+        "gold_output_path": {"type": "string"},
+        "required_facts": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "optional_facts": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "forbidden_claims": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "required_call_to_action": {"type": "string"},
+        "acceptable_variations": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
       }
     },
     "provenance": {
@@ -65,19 +54,9 @@
       "required": ["lineage_group", "target_document_ids", "input_origin"],
       "properties": {
         "lineage_group": {"type": "string", "minLength": 1},
-        "target_document_ids": {
-          "type": "array",
-          "items": {"type": "string"},
-          "uniqueItems": true
-        },
-        "input_origin": {
-          "enum": ["real_agent_output", "paired_history", "synthetic_degradation"]
-        },
-        "reviewers": {
-          "type": "array",
-          "items": {"type": "string"},
-          "uniqueItems": true
-        }
+        "target_document_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "input_origin": {"enum": ["real_source_material", "paired_history", "synthetic_degradation"]},
+        "reviewers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
       }
     }
   }

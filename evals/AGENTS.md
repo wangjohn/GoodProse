@@ -2,7 +2,7 @@
 
 ## Goal
 
-Evals measure whether the system converts coding-agent artifacts into high-quality engineering specifications.
+Evals measure whether the system converts source material into factual, effective executive communication for a stated audience, channel, and objective.
 
 The score is not the goal. Reliable measurement is the goal.
 

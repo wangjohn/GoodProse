@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "collection_type": "content_foundation",
+  "description": "Whole-document references selected for grounded technical reasoning and decision content, independent of prose quality.",
+  "documents": [
+    {
+      "document_id": "go-draft-fuzzing",
+      "technical_score": 4,
+      "strengths": ["user-workflow", "api", "file-format", "implementation", "open-questions"],
+      "caveats": ["historical-design-draft", "not-current-authority"]
+    },
+    {
+      "document_id": "go-lazy-module-loading",
+      "technical_score": 5,
+      "strengths": ["invariants", "algorithm", "compatibility", "worked-examples", "test-scenarios"],
+      "caveats": ["very-dense-prose"]
+    },
+    {
+      "document_id": "go-godebug-compatibility",
+      "technical_score": 5,
+      "strengths": ["policy", "compatibility", "lifecycle", "observability", "rationale"],
+      "caveats": ["frequent-long-sentences"]
+    },
+    {
+      "document_id": "go-register-calling-convention",
+      "technical_score": 5,
+      "strengths": ["systems-architecture", "constraints", "cross-component-impact", "compatibility", "rollout"],
+      "caveats": ["dense-prose", "large-noun-clusters"]
+    },
+    {
+      "document_id": "go-doc-comment-format",
+      "technical_score": 5,
+      "strengths": ["goals-and-non-goals", "syntax", "api", "alternatives", "compatibility"],
+      "caveats": ["development-eval-holdout", "frequent-long-sentences"]
+    },
+    {
+      "document_id": "react-server-components",
+      "technical_score": 4,
+      "strengths": ["architecture", "user-examples", "constraints", "adoption", "faq"],
+      "caveats": ["verbose", "repetitive"]
+    },
+    {
+      "document_id": "react-sync-external-store",
+      "technical_score": 4,
+      "strengths": ["api-contract", "concurrency", "edge-cases", "migration", "tradeoffs"],
+      "caveats": ["complex-sentences"]
+    },
+    {
+      "document_id": "rust-const-generics",
+      "technical_score": 4,
+      "strengths": ["terminology", "formal-semantics", "drawbacks", "alternatives", "open-questions"],
+      "caveats": ["language-design-bias", "dense-prose"]
+    },
+    {
+      "document_id": "rust-async-await",
+      "technical_score": 5,
+      "strengths": ["guide-and-reference-separation", "semantics", "alternatives", "prior-art", "open-questions"],
+      "caveats": ["historical-design", "long-document"]
+    },
+    {
+      "document_id": "rust-pointer-metadata",
+      "technical_score": 4,
+      "strengths": ["unsafe-api", "worked-example", "reference-detail", "alternatives", "prior-art"],
+      "caveats": ["specialized-domain"]
+    },
+    {
+      "document_id": "rust-dyn-upcasting",
+      "technical_score": 5,
+      "strengths": ["surface-semantics", "runtime-layout", "unsafe-implications", "tradeoffs", "future-work"],
+      "caveats": ["dense-prose"]
+    },
+    {
+      "document_id": "rust-scoped-threads",
+      "technical_score": 4,
+      "strengths": ["guide-and-reference-separation", "safety", "api", "alternatives", "prior-art"],
+      "caveats": ["development-eval-holdout"]
+    },
+    {
+      "document_id": "python-frozendict",
+      "technical_score": 4,
+      "strengths": ["api", "data-model", "semantics", "examples", "alternatives"],
+      "caveats": ["narrow-language-feature"]
+    },
+    {
+      "document_id": "python-bytes-writer-c-api",
+      "technical_score": 4,
+      "strengths": ["c-api", "object-lifecycle", "error-behavior", "performance", "alternatives"],
+      "caveats": ["specialized-c-api"]
+    },
+    {
+      "document_id": "python-low-impact-monitoring",
+      "technical_score": 5,
+      "strengths": ["runtime-api", "observability", "performance", "security", "compatibility"],
+      "caveats": ["large-api-surface"]
+    },
+    {
+      "document_id": "swift-c-compatible-declarations",
+      "technical_score": 5,
+      "strengths": ["interoperability", "abi", "source-compatibility", "adoption", "alternatives"],
+      "caveats": ["compiler-domain"]
+    },
+    {
+      "document_id": "swift-unsafe-raw-pointer",
+      "technical_score": 5,
+      "strengths": ["memory-model", "goals", "unsafe-api", "migration", "implementation"],
+      "caveats": ["historical-design", "specialized-domain"]
+    },
+    {
+      "document_id": "kubernetes-scheduling-framework",
+      "technical_score": 5,
+      "strengths": ["architecture", "extension-api", "concurrency", "configuration", "graduation-and-tests"],
+      "caveats": ["kubernetes-terminology"]
+    },
+    {
+      "document_id": "kubernetes-bound-service-account-tokens",
+      "technical_score": 5,
+      "strengths": ["security", "api-semantics", "migration", "rollout", "observability-and-recovery"],
+      "caveats": ["kubernetes-terminology", "some-long-sentences"]
+    },
+    {
+      "document_id": "bytecode-async-imports",
+      "technical_score": 5,
+      "strengths": ["api", "execution-trace", "cancellation", "alternatives", "open-questions"],
+      "caveats": ["test-eval-holdout"]
+    },
+    {
+      "document_id": "bytecode-cranelift-assembler",
+      "technical_score": 4,
+      "strengths": ["architecture", "dsl", "generation-pipeline", "fuzzing", "integration"],
+      "caveats": ["test-eval-holdout", "template-residue", "editing-errors", "not-a-style-reference"]
+    },
+    {
+      "document_id": "bytecode-wasmtime-instance-allocator",
+      "technical_score": 4,
+      "strengths": ["runtime-api", "resource-limits", "configuration", "allocation-strategy", "example"],
+      "caveats": ["test-eval-holdout", "limited-failure-analysis"]
+    },
+    {
+      "document_id": "bytecode-wasmtime-lts",
+      "technical_score": 4,
+      "strengths": ["release-policy", "support-window", "schedule", "ci", "feature-policy"],
+      "caveats": ["test-eval-holdout", "weak-sentence-construction"]
+    }
+  ]
+}

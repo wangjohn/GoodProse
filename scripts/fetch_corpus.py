@@ -7,12 +7,11 @@ import argparse
 import hashlib
 import json
 import os
-from pathlib import Path, PurePosixPath
 import sys
 import tempfile
 import urllib.error
 import urllib.request
-
+from pathlib import Path, PurePosixPath
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_ROOT / "data" / "sources.json"
@@ -61,7 +60,7 @@ def sha256_bytes(data: bytes) -> str:
 
 
 def download(url: str) -> bytes:
-    request = urllib.request.Request(url, headers={"User-Agent": "RFClear-corpus-fetcher/1"})
+    request = urllib.request.Request(url, headers={"User-Agent": "GoodProse-corpus-fetcher/1"})
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
             return response.read()
@@ -140,9 +139,7 @@ def main() -> int:
             if destination.exists() and sha256_bytes(destination.read_bytes()) == entry["sha256"]:
                 result = "verified"
             else:
-                result = install_file(
-                    destination, download(url), entry["sha256"], args.force
-                )
+                result = install_file(destination, download(url), entry["sha256"], args.force)
             if result == "fetched":
                 fetched_count += 1
             else:
@@ -151,8 +148,7 @@ def main() -> int:
 
     if skipped_sources:
         print(
-            "skipped sources requiring manual review: "
-            + ", ".join(sorted(skipped_sources)),
+            "skipped sources requiring manual review: " + ", ".join(sorted(skipped_sources)),
             file=sys.stderr,
         )
     print(f"done: {fetched_count} fetched, {verified_count} already verified")

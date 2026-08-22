@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:goodprose:schema:training-example:v1",
-  "title": "GoodProse supervised training example",
+  "$id": "urn:goodprose:schema:annotation-seed:v1",
+  "title": "GoodProse annotation seed",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "id", "split", "input", "output", "provenance", "review"],
+  "required": ["version", "id", "split", "input", "provenance"],
   "properties": {
     "version": {"const": 1},
     "id": {"type": "string", "minLength": 1},
@@ -39,15 +39,6 @@
         }
       }
     },
-    "output": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["body_markdown"],
-      "properties": {
-        "title": {"type": "string"},
-        "body_markdown": {"type": "string", "minLength": 1}
-      }
-    },
     "provenance": {
       "type": "object",
       "additionalProperties": false,
@@ -60,22 +51,6 @@
         "license_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
         "source_url": {"type": "string", "format": "uri"},
         "source_revision": {"type": "string"}
-      }
-    },
-    "review": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["privacy", "factuality", "objective_fulfillment", "audience_fit", "channel_fit", "house_style", "overall_quality"],
-      "properties": {
-        "privacy": {"enum": ["pending", "passed", "failed"]},
-        "factuality": {"enum": ["pending", "passed", "failed"]},
-        "objective_fulfillment": {"enum": ["pending", "passed", "failed"]},
-        "audience_fit": {"enum": ["pending", "passed", "failed"]},
-        "channel_fit": {"enum": ["pending", "passed", "failed"]},
-        "house_style": {"enum": ["pending", "passed", "failed"]},
-        "overall_quality": {"enum": ["pending", "passed", "failed"]},
-        "reviewer": {"type": "string"},
-        "notes": {"type": "string"}
       }
     }
   }

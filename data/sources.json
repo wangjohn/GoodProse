@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Pinned, provenance-tracked technical specifications used as references and evaluation targets.",
+  "description": "Pinned, provenance-tracked technical source material retained for grounded writing research and evaluation targets.",
   "split_policy": {
     "train_reference": "May inform supervised-example creation, but is not itself a training pair.",
     "dev_eval": "Public development holdout. May be used for prompt and rubric iteration, never for fitting.",
@@ -81,14 +81,6 @@
       ],
       "documents": [
         {
-          "id": "react-hooks",
-          "path": "text/0068-react-hooks.md",
-          "sha256": "ab5a7eed821a9b2c6a52da8e8b27ca2a97e53b1d79df2ee009eb97364d292376",
-          "split": "train_reference",
-          "quality_tags": ["concise", "api", "motivation", "alternatives"],
-          "selection_note": "A compact example that covers motivation, API shape, drawbacks, alternatives, adoption, and teaching."
-        },
-        {
           "id": "react-server-components",
           "path": "text/0188-server-components.md",
           "sha256": "69a2811dc897b66d94690243a13ab78146a998b8753087c97d14c78a38643575",
@@ -103,14 +95,6 @@
           "split": "train_reference",
           "quality_tags": ["api", "concurrency", "migration", "tradeoffs"],
           "selection_note": "Explains a subtle concurrency contract through an API, examples, tradeoffs, and migration strategy."
-        },
-        {
-          "id": "react-lazy-context-propagation",
-          "path": "text/0118-lazy-context-propagation.md",
-          "sha256": "89893b6c6960389bb361bd13cc1a04ea92ba6980240c48d5ff5536203332aae5",
-          "split": "dev_eval",
-          "quality_tags": ["internals", "algorithm", "performance", "alternatives"],
-          "selection_note": "A concise development target for converting implementation-heavy material into a navigable internal design."
         }
       ]
     },
@@ -172,6 +156,121 @@
           "split": "dev_eval",
           "quality_tags": ["api", "safety", "alternatives", "prior-art"],
           "selection_note": "A compact public target with safety invariants, exact API behavior, alternatives, and prior art."
+        }
+      ]
+    },
+    {
+      "id": "python-peps",
+      "name": "Python Enhancement Proposals",
+      "repository": "https://github.com/python/peps",
+      "revision": "8605833b97fc60f3f11c8d8fb7160a34eb095247",
+      "raw_base_url": "https://raw.githubusercontent.com/python/peps/8605833b97fc60f3f11c8d8fb7160a34eb095247",
+      "license_id": "CC0-1.0 OR LicenseRef-Public-Domain",
+      "license_scope": "Each selected PEP contains its own public-domain or CC0-1.0 notice. PEP 1 records the licensing policy for new PEPs.",
+      "fetch_policy": "default",
+      "licenses": [
+        {
+          "path": "peps/pep-0001.rst",
+          "sha256": "c2bc2ce666758fa82ee2592926218d710e6fdddc674d78314bd6b56c392c46f6"
+        }
+      ],
+      "documents": [
+        {
+          "id": "python-frozendict",
+          "path": "peps/pep-0814.rst",
+          "sha256": "b806c68cf7789a2ede4619f790b885a45d04ccf808126e93284b024c63066793",
+          "split": "train_reference",
+          "maturity": "final",
+          "quality_tags": ["api", "data-model", "semantics", "alternatives"],
+          "selection_note": "A final, compact language proposal with unusually short sentences, explicit semantics, examples, and rejected alternatives."
+        },
+        {
+          "id": "python-bytes-writer-c-api",
+          "path": "peps/pep-0782.rst",
+          "sha256": "d0b9af10de6266dd6c04a3439fee5d4629397cc708c2235fe2227f9844c73b17",
+          "split": "train_reference",
+          "maturity": "final",
+          "quality_tags": ["c-api", "lifecycle", "error-behavior", "performance"],
+          "selection_note": "A final C API proposal that states object lifecycle, error behavior, performance rationale, compatibility, and rejected designs in direct prose."
+        },
+        {
+          "id": "python-low-impact-monitoring",
+          "path": "peps/pep-0669.rst",
+          "sha256": "3122dbc485bcd958d28f9a6878bab2c559733f98311e311b635d0e8898ce1c5f",
+          "split": "train_reference",
+          "maturity": "final",
+          "quality_tags": ["runtime", "observability", "performance", "security", "compatibility"],
+          "selection_note": "A final runtime design that connects a precise event API to debugger and profiler needs, performance, security, and backward compatibility."
+        }
+      ]
+    },
+    {
+      "id": "swift-evolution",
+      "name": "Swift Evolution proposals",
+      "repository": "https://github.com/swiftlang/swift-evolution",
+      "revision": "eddf5412bc40499b7e248b7e80de6dd9abc18861",
+      "raw_base_url": "https://raw.githubusercontent.com/swiftlang/swift-evolution/eddf5412bc40499b7e248b7e80de6dd9abc18861",
+      "license_id": "Apache-2.0",
+      "fetch_policy": "default",
+      "licenses": [
+        {
+          "path": "LICENSE.txt",
+          "sha256": "186c5f0192a754714a7e542233ddaaad28745626e0ad32e358d3f5af00afb84a"
+        }
+      ],
+      "documents": [
+        {
+          "id": "swift-c-compatible-declarations",
+          "path": "proposals/0495-cdecl.md",
+          "sha256": "455915895fba15352af96775de85d43f481cc59f892dd17f0fdb2548ea6643cb",
+          "split": "train_reference",
+          "maturity": "implemented",
+          "quality_tags": ["interoperability", "abi", "compatibility", "adoption", "alternatives"],
+          "selection_note": "An implemented interoperability proposal with a clean path from motivation through ABI consequences, adoption, future work, and alternatives."
+        },
+        {
+          "id": "swift-unsafe-raw-pointer",
+          "path": "proposals/0107-unsaferawpointer.md",
+          "sha256": "efc6a8d1559c4976755296c8aecbc96ad1e42a564498a14326f3e9e33a332cf7",
+          "split": "train_reference",
+          "maturity": "implemented",
+          "quality_tags": ["memory-model", "unsafe-api", "migration", "implementation", "alternatives"],
+          "selection_note": "An implemented low-level API design with explicit goals, a memory model, use cases, detailed semantics, migration impact, and alternatives."
+        }
+      ]
+    },
+    {
+      "id": "kubernetes-enhancements",
+      "name": "Kubernetes Enhancement Proposals",
+      "repository": "https://github.com/kubernetes/enhancements",
+      "revision": "552c48ba8adf5b77b2c12c7bef04c47748136898",
+      "raw_base_url": "https://raw.githubusercontent.com/kubernetes/enhancements/552c48ba8adf5b77b2c12c7bef04c47748136898",
+      "license_id": "Apache-2.0",
+      "fetch_policy": "default",
+      "licenses": [
+        {
+          "path": "LICENSE",
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+        }
+      ],
+      "documents": [
+        {
+          "id": "kubernetes-scheduling-framework",
+          "path": "keps/sig-scheduling/624-scheduling-framework/README.md",
+          "sha256": "2b816de2e131bbefb9d26fb54a6a511f7dc7e856b57b5f7ad03f49611c2fcaab",
+          "split": "train_reference",
+          "maturity": "implemented/stable",
+          "quality_tags": ["architecture", "extension-api", "concurrency", "configuration", "testing"],
+          "selection_note": "An implemented, stable architecture proposal with extension points, control flow, concurrency rules, configuration, graduation criteria, and tests."
+        },
+        {
+          "id": "kubernetes-bound-service-account-tokens",
+          "path": "keps/sig-auth/1205-bound-service-account-tokens/README.md",
+          "sha256": "c0792de5996a0dfefa9c9c731386c5b453fd38b26cbb9ba86740321c7f445f44",
+          "split": "train_reference",
+          "maturity": "implemented/stable",
+          "quality_tags": ["security", "api", "migration", "rollout", "observability", "failure-recovery"],
+          "selection_note": "An implemented, stable security design that covers token semantics, migration, rollout, metrics, scale, failure recovery, and troubleshooting."
         }
       ]
     },

@@ -1,48 +1,42 @@
 {
   "version": 1,
-  "description": "Held-out reference specifications from which runnable agent-output-to-spec eval cases will be derived.",
+  "description": "Held-out technical sources from which runnable source-to-executive-communication eval cases can be derived.",
   "targets": [
     {
       "document_id": "go-doc-comment-format",
       "split": "dev_eval",
       "case_status": "target_only",
-      "evaluation_focus": ["goals-and-non-goals", "syntax", "compatibility", "api-detail"]
-    },
-    {
-      "document_id": "react-lazy-context-propagation",
-      "split": "dev_eval",
-      "case_status": "target_only",
-      "evaluation_focus": ["algorithm", "internal-control-flow", "performance", "conciseness"]
+      "evaluation_focus": ["decision-summary", "audience-calibration", "factual-compression", "tradeoffs"]
     },
     {
       "document_id": "rust-scoped-threads",
       "split": "dev_eval",
       "case_status": "target_only",
-      "evaluation_focus": ["api-contract", "safety", "alternatives", "prior-art"]
+      "evaluation_focus": ["internal-memo", "risk-communication", "alternatives", "recommendation"]
     },
     {
       "document_id": "bytecode-async-imports",
       "split": "test_eval",
       "case_status": "target_only",
-      "evaluation_focus": ["api-contract", "execution-flow", "cancellation", "open-questions"]
+      "evaluation_focus": ["executive-summary", "operational-impact", "uncertainty", "open-questions"]
     },
     {
       "document_id": "bytecode-cranelift-assembler",
       "split": "test_eval",
       "case_status": "target_only",
-      "evaluation_focus": ["architecture", "dsl", "generation", "test-strategy"]
+      "evaluation_focus": ["technical-to-executive", "strategy", "evidence", "next-steps"]
     },
     {
       "document_id": "bytecode-wasmtime-instance-allocator",
       "split": "test_eval",
       "case_status": "target_only",
-      "evaluation_focus": ["types", "limits", "configuration", "examples"]
+      "evaluation_focus": ["constraints", "resource-risk", "configuration", "examples"]
     },
     {
       "document_id": "bytecode-wasmtime-lts",
       "split": "test_eval",
       "case_status": "target_only",
-      "evaluation_focus": ["policy", "schedule", "ci", "support-window"]
+      "evaluation_focus": ["policy-email", "timeline", "commitment", "support-window"]
     }
   ]
 }
