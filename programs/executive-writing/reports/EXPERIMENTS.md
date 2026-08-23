@@ -120,6 +120,24 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   `../experiments/goodprose-b1-v1.1-case-results.jsonl`, and human summary
   `FIRST_EVIDENCE_BASELINES.md`.
 
+## 2026-08-22 — Ox Alpha baseline-failure review attempt
+
+- Hypothesis: a read-only Ox Alpha assignment will surface validity or
+  experiment-design problems before iteration one.
+- Model/provider/prompt: `stealth/ox-alpha` / OpenRouter /
+  `sha256:1dd9dcae60557af224583b1e32d73f723a047353519e28fd0657dca15a713004`.
+- Validation: the public inventory still listed the exact model with a
+  1,048,576-token context and $0 prompt/completion prices. The earlier
+  successful design-review session still exported nonzero Ox Alpha usage.
+- Result: fresh high and default sessions, a fork of the successful session,
+  and a minimal no-tool diagnostic each stopped with zero input/output tokens
+  and no content. Repository tree `f714374d7b2d50428cc8895430680ebd8b1a066d`
+  remained unchanged; settled cost was $0.
+- Decision: no Ox review was produced. Reject any inferred findings and
+  continue directly; bounded delegation remains optional and must be
+  revalidated before a later retry.
+- Record: `../experiments/ox-baseline-failure-review-v1.json`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

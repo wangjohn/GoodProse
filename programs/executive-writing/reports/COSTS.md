@@ -28,6 +28,7 @@ reference. Never record payment credentials.
 | 2026-08-23T02:26:09Z | Local Apple M3 Pro | Implement and validate matched baseline runner | `local-baseline-runner-v1` | completed | $0.00 | pinned configs and green focused suite |
 | 2026-08-23T03:48:27Z | Local Apple M3 Pro | Generate three matched 24-case B1 baselines | `goodprose-b1-v1-initial-baselines` | completed; scorer comparison invalidated | $0.00 | preserved local outputs, timings, tokens, scores, and hashes |
 | 2026-08-23T04:02:28Z | Local Apple M3 Pro | Offline v1.1 rescore and paired baseline analysis | `goodprose-b1-v1.1-baseline-analysis` | completed | $0.00 | exact output-byte reuse, corrected score hashes, 10,000 paired resamples |
+| 2026-08-23T04:08:22Z | OpenRouter | Bounded Ox Alpha baseline-failure critique | `ox-baseline-failure-review-v1` | attempted; empty zero-token runtime | $0.00 | four session IDs and fresh public inventory record |
 
 ## Zero-cost feasibility snapshot
 

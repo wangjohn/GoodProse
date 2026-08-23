@@ -76,9 +76,15 @@ unsupported-transformation count without lowering the 37.50% retrieval hard
 gate or adding more than a bounded latency/token increase. This is a prompt and
 pipeline hypothesis, not a benchmark change.
 
-Ox Alpha receives a bounded critique assignment on this analysis. Its role is
-to challenge scorer validity, selection logic, and the next hypothesis; it is
-not a candidate generator, benchmark author, or sole judge.
+Ox Alpha received a bounded critique assignment on this analysis. Its live
+OpenRouter/OpenCode endpoint returned empty zero-token completions on fresh
+default and high variants, a fork of the previously successful session, and a
+minimal availability diagnostic. The model remained listed at $0, so this is a
+harness/provider runtime failure rather than a budget or inventory rejection.
+No critique was produced or inferred. Its intended role remains to challenge
+scorer validity, selection logic, and the next hypothesis—not to generate
+candidates, author the benchmark, or act as sole judge. The failed optimization
+does not block the local evidence loop.
 
 ## Artifacts
 
@@ -88,6 +94,8 @@ not a candidate generator, benchmark author, or sole judge.
   `../experiments/goodprose-b1-v1.1-case-results.jsonl`
 - Preserved invalidated v1 audit record:
   `../experiments/b1-v1-initial-baselines.json`
+- Ox Alpha review runtime record:
+  `../experiments/ox-baseline-failure-review-v1.json`
 - Frozen correction record:
   `../../../evals/executive-writing/goodprose-b1-v1/SCORER_CALIBRATION_v1.1.md`
 

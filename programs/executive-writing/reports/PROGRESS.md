@@ -178,3 +178,23 @@ historical entries.
 - Unresolved risks: retrieval still fails 15 of 24 hard gates, including 14
   cases with omissions, one true fabrication, and one placeholder loss;
   deterministic B1 results cannot substitute for semantic or human judgment.
+
+### 2026-08-22 — Phase 0 checkpoint: Ox baseline-review runtime failure
+
+- Hypothesis: Ox Alpha can provide a bounded independent critique of scorer
+  validity, selection logic, and the next experiment without seeing raw outputs
+  or acting as judge.
+- Evidence: the committed prompt hash, four session IDs, zero-token usage
+  records, unchanged repository tree, and a fresh public inventory response
+  showing the exact model, 1,048,576-token context, and $0 prices.
+- Exit criteria: a nonempty contract-compliant JSON critique with exact
+  model/provider provenance and no repository change.
+- Decision: fail the optimization. Fresh default and high variants, a fork of
+  the earlier successful Ox session, and a minimal `OK` diagnostic all stopped
+  with zero input and output tokens. No review exists and none is inferred.
+- Next actions: continue the structured local improvement experiment under
+  Codex review; retry Ox only at a later natural checkpoint after runtime
+  revalidation, without pausing evidence-bearing work.
+- Unresolved risks: public inventory presence does not establish live inference
+  health; the endpoint may be transiently unavailable or incompatible with the
+  current harness request path.

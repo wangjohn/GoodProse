@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T04:02:28Z",
+  "updated_at": "2026-08-23T04:08:22Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -76,6 +76,19 @@
       "model_id": "qwen2.5:0.5b-instruct",
       "settled_cost_usd": 0,
       "disposition": "keep retrieval v1 as the next-iteration baseline; treat all results as post-generation evaluator calibration and visible search evidence"
+    },
+    {
+      "experiment_id": "ox-baseline-failure-review-v1",
+      "kind": "failure_analysis_review",
+      "status": "harness_runtime_empty_completion",
+      "record": "programs/executive-writing/experiments/ox-baseline-failure-review-v1.json",
+      "code_revision_start": "acce2d8",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "no review produced; continue directly because Ox delegation is an optimization, not a program blocker"
     }
   ]
 }
