@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "updated_at": "2026-08-23T02:26:09Z",
+  "experiments": [
+    {
+      "experiment_id": "harness-preflight-2026-08-22",
+      "kind": "capability_gate",
+      "status": "completed_pass",
+      "record": "programs/executive-writing/experiments/2026-08-22-harness-preflight.json",
+      "code_revision_start": "20c27103de41a495cbe6795432f48e6794a46f6c",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "enable bounded delegation"
+    },
+    {
+      "experiment_id": "ox-benchmark-design-review-v1",
+      "kind": "design_review",
+      "status": "completed_reviewed",
+      "record": "programs/executive-writing/experiments/ox-benchmark-design-review-v1.json",
+      "code_revision_start": "5556921",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "accepted with Codex corrections; design provenance only"
+    },
+    {
+      "experiment_id": "goodprose-b1-v1-build",
+      "kind": "benchmark_build",
+      "status": "completed_pass",
+      "record": "evals/executive-writing/goodprose-b1-v1/manifest.json",
+      "code_revision_start": "645c342",
+      "dataset_id": "goodprose-b1-v1",
+      "dataset_sha256": "a15232a5d426dcb6f5161abc5644a8ed10f57b8b7b87fb771e62fe26e57ae352",
+      "scorer_version": "goodprose-deterministic-v1",
+      "provider": "local",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "keep as visible search-development plumbing and screening evidence"
+    }
+  ]
+}

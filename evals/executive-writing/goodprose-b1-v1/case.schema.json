@@ -1,0 +1,334 @@
+{
+  "$defs": {
+    "BenchmarkExpected": {
+      "additionalProperties": false,
+      "properties": {
+        "forbidden_claims": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TextExpectation"
+          },
+          "title": "Forbidden Claims",
+          "type": "array"
+        },
+        "headings_prohibited": {
+          "default": false,
+          "title": "Headings Prohibited",
+          "type": "boolean"
+        },
+        "headings_required": {
+          "default": false,
+          "title": "Headings Required",
+          "type": "boolean"
+        },
+        "max_source_change_ratio": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Source Change Ratio"
+        },
+        "max_words": {
+          "minimum": 1,
+          "title": "Max Words",
+          "type": "integer"
+        },
+        "min_words": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Min Words",
+          "type": "integer"
+        },
+        "must_preserve_spans": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Must Preserve Spans",
+          "type": "array"
+        },
+        "opening_any_of": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Opening Any Of",
+          "type": "array"
+        },
+        "required_call_to_action": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Required Call To Action",
+          "type": "array"
+        },
+        "required_facts": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TextExpectation"
+          },
+          "title": "Required Facts",
+          "type": "array"
+        },
+        "required_placeholders": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Required Placeholders",
+          "type": "array"
+        },
+        "subject_required": {
+          "default": false,
+          "title": "Subject Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "max_words"
+      ],
+      "title": "BenchmarkExpected",
+      "type": "object"
+    },
+    "BenchmarkInput": {
+      "additionalProperties": false,
+      "properties": {
+        "audience": {
+          "minLength": 1,
+          "title": "Audience",
+          "type": "string"
+        },
+        "constraints": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Constraints",
+          "type": "array"
+        },
+        "objective": {
+          "minLength": 1,
+          "title": "Objective",
+          "type": "string"
+        },
+        "output_format": {
+          "$ref": "#/$defs/OutputFormat"
+        },
+        "profile_id": {
+          "minLength": 1,
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "source_material": {
+          "minLength": 1,
+          "title": "Source Material",
+          "type": "string"
+        },
+        "task_family": {
+          "$ref": "#/$defs/TaskFamily"
+        }
+      },
+      "required": [
+        "task_family",
+        "output_format",
+        "source_material",
+        "audience",
+        "objective",
+        "profile_id"
+      ],
+      "title": "BenchmarkInput",
+      "type": "object"
+    },
+    "BenchmarkProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "authored_at": {
+          "format": "date-time",
+          "title": "Authored At",
+          "type": "string"
+        },
+        "authored_by": {
+          "const": "codex",
+          "title": "Authored By",
+          "type": "string"
+        },
+        "creation_method": {
+          "const": "project_authored",
+          "title": "Creation Method",
+          "type": "string"
+        },
+        "lineage_group": {
+          "minLength": 1,
+          "title": "Lineage Group",
+          "type": "string"
+        },
+        "rights_status": {
+          "const": "evaluation_approved_project_owned",
+          "title": "Rights Status",
+          "type": "string"
+        },
+        "source_material_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Material Sha256",
+          "type": "string"
+        },
+        "time_bucket": {
+          "minLength": 1,
+          "title": "Time Bucket",
+          "type": "string"
+        },
+        "topic": {
+          "minLength": 1,
+          "title": "Topic",
+          "type": "string"
+        }
+      },
+      "required": [
+        "creation_method",
+        "authored_by",
+        "authored_at",
+        "rights_status",
+        "lineage_group",
+        "topic",
+        "time_bucket",
+        "source_material_sha256"
+      ],
+      "title": "BenchmarkProvenance",
+      "type": "object"
+    },
+    "OutputFormat": {
+      "enum": [
+        "email",
+        "memo",
+        "document",
+        "blog_post",
+        "short_post"
+      ],
+      "title": "OutputFormat",
+      "type": "string"
+    },
+    "TaskFamily": {
+      "enum": [
+        "rough_notes_to_executive_email",
+        "rough_notes_to_internal_memo",
+        "meeting_transcript_to_decision_memo",
+        "technical_source_to_engineering_document",
+        "long_draft_to_concise_revision",
+        "disorganized_draft_to_coherent_revision",
+        "source_documents_to_strategy_update",
+        "announcement_or_launch_memo",
+        "sensitive_internal_communication",
+        "short_form_post_or_thread",
+        "blog_post_or_explanatory_essay",
+        "audience_adaptation",
+        "minimal_edit_revision",
+        "content_controlled_profile_rendering"
+      ],
+      "title": "TaskFamily",
+      "type": "string"
+    },
+    "TextExpectation": {
+      "additionalProperties": false,
+      "properties": {
+        "any_of": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Any Of",
+          "type": "array"
+        },
+        "critical": {
+          "default": true,
+          "title": "Critical",
+          "type": "boolean"
+        },
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "any_of"
+      ],
+      "title": "TextExpectation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "adversarial_features": {
+      "default": [],
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Adversarial Features",
+      "type": "array"
+    },
+    "difficulty": {
+      "enum": [
+        "standard",
+        "difficult"
+      ],
+      "title": "Difficulty",
+      "type": "string"
+    },
+    "expected": {
+      "$ref": "#/$defs/BenchmarkExpected"
+    },
+    "id": {
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "input": {
+      "$ref": "#/$defs/BenchmarkInput"
+    },
+    "provenance": {
+      "$ref": "#/$defs/BenchmarkProvenance"
+    },
+    "tier": {
+      "const": "B1",
+      "title": "Tier",
+      "type": "string"
+    },
+    "version": {
+      "const": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "version",
+    "id",
+    "tier",
+    "input",
+    "expected",
+    "provenance",
+    "difficulty"
+  ],
+  "title": "BenchmarkCase",
+  "type": "object"
+}

@@ -24,6 +24,7 @@ reference. Never record payment credentials.
 | 2026-08-23T02:02:50Z | OpenRouter | Ox Alpha harness capability gate | `harness-preflight-2026-08-22` | attempted and settled | $0.00 | local sanitized session metadata |
 | 2026-08-23T02:26:09Z | OpenRouter | Corrected Ox Alpha harness rerun | `harness-preflight-2026-08-22-rerun` | attempted and settled | $0.00 | local sanitized session metadata |
 | 2026-08-23T02:26:09Z | OpenRouter | B1 benchmark design review | `ox-benchmark-design-review-v1` | attempted and settled | $0.00 | committed sanitized result record |
+| 2026-08-23T02:26:09Z | Local Apple M3 Pro | Build and validate 24-case B1 v1 benchmark | `goodprose-b1-v1-build` | completed | $0.00 | committed manifest and green verification suite |
 
 ## Zero-cost feasibility snapshot
 

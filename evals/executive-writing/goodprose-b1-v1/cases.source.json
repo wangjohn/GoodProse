@@ -1,0 +1,950 @@
+[
+  {
+    "version": 1,
+    "id": "b1-001-migration-email",
+    "tier": "B1",
+    "input": {
+      "task_family": "rough_notes_to_executive_email",
+      "output_format": "email",
+      "source_material": "Cloud migration update. Wave 2 finished August 18. 72% of production traffic is now on the new platform. Checkout latency improved 14%. The remaining billing service move is planned for September 9, but that date is still at risk because the vendor has not completed load testing. Ask the leadership team to identify any September launch dependencies by Friday.",
+      "audience": "executive leadership team",
+      "objective": "give a concise migration status and surface the at-risk dependency",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use a subject line", "Do not imply the September 9 date is firm", "Stay under 130 words"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "wave-date", "description": "Wave 2 completed August 18", "any_of": ["August 18", "Aug. 18", "Aug 18"]},
+        {"id": "traffic", "description": "72% of traffic migrated", "any_of": ["72%", "72 percent"]},
+        {"id": "latency", "description": "checkout latency improved 14%", "any_of": ["14%", "14 percent"]},
+        {"id": "risk", "description": "September date remains at risk", "any_of": ["still at risk", "date is at risk", "September 9 is at risk"]}
+      ],
+      "forbidden_claims": [
+        {"id": "firm-date", "description": "do not claim the billing date is firm", "any_of": ["September 9 is confirmed", "September 9 is firm", "will move on September 9"]}
+      ],
+      "required_call_to_action": ["by Friday"],
+      "opening_any_of": ["migration", "Wave 2"],
+      "min_words": 45,
+      "max_words": 130,
+      "subject_required": true,
+      "headings_prohibited": true
+    },
+    "lineage_group": "b1-migration-wave-2",
+    "topic": "cloud migration",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "dates_and_deadlines", "uncertainty_calibration", "caveat_preservation"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-002-pricing-pilot-email",
+    "tier": "B1",
+    "input": {
+      "task_family": "rough_notes_to_executive_email",
+      "output_format": "email",
+      "source_material": "Pricing pilot notes: 18 customers joined. Median expansion in monthly recurring revenue was 4.5% after eight weeks. This is not an annualized result and the sample is too small for a rollout decision. Recommend extending the pilot four weeks. Finance should validate churn effects before October 3.",
+      "audience": "chief executive and finance leadership",
+      "objective": "recommend a bounded extension without overstating the evidence",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use a subject line", "Preserve the sample-size caveat", "Do not annualize the result"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "customers", "description": "18 customers participated", "any_of": ["18 customers"]},
+        {"id": "mrr", "description": "median monthly recurring revenue expansion was 4.5%", "any_of": ["4.5%", "4.5 percent"]},
+        {"id": "sample", "description": "sample is too small for rollout", "any_of": ["sample is too small", "too small for a rollout decision"]},
+        {"id": "extension", "description": "extend four weeks", "any_of": ["four weeks", "4 weeks"]}
+      ],
+      "forbidden_claims": [
+        {"id": "annual", "description": "do not annualize monthly evidence", "any_of": ["54% annual", "54 percent annual", "annual growth of 54"]},
+        {"id": "rollout", "description": "do not recommend full rollout", "any_of": ["roll out to all customers", "full rollout now"]}
+      ],
+      "required_call_to_action": ["October 3", "Oct. 3", "Oct 3"],
+      "opening_any_of": ["extend the pilot", "recommend extending"],
+      "min_words": 45,
+      "max_words": 125,
+      "subject_required": true,
+      "headings_prohibited": true
+    },
+    "lineage_group": "b1-pricing-pilot",
+    "topic": "pricing",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "uncertainty_calibration", "caveat_preservation"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-003-incident-email",
+    "tier": "B1",
+    "input": {
+      "task_family": "rough_notes_to_executive_email",
+      "output_format": "email",
+      "source_material": "Incident notes. API errors began 14:07 UTC and ended 14:54 UTC: 47 minutes. 6.2% of requests failed. No customer data was lost. The immediate trigger was a bad cache configuration; the underlying process failure is not yet known. The reliability review is Monday at 10:00 UTC. Ask owners to add evidence to the incident document before the review.",
+      "audience": "company leadership",
+      "objective": "report impact and the next investigation step",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use a subject line", "Distinguish trigger from root cause", "Do not claim the investigation is complete"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "duration", "description": "incident lasted 47 minutes", "any_of": ["47 minutes"]},
+        {"id": "failure-rate", "description": "6.2% of requests failed", "any_of": ["6.2%", "6.2 percent"]},
+        {"id": "no-loss", "description": "no customer data was lost", "any_of": ["No customer data was lost", "no loss of customer data"]},
+        {"id": "unknown", "description": "underlying process failure remains unknown", "any_of": ["not yet known", "remains unknown", "still investigating"]}
+      ],
+      "forbidden_claims": [
+        {"id": "root-cause", "description": "cache configuration is not yet the root cause", "any_of": ["root cause was the cache", "root cause is the cache configuration"]}
+      ],
+      "required_call_to_action": ["before the review", "before Monday"],
+      "opening_any_of": ["incident", "API errors"],
+      "min_words": 55,
+      "max_words": 140,
+      "subject_required": true,
+      "headings_prohibited": true
+    },
+    "lineage_group": "b1-api-incident",
+    "topic": "reliability incident",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "names_and_attribution", "uncertainty_calibration", "negation_polarity"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-004-hiring-memo",
+    "tier": "B1",
+    "input": {
+      "task_family": "rough_notes_to_internal_memo",
+      "output_format": "memo",
+      "source_material": "Hiring plan: product requested six roles. Finance approved three roles now: one staff engineer, one product designer, one customer researcher. The other three roles are contingent on fourth-quarter revenue reaching $8.4 million. Current forecast is $8.1 million, with a range of $7.8-$8.6 million. Revisit on November 6 after the October close.",
+      "audience": "product and finance leaders",
+      "objective": "document the approved hiring decision and the condition for reconsideration",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use memo headings", "Separate approved roles from contingent roles", "Preserve the forecast range"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "approved", "description": "three roles are approved", "any_of": ["three roles", "3 roles"]},
+        {"id": "threshold", "description": "remaining roles require $8.4 million Q4 revenue", "any_of": ["$8.4 million", "$8.4M"]},
+        {"id": "forecast", "description": "current forecast is $8.1 million", "any_of": ["$8.1 million", "$8.1M"]},
+        {"id": "range", "description": "forecast range is $7.8-$8.6 million", "any_of": ["$7.8-$8.6 million", "$7.8 million to $8.6 million"]}
+      ],
+      "forbidden_claims": [
+        {"id": "six-approved", "description": "six roles are not approved", "any_of": ["all six roles are approved", "approved six roles"]}
+      ],
+      "required_call_to_action": ["November 6", "Nov. 6", "Nov 6"],
+      "opening_any_of": ["approved three", "three roles", "hiring decision"],
+      "min_words": 80,
+      "max_words": 190,
+      "headings_required": true
+    },
+    "lineage_group": "b1-hiring-plan",
+    "topic": "hiring",
+    "time_bucket": "2026-q4",
+    "adversarial_features": ["numbers_and_units", "dates_and_deadlines", "uncertainty_calibration", "caveat_preservation"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-005-vendor-memo",
+    "tier": "B1",
+    "input": {
+      "task_family": "rough_notes_to_internal_memo",
+      "output_format": "memo",
+      "source_material": "Vendor review. Atlas costs $84,000 per year; Cinder costs $76,000. Select Atlas because it supports regional data residency and passed the security review. Cinder has not completed its SOC 2 Type II audit. Atlas still needs a four-week implementation test before signature. Security recommends Atlas; Procurement did not make the selection. Decision owner: Maya Chen.",
+      "audience": "operations steering committee",
+      "objective": "record the conditional Atlas selection and rationale",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use memo headings", "Attribute the recommendation correctly", "Do not present signature as complete"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "selection", "description": "Atlas is selected conditionally", "any_of": ["Select Atlas", "Atlas is the selected", "conditional selection of Atlas"]},
+        {"id": "cost", "description": "Atlas costs $84,000 annually", "any_of": ["$84,000", "$84k"]},
+        {"id": "security", "description": "Security recommended Atlas", "any_of": ["Security recommends Atlas", "Security recommended Atlas"]},
+        {"id": "test", "description": "four-week implementation test remains", "any_of": ["four-week implementation test", "4-week implementation test"]},
+        {"id": "owner", "description": "Maya Chen owns the decision", "any_of": ["Maya Chen"]}
+      ],
+      "forbidden_claims": [
+        {"id": "procurement", "description": "Procurement did not select Atlas", "any_of": ["Procurement selected Atlas", "Procurement recommends Atlas"]},
+        {"id": "signed", "description": "contract is not signed", "any_of": ["contract is signed", "signed the Atlas contract"]}
+      ],
+      "required_call_to_action": ["implementation test", "four-week test", "4-week test"],
+      "opening_any_of": ["Atlas", "conditional"],
+      "min_words": 85,
+      "max_words": 200,
+      "headings_required": true
+    },
+    "lineage_group": "b1-vendor-selection",
+    "topic": "vendor selection",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "names_and_attribution", "negation_polarity", "caveat_preservation"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-006-budget-memo",
+    "tier": "B1",
+    "input": {
+      "task_family": "rough_notes_to_internal_memo",
+      "output_format": "memo",
+      "source_material": "Allocate the $1.2 million reliability budget as follows: 60% to database failover, 25% to observability, 15% to incident training. This budget does not include new headcount. The allocation is approved for planning, but release of funds depends on the board approving the annual plan on December 11. Owners should submit milestones by November 20.",
+      "audience": "engineering directors",
+      "objective": "communicate the planned allocation and approval dependency",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Keep percentages exact", "Do not imply funds have been released"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "total", "description": "budget totals $1.2 million", "any_of": ["$1.2 million", "$1.2M"]},
+        {"id": "failover", "description": "60% goes to failover", "any_of": ["60%", "60 percent"]},
+        {"id": "observability", "description": "25% goes to observability", "any_of": ["25%", "25 percent"]},
+        {"id": "training", "description": "15% goes to incident training", "any_of": ["15%", "15 percent"]},
+        {"id": "dependency", "description": "board approval on December 11 is required", "any_of": ["December 11", "Dec. 11", "Dec 11"]}
+      ],
+      "forbidden_claims": [
+        {"id": "released", "description": "funds are not released", "any_of": ["funds have been released", "budget is fully funded"]},
+        {"id": "headcount", "description": "budget excludes headcount", "any_of": ["includes new headcount", "funds new hires"]}
+      ],
+      "required_call_to_action": ["November 20", "Nov. 20", "Nov 20"],
+      "opening_any_of": ["$1.2 million", "reliability budget"],
+      "min_words": 80,
+      "max_words": 185,
+      "headings_required": true
+    },
+    "lineage_group": "b1-reliability-budget",
+    "topic": "budget allocation",
+    "time_bucket": "2026-q4",
+    "adversarial_features": ["numbers_and_units", "dates_and_deadlines", "negation_polarity", "caveat_preservation"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-007-launch-decision-memo",
+    "tier": "B1",
+    "input": {
+      "task_family": "meeting_transcript_to_decision_memo",
+      "output_format": "memo",
+      "source_material": "Transcript excerpt. Elena: Accessibility testing found two keyboard-navigation blockers. I recommend moving launch from June 12 to June 26. Omar: Sales can support that if customer previews continue June 12. Priya: We have not estimated the fix beyond two weeks. Decision: public launch moves to June 26; customer previews continue June 12; Elena owns blocker closure and will report June 19.",
+      "audience": "product launch team",
+      "objective": "record the decision, rationale, owners, and dates",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Distinguish public launch from customer previews", "Preserve attribution"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "launch", "description": "public launch moves to June 26", "any_of": ["public launch moves to June 26", "launch on June 26"]},
+        {"id": "preview", "description": "customer previews continue June 12", "any_of": ["customer previews continue June 12", "previews on June 12"]},
+        {"id": "blockers", "description": "two accessibility blockers", "any_of": ["two keyboard-navigation blockers", "2 keyboard-navigation blockers", "two accessibility blockers"]},
+        {"id": "owner", "description": "Elena owns blocker closure", "any_of": ["Elena owns", "Owner: Elena"]},
+        {"id": "report", "description": "report due June 19", "any_of": ["June 19"]}
+      ],
+      "forbidden_claims": [
+        {"id": "cancel-preview", "description": "previews are not cancelled", "any_of": ["cancel customer previews", "previews are cancelled"]},
+        {"id": "omar-owner", "description": "Omar is not blocker owner", "any_of": ["Omar owns blocker closure"]}
+      ],
+      "required_call_to_action": ["June 19"],
+      "opening_any_of": ["public launch", "Decision"],
+      "min_words": 90,
+      "max_words": 210,
+      "headings_required": true
+    },
+    "lineage_group": "b1-launch-accessibility",
+    "topic": "product launch",
+    "time_bucket": "2026-q2",
+    "adversarial_features": ["dates_and_deadlines", "names_and_attribution", "negation_polarity"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-008-database-decision-memo",
+    "tier": "B1",
+    "input": {
+      "task_family": "meeting_transcript_to_decision_memo",
+      "output_format": "memo",
+      "source_material": "Architecture review transcript. Ravi: Dynamo scales easily, but our joins would move into application code. Zoe: Postgres sustained 28,000 writes per second in the test; the 40,000 target is a projection, not a measured result. Luis: Operations already supports Postgres. Decision: use Postgres for the first release. Reassess only if the November load test misses 35,000 writes per second. Zoe owns the test.",
+      "audience": "engineering leadership",
+      "objective": "capture the database decision and reassessment trigger",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Separate measured from projected throughput", "Preserve the reassessment condition"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "decision", "description": "Postgres selected for first release", "any_of": ["use Postgres", "Postgres for the first release"]},
+        {"id": "measured", "description": "measured 28,000 writes per second", "any_of": ["28,000 writes per second", "28k writes per second"]},
+        {"id": "projection", "description": "40,000 is projected", "any_of": ["40,000 target is a projection", "40k target is projected"]},
+        {"id": "trigger", "description": "reassess below 35,000 in November", "any_of": ["35,000 writes per second", "35k writes per second"]},
+        {"id": "owner", "description": "Zoe owns load test", "any_of": ["Zoe owns", "Owner: Zoe"]}
+      ],
+      "forbidden_claims": [
+        {"id": "measured40", "description": "40,000 was not measured", "any_of": ["sustained 40,000", "measured 40,000"]},
+        {"id": "dynamo", "description": "Dynamo was not selected", "any_of": ["selected Dynamo", "use Dynamo for the first release"]}
+      ],
+      "required_call_to_action": ["November load test", "load test in November"],
+      "opening_any_of": ["Postgres", "Decision"],
+      "min_words": 95,
+      "max_words": 220,
+      "headings_required": true
+    },
+    "lineage_group": "b1-database-choice",
+    "topic": "database architecture",
+    "time_bucket": "2026-q4",
+    "adversarial_features": ["numbers_and_units", "names_and_attribution", "uncertainty_calibration", "caveat_preservation"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-009-token-rotation-document",
+    "tier": "B1",
+    "input": {
+      "task_family": "technical_source_to_engineering_document",
+      "output_format": "document",
+      "source_material": "Token rotation design. Access tokens expire after 24 hours. During rotation, accept the old and new signing keys for a 10-minute grace period. After the grace period, verification must fail closed. Start with 5% of tenants on August 27. Roll back automatically if authentication failures exceed 0.2% over five minutes. The security team owns key custody; the platform team owns rollout.",
+      "audience": "software engineers and security reviewers",
+      "objective": "write an implementation-ready design summary",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Keep ownership boundaries explicit", "Preserve thresholds and units"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "expiry", "description": "tokens expire after 24 hours", "any_of": ["24 hours"]},
+        {"id": "grace", "description": "dual-key grace is 10 minutes", "any_of": ["10-minute", "10 minute"]},
+        {"id": "fail-closed", "description": "verification fails closed", "any_of": ["fail closed", "fails closed"]},
+        {"id": "rollout", "description": "rollout begins at 5% on August 27", "any_of": ["5%", "5 percent"]},
+        {"id": "threshold", "description": "rollback threshold is 0.2% over five minutes", "any_of": ["0.2%", "0.2 percent"]}
+      ],
+      "forbidden_claims": [
+        {"id": "fail-open", "description": "must not fail open", "any_of": ["fail open", "continue accepting invalid tokens"]}
+      ],
+      "required_call_to_action": ["August 27", "Aug. 27", "Aug 27"],
+      "opening_any_of": ["token rotation", "Access tokens"],
+      "min_words": 130,
+      "max_words": 290,
+      "headings_required": true
+    },
+    "lineage_group": "b1-token-rotation",
+    "topic": "authentication",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "dates_and_deadlines", "names_and_attribution", "negation_polarity"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-010-queue-backpressure-document",
+    "tier": "B1",
+    "input": {
+      "task_family": "technical_source_to_engineering_document",
+      "output_format": "document",
+      "source_material": "Queue backpressure proposal. Each tenant may have at most 5,000 queued jobs. When the limit is reached, the API returns HTTP 429 with Retry-After: 3. Existing queued jobs are not dropped. Operators can raise the limit only through a reviewed configuration change. Pilot on the media-processing queue for seven days. Success means p99 enqueue latency below 120 ms and no lost jobs.",
+      "audience": "platform engineers",
+      "objective": "turn the proposal into a clear engineering decision document",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Preserve protocol details verbatim", "State success criteria"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "limit", "description": "queue limit is 5,000 jobs per tenant", "any_of": ["5,000 queued jobs", "5,000 jobs"]},
+        {"id": "status", "description": "limit returns HTTP 429", "any_of": ["HTTP 429", "429"]},
+        {"id": "retry", "description": "Retry-After is 3", "any_of": ["Retry-After: 3", "Retry-After of 3"]},
+        {"id": "no-drop", "description": "existing jobs are not dropped", "any_of": ["not dropped", "no queued jobs are dropped"]},
+        {"id": "latency", "description": "p99 below 120 ms", "any_of": ["120 ms", "120 milliseconds"]}
+      ],
+      "forbidden_claims": [
+        {"id": "drop", "description": "must not drop existing jobs", "any_of": ["drop existing jobs", "oldest jobs are dropped"]}
+      ],
+      "required_call_to_action": ["seven days", "7 days"],
+      "opening_any_of": ["queue", "backpressure"],
+      "min_words": 130,
+      "max_words": 285,
+      "headings_required": true
+    },
+    "lineage_group": "b1-queue-backpressure",
+    "topic": "job queues",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "negation_polarity", "caveat_preservation"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-011-concise-onboarding-revision",
+    "tier": "B1",
+    "input": {
+      "task_family": "long_draft_to_concise_revision",
+      "output_format": "email",
+      "source_material": "Subject: A note about the onboarding experiment\n\nI wanted to share an update about the onboarding experiment that we began running. We began the experiment on July 6, and the experiment has now been running for six weeks. The result that we observed was that setup completion increased from 61% to 68%, which is an increase of seven percentage points. Support contacts did not change in a statistically meaningful way. Because the experiment was only for new self-serve accounts in Canada, we should not assume the result applies to enterprise accounts or other countries. My recommendation is that we keep the experiment running for two more weeks and then decide whether to expand it. Please send concerns by Tuesday.",
+      "audience": "product leadership",
+      "objective": "remove repetition while preserving the evidence and limits",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Preserve the subject", "Stay under 105 words", "Do not broaden the population"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "date", "description": "experiment began July 6", "any_of": ["July 6"]},
+        {"id": "change", "description": "completion increased 61% to 68%", "any_of": ["61% to 68%", "61 percent to 68 percent"]},
+        {"id": "support", "description": "support contacts did not meaningfully change", "any_of": ["Support contacts did not change", "no meaningful change in support contacts"]},
+        {"id": "scope", "description": "limited to Canadian self-serve accounts", "any_of": ["self-serve accounts in Canada", "Canadian self-serve accounts"]},
+        {"id": "extension", "description": "extend two weeks", "any_of": ["two more weeks", "2 more weeks"]}
+      ],
+      "forbidden_claims": [
+        {"id": "enterprise", "description": "do not generalize to enterprise", "any_of": ["applies to enterprise", "enterprise accounts improved"]}
+      ],
+      "required_call_to_action": ["by Tuesday"],
+      "opening_any_of": ["onboarding", "setup completion"],
+      "must_preserve_spans": ["Subject: A note about the onboarding experiment"],
+      "min_words": 55,
+      "max_words": 105,
+      "subject_required": true,
+      "headings_prohibited": true
+    },
+    "lineage_group": "b1-onboarding-experiment",
+    "topic": "onboarding",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "dates_and_deadlines", "caveat_preservation", "minimality"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-012-concise-renewal-revision",
+    "tier": "B1",
+    "input": {
+      "task_family": "long_draft_to_concise_revision",
+      "output_format": "memo",
+      "source_material": "Renewal performance update. The renewal rate for the quarter was 91%. That rate is one point below the 92% plan and two points above last quarter's 89% result. We lost $240,000 in annual recurring revenue from three customers. Two of those customers consolidated vendors after acquisitions, while one left because our export workflow was too slow. The export fix is scheduled for September 16, but its performance impact has not been measured. The team should review the three losses and confirm whether the next forecast should change by September 22. In summary, renewals were 91%, which was close to but below plan.",
+      "audience": "revenue leadership",
+      "objective": "produce a concise update that distinguishes causes and uncertainty",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Stay under 125 words", "Do not claim the export fix will recover revenue"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "renewal", "description": "renewal rate was 91%", "any_of": ["91%", "91 percent"]},
+        {"id": "plan", "description": "plan was 92%", "any_of": ["92%", "92 percent"]},
+        {"id": "loss", "description": "$240,000 ARR lost", "any_of": ["$240,000", "$240k"]},
+        {"id": "causes", "description": "two acquisitions and one workflow loss", "any_of": ["two", "2"]},
+        {"id": "uncertainty", "description": "fix impact not measured", "any_of": ["not been measured", "impact is unmeasured"]}
+      ],
+      "forbidden_claims": [
+        {"id": "recovery", "description": "fix is not proven to recover revenue", "any_of": ["will recover the lost revenue", "guarantees recovery"]}
+      ],
+      "required_call_to_action": ["September 22", "Sept. 22", "Sep 22"],
+      "opening_any_of": ["91%", "renewal"],
+      "min_words": 75,
+      "max_words": 125,
+      "headings_required": true
+    },
+    "lineage_group": "b1-renewal-performance",
+    "topic": "customer renewals",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "dates_and_deadlines", "names_and_attribution", "uncertainty_calibration"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-013-coherent-support-revision",
+    "tier": "B1",
+    "input": {
+      "task_family": "disorganized_draft_to_coherent_revision",
+      "output_format": "memo",
+      "source_material": "The support team will not stop weekend coverage. We have a queue problem. Starting October 5, weekend coverage moves from two generalists to one generalist plus one billing specialist. Billing tickets are 38% of weekend volume and take 1.7 times longer than other tickets. The six-week test will cover North America only. Customer response targets do not change. We need Support Operations to publish the schedule by September 28. If first-response time worsens by more than 10%, revert to the current staffing model. This is not a cost-reduction project.",
+      "audience": "support managers",
+      "objective": "reorganize the draft into decision, rationale, safeguards, and next step",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Do not imply weekend coverage ends", "Preserve rollback threshold"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "staffing", "description": "one generalist plus one billing specialist", "any_of": ["one generalist plus one billing specialist", "1 generalist and 1 billing specialist"]},
+        {"id": "volume", "description": "billing is 38% of weekend volume", "any_of": ["38%", "38 percent"]},
+        {"id": "scope", "description": "six-week North America test", "any_of": ["six-week", "6-week"]},
+        {"id": "rollback", "description": "revert above 10% worsening", "any_of": ["more than 10%", "over 10 percent"]},
+        {"id": "not-cost", "description": "not a cost reduction project", "any_of": ["not a cost-reduction", "not a cost reduction"]}
+      ],
+      "forbidden_claims": [
+        {"id": "end-weekend", "description": "weekend support continues", "any_of": ["end weekend coverage", "stop weekend support"]}
+      ],
+      "required_call_to_action": ["September 28", "Sept. 28", "Sep 28"],
+      "opening_any_of": ["Starting October 5", "weekend coverage"],
+      "min_words": 100,
+      "max_words": 210,
+      "headings_required": true
+    },
+    "lineage_group": "b1-support-weekend",
+    "topic": "support operations",
+    "time_bucket": "2026-q4",
+    "adversarial_features": ["numbers_and_units", "dates_and_deadlines", "negation_polarity", "caveat_preservation"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-014-coherent-roadmap-revision",
+    "tier": "B1",
+    "input": {
+      "task_family": "disorganized_draft_to_coherent_revision",
+      "output_format": "document",
+      "source_material": "Roadmap draft. Mobile offline mode is not committed. The customer advisory group ranked audit exports first, offline mode second, and custom dashboards third. Engineering estimates audit exports at five weeks with high confidence. Offline mode is eight to twelve weeks with low confidence because conflict resolution is unresolved. We have capacity for one project before year-end. Recommend audit exports. Decide September 4. If selected, Kira will publish milestones September 8. Custom dashboards remain discovery work only.",
+      "audience": "product and engineering leaders",
+      "objective": "turn the notes into a coherent roadmap recommendation",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Preserve confidence levels", "Do not present offline mode as committed"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "ranking", "description": "audit exports ranked first", "any_of": ["audit exports first", "ranked audit exports first"]},
+        {"id": "estimate", "description": "audit exports take five weeks with high confidence", "any_of": ["five weeks", "5 weeks"]},
+        {"id": "offline", "description": "offline mode is 8-12 weeks with low confidence", "any_of": ["eight to twelve weeks", "8-12 weeks"]},
+        {"id": "capacity", "description": "capacity for one project", "any_of": ["one project", "1 project"]},
+        {"id": "recommendation", "description": "recommend audit exports", "any_of": ["recommend audit exports"]}
+      ],
+      "forbidden_claims": [
+        {"id": "offline-committed", "description": "offline mode is not committed", "any_of": ["offline mode is committed", "we will ship offline mode"]},
+        {"id": "dashboards", "description": "dashboards remain discovery only", "any_of": ["custom dashboards are approved", "ship custom dashboards"]}
+      ],
+      "required_call_to_action": ["September 4", "Sept. 4", "Sep 4"],
+      "opening_any_of": ["recommend audit exports", "audit exports"],
+      "min_words": 105,
+      "max_words": 220,
+      "headings_required": true
+    },
+    "lineage_group": "b1-product-roadmap",
+    "topic": "product roadmap",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["dates_and_deadlines", "names_and_attribution", "uncertainty_calibration", "negation_polarity"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-015-europe-strategy-update",
+    "tier": "B1",
+    "input": {
+      "task_family": "source_documents_to_strategy_update",
+      "output_format": "document",
+      "source_material": "Europe expansion inputs. Target Germany and the Netherlands in Q1 2027; France is out of scope for this phase. Research found 43 qualified design partners across the two target countries. Legal review is complete. Product translation is 70% complete, but invoice localization is blocked on a tax-provider integration. The approved discovery budget cap is €180,000; launch funding is not approved. Recommend completing the tax integration before setting a public date.",
+      "audience": "board strategy committee",
+      "objective": "summarize scope, readiness, and the decision needed",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Distinguish discovery budget from launch funding", "Do not add France"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "countries", "description": "Germany and Netherlands are in scope", "any_of": ["Germany and the Netherlands", "Germany and Netherlands"]},
+        {"id": "quarter", "description": "target is Q1 2027", "any_of": ["Q1 2027"]},
+        {"id": "partners", "description": "43 qualified design partners", "any_of": ["43 qualified design partners"]},
+        {"id": "translation", "description": "translation is 70% complete", "any_of": ["70%", "70 percent"]},
+        {"id": "budget", "description": "discovery cap is €180,000", "any_of": ["€180,000", "€180k"]}
+      ],
+      "forbidden_claims": [
+        {"id": "france", "description": "France is out of scope", "any_of": ["Germany, France", "launch in France"]},
+        {"id": "funded", "description": "launch funding is not approved", "any_of": ["launch funding is approved", "fully funded launch"]}
+      ],
+      "required_call_to_action": ["tax integration"],
+      "opening_any_of": ["Germany", "Q1 2027", "Europe"],
+      "min_words": 130,
+      "max_words": 260,
+      "headings_required": true
+    },
+    "lineage_group": "b1-europe-expansion",
+    "topic": "international expansion",
+    "time_bucket": "2027-q1",
+    "adversarial_features": ["numbers_and_units", "negation_polarity", "caveat_preservation", "topic_swap"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-016-partner-strategy-update",
+    "tier": "B1",
+    "input": {
+      "task_family": "source_documents_to_strategy_update",
+      "output_format": "document",
+      "source_material": "Partner-channel evidence. The quarter produced 14 referred leads. Three met the qualification bar; one became a $32,000 annual contract. The original plan assumed eight qualified leads. Partner enablement used 420 staff hours. The data does not show whether the channel can scale because two partners generated all qualified leads. Recommend pausing expansion, keeping the two productive partners, and testing a revised qualification guide for six weeks.",
+      "audience": "go-to-market leadership",
+      "objective": "make an evidence-based partner-channel recommendation",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Preserve concentration risk", "Do not describe the channel as validated"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "leads", "description": "14 referred leads", "any_of": ["14 referred leads", "14 leads"]},
+        {"id": "qualified", "description": "three qualified leads", "any_of": ["three met", "3 qualified"]},
+        {"id": "contract", "description": "one $32,000 annual contract", "any_of": ["$32,000", "$32k"]},
+        {"id": "hours", "description": "420 staff hours", "any_of": ["420 staff hours", "420 hours"]},
+        {"id": "concentration", "description": "two partners generated all qualified leads", "any_of": ["two partners generated all", "2 partners generated all"]}
+      ],
+      "forbidden_claims": [
+        {"id": "validated", "description": "channel is not validated", "any_of": ["channel is validated", "proves the channel can scale"]}
+      ],
+      "required_call_to_action": ["six weeks", "6 weeks"],
+      "opening_any_of": ["pause expansion", "partner channel"],
+      "min_words": 120,
+      "max_words": 245,
+      "headings_required": true
+    },
+    "lineage_group": "b1-partner-channel",
+    "topic": "partner strategy",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "uncertainty_calibration", "caveat_preservation"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-017-beta-announcement",
+    "tier": "B1",
+    "input": {
+      "task_family": "announcement_or_launch_memo",
+      "output_format": "memo",
+      "source_material": "Launch announcement facts. Analytics Workspace beta opens September 14. Capacity is 200 customer seats, allocated first to existing research partners. The beta includes collaborative dashboards and CSV export. It does not include an uptime SLA or mobile access. Feedback sessions run weekly. General availability has no committed date. Customer Success must nominate participants by September 7.",
+      "audience": "customer-facing teams",
+      "objective": "announce the beta with exact scope and enrollment action",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "State exclusions clearly", "Do not announce general availability"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "date", "description": "beta opens September 14", "any_of": ["September 14", "Sept. 14", "Sep 14"]},
+        {"id": "capacity", "description": "capacity is 200 seats", "any_of": ["200 customer seats", "200 seats"]},
+        {"id": "features", "description": "dashboards and CSV export included", "any_of": ["collaborative dashboards", "CSV export"]},
+        {"id": "no-sla", "description": "no uptime SLA", "any_of": ["does not include an uptime SLA", "no uptime SLA"]},
+        {"id": "no-ga", "description": "no committed GA date", "any_of": ["no committed date", "general availability date is not committed"]}
+      ],
+      "forbidden_claims": [
+        {"id": "ga-date", "description": "do not invent GA date", "any_of": ["general availability on", "GA launches on"]},
+        {"id": "mobile", "description": "mobile is excluded", "any_of": ["includes mobile access", "mobile app included"]}
+      ],
+      "required_call_to_action": ["September 7", "Sept. 7", "Sep 7"],
+      "opening_any_of": ["beta", "Analytics Workspace"],
+      "min_words": 105,
+      "max_words": 225,
+      "headings_required": true
+    },
+    "lineage_group": "b1-analytics-beta",
+    "topic": "product beta",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "dates_and_deadlines", "negation_polarity", "caveat_preservation"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-018-restructure-message",
+    "tier": "B1",
+    "input": {
+      "task_family": "sensitive_internal_communication",
+      "output_format": "email",
+      "source_material": "Confidential planning facts. A team restructure eliminates nine roles. The change is about consolidating overlapping work, not individual performance. Affected employees are told in private manager meetings on October 2 before the company note. Benefits continue through October 31. [TEAM_NAME] must remain a placeholder until the plan is announced. Do not name affected people. Managers receive a question guide on September 30.",
+      "audience": "people managers",
+      "objective": "prepare managers for a difficult, confidential change",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use a subject line", "Preserve [TEAM_NAME]", "Do not name individuals", "Lead with confidentiality and timing"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "roles", "description": "nine roles are eliminated", "any_of": ["nine roles", "9 roles"]},
+        {"id": "not-performance", "description": "not an individual performance decision", "any_of": ["not individual performance", "not about individual performance"]},
+        {"id": "meetings", "description": "private meetings happen October 2", "any_of": ["October 2", "Oct. 2", "Oct 2"]},
+        {"id": "benefits", "description": "benefits continue through October 31", "any_of": ["October 31", "Oct. 31", "Oct 31"]}
+      ],
+      "forbidden_claims": [
+        {"id": "performance", "description": "do not imply poor performance", "any_of": ["performance-based", "underperformance"]},
+        {"id": "public", "description": "do not say announcement is public", "any_of": ["public announcement", "tell customers"]}
+      ],
+      "required_placeholders": ["[TEAM_NAME]"],
+      "required_call_to_action": ["September 30", "Sept. 30", "Sep 30"],
+      "opening_any_of": ["confidential", "October 2"],
+      "min_words": 100,
+      "max_words": 210,
+      "subject_required": true,
+      "headings_prohibited": true
+    },
+    "lineage_group": "b1-restructure",
+    "topic": "organizational change",
+    "time_bucket": "2026-q4",
+    "adversarial_features": ["confidential_placeholders", "dates_and_deadlines", "negation_polarity", "privacy"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-019-incident-short-post",
+    "tier": "B1",
+    "input": {
+      "task_family": "short_form_post_or_thread",
+      "output_format": "short_post",
+      "source_material": "Public status facts: Payment processing recovered at 16:40 UTC. Between 16:12 and 16:40 UTC, 2.1% of card payments failed. No duplicate charges occurred. Automatic refunds for failed charges will complete within 24 hours. The underlying provider issue is still under investigation. Link placeholder: [STATUS_LINK].",
+      "audience": "customers",
+      "objective": "publish a factual status update",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Stay under 70 words", "Preserve [STATUS_LINK]", "Do not speculate about cause"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "recovery", "description": "recovered at 16:40 UTC", "any_of": ["16:40 UTC"]},
+        {"id": "failure", "description": "2.1% failed", "any_of": ["2.1%", "2.1 percent"]},
+        {"id": "no-duplicates", "description": "no duplicate charges", "any_of": ["No duplicate charges", "no customers were charged twice"]},
+        {"id": "refunds", "description": "refunds complete within 24 hours", "any_of": ["within 24 hours"]},
+        {"id": "investigation", "description": "cause remains under investigation", "any_of": ["still under investigation", "remains under investigation"]}
+      ],
+      "forbidden_claims": [
+        {"id": "cause", "description": "do not assert a root cause", "any_of": ["root cause was", "caused by a configuration"]}
+      ],
+      "required_placeholders": ["[STATUS_LINK]"],
+      "opening_any_of": ["Payment processing", "Payments"],
+      "min_words": 35,
+      "max_words": 70,
+      "headings_prohibited": true
+    },
+    "lineage_group": "b1-payment-status",
+    "topic": "payment incident",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "confidential_placeholders", "negation_polarity", "uncertainty_calibration"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-020-cache-blog",
+    "tier": "B1",
+    "input": {
+      "task_family": "blog_post_or_explanatory_essay",
+      "output_format": "blog_post",
+      "source_material": "Cache freshness design. Product catalog reads use a five-minute cache. Price changes publish an invalidation event and usually appear within 30 seconds. If invalidation fails, the five-minute expiry is the fallback; therefore we cannot promise 30-second freshness. Inventory counts bypass this cache. The change reduced median catalog latency from 180 ms to 65 ms in a two-week test. Explain the tradeoff to technically curious customers without exposing internal service names.",
+      "audience": "technically curious customers",
+      "objective": "explain the cache's performance and freshness tradeoff",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Avoid internal service names", "Do not promise 30-second freshness"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "cache", "description": "catalog cache lasts five minutes", "any_of": ["five-minute cache", "5-minute cache"]},
+        {"id": "usual", "description": "price changes usually appear within 30 seconds", "any_of": ["within 30 seconds"]},
+        {"id": "fallback", "description": "five-minute expiry is fallback", "any_of": ["five-minute expiry", "5-minute expiry"]},
+        {"id": "inventory", "description": "inventory bypasses the cache", "any_of": ["Inventory counts bypass", "inventory does not use this cache"]},
+        {"id": "latency", "description": "latency improved from 180 ms to 65 ms", "any_of": ["180 ms to 65 ms", "180 milliseconds to 65 milliseconds"]}
+      ],
+      "forbidden_claims": [
+        {"id": "guarantee", "description": "30-second freshness is not guaranteed", "any_of": ["guaranteed within 30 seconds", "always fresh within 30 seconds"]}
+      ],
+      "opening_any_of": ["cache", "catalog"],
+      "min_words": 170,
+      "max_words": 360,
+      "headings_required": true
+    },
+    "lineage_group": "b1-cache-freshness",
+    "topic": "caching",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["numbers_and_units", "uncertainty_calibration", "caveat_preservation"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-021-payment-delay-executive",
+    "tier": "B1",
+    "input": {
+      "task_family": "audience_adaptation",
+      "output_format": "memo",
+      "source_material": "Payment settlement update. A banking partner changed its review process on August 20. Settlement now takes three business days instead of one for transfers above $50,000. Transfers at or below $50,000 are unaffected. The partner says the change is temporary but gave no end date. Treasury estimates $600,000 more working capital may be needed. Recommend opening a second banking route; Operations should return a feasibility estimate by September 2.",
+      "audience": "chief executive and board finance committee",
+      "objective": "explain the business impact and request a mitigation decision",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Emphasize decision impact", "Preserve uncertainty about duration"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "date", "description": "change began August 20", "any_of": ["August 20", "Aug. 20", "Aug 20"]},
+        {"id": "delay", "description": "three days instead of one", "any_of": ["three business days", "3 business days"]},
+        {"id": "threshold", "description": "only transfers above $50,000", "any_of": ["above $50,000", "over $50,000"]},
+        {"id": "capital", "description": "$600,000 working capital estimate", "any_of": ["$600,000", "$600k"]},
+        {"id": "unknown", "description": "no end date", "any_of": ["no end date", "end date is unknown"]}
+      ],
+      "forbidden_claims": [
+        {"id": "all", "description": "small transfers are unaffected", "any_of": ["all transfers are delayed", "every transfer takes three days"]}
+      ],
+      "required_call_to_action": ["September 2", "Sept. 2", "Sep 2"],
+      "opening_any_of": ["settlement", "$600,000", "banking route"],
+      "min_words": 115,
+      "max_words": 230,
+      "headings_required": true
+    },
+    "lineage_group": "b1-payment-settlement-adaptation",
+    "topic": "payment settlement",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["audience_adaptation", "numbers_and_units", "uncertainty_calibration", "negation_polarity"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-022-payment-delay-operations",
+    "tier": "B1",
+    "input": {
+      "task_family": "audience_adaptation",
+      "output_format": "email",
+      "source_material": "Payment settlement update. A banking partner changed its review process on August 20. Settlement now takes three business days instead of one for transfers above $50,000. Transfers at or below $50,000 are unaffected. The partner says the change is temporary but gave no end date. Treasury estimates $600,000 more working capital may be needed. Recommend opening a second banking route; Operations should return a feasibility estimate by September 2.",
+      "audience": "treasury and payment operations staff",
+      "objective": "explain the operational boundary and assign the feasibility estimate",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use a subject line", "Emphasize the threshold and owner", "Preserve uncertainty about duration"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "date", "description": "change began August 20", "any_of": ["August 20", "Aug. 20", "Aug 20"]},
+        {"id": "delay", "description": "three business days", "any_of": ["three business days", "3 business days"]},
+        {"id": "threshold", "description": "above $50,000 only", "any_of": ["above $50,000", "over $50,000"]},
+        {"id": "unaffected", "description": "at or below threshold unaffected", "any_of": ["at or below $50,000 are unaffected", "$50,000 or less are unaffected"]},
+        {"id": "unknown", "description": "no end date", "any_of": ["no end date", "end date is unknown"]}
+      ],
+      "forbidden_claims": [
+        {"id": "permanent", "description": "change is not known to be permanent", "any_of": ["permanent change", "will never revert"]}
+      ],
+      "required_call_to_action": ["September 2", "Sept. 2", "Sep 2"],
+      "opening_any_of": ["transfers above", "settlement"],
+      "min_words": 80,
+      "max_words": 165,
+      "subject_required": true,
+      "headings_prohibited": true
+    },
+    "lineage_group": "b1-payment-settlement-adaptation",
+    "topic": "payment settlement",
+    "time_bucket": "2026-q3",
+    "adversarial_features": ["audience_adaptation", "numbers_and_units", "uncertainty_calibration", "negation_polarity"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-023-minimal-edit-policy",
+    "tier": "B1",
+    "input": {
+      "task_family": "minimal_edit_revision",
+      "output_format": "email",
+      "source_material": "Subject: Updated travel policy\n\nStarting November 1, employees may book rail instead of air for trips under 500 miles. The company will reimburse standard-class rail fares. Business-class rail requires vice-president approval. The policy does not change lodging limits. Please review the policy page before booking travel.\n\nThanks,\nOperations",
+      "audience": "all employees",
+      "objective": "fix only the inconsistent spelling of vice president and preserve the otherwise-ready email",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Make the smallest necessary edit", "Preserve all facts and formatting", "Do not rewrite already-good sentences"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "date", "description": "policy starts November 1", "any_of": ["November 1"]},
+        {"id": "distance", "description": "rail option applies under 500 miles", "any_of": ["under 500 miles"]},
+        {"id": "standard", "description": "standard class is reimbursed", "any_of": ["standard-class rail fares"]},
+        {"id": "approval", "description": "business class needs vice president approval", "any_of": ["vice president approval"]},
+        {"id": "lodging", "description": "lodging limits do not change", "any_of": ["does not change lodging limits"]}
+      ],
+      "forbidden_claims": [],
+      "required_call_to_action": ["review the policy page"],
+      "opening_any_of": ["Starting November 1"],
+      "must_preserve_spans": ["Subject: Updated travel policy", "The policy does not change lodging limits.", "Thanks,\nOperations"],
+      "min_words": 45,
+      "max_words": 70,
+      "max_source_change_ratio": 0.12,
+      "subject_required": true,
+      "headings_prohibited": true
+    },
+    "lineage_group": "b1-travel-policy",
+    "topic": "travel policy",
+    "time_bucket": "2026-q4",
+    "adversarial_features": ["minimality", "dates_and_deadlines", "negation_polarity"],
+    "difficulty": "standard",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  },
+  {
+    "version": 1,
+    "id": "b1-024-profile-rendering",
+    "tier": "B1",
+    "input": {
+      "task_family": "content_controlled_profile_rendering",
+      "output_format": "memo",
+      "source_material": "Neutral source facts. The downtown office will close Friday, December 18 at 15:00 for electrical maintenance. Remote work is available after closure. The office reopens Monday, December 21 at 08:00. The maintenance does not affect the warehouse. Facilities will post an update in [OFFICE_CHANNEL] if the schedule changes. Ask managers to confirm critical on-site work by December 11.",
+      "audience": "company managers",
+      "objective": "render the neutral facts as a direct, decision-useful house-voice memo",
+      "profile_id": "executive-house-v1",
+      "constraints": ["Use headings", "Preserve [OFFICE_CHANNEL]", "Do not imply the warehouse closes", "Do not imitate a named person"]
+    },
+    "expected": {
+      "required_facts": [
+        {"id": "close", "description": "office closes December 18 at 15:00", "any_of": ["December 18 at 15:00", "Dec. 18 at 15:00"]},
+        {"id": "remote", "description": "remote work available", "any_of": ["Remote work is available", "work remotely"]},
+        {"id": "reopen", "description": "reopens December 21 at 08:00", "any_of": ["December 21 at 08:00", "Dec. 21 at 08:00"]},
+        {"id": "warehouse", "description": "warehouse unaffected", "any_of": ["does not affect the warehouse", "warehouse is unaffected"]}
+      ],
+      "forbidden_claims": [
+        {"id": "warehouse-close", "description": "warehouse remains open", "any_of": ["warehouse will close", "warehouse closes"]}
+      ],
+      "required_placeholders": ["[OFFICE_CHANNEL]"],
+      "required_call_to_action": ["December 11", "Dec. 11", "Dec 11"],
+      "opening_any_of": ["office will close", "downtown office"],
+      "min_words": 95,
+      "max_words": 190,
+      "headings_required": true
+    },
+    "lineage_group": "b1-office-maintenance",
+    "topic": "office operations",
+    "time_bucket": "2026-q4",
+    "adversarial_features": ["content_control", "confidential_placeholders", "dates_and_deadlines", "negation_polarity"],
+    "difficulty": "difficult",
+    "authored_by": "codex",
+    "authored_at": "2026-08-23T02:26:09Z",
+    "rights_status": "evaluation_approved_project_owned"
+  }
+]

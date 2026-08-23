@@ -7,7 +7,10 @@
 - Program branch: `codex/executive-model-program`
 - Settled spend: $0 of $100
 - Starting revision: `20c27103de41a495cbe6795432f48e6794a46f6c`
-- First-evidence milestone: in progress; repository and harness feasibility audited
+- First-evidence milestone: in progress; the 24-case B1 benchmark, frozen
+  schema, preregistration, deterministic scorer, and validation path are
+  complete; three baselines, shared results, failure analysis, and smoke
+  fine-tune remain
 - Harness preflight: passed on a complete 2026-08-22 rerun after supplying a
   trusted orchestrator timestamp to the artifact task. Exact model/provider,
   repository `read` use, strict artifact JSON, unchanged Git tree, and $0 cost
@@ -88,3 +91,25 @@ historical entries.
 - Unresolved risks: 24 cases provide plumbing and screening evidence only;
   semantic quality and unsupported-claim detection still require independent
   calibrated or human assessment in later phases.
+
+### 2026-08-22 — Phase 0 checkpoint: B1 v1 benchmark implementation
+
+- Hypothesis: a 24-case project-authored slice can cover the contracted
+  email, memo, document, short-form, blog, audience-adaptation, and revision
+  paths while making deterministic fidelity failures inspectable.
+- Evidence: `goodprose-b1-v1` contains 24 content-hashed cases across 14 task
+  families and five output formats, a generated frozen JSON schema,
+  preregistration, exact file hashes, and deterministic scoring with the
+  contract's 35/20/15/15/10/5 weights. The complete repository suite passed:
+  19 tests, Ruff lint and format, Pyright, and corpus validation.
+- Exit criteria: 20–50 rights-safe cases, contracted first-slice task coverage,
+  explicit provenance/limitations, deterministic rebuild, schema validation,
+  preregistered metrics and hard gates, and green engineering checks.
+- Decision: pass and freeze B1 v1 before candidate generation. Treat it as
+  visible exploratory search evidence only, never sealed or confirmatory.
+- Next actions: run matched minimal-instruction, strong-prompt, and retrieval
+  baselines on the cached local model; publish case-level and aggregate results;
+  then select the first evidence-driven improvement hypothesis.
+- Unresolved risks: exact lexical checks can miss valid paraphrases and cannot
+  detect every semantic fabrication; all 24 inputs are project-authored rather
+  than authentic permissioned rough-to-final pairs.

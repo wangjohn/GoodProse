@@ -1,0 +1,63 @@
+{
+  "adversarial_feature_counts": {
+    "audience_adaptation": 2,
+    "caveat_preservation": 13,
+    "confidential_placeholders": 3,
+    "content_control": 1,
+    "dates_and_deadlines": 13,
+    "minimality": 2,
+    "names_and_attribution": 7,
+    "negation_polarity": 16,
+    "numbers_and_units": 19,
+    "privacy": 1,
+    "topic_swap": 1,
+    "uncertainty_calibration": 12
+  },
+  "benchmark_id": "goodprose-b1-v1",
+  "case_count": 24,
+  "case_schema_sha256": "4485eb546dc37e02aef952103ae36de93e0d6935547727f48cf80c7294742a6b",
+  "cases_sha256": "a15232a5d426dcb6f5161abc5644a8ed10f57b8b7b87fb771e62fe26e57ae352",
+  "creation_method": "project_authored",
+  "limitations": [
+    "Twenty-four project-authored cases provide plumbing and directional search evidence only.",
+    "Lexical deterministic checks do not establish semantic writing quality or detect every unsupported claim.",
+    "This B1 set is visible to developers and must never be represented as sealed or confirmatory."
+  ],
+  "output_format_counts": {
+    "blog_post": 1,
+    "document": 5,
+    "email": 7,
+    "memo": 10,
+    "short_post": 1
+  },
+  "rights_status": "evaluation_approved_project_owned",
+  "scorecard_weights": {
+    "audience_format": 0.1,
+    "clarity_coherence": 0.2,
+    "concision": 0.15,
+    "fidelity": 0.35,
+    "organization_actionability": 0.15,
+    "profile_control": 0.05
+  },
+  "scorer_version": "goodprose-deterministic-v1",
+  "source_cases_sha256": "60b9eda04fc2e312ffbc4d727a00a6ab6ba58dac08876ce0607b37c36e516b06",
+  "status": "search_development",
+  "task_family_counts": {
+    "announcement_or_launch_memo": 1,
+    "audience_adaptation": 2,
+    "blog_post_or_explanatory_essay": 1,
+    "content_controlled_profile_rendering": 1,
+    "disorganized_draft_to_coherent_revision": 2,
+    "long_draft_to_concise_revision": 2,
+    "meeting_transcript_to_decision_memo": 2,
+    "minimal_edit_revision": 1,
+    "rough_notes_to_executive_email": 3,
+    "rough_notes_to_internal_memo": 3,
+    "sensitive_internal_communication": 1,
+    "short_form_post_or_thread": 1,
+    "source_documents_to_strategy_update": 2,
+    "technical_source_to_engineering_document": 2
+  },
+  "tier": "B1",
+  "version": 1
+}

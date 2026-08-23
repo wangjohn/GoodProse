@@ -40,6 +40,22 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   benchmark evidence, reference answers, and grading.
 - Record: `../experiments/ox-benchmark-design-review-v1.json`.
 
+## 2026-08-22 — GoodProse B1 v1 benchmark build
+
+- Hypothesis: 24 project-authored cases can prove the evaluation plumbing and
+  screen the first three baselines across the contract's high-value task span.
+- Dataset/eval: `goodprose-b1-v1`, cases SHA-256
+  `a15232a5d426dcb6f5161abc5644a8ed10f57b8b7b87fb771e62fe26e57ae352`,
+  scorer `goodprose-deterministic-v1`, preregistered before generation.
+- Code base: `645c342`; implementation and data are captured by the enclosing
+  benchmark milestone commit.
+- Hardware/provider/cost: local Apple M3 Pro; $0.
+- Result: 24/24 records build deterministically and validate against the frozen
+  schema. The full repository suite passed (19 tests, lint, format, type check,
+  and corpus validation).
+- Decision: keep as B1 search-development evidence only. It cannot establish
+  semantic writing quality, authenticity, or publish readiness.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,
