@@ -317,6 +317,39 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   case-level companion, shared `../experiments/latest-results.json`, and
   `FIRST_EVIDENCE_RESULTS.md`.
 
+## 2026-08-23 — Ox all-profile source discovery
+
+- Assignment/model: `ox-source-discovery-v1` / `stealth/ox-alpha` through
+  OpenRouter, high reasoning, OpenCode 1.18.21.
+- Result: all eleven names appeared once; 23 primary and routing leads were
+  returned; no authored public-email collection was reported as verified; cost
+  was $0. Raw output remains design provenance, not training or eval evidence.
+- Codex review: retained only independently supported canonical routes;
+  excluded company/secondary/government routes without adequate retrieval or
+  individual attribution; corrected Jason Fried's outlook to unknown; removed
+  unsupported quantitative and author-position claims; rejected the response's
+  pre-session `generated_at` value.
+- Decision: accept with corrections as bounded research leads. Record exact
+  prompt, response, token, timing, and cost evidence in
+  `../experiments/ox-source-discovery-v1.json`.
+
+## 2026-08-23 — Ox named-source artifact implementation
+
+- Assignment/model: `ox-source-artifacts-implementation-v1` /
+  `stealth/ox-alpha` through OpenRouter, high reasoning, forked from the source
+  research context; cost $0.
+- Draft result: typed Pydantic source boundary, one all-eleven source manifest,
+  one common-slice eval manifest, eleven source-specific configs, two READMEs,
+  and 17 focused tests initially; no source text or training approval.
+- Codex review: made evaluation membership exact; cross-validated config paths,
+  IDs, blockers, architecture, eligibility, and provenance; narrowed rights
+  uses; added regression tests for eval/config drift; and preserved exact Ox
+  provenance in the machine artifacts. The corrected focused suite passes 20
+  tests with Ruff lint/format and Pyright clean.
+- Decision: accept after corrections as the source-manifest and rights-system
+  milestone. Profile-card runs remain configured but unexecuted. Record:
+  `../experiments/ox-source-artifacts-implementation-v1.json`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

@@ -1,0 +1,65 @@
+{
+  "assignment_id": "ox-source-discovery-v1",
+  "session_id": "ses_fd2d6a118ffeWvm8ACXjeWmyS3",
+  "model_id": "stealth/ox-alpha",
+  "provider": "openrouter",
+  "reasoning_variant": "high",
+  "opencode_version": "1.18.21",
+  "prompt_path": "programs/executive-writing/configs/ox/source-discovery-v1.md",
+  "prompt_sha256": "82887b36261409392b5735636f0822b8f31ea05c05eea3dc4c53ec3509b1c280",
+  "response_sha256": "bc6644e7f519795d98169ccd0a2c28d2a0af1172df1f20ce9c9aa180eaf1ff1b",
+  "started_at": "2026-08-23T05:48:01Z",
+  "completed_at": "2026-08-23T05:53:27Z",
+  "intended_use": "public source discovery leads and evidence routing only",
+  "input_classification": "public repository metadata and public web pages",
+  "settled_cost_usd": 0,
+  "tokens": {
+    "input": 111994,
+    "output": 13763,
+    "reasoning": 0,
+    "cache_read": 458816,
+    "cache_write": 0
+  },
+  "repository_state_changed": false,
+  "response_contract": {
+    "people": 11,
+    "unique_people": 11,
+    "source_leads": 23,
+    "verified_public_email_collections": 0,
+    "rights_recommendations": [
+      "evaluation_only",
+      "permission_required"
+    ]
+  },
+  "codex_review": {
+    "status": "accepted_with_corrections",
+    "accepted": [
+      "all eleven requested people appeared exactly once",
+      "no public-email collection was asserted as verified",
+      "no source was promoted to training_approved",
+      "uncertain and failed primary-source routes were disclosed"
+    ],
+    "corrections": [
+      "excluded company newsrooms and secondary routing where individual authorship was not verified",
+      "excluded SEC routing because the filings were not retrieved during the assignment",
+      "changed Jason Fried standalone outlook to unknown because the verified archive is collective",
+      "removed unverified quantitative archive claims and one unverified author-objection claim",
+      "rejected the model-supplied generated_at because it predates the recorded session start",
+      "narrowed permission_required approved uses to metadata audit and source-text-free profile evaluation"
+    ],
+    "excluded_use": "not training data, evaluation evidence, a legal conclusion, or architecture-selection evidence"
+  },
+  "codex_primary_verification": [
+    "https://patrickcollison.com/",
+    "https://paulgraham.com/articles.html",
+    "https://blog.samaltman.com/",
+    "https://www.joelonsoftware.com/archives/",
+    "https://avc.com/",
+    "https://dhh.dk/",
+    "https://37signals.com/thoughts/",
+    "https://simonwillison.net/",
+    "https://pluralistic.net/",
+    "https://chinwag.pluralistic.net/tos",
+    "https://ir.aboutamazon.com/annual-reports-proxies-and-shareholder-letters/default.aspx"
+  ]
+}

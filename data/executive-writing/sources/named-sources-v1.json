@@ -1,0 +1,1587 @@
+{
+  "version": 1,
+  "manifest_id": "named-sources-v1",
+  "assignment_id": "ox-source-artifacts-implementation-v1",
+  "generated_by_model": "stealth/ox-alpha",
+  "provider": "OpenRouter through Ori/OpenCode",
+  "provenance_record": "programs/executive-writing/experiments/ox-source-artifacts-implementation-v1.json",
+  "people": [
+    {
+      "person": "Patrick Collison",
+      "source_routes": [
+        {
+          "source_id": "patrick-collison-site",
+          "title": "Patrick Collison personal site",
+          "canonical_url": "https://patrickcollison.com/",
+          "controller": "Patrick Collison",
+          "source_type": "official_personal",
+          "genres": [
+            "essay",
+            "curated-question-collection",
+            "reference-list"
+          ],
+          "availability_proxy": "single-page site exposing multiple named writing sections maintained by the author; section-level document counts not enumerated",
+          "rights_or_terms_url": null,
+          "evidence_fact": "author-controlled homepage presents named writing sections including questions, fast, growth, and progress",
+          "primary": true
+        }
+      ],
+      "public_email": {
+        "verified_collection_found": false,
+        "strongest_lead_url": null,
+        "finding": "no authored public-email collection was located during discovery; published material is site prose rather than correspondence"
+      },
+      "availability": {
+        "default_threshold": {
+          "effective_clean_tokens": 50000,
+          "independent_examples": 100,
+          "relevant_genres": 3,
+          "held_out_cases": 30
+        },
+        "outlook": "unknown",
+        "component_assessments": [
+          {
+            "component": "effective_clean_tokens",
+            "status": "unverified",
+            "note": "section volumes are unenumerated and may fall below fifty thousand clean tokens"
+          },
+          {
+            "component": "independent_examples",
+            "status": "unverified",
+            "note": "independent example count is unknown before collection"
+          },
+          {
+            "component": "genre_coverage",
+            "status": "unverified",
+            "note": "genre spread across sections is plausible but unconfirmed"
+          },
+          {
+            "component": "held_out_cases",
+            "status": "unmet",
+            "note": "no held-out pool exists yet"
+          }
+        ],
+        "notes": [
+          "assessments are provisional and must be recomputed after collection and deduplication"
+        ]
+      },
+      "rights": {
+        "classification": "permission_required",
+        "approved_uses": [
+          "public-source metadata audit",
+          "abstract profile-card evaluation without source text"
+        ],
+        "evidence_url": "https://patrickcollison.com/",
+        "reviewer_role": "codex-reviewer",
+        "review_date": "2026-08-22",
+        "unresolved_questions": [
+          "no license or terms page was located for the personal site",
+          "continuity of individual authorship across site sections is unverified"
+        ],
+        "promotion_authority": "user-or-qualified-counsel"
+      },
+      "profile": {
+        "profile_id": "concise-curation-brief-v1",
+        "production_name": "Concise Curated Brief",
+        "description": "compressed curiosity-led curation register adapted to short executive briefs",
+        "traits": [
+          {
+            "trait": "curiosity-driven multi-domain curation",
+            "supporting_source_ids": [
+              "patrick-collison-site"
+            ]
+          },
+          {
+            "trait": "question-oriented compression over long exposition",
+            "supporting_source_ids": [
+              "patrick-collison-site"
+            ]
+          },
+          {
+            "trait": "progress-optimist framing",
+            "supporting_source_ids": [
+              "patrick-collison-site"
+            ]
+          }
+        ],
+        "anti_impersonation_limits": [
+          "outputs must not assert biographical facts about any named individual",
+          "profiles must not imply endorsement by the underlying author"
+        ]
+      },
+      "evaluation_subset": {
+        "slice_id": "slice-patrick-collison-v1",
+        "case_ids": [
+          "b1-001-migration-email",
+          "b1-004-hiring-memo",
+          "b1-007-launch-decision-memo",
+          "b1-011-concise-onboarding-revision",
+          "b1-015-europe-strategy-update",
+          "b1-020-cache-blog"
+        ],
+        "protocols": [
+          {
+            "protocol": "topic_swap",
+            "status": "current_limitation",
+            "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+          },
+          {
+            "protocol": "leave_topic_out",
+            "status": "declared",
+            "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+          },
+          {
+            "protocol": "leave_time_out",
+            "status": "current_limitation",
+            "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+          }
+        ]
+      },
+      "run_configuration": {
+        "config_id": "runconfig-concise-curation-brief-v1-v1",
+        "config_path": "programs/executive-writing/configs/source-profiles/concise-curation-brief-v1.json",
+        "architecture": "profile_card_retrieval_coverage",
+        "standalone_eligible": false,
+        "blocker": "voluntary publication carries no training license so rights remain permission_required, and volume against the standalone threshold is unverified",
+        "third_party_training_text_allowed": false,
+        "evaluation_slice_id": "slice-patrick-collison-v1",
+        "exploratory_label": "exploratory research run; not impersonation, replication, or endorsement"
+      }
+    },
+    {
+      "person": "Paul Graham",
+      "source_routes": [
+        {
+          "source_id": "pg-essays-index",
+          "title": "Paul Graham essays index",
+          "canonical_url": "https://paulgraham.com/articles.html",
+          "controller": "Paul Graham",
+          "source_type": "official_personal",
+          "genres": [
+            "essay",
+            "advice-essay",
+            "memoir-sketch"
+          ],
+          "availability_proxy": "author-maintained index enumerates several hundred titled essays spanning roughly 2001 to 2025",
+          "rights_or_terms_url": null,
+          "evidence_fact": "the author-controlled index page lists several hundred individually titled essays under his own name",
+          "primary": true
+        }
+      ],
+      "public_email": {
+        "verified_collection_found": false,
+        "strongest_lead_url": null,
+        "finding": "no verified authored public-email collection exists; correspondence referenced inside essays is not published as a corpus"
+      },
+      "availability": {
+        "default_threshold": {
+          "effective_clean_tokens": 50000,
+          "independent_examples": 100,
+          "relevant_genres": 3,
+          "held_out_cases": 30
+        },
+        "outlook": "plausibly_reachable",
+        "component_assessments": [
+          {
+            "component": "effective_clean_tokens",
+            "status": "unverified",
+            "note": "hundreds of long essays suggest token sufficiency pending deduplication measurement"
+          },
+          {
+            "component": "independent_examples",
+            "status": "unverified",
+            "note": "example count plausibly exceeds one hundred but is unmeasured"
+          },
+          {
+            "component": "genre_coverage",
+            "status": "unverified",
+            "note": "at least three essay subgenres appear represented on the index"
+          },
+          {
+            "component": "held_out_cases",
+            "status": "unmet",
+            "note": "held-out cases can be reserved only after collection and deduplication"
+          }
+        ],
+        "notes": [
+          "assessments are provisional and must be recomputed after collection and deduplication"
+        ]
+      },
+      "rights": {
+        "classification": "permission_required",
+        "approved_uses": [
+          "public-source metadata audit",
+          "abstract profile-card evaluation without source text"
+        ],
+        "evidence_url": "https://paulgraham.com/articles.html",
+        "reviewer_role": "codex-reviewer",
+        "review_date": "2026-08-22",
+        "unresolved_questions": [
+          "the site displays no license so default copyright applies",
+          "redistribution rights for any collected text are undetermined"
+        ],
+        "promotion_authority": "user-or-qualified-counsel"
+      },
+      "profile": {
+        "profile_id": "conversational-essay-memo-v1",
+        "production_name": "Conversational Essay Memo",
+        "description": "plain conversational argumentation register adapted to internal memos",
+        "traits": [
+          {
+            "trait": "conversational plain diction inside structured argument",
+            "supporting_source_ids": [
+              "pg-essays-index"
+            ]
+          },
+          {
+            "trait": "aphoristic compression from concrete cases",
+            "supporting_source_ids": [
+              "pg-essays-index"
+            ]
+          },
+          {
+            "trait": "first-person epistemic self-correction",
+            "supporting_source_ids": [
+              "pg-essays-index"
+            ]
+          }
+        ],
+        "anti_impersonation_limits": [
+          "outputs must not claim authorship by the underlying writer",
+          "traits describe abstract registers only and must be verified by human review"
+        ]
+      },
+      "evaluation_subset": {
+        "slice_id": "slice-paul-graham-v1",
+        "case_ids": [
+          "b1-001-migration-email",
+          "b1-004-hiring-memo",
+          "b1-007-launch-decision-memo",
+          "b1-011-concise-onboarding-revision",
+          "b1-015-europe-strategy-update",
+          "b1-020-cache-blog"
+        ],
+        "protocols": [
+          {
+            "protocol": "topic_swap",
+            "status": "current_limitation",
+            "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+          },
+          {
+            "protocol": "leave_topic_out",
+            "status": "declared",
+            "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+          },
+          {
+            "protocol": "leave_time_out",
+            "status": "current_limitation",
+            "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+          }
+        ]
+      },
+      "run_configuration": {
+        "config_id": "runconfig-conversational-essay-memo-v1-v1",
+        "config_path": "programs/executive-writing/configs/source-profiles/conversational-essay-memo-v1.json",
+        "architecture": "profile_card_retrieval_coverage",
+        "standalone_eligible": false,
+        "blocker": "rights remain permission_required because no license covers training use; statistical outlook alone looks reachable",
+        "third_party_training_text_allowed": false,
+        "evaluation_slice_id": "slice-paul-graham-v1",
+        "exploratory_label": "exploratory research run; not impersonation, replication, or endorsement"
+      }
+    },
+    {
+      "person": "Sam Altman",
+      "source_routes": [
+        {
+          "source_id": "sam-altman-blog",
+          "title": "Sam Altman blog",
+          "canonical_url": "https://blog.samaltman.com/",
+          "controller": "Sam Altman",
+          "source_type": "official_personal",
+          "genres": [
+            "reflection-post",
+            "announcement-commentary",
+            "advice-list"
+          ],
+          "availability_proxy": "paginated multi-year archive on Posthaven with personally signed posts and a browsable index",
+          "rights_or_terms_url": null,
+          "evidence_fact": "the blog presents a paginated archive of posts published under his own name",
+          "primary": true
+        }
+      ],
+      "public_email": {
+        "verified_collection_found": false,
+        "strongest_lead_url": null,
+        "finding": "no verified authored public-email collection exists; the blog distributes posts to subscribers by email without publishing correspondence"
+      },
+      "availability": {
+        "default_threshold": {
+          "effective_clean_tokens": 50000,
+          "independent_examples": 100,
+          "relevant_genres": 3,
+          "held_out_cases": 30
+        },
+        "outlook": "unknown",
+        "component_assessments": [
+          {
+            "component": "effective_clean_tokens",
+            "status": "unverified",
+            "note": "visible post volume appears modest against the token default"
+          },
+          {
+            "component": "independent_examples",
+            "status": "unverified",
+            "note": "independent example count may fall below one hundred"
+          },
+          {
+            "component": "genre_coverage",
+            "status": "unverified",
+            "note": "three relevant genres are not clearly present"
+          },
+          {
+            "component": "held_out_cases",
+            "status": "unmet",
+            "note": "no held-out pool exists yet"
+          }
+        ],
+        "notes": [
+          "assessments are provisional and must be recomputed after collection and deduplication"
+        ]
+      },
+      "rights": {
+        "classification": "permission_required",
+        "approved_uses": [
+          "public-source metadata audit",
+          "abstract profile-card evaluation without source text"
+        ],
+        "evidence_url": "https://blog.samaltman.com/",
+        "reviewer_role": "codex-reviewer",
+        "review_date": "2026-08-22",
+        "unresolved_questions": [
+          "no license page exists for the blog",
+          "company-channel writings were excluded for insufficient authorship verification"
+        ],
+        "promotion_authority": "user-or-qualified-counsel"
+      },
+      "profile": {
+        "profile_id": "declarative-trajectory-update-v1",
+        "production_name": "Declarative Trajectory Update",
+        "description": "thesis-first update register with enumerated support adapted to stakeholder updates",
+        "traits": [
+          {
+            "trait": "declarative thesis-first openings",
+            "supporting_source_ids": [
+              "sam-altman-blog"
+            ]
+          },
+          {
+            "trait": "numbered and bulleted structural scaffolding",
+            "supporting_source_ids": [
+              "sam-altman-blog"
+            ]
+          },
+          {
+            "trait": "explicit timeline framing of expectations",
+            "supporting_source_ids": [
+              "sam-altman-blog"
+            ]
+          }
+        ],
+        "anti_impersonation_limits": [
+          "outputs must not reproduce institutional positions as personal commitments",
+          "profiles must remain descriptive and never marketed as replicas"
+        ]
+      },
+      "evaluation_subset": {
+        "slice_id": "slice-sam-altman-v1",
+        "case_ids": [
+          "b1-001-migration-email",
+          "b1-004-hiring-memo",
+          "b1-007-launch-decision-memo",
+          "b1-011-concise-onboarding-revision",
+          "b1-015-europe-strategy-update",
+          "b1-020-cache-blog"
+        ],
+        "protocols": [
+          {
+            "protocol": "topic_swap",
+            "status": "current_limitation",
+            "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+          },
+          {
+            "protocol": "leave_topic_out",
+            "status": "declared",
+            "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+          },
+          {
+            "protocol": "leave_time_out",
+            "status": "current_limitation",
+            "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+          }
+        ]
+      },
+      "run_configuration": {
+        "config_id": "runconfig-declarative-trajectory-update-v1-v1",
+        "config_path": "programs/executive-writing/configs/source-profiles/declarative-trajectory-update-v1.json",
+        "architecture": "profile_card_retrieval_coverage",
+        "standalone_eligible": false,
+        "blocker": "rights remain permission_required and visible volume may fall below the standalone threshold",
+        "third_party_training_text_allowed": false,
+        "evaluation_slice_id": "slice-sam-altman-v1",
+        "exploratory_label": "exploratory research run; not impersonation, replication, or endorsement"
+      }
+    },
+    {
+      "person": "Joel Spolsky",
+      "source_routes": [
+        {
+          "source_id": "joel-on-software-archives",
+          "title": "Joel on Software archives",
+          "canonical_url": "https://www.joelonsoftware.com/archives/",
+          "controller": "Joel Spolsky",
+          "source_type": "official_personal",
+          "genres": [
+            "technical-essay",
+            "management-advice",
+            "design-commentary"
+          ],
+          "availability_proxy": "site states roughly one thousand one hundred articles written over about sixteen years organized into dated archives",
+          "rights_or_terms_url": null,
+          "evidence_fact": "the author states on the site that he wrote more than one thousand articles there and organizes them into topical archives",
+          "primary": true
+        }
+      ],
+      "public_email": {
+        "verified_collection_found": false,
+        "strongest_lead_url": null,
+        "finding": "no verified public-email collection exists; the historical discussion forum is user-generated community content rather than his correspondence"
+      },
+      "availability": {
+        "default_threshold": {
+          "effective_clean_tokens": 50000,
+          "independent_examples": 100,
+          "relevant_genres": 3,
+          "held_out_cases": 30
+        },
+        "outlook": "plausibly_reachable",
+        "component_assessments": [
+          {
+            "component": "effective_clean_tokens",
+            "status": "unverified",
+            "note": "stated article count suggests token sufficiency pending deduplication and boilerplate removal"
+          },
+          {
+            "component": "independent_examples",
+            "status": "unverified",
+            "note": "example count plausibly exceeds one hundred but is unmeasured"
+          },
+          {
+            "component": "genre_coverage",
+            "status": "unverified",
+            "note": "technical, management, and design genres appear represented"
+          },
+          {
+            "component": "held_out_cases",
+            "status": "unmet",
+            "note": "held-out cases require collection first"
+          }
+        ],
+        "notes": [
+          "assessments are provisional and must be recomputed after collection and deduplication"
+        ]
+      },
+      "rights": {
+        "classification": "permission_required",
+        "approved_uses": [
+          "public-source metadata audit",
+          "abstract profile-card evaluation without source text"
+        ],
+        "evidence_url": "https://www.joelonsoftware.com/archives/",
+        "reviewer_role": "codex-reviewer",
+        "review_date": "2026-08-22",
+        "unresolved_questions": [
+          "no visible license page governs reuse of the articles",
+          "recent posting activity is sparse relative to the classic archive era"
+        ],
+        "promotion_authority": "user-or-qualified-counsel"
+      },
+      "profile": {
+        "profile_id": "narrative-anecdote-advisory-v1",
+        "production_name": "Narrative Anecdote Advisory",
+        "description": "anecdote-led advisory register adapted to engineering-management guidance",
+        "traits": [
+          {
+            "trait": "narrative anecdote openings launching arguments",
+            "supporting_source_ids": [
+              "joel-on-software-archives"
+            ]
+          },
+          {
+            "trait": "humorous analogy-driven explanation",
+            "supporting_source_ids": [
+              "joel-on-software-archives"
+            ]
+          },
+          {
+            "trait": "prescriptive list-based advice format",
+            "supporting_source_ids": [
+              "joel-on-software-archives"
+            ]
+          }
+        ],
+        "anti_impersonation_limits": [
+          "outputs must not imitate identifiable voice mannerisms beyond abstract structure",
+          "profiles must not be presented as the person in production"
+        ]
+      },
+      "evaluation_subset": {
+        "slice_id": "slice-joel-spolsky-v1",
+        "case_ids": [
+          "b1-001-migration-email",
+          "b1-004-hiring-memo",
+          "b1-007-launch-decision-memo",
+          "b1-011-concise-onboarding-revision",
+          "b1-015-europe-strategy-update",
+          "b1-020-cache-blog"
+        ],
+        "protocols": [
+          {
+            "protocol": "topic_swap",
+            "status": "current_limitation",
+            "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+          },
+          {
+            "protocol": "leave_topic_out",
+            "status": "declared",
+            "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+          },
+          {
+            "protocol": "leave_time_out",
+            "status": "current_limitation",
+            "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+          }
+        ]
+      },
+      "run_configuration": {
+        "config_id": "runconfig-narrative-anecdote-advisory-v1-v1",
+        "config_path": "programs/executive-writing/configs/source-profiles/narrative-anecdote-advisory-v1.json",
+        "architecture": "profile_card_retrieval_coverage",
+        "standalone_eligible": false,
+        "blocker": "rights remain permission_required because no license covers training use",
+        "third_party_training_text_allowed": false,
+        "evaluation_slice_id": "slice-joel-spolsky-v1",
+        "exploratory_label": "exploratory research run; not impersonation, replication, or endorsement"
+      }
+    },
+    {
+      "person": "Fred Wilson",
+      "source_routes": [
+        {
+          "source_id": "avc-blog",
+          "title": "AVC blog",
+          "canonical_url": "https://avc.com/",
+          "controller": "Fred Wilson",
+          "source_type": "official_personal",
+          "genres": [
+            "daily-blog-post",
+            "annual-review-post",
+            "personal-essay"
+          ],
+          "availability_proxy": "author describes more than twenty years of continuous blogging since 2003 with the archive retained after posting moved platforms in early 2024",
+          "rights_or_terms_url": null,
+          "evidence_fact": "a post on the site confirms two decades of blogging there and that the archive remains hosted",
+          "primary": true
+        }
+      ],
+      "public_email": {
+        "verified_collection_found": false,
+        "strongest_lead_url": null,
+        "finding": "no verified authored email collection exists; subscriber emails deliver blog posts rather than correspondence"
+      },
+      "availability": {
+        "default_threshold": {
+          "effective_clean_tokens": 50000,
+          "independent_examples": 100,
+          "relevant_genres": 3,
+          "held_out_cases": 30
+        },
+        "outlook": "plausibly_reachable",
+        "component_assessments": [
+          {
+            "component": "effective_clean_tokens",
+            "status": "unverified",
+            "note": "two decades of daily posting suggests token sufficiency subject to deduplication"
+          },
+          {
+            "component": "independent_examples",
+            "status": "unverified",
+            "note": "thousands of posts plausibly exceed the example default"
+          },
+          {
+            "component": "genre_coverage",
+            "status": "unverified",
+            "note": "daily notes, annual reviews, and personal essays span at least three genres"
+          },
+          {
+            "component": "held_out_cases",
+            "status": "unmet",
+            "note": "held-out cases require collection and split design first"
+          }
+        ],
+        "notes": [
+          "assessments are provisional and must be recomputed after collection and deduplication"
+        ]
+      },
+      "rights": {
+        "classification": "permission_required",
+        "approved_uses": [
+          "public-source metadata audit",
+          "abstract profile-card evaluation without source text"
+        ],
+        "evidence_url": "https://avc.com/",
+        "reviewer_role": "codex-reviewer",
+        "review_date": "2026-08-22",
+        "unresolved_questions": [
+          "no license page exists on the blog",
+          "no license covering model training or redistribution was located"
+        ],
+        "promotion_authority": "user-or-qualified-counsel"
+      },
+      "profile": {
+        "profile_id": "daily-cadence-note-v1",
+        "production_name": "Daily Cadence Note",
+        "description": "short high-cadence note register adapted to recurring stakeholder updates",
+        "traits": [
+          {
+            "trait": "very short daily-cadence posts favoring immediacy",
+            "supporting_source_ids": [
+              "avc-blog"
+            ]
+          },
+          {
+            "trait": "direct conversational address of a lay readership",
+            "supporting_source_ids": [
+              "avc-blog"
+            ]
+          },
+          {
+            "trait": "ritualized retrospective and prediction framing",
+            "supporting_source_ids": [
+              "avc-blog"
+            ]
+          }
+        ],
+        "anti_impersonation_limits": [
+          "outputs must not reference real portfolio holdings or financial advice",
+          "profiles must not imply endorsement by the underlying author"
+        ]
+      },
+      "evaluation_subset": {
+        "slice_id": "slice-fred-wilson-v1",
+        "case_ids": [
+          "b1-001-migration-email",
+          "b1-004-hiring-memo",
+          "b1-007-launch-decision-memo",
+          "b1-011-concise-onboarding-revision",
+          "b1-015-europe-strategy-update",
+          "b1-020-cache-blog"
+        ],
+        "protocols": [
+          {
+            "protocol": "topic_swap",
+            "status": "current_limitation",
+            "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+          },
+          {
+            "protocol": "leave_topic_out",
+            "status": "declared",
+            "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+          },
+          {
+            "protocol": "leave_time_out",
+            "status": "current_limitation",
+            "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+          }
+        ]
+      },
+      "run_configuration": {
+        "config_id": "runconfig-daily-cadence-note-v1-v1",
+        "config_path": "programs/executive-writing/configs/source-profiles/daily-cadence-note-v1.json",
+        "architecture": "profile_card_retrieval_coverage",
+        "standalone_eligible": false,
+        "blocker": "rights remain permission_required because no license covering training use was located",
+        "third_party_training_text_allowed": false,
+        "evaluation_slice_id": "slice-fred-wilson-v1",
+        "exploratory_label": "exploratory research run; not impersonation, replication, or endorsement"
+      }
+    },
+    {
+      "person": "David Heinemeier Hansson",
+      "source_routes": [
+        {
+          "source_id": "dhh-personal-site",
+          "title": "David Heinemeier Hansson personal site",
+          "canonical_url": "https://dhh.dk/",
+          "controller": "David Heinemeier Hansson",
+          "source_type": "official_personal",
+          "genres": [
+            "biographical-profile",
+            "writing-hub"
+          ],
+          "availability_proxy": "single authoritative profile page linking to regular writing venues and books",
+          "rights_or_terms_url": null,
+          "evidence_fact": "the page establishes identity and routes readers to his regular writing venue on HEY World",
+          "primary": true
+        },
+        {
+          "source_id": "dhh-hey-world",
+          "title": "DHH on HEY World",
+          "canonical_url": "https://world.hey.com/dhh",
+          "controller": "37signals LLC platform with author-controlled content",
+          "source_type": "official_personal",
+          "genres": [
+            "opinion-essay",
+            "technical-advocacy",
+            "product-philosophy"
+          ],
+          "availability_proxy": "multi-year stream of email-format posts with subscription surfaces",
+          "rights_or_terms_url": null,
+          "evidence_fact": "the author site names this venue as where he writes regularly, corroborated by platform documentation describing posts as emailed publications",
+          "primary": true
+        }
+      ],
+      "public_email": {
+        "verified_collection_found": false,
+        "strongest_lead_url": null,
+        "finding": "no standalone authored email archive exists; HEY World posts are composed as emails making this the nearest email-native surface found"
+      },
+      "availability": {
+        "default_threshold": {
+          "effective_clean_tokens": 50000,
+          "independent_examples": 100,
+          "relevant_genres": 3,
+          "held_out_cases": 30
+        },
+        "outlook": "plausibly_reachable",
+        "component_assessments": [
+          {
+            "component": "effective_clean_tokens",
+            "status": "unverified",
+            "note": "long-running multi-venue output suggests token sufficiency pending collection"
+          },
+          {
+            "component": "independent_examples",
+            "status": "unverified",
+            "note": "example count plausibly exceeds one hundred across venues"
+          },
+          {
+            "component": "genre_coverage",
+            "status": "unverified",
+            "note": "opinion, technical, and product-philosophy genres appear represented"
+          },
+          {
+            "component": "held_out_cases",
+            "status": "unmet",
+            "note": "held-out cases require collection and dating metadata first"
+          }
+        ],
+        "notes": [
+          "assessments are provisional and must be recomputed after collection and deduplication"
+        ]
+      },
+      "rights": {
+        "classification": "permission_required",
+        "approved_uses": [
+          "public-source metadata audit",
+          "abstract profile-card evaluation without source text"
+        ],
+        "evidence_url": "https://world.hey.com/dhh",
+        "reviewer_role": "codex-reviewer",
+        "review_date": "2026-08-22",
+        "unresolved_questions": [
+          "platform terms govern hosting while no explicit content license was located",
+          "book excerpts carry separate publisher rights and are excluded here"
+        ],
+        "promotion_authority": "user-or-qualified-counsel"
+      },
+      "profile": {
+        "profile_id": "polemical-product-philosophy-note-v1",
+        "production_name": "Polemical Product Philosophy Note",
+        "description": "contrarian product-philosophy register adapted to opinionated internal advocacy",
+        "traits": [
+          {
+            "trait": "polemical contrarian stance-taking against industry norms",
+            "supporting_source_ids": [
+              "dhh-personal-site",
+              "dhh-hey-world"
+            ]
+          },
+          {
+            "trait": "product-philosophy argumentation tying choices to values",
+            "supporting_source_ids": [
+              "dhh-hey-world"
+            ]
+          },
+          {
+            "trait": "confident unhedged declarative register",
+            "supporting_source_ids": [
+              "dhh-hey-world"
+            ]
+          }
+        ],
+        "anti_impersonation_limits": [
+          "outputs must not adopt profanity or personal attack patterns",
+          "profiles must not be marketed as the person"
+        ]
+      },
+      "evaluation_subset": {
+        "slice_id": "slice-david-heinemeier-hansson-v1",
+        "case_ids": [
+          "b1-001-migration-email",
+          "b1-004-hiring-memo",
+          "b1-007-launch-decision-memo",
+          "b1-011-concise-onboarding-revision",
+          "b1-015-europe-strategy-update",
+          "b1-020-cache-blog"
+        ],
+        "protocols": [
+          {
+            "protocol": "topic_swap",
+            "status": "current_limitation",
+            "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+          },
+          {
+            "protocol": "leave_topic_out",
+            "status": "declared",
+            "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+          },
+          {
+            "protocol": "leave_time_out",
+            "status": "current_limitation",
+            "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+          }
+        ]
+      },
+      "run_configuration": {
+        "config_id": "runconfig-polemical-product-philosophy-note-v1-v1",
+        "config_path": "programs/executive-writing/configs/source-profiles/polemical-product-philosophy-note-v1.json",
+        "architecture": "profile_card_retrieval_coverage",
+        "standalone_eligible": false,
+        "blocker": "rights remain permission_required because no content license covers training use",
+        "third_party_training_text_allowed": false,
+        "evaluation_slice_id": "slice-david-heinemeier-hansson-v1",
+        "exploratory_label": "exploratory research run; not impersonation, replication, or endorsement"
+      }
+    },
+    {
+      "person": "Jason Fried",
+      "source_routes": [
+        {
+          "source_id": "signals-thoughts-archive",
+          "title": "37signals thoughts archive",
+          "canonical_url": "https://37signals.com/thoughts/",
+          "controller": "37signals LLC",
+          "source_type": "official_company",
+          "genres": [
+            "manifesto-essay",
+            "workplace-philosophy-essay",
+            "principle-statement"
+          ],
+          "availability_proxy": "company thoughts archive presenting essays from the founding team collectively; individual attribution limited",
+          "rights_or_terms_url": null,
+          "evidence_fact": "the company thoughts archive publishes founder-team essays collectively so solo authorship within it is limited",
+          "primary": true
+        }
+      ],
+      "public_email": {
+        "verified_collection_found": false,
+        "strongest_lead_url": null,
+        "finding": "no verified authored public-email collection exists; the legacy group-blog archive location could not be confirmed"
+      },
+      "availability": {
+        "default_threshold": {
+          "effective_clean_tokens": 50000,
+          "independent_examples": 100,
+          "relevant_genres": 3,
+          "held_out_cases": 30
+        },
+        "outlook": "unknown",
+        "component_assessments": [
+          {
+            "component": "effective_clean_tokens",
+            "status": "unverified",
+            "note": "collective archive prevents isolated author token counts"
+          },
+          {
+            "component": "independent_examples",
+            "status": "unverified",
+            "note": "individual example counts are unverifiable inside collective archives"
+          },
+          {
+            "component": "genre_coverage",
+            "status": "unverified",
+            "note": "genre spread appears narrow and centered on workplace philosophy"
+          },
+          {
+            "component": "held_out_cases",
+            "status": "unmet",
+            "note": "no held-out pool exists yet"
+          }
+        ],
+        "notes": [
+          "assessments are provisional and must be recomputed after collection and deduplication"
+        ]
+      },
+      "rights": {
+        "classification": "permission_required",
+        "approved_uses": [
+          "public-source metadata audit",
+          "abstract profile-card evaluation without source text and with attribution caveats"
+        ],
+        "evidence_url": "https://37signals.com/thoughts/",
+        "reviewer_role": "codex-reviewer",
+        "review_date": "2026-08-22",
+        "unresolved_questions": [
+          "individual attribution inside the collective founder archive is unresolved",
+          "co-authored books carry separate publisher rights and are excluded here"
+        ],
+        "promotion_authority": "user-or-qualified-counsel"
+      },
+      "profile": {
+        "profile_id": "principle-driven-manifesto-memo-v1",
+        "production_name": "Principle-Driven Manifesto Memo",
+        "description": "short declarative principle-exposition register adapted to policy memos",
+        "traits": [
+          {
+            "trait": "short declarative sentence rhythm building cumulative force",
+            "supporting_source_ids": [
+              "signals-thoughts-archive"
+            ]
+          },
+          {
+            "trait": "numbered principle exposition",
+            "supporting_source_ids": [
+              "signals-thoughts-archive"
+            ]
+          },
+          {
+            "trait": "minimal-hedging manifesto register",
+            "supporting_source_ids": [
+              "signals-thoughts-archive"
+            ]
+          }
+        ],
+        "anti_impersonation_limits": [
+          "outputs must not present company doctrine as endorsed by any individual",
+          "collective-attribution sources must not train impersonation behavior"
+        ]
+      },
+      "evaluation_subset": {
+        "slice_id": "slice-jason-fried-v1",
+        "case_ids": [
+          "b1-001-migration-email",
+          "b1-004-hiring-memo",
+          "b1-007-launch-decision-memo",
+          "b1-011-concise-onboarding-revision",
+          "b1-015-europe-strategy-update",
+          "b1-020-cache-blog"
+        ],
+        "protocols": [
+          {
+            "protocol": "topic_swap",
+            "status": "current_limitation",
+            "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+          },
+          {
+            "protocol": "leave_topic_out",
+            "status": "declared",
+            "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+          },
+          {
+            "protocol": "leave_time_out",
+            "status": "current_limitation",
+            "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+          }
+        ]
+      },
+      "run_configuration": {
+        "config_id": "runconfig-principle-driven-manifesto-memo-v1-v1",
+        "config_path": "programs/executive-writing/configs/source-profiles/principle-driven-manifesto-memo-v1.json",
+        "architecture": "profile_card_retrieval_coverage",
+        "standalone_eligible": false,
+        "blocker": "rights remain permission_required and the verified archive is collective so isolated authorship statistics are unavailable",
+        "third_party_training_text_allowed": false,
+        "evaluation_slice_id": "slice-jason-fried-v1",
+        "exploratory_label": "exploratory research run; not impersonation, replication, or endorsement"
+      }
+    },
+    {
+      "person": "Simon Willison",
+      "source_routes": [
+        {
+          "source_id": "simonwillison-weblog",
+          "title": "Simon Willison weblog",
+          "canonical_url": "https://simonwillison.net/",
+          "controller": "Simon Willison",
+          "source_type": "official_personal",
+          "genres": [
+            "blog-entry",
+            "link-with-commentary",
+            "release-notes",
+            "guide"
+          ],
+          "availability_proxy": "multi-decade archive whose official about page states that the author has blogged on the site since 2002",
+          "rights_or_terms_url": null,
+          "evidence_fact": "the official about page identifies the site as the author's weblog and states that he has blogged there since 2002",
+          "primary": true
+        }
+      ],
+      "public_email": {
+        "verified_collection_found": false,
+        "strongest_lead_url": null,
+        "finding": "no verified authored public-email collection exists; subscriptions deliver blog feeds rather than correspondence"
+      },
+      "availability": {
+        "default_threshold": {
+          "effective_clean_tokens": 50000,
+          "independent_examples": 100,
+          "relevant_genres": 3,
+          "held_out_cases": 30
+        },
+        "outlook": "plausibly_reachable",
+        "component_assessments": [
+          {
+            "component": "effective_clean_tokens",
+            "status": "unverified",
+            "note": "quarter-century of dense posting suggests token sufficiency subject to deduplication"
+          },
+          {
+            "component": "independent_examples",
+            "status": "unverified",
+            "note": "many thousands of entries plausibly exceed the example default though many entries are short"
+          },
+          {
+            "component": "genre_coverage",
+            "status": "unverified",
+            "note": "entries, links, guides, and release notes span at least three genres"
+          },
+          {
+            "component": "held_out_cases",
+            "status": "unmet",
+            "note": "held-out cases require collection and split design first"
+          }
+        ],
+        "notes": [
+          "assessments are provisional and must be recomputed after collection and deduplication"
+        ]
+      },
+      "rights": {
+        "classification": "permission_required",
+        "approved_uses": [
+          "public-source metadata audit",
+          "abstract profile-card evaluation without source text"
+        ],
+        "evidence_url": "https://simonwillison.net/",
+        "reviewer_role": "codex-reviewer",
+        "review_date": "2026-08-22",
+        "unresolved_questions": [
+          "no explicit license covers the weblog text",
+          "short link commentary yields many low-token examples requiring length filtering"
+        ],
+        "promotion_authority": "user-or-qualified-counsel"
+      },
+      "profile": {
+        "profile_id": "technical-link-commentary-v1",
+        "production_name": "Technical Link Commentary",
+        "description": "dense technical micro-analysis register adapted to engineering status notes",
+        "traits": [
+          {
+            "trait": "link-plus-commentary pattern producing frequent micro-analysis",
+            "supporting_source_ids": [
+              "simonwillison-weblog"
+            ]
+          },
+          {
+            "trait": "reproducibility habits citing commands and versions",
+            "supporting_source_ids": [
+              "simonwillison-weblog"
+            ]
+          },
+          {
+            "trait": "visible errata culture appending corrections",
+            "supporting_source_ids": [
+              "simonwillison-weblog"
+            ]
+          }
+        ],
+        "anti_impersonation_limits": [
+          "outputs must not fabricate tool benchmarks or release claims",
+          "profiles describe abstract habits only and require human verification"
+        ]
+      },
+      "evaluation_subset": {
+        "slice_id": "slice-simon-willison-v1",
+        "case_ids": [
+          "b1-001-migration-email",
+          "b1-004-hiring-memo",
+          "b1-007-launch-decision-memo",
+          "b1-011-concise-onboarding-revision",
+          "b1-015-europe-strategy-update",
+          "b1-020-cache-blog"
+        ],
+        "protocols": [
+          {
+            "protocol": "topic_swap",
+            "status": "current_limitation",
+            "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+          },
+          {
+            "protocol": "leave_topic_out",
+            "status": "declared",
+            "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+          },
+          {
+            "protocol": "leave_time_out",
+            "status": "current_limitation",
+            "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+          }
+        ]
+      },
+      "run_configuration": {
+        "config_id": "runconfig-technical-link-commentary-v1-v1",
+        "config_path": "programs/executive-writing/configs/source-profiles/technical-link-commentary-v1.json",
+        "architecture": "profile_card_retrieval_coverage",
+        "standalone_eligible": false,
+        "blocker": "rights remain permission_required because no license covers training use",
+        "third_party_training_text_allowed": false,
+        "evaluation_slice_id": "slice-simon-willison-v1",
+        "exploratory_label": "exploratory research run; not impersonation, replication, or endorsement"
+      }
+    },
+    {
+      "person": "Cory Doctorow",
+      "source_routes": [
+        {
+          "source_id": "pluralistic-daily",
+          "title": "Pluralistic daily blog",
+          "canonical_url": "https://pluralistic.net/",
+          "controller": "Cory Doctorow",
+          "source_type": "official_personal",
+          "genres": [
+            "daily-essay",
+            "link-roundup",
+            "policy-commentary"
+          ],
+          "availability_proxy": "multi-year daily essay and link-roundup archive maintained on the author's official site",
+          "rights_or_terms_url": "https://chinwag.pluralistic.net/tos",
+          "evidence_fact": "the author's official biography identifies Pluralistic as his daily blog, and the site presents dated posts",
+          "primary": true
+        }
+      ],
+      "public_email": {
+        "verified_collection_found": false,
+        "strongest_lead_url": null,
+        "finding": "no verified authored public-email collection exists; newsletters mirror blog content rather than constituting correspondence"
+      },
+      "availability": {
+        "default_threshold": {
+          "effective_clean_tokens": 50000,
+          "independent_examples": 100,
+          "relevant_genres": 3,
+          "held_out_cases": 30
+        },
+        "outlook": "plausibly_reachable",
+        "component_assessments": [
+          {
+            "component": "effective_clean_tokens",
+            "status": "unverified",
+            "note": "years of long daily essays suggest token sufficiency subject to deduplication"
+          },
+          {
+            "component": "independent_examples",
+            "status": "unverified",
+            "note": "example count plausibly exceeds one hundred"
+          },
+          {
+            "component": "genre_coverage",
+            "status": "unverified",
+            "note": "essays, roundups, and fiction adjacent commentary span multiple genres though fiction must be separated"
+          },
+          {
+            "component": "held_out_cases",
+            "status": "unmet",
+            "note": "held-out cases require collection and licensing checks first"
+          }
+        ],
+        "notes": [
+          "assessments are provisional and must be recomputed after collection and deduplication"
+        ]
+      },
+      "rights": {
+        "classification": "evaluation_only",
+        "approved_uses": [
+          "evaluation under the official terms stating CC BY 4.0 for site text",
+          "abstract trait analysis excluding quotations and images"
+        ],
+        "evidence_url": "https://chinwag.pluralistic.net/tos",
+        "reviewer_role": "codex-reviewer",
+        "review_date": "2026-08-22",
+        "unresolved_questions": [
+          "terms exclude quotations and images from the license grant",
+          "per-work license variants elsewhere on his sites vary and are out of scope here"
+        ],
+        "promotion_authority": "user-or-qualified-counsel"
+      },
+      "profile": {
+        "profile_id": "policy-polemical-analysis-v1",
+        "production_name": "Policy Polemical Analysis",
+        "description": "political-economy polemic register adapted to argued strategy analysis",
+        "traits": [
+          {
+            "trait": "policy-polemical framing anchored in political economy",
+            "supporting_source_ids": [
+              "pluralistic-daily"
+            ]
+          },
+          {
+            "trait": "coined-term reuse as systematic argument devices",
+            "supporting_source_ids": [
+              "pluralistic-daily"
+            ]
+          },
+          {
+            "trait": "roundup scaffolding around extended lead essays",
+            "supporting_source_ids": [
+              "pluralistic-daily"
+            ]
+          }
+        ],
+        "anti_impersonation_limits": [
+          "outputs must not reuse coined trademark-like phrases from the source",
+          "profiles must not imply political endorsement by any person"
+        ]
+      },
+      "evaluation_subset": {
+        "slice_id": "slice-cory-doctorow-v1",
+        "case_ids": [
+          "b1-001-migration-email",
+          "b1-004-hiring-memo",
+          "b1-007-launch-decision-memo",
+          "b1-011-concise-onboarding-revision",
+          "b1-015-europe-strategy-update",
+          "b1-020-cache-blog"
+        ],
+        "protocols": [
+          {
+            "protocol": "topic_swap",
+            "status": "current_limitation",
+            "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+          },
+          {
+            "protocol": "leave_topic_out",
+            "status": "declared",
+            "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+          },
+          {
+            "protocol": "leave_time_out",
+            "status": "current_limitation",
+            "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+          }
+        ]
+      },
+      "run_configuration": {
+        "config_id": "runconfig-policy-polemical-analysis-v1-v1",
+        "config_path": "programs/executive-writing/configs/source-profiles/policy-polemical-analysis-v1.json",
+        "architecture": "profile_card_retrieval_coverage",
+        "standalone_eligible": false,
+        "blocker": "official terms permit CC BY 4.0 use of site text but exclude quotations and images, so classification stays evaluation_only pending counsel review",
+        "third_party_training_text_allowed": false,
+        "evaluation_slice_id": "slice-cory-doctorow-v1",
+        "exploratory_label": "exploratory research run; not impersonation, replication, or endorsement"
+      }
+    },
+    {
+      "person": "Jeff Bezos",
+      "source_routes": [
+        {
+          "source_id": "amazon-shareholder-letters-bezos",
+          "title": "Amazon investor relations shareholder letters repository",
+          "canonical_url": "https://ir.aboutamazon.com/annual-reports-proxies-and-shareholder-letters/default.aspx",
+          "controller": "Amazon.com, Inc.",
+          "source_type": "official_company",
+          "genres": [
+            "shareholder-letter",
+            "annual-report"
+          ],
+          "availability_proxy": "repository page confirmed live hosting CEO-signed letters including the founder-CEO era corpus of roughly two dozen documents",
+          "rights_or_terms_url": null,
+          "evidence_fact": "investor relations hosts a repository titled annual reports proxies and shareholder letters which is the canonical home of the signed letters",
+          "primary": true
+        }
+      ],
+      "public_email": {
+        "verified_collection_found": false,
+        "strongest_lead_url": null,
+        "finding": "press reporting describes a customer escalation mailbox associated with the founder but no authorized public collection exists and compilations would be unauthorized secondary material"
+      },
+      "availability": {
+        "default_threshold": {
+          "effective_clean_tokens": 50000,
+          "independent_examples": 100,
+          "relevant_genres": 3,
+          "held_out_cases": 30
+        },
+        "outlook": "clearly_unreachable",
+        "component_assessments": [
+          {
+            "component": "effective_clean_tokens",
+            "status": "unmet",
+            "note": "roughly two dozen formal letters cannot approach fifty thousand clean tokens"
+          },
+          {
+            "component": "independent_examples",
+            "status": "unmet",
+            "note": "far fewer than one hundred independent examples exist"
+          },
+          {
+            "component": "genre_coverage",
+            "status": "unmet",
+            "note": "a single dominant formal letter genre with no verified secondary genres"
+          },
+          {
+            "component": "held_out_cases",
+            "status": "unmet",
+            "note": "no independent held-out pool can be drawn from this corpus"
+          }
+        ],
+        "notes": [
+          "assessments are provisional and must be recomputed after collection and deduplication"
+        ]
+      },
+      "rights": {
+        "classification": "permission_required",
+        "approved_uses": [
+          "public-source metadata audit",
+          "abstract profile-card evaluation without source text"
+        ],
+        "evidence_url": "https://ir.aboutamazon.com/annual-reports-proxies-and-shareholder-letters/default.aspx",
+        "reviewer_role": "codex-reviewer",
+        "review_date": "2026-08-22",
+        "unresolved_questions": [
+          "letter texts embedded in corporate annual reports carry corporate copyright",
+          "newsroom items were excluded because staff authorship cannot be ruled out"
+        ],
+        "promotion_authority": "user-or-qualified-counsel"
+      },
+      "profile": {
+        "profile_id": "institutional-narrative-letter-v1",
+        "production_name": "Institutional Narrative Letter",
+        "description": "long-horizon institutional storytelling register adapted to board-facing letters",
+        "traits": [
+          {
+            "trait": "long-horizon institutional storytelling over quarterly results",
+            "supporting_source_ids": [
+              "amazon-shareholder-letters-bezos"
+            ]
+          },
+          {
+            "trait": "narrative letter form binding results to management doctrine",
+            "supporting_source_ids": [
+              "amazon-shareholder-letters-bezos"
+            ]
+          },
+          {
+            "trait": "customer-first axiom repetition as rhetorical spine",
+            "supporting_source_ids": [
+              "amazon-shareholder-letters-bezos"
+            ]
+          }
+        ],
+        "anti_impersonation_limits": [
+          "outputs must not fabricate financial results or forward guidance",
+          "profiles must not be presented as statements by any executive"
+        ]
+      },
+      "evaluation_subset": {
+        "slice_id": "slice-jeff-bezos-v1",
+        "case_ids": [
+          "b1-001-migration-email",
+          "b1-004-hiring-memo",
+          "b1-007-launch-decision-memo",
+          "b1-011-concise-onboarding-revision",
+          "b1-015-europe-strategy-update",
+          "b1-020-cache-blog"
+        ],
+        "protocols": [
+          {
+            "protocol": "topic_swap",
+            "status": "current_limitation",
+            "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+          },
+          {
+            "protocol": "leave_topic_out",
+            "status": "declared",
+            "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+          },
+          {
+            "protocol": "leave_time_out",
+            "status": "current_limitation",
+            "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+          }
+        ]
+      },
+      "run_configuration": {
+        "config_id": "runconfig-institutional-narrative-letter-v1-v1",
+        "config_path": "programs/executive-writing/configs/source-profiles/institutional-narrative-letter-v1.json",
+        "architecture": "profile_card_retrieval_coverage",
+        "standalone_eligible": false,
+        "blocker": "statistical insufficiency is decisive because the corpus cannot reach the token, example, genre, or held-out defaults, and rights also remain permission_required",
+        "third_party_training_text_allowed": false,
+        "evaluation_slice_id": "slice-jeff-bezos-v1",
+        "exploratory_label": "exploratory research run; not impersonation, replication, or endorsement"
+      }
+    },
+    {
+      "person": "Andy Jassy",
+      "source_routes": [
+        {
+          "source_id": "amazon-shareholder-letters-jassy",
+          "title": "Amazon investor relations shareholder letters repository",
+          "canonical_url": "https://ir.aboutamazon.com/annual-reports-proxies-and-shareholder-letters/default.aspx",
+          "controller": "Amazon.com, Inc.",
+          "source_type": "official_company",
+          "genres": [
+            "shareholder-letter",
+            "annual-report"
+          ],
+          "availability_proxy": "repository page confirmed live hosting letters issued during the current CEO tenure alongside earlier corpora",
+          "rights_or_terms_url": null,
+          "evidence_fact": "investor relations hosts the canonical repository for CEO-signed annual letters issued during his tenure",
+          "primary": true
+        }
+      ],
+      "public_email": {
+        "verified_collection_found": false,
+        "strongest_lead_url": null,
+        "finding": "no authored public-email collection exists and no credible official lead surfaced during discovery"
+      },
+      "availability": {
+        "default_threshold": {
+          "effective_clean_tokens": 50000,
+          "independent_examples": 100,
+          "relevant_genres": 3,
+          "held_out_cases": 30
+        },
+        "outlook": "clearly_unreachable",
+        "component_assessments": [
+          {
+            "component": "effective_clean_tokens",
+            "status": "unmet",
+            "note": "roughly two dozen formal letters cannot approach fifty thousand clean tokens"
+          },
+          {
+            "component": "independent_examples",
+            "status": "unmet",
+            "note": "far fewer than one hundred independent examples exist"
+          },
+          {
+            "component": "genre_coverage",
+            "status": "unmet",
+            "note": "a single dominant formal letter genre with no verified secondary genres"
+          },
+          {
+            "component": "held_out_cases",
+            "status": "unmet",
+            "note": "no independent held-out pool can be drawn from this corpus"
+          }
+        ],
+        "notes": [
+          "assessments are provisional and must be recomputed after collection and deduplication"
+        ]
+      },
+      "rights": {
+        "classification": "permission_required",
+        "approved_uses": [
+          "public-source metadata audit",
+          "abstract profile-card evaluation without source text"
+        ],
+        "evidence_url": "https://ir.aboutamazon.com/annual-reports-proxies-and-shareholder-letters/default.aspx",
+        "reviewer_role": "codex-reviewer",
+        "review_date": "2026-08-22",
+        "unresolved_questions": [
+          "most company communications are drafted by communications staff weakening attribution",
+          "government filings supply signatures but negligible stylistic prose"
+        ],
+        "promotion_authority": "user-or-qualified-counsel"
+      },
+      "profile": {
+        "profile_id": "operational-executive-update-v1",
+        "production_name": "Operational Executive Update",
+        "description": "metrics-forward operational update register adapted to leadership reporting",
+        "traits": [
+          {
+            "trait": "operational executive-update register emphasizing execution detail",
+            "supporting_source_ids": [
+              "amazon-shareholder-letters-jassy"
+            ]
+          },
+          {
+            "trait": "metrics-forward presentation anchoring claims to figures",
+            "supporting_source_ids": [
+              "amazon-shareholder-letters-jassy"
+            ]
+          },
+          {
+            "trait": "formal announcement tone with little personal anecdote",
+            "supporting_source_ids": [
+              "amazon-shareholder-letters-jassy"
+            ]
+          }
+        ],
+        "anti_impersonation_limits": [
+          "outputs must not invent operational metrics or guidance",
+          "profiles must not be presented as statements by any executive"
+        ]
+      },
+      "evaluation_subset": {
+        "slice_id": "slice-andy-jassy-v1",
+        "case_ids": [
+          "b1-001-migration-email",
+          "b1-004-hiring-memo",
+          "b1-007-launch-decision-memo",
+          "b1-011-concise-onboarding-revision",
+          "b1-015-europe-strategy-update",
+          "b1-020-cache-blog"
+        ],
+        "protocols": [
+          {
+            "protocol": "topic_swap",
+            "status": "current_limitation",
+            "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+          },
+          {
+            "protocol": "leave_topic_out",
+            "status": "declared",
+            "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+          },
+          {
+            "protocol": "leave_time_out",
+            "status": "current_limitation",
+            "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+          }
+        ]
+      },
+      "run_configuration": {
+        "config_id": "runconfig-operational-executive-update-v1-v1",
+        "config_path": "programs/executive-writing/configs/source-profiles/operational-executive-update-v1.json",
+        "architecture": "profile_card_retrieval_coverage",
+        "standalone_eligible": false,
+        "blocker": "statistical insufficiency is decisive because the corpus cannot reach the token, example, genre, or held-out defaults, and rights also remain permission_required",
+        "third_party_training_text_allowed": false,
+        "evaluation_slice_id": "slice-andy-jassy-v1",
+        "exploratory_label": "exploratory research run; not impersonation, replication, or endorsement"
+      }
+    }
+  ]
+}

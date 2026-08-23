@@ -1,0 +1,61 @@
+{
+  "assignment_id": "ox-source-artifacts-implementation-v1",
+  "session_id": "ses_fd2a70394ffewNMX6G81EQ4jvK",
+  "model_id": "stealth/ox-alpha",
+  "provider": "openrouter",
+  "reasoning_variant": "high",
+  "opencode_version": "1.18.21",
+  "prompt_path": "programs/executive-writing/configs/ox/source-artifacts-implementation-v1.md",
+  "prompt_sha256": "d6e38d789263b108a1a138d7fea50ec8a7706271fa117a0fed2686f6880ae359",
+  "response_sha256": "63ae661f4d4442caf74cc2c47ac506cbe4ecbe833946d3beba792c0b260a2ed4",
+  "started_at": "2026-08-23T06:40:01Z",
+  "completed_at": "2026-08-23T06:54:38Z",
+  "code_revision_start": "c3b3516",
+  "intended_use": "implementation draft of typed source, rights, profile, evaluation, and run-config artifacts for Codex review",
+  "input_classification": "public source-discovery metadata and public repository files",
+  "settled_cost_usd": 0,
+  "tokens": {
+    "input": 369831,
+    "output": 45638,
+    "reasoning": 0,
+    "cache_read": 4252800,
+    "cache_write": 0
+  },
+  "repository_state_changed": true,
+  "generated_file_count": 17,
+  "ox_validation": {
+    "focused_tests_passed": 17,
+    "ruff_check": "passed",
+    "ruff_format_check": "passed",
+    "pyright_errors": 0,
+    "git_diff_check": "passed"
+  },
+  "codex_validation": {
+    "focused_source_tests_passed": 20,
+    "full_repository_tests_passed": 75,
+    "corpus_validation": "passed",
+    "ruff_check": "passed",
+    "ruff_format_check": "passed",
+    "pyright_errors": 0,
+    "git_diff_check": "passed"
+  },
+  "codex_review": {
+    "status": "accepted_with_corrections",
+    "accepted": [
+      "typed Pydantic boundary in the dedicated program namespace",
+      "one conservative source audit and descriptive profile for each requested person",
+      "one common six-case content-controlled B1 slice for each profile",
+      "eleven source-specific profile-card coverage configs with standalone adapters disabled",
+      "no source bodies, private data, or training approvals"
+    ],
+    "corrections": [
+      "made evaluation-profile membership exact rather than minimum-length only",
+      "cross-validated embedded run references against the eleven config files",
+      "added exact provenance-record pointers to every generated machine artifact",
+      "narrowed permission_required approved uses so they do not imply source-text permission",
+      "removed unverified quantitative and author-position claims",
+      "added regression tests for extra evaluation profiles and config-reference drift"
+    ],
+    "excluded_use": "the draft is not training data, model-quality evidence, legal advice, or a human-confirmed style analysis"
+  }
+}

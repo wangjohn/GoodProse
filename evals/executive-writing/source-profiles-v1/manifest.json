@@ -1,0 +1,337 @@
+{
+  "version": 1,
+  "eval_id": "source-profiles-v1",
+  "tier": "B1-derived-content-controlled",
+  "benchmark_id": "goodprose-b1-v1",
+  "provenance_record": "programs/executive-writing/experiments/ox-source-artifacts-implementation-v1.json",
+  "shared_case_ids": [
+    "b1-001-migration-email",
+    "b1-004-hiring-memo",
+    "b1-007-launch-decision-memo",
+    "b1-011-concise-onboarding-revision",
+    "b1-015-europe-strategy-update",
+    "b1-020-cache-blog"
+  ],
+  "content_control_note": "every source profile is evaluated on the same six project-authored B1 cases so profile differences reflect conditioned rendering rather than case difficulty",
+  "slices": [
+    {
+      "slice_id": "slice-patrick-collison-v1",
+      "profile_id": "concise-curation-brief-v1",
+      "case_ids": [
+        "b1-001-migration-email",
+        "b1-004-hiring-memo",
+        "b1-007-launch-decision-memo",
+        "b1-011-concise-onboarding-revision",
+        "b1-015-europe-strategy-update",
+        "b1-020-cache-blog"
+      ],
+      "protocols": [
+        {
+          "protocol": "topic_swap",
+          "status": "current_limitation",
+          "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+        },
+        {
+          "protocol": "leave_topic_out",
+          "status": "declared",
+          "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+        },
+        {
+          "protocol": "leave_time_out",
+          "status": "current_limitation",
+          "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+        }
+      ]
+    },
+    {
+      "slice_id": "slice-paul-graham-v1",
+      "profile_id": "conversational-essay-memo-v1",
+      "case_ids": [
+        "b1-001-migration-email",
+        "b1-004-hiring-memo",
+        "b1-007-launch-decision-memo",
+        "b1-011-concise-onboarding-revision",
+        "b1-015-europe-strategy-update",
+        "b1-020-cache-blog"
+      ],
+      "protocols": [
+        {
+          "protocol": "topic_swap",
+          "status": "current_limitation",
+          "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+        },
+        {
+          "protocol": "leave_topic_out",
+          "status": "declared",
+          "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+        },
+        {
+          "protocol": "leave_time_out",
+          "status": "current_limitation",
+          "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+        }
+      ]
+    },
+    {
+      "slice_id": "slice-sam-altman-v1",
+      "profile_id": "declarative-trajectory-update-v1",
+      "case_ids": [
+        "b1-001-migration-email",
+        "b1-004-hiring-memo",
+        "b1-007-launch-decision-memo",
+        "b1-011-concise-onboarding-revision",
+        "b1-015-europe-strategy-update",
+        "b1-020-cache-blog"
+      ],
+      "protocols": [
+        {
+          "protocol": "topic_swap",
+          "status": "current_limitation",
+          "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+        },
+        {
+          "protocol": "leave_topic_out",
+          "status": "declared",
+          "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+        },
+        {
+          "protocol": "leave_time_out",
+          "status": "current_limitation",
+          "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+        }
+      ]
+    },
+    {
+      "slice_id": "slice-joel-spolsky-v1",
+      "profile_id": "narrative-anecdote-advisory-v1",
+      "case_ids": [
+        "b1-001-migration-email",
+        "b1-004-hiring-memo",
+        "b1-007-launch-decision-memo",
+        "b1-011-concise-onboarding-revision",
+        "b1-015-europe-strategy-update",
+        "b1-020-cache-blog"
+      ],
+      "protocols": [
+        {
+          "protocol": "topic_swap",
+          "status": "current_limitation",
+          "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+        },
+        {
+          "protocol": "leave_topic_out",
+          "status": "declared",
+          "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+        },
+        {
+          "protocol": "leave_time_out",
+          "status": "current_limitation",
+          "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+        }
+      ]
+    },
+    {
+      "slice_id": "slice-fred-wilson-v1",
+      "profile_id": "daily-cadence-note-v1",
+      "case_ids": [
+        "b1-001-migration-email",
+        "b1-004-hiring-memo",
+        "b1-007-launch-decision-memo",
+        "b1-011-concise-onboarding-revision",
+        "b1-015-europe-strategy-update",
+        "b1-020-cache-blog"
+      ],
+      "protocols": [
+        {
+          "protocol": "topic_swap",
+          "status": "current_limitation",
+          "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+        },
+        {
+          "protocol": "leave_topic_out",
+          "status": "declared",
+          "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+        },
+        {
+          "protocol": "leave_time_out",
+          "status": "current_limitation",
+          "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+        }
+      ]
+    },
+    {
+      "slice_id": "slice-david-heinemeier-hansson-v1",
+      "profile_id": "polemical-product-philosophy-note-v1",
+      "case_ids": [
+        "b1-001-migration-email",
+        "b1-004-hiring-memo",
+        "b1-007-launch-decision-memo",
+        "b1-011-concise-onboarding-revision",
+        "b1-015-europe-strategy-update",
+        "b1-020-cache-blog"
+      ],
+      "protocols": [
+        {
+          "protocol": "topic_swap",
+          "status": "current_limitation",
+          "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+        },
+        {
+          "protocol": "leave_topic_out",
+          "status": "declared",
+          "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+        },
+        {
+          "protocol": "leave_time_out",
+          "status": "current_limitation",
+          "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+        }
+      ]
+    },
+    {
+      "slice_id": "slice-jason-fried-v1",
+      "profile_id": "principle-driven-manifesto-memo-v1",
+      "case_ids": [
+        "b1-001-migration-email",
+        "b1-004-hiring-memo",
+        "b1-007-launch-decision-memo",
+        "b1-011-concise-onboarding-revision",
+        "b1-015-europe-strategy-update",
+        "b1-020-cache-blog"
+      ],
+      "protocols": [
+        {
+          "protocol": "topic_swap",
+          "status": "current_limitation",
+          "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+        },
+        {
+          "protocol": "leave_topic_out",
+          "status": "declared",
+          "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+        },
+        {
+          "protocol": "leave_time_out",
+          "status": "current_limitation",
+          "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+        }
+      ]
+    },
+    {
+      "slice_id": "slice-simon-willison-v1",
+      "profile_id": "technical-link-commentary-v1",
+      "case_ids": [
+        "b1-001-migration-email",
+        "b1-004-hiring-memo",
+        "b1-007-launch-decision-memo",
+        "b1-011-concise-onboarding-revision",
+        "b1-015-europe-strategy-update",
+        "b1-020-cache-blog"
+      ],
+      "protocols": [
+        {
+          "protocol": "topic_swap",
+          "status": "current_limitation",
+          "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+        },
+        {
+          "protocol": "leave_topic_out",
+          "status": "declared",
+          "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+        },
+        {
+          "protocol": "leave_time_out",
+          "status": "current_limitation",
+          "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+        }
+      ]
+    },
+    {
+      "slice_id": "slice-cory-doctorow-v1",
+      "profile_id": "policy-polemical-analysis-v1",
+      "case_ids": [
+        "b1-001-migration-email",
+        "b1-004-hiring-memo",
+        "b1-007-launch-decision-memo",
+        "b1-011-concise-onboarding-revision",
+        "b1-015-europe-strategy-update",
+        "b1-020-cache-blog"
+      ],
+      "protocols": [
+        {
+          "protocol": "topic_swap",
+          "status": "current_limitation",
+          "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+        },
+        {
+          "protocol": "leave_topic_out",
+          "status": "declared",
+          "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+        },
+        {
+          "protocol": "leave_time_out",
+          "status": "current_limitation",
+          "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+        }
+      ]
+    },
+    {
+      "slice_id": "slice-jeff-bezos-v1",
+      "profile_id": "institutional-narrative-letter-v1",
+      "case_ids": [
+        "b1-001-migration-email",
+        "b1-004-hiring-memo",
+        "b1-007-launch-decision-memo",
+        "b1-011-concise-onboarding-revision",
+        "b1-015-europe-strategy-update",
+        "b1-020-cache-blog"
+      ],
+      "protocols": [
+        {
+          "protocol": "topic_swap",
+          "status": "current_limitation",
+          "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+        },
+        {
+          "protocol": "leave_topic_out",
+          "status": "declared",
+          "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+        },
+        {
+          "protocol": "leave_time_out",
+          "status": "current_limitation",
+          "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+        }
+      ]
+    },
+    {
+      "slice_id": "slice-andy-jassy-v1",
+      "profile_id": "operational-executive-update-v1",
+      "case_ids": [
+        "b1-001-migration-email",
+        "b1-004-hiring-memo",
+        "b1-007-launch-decision-memo",
+        "b1-011-concise-onboarding-revision",
+        "b1-015-europe-strategy-update",
+        "b1-020-cache-blog"
+      ],
+      "protocols": [
+        {
+          "protocol": "topic_swap",
+          "status": "current_limitation",
+          "detail": "topic-swapped variants of the six shared B1 cases are not yet constructed; until then topic control relies on neutral shared source material rather than swapped topics"
+        },
+        {
+          "protocol": "leave_topic_out",
+          "status": "declared",
+          "detail": "each evaluation pass omits one task topic from profile conditioning and reports that slice separately so traits are not tied to a subject"
+        },
+        {
+          "protocol": "leave_time_out",
+          "status": "current_limitation",
+          "detail": "the collected public corpora lack verified per-document dates in the manifest, so time-based splits cannot be declared yet and remain an explicit limitation pending collection metadata"
+        }
+      ]
+    }
+  ]
+}

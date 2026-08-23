@@ -393,3 +393,37 @@ historical entries.
 - Unresolved risks: lexical scoring misses semantic example-fact leakage; the
   current leader still fails 12 of 24 hard gates; no authentic human endpoint,
   sealed evidence, or production recommendation exists yet.
+
+### 2026-08-23 — Phase 0 checkpoint: all-eleven source and rights artifacts
+
+- Hypothesis: Ox Alpha can accelerate bounded public-source discovery and
+  mechanical artifact construction while Codex retains source verification,
+  rights classification, integration review, and final decision authority.
+- Evidence: exact `stealth/ox-alpha` source-discovery and implementation
+  sessions; pinned prompts and response hashes; zero settled cost; independent
+  Codex checks of the retained canonical routes; one typed manifest containing
+  all eleven people exactly once; eleven descriptive profile specs; eleven
+  conservative rights assessments; eleven common six-case evaluation slices;
+  and eleven source-specific profile-card coverage configs.
+- Review corrections: removed weakly attributed newsrooms, secondary and
+  unretrieved government routes, unsupported quantitative archive claims, and
+  an unverified author-position claim; narrowed `permission_required` uses to
+  metadata audit and source-text-free profile evaluation; rejected Ox's
+  incorrect generated timestamp; and added exact cross-artifact and provenance
+  validation.
+- Exit criteria: no `training_approved` source; no corpus bodies, public email,
+  private data, or hidden evaluation material; exact Ox model/provider/prompt/
+  response/time/cost provenance; frozen standalone threshold; explicit
+  blockers; and 20 focused source-artifact tests plus lint, format, and Pyright
+  passing after Codex corrections. Required corpus validation and the complete
+  75-test repository suite also pass; Ruff lint/format and Pyright are clean.
+- Decision: accept the source/right/profile artifact milestone. Treat traits
+  as testable hypotheses, not identity replicas or human-confirmed analysis.
+  Treat configured slices as coverage definitions, not model-quality evidence.
+- Next actions: execute the eleven source-text-free profile-card coverage runs
+  on the shared B1 slice, then implement B2 aggregate-only and Tier C one-shot
+  lifecycle infrastructure.
+- Unresolved risks: nine statistically promising or unknown sources still
+  require rights promotion and measurement before training; Bezos and Jassy
+  are clearly insufficient for standalone adapters; topic swaps and
+  leave-time-out cases remain unbuilt; no public-email corpus was verified.

@@ -1,0 +1,16 @@
+{
+  "config_id": "runconfig-technical-link-commentary-v1-v1",
+  "label": "profile-card retrieval coverage run for Simon Willison research sources",
+  "person": "Simon Willison",
+  "profile_id": "technical-link-commentary-v1",
+  "architecture": "profile_card_retrieval_coverage",
+  "standalone_eligible": false,
+  "blocker": "rights remain permission_required because no license covers training use",
+  "third_party_training_text": false,
+  "purpose": "exploratory_research_not_impersonation_or_endorsement",
+  "source_manifest_id": "named-sources-v1",
+  "source_manifest_version": 1,
+  "evaluation_benchmark_id": "goodprose-b1-v1",
+  "evaluation_slice_id": "slice-simon-willison-v1",
+  "provenance_record": "programs/executive-writing/experiments/ox-source-artifacts-implementation-v1.json"
+}

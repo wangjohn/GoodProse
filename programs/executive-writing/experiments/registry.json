@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T05:34:11Z",
+  "updated_at": "2026-08-23T07:01:04Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -208,6 +208,29 @@
       "adapter_sha256": "becaefb39f4f064ffc52bb8a02629b0d8c49406d83bc51087f04754359031f85",
       "settled_cost_usd": 0,
       "disposition": "reject adapter for quality use; retain as genuine training plumbing evidence and stop templated smoke optimization"
+    },
+    {
+      "experiment_id": "ox-source-discovery-v1",
+      "kind": "public_source_discovery",
+      "status": "completed_reviewed",
+      "record": "programs/executive-writing/experiments/ox-source-discovery-v1.json",
+      "code_revision_start": "55afb8f",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "accept bounded leads with Codex corrections; exclude raw response from training and evaluation evidence"
+    },
+    {
+      "experiment_id": "ox-source-artifacts-implementation-v1",
+      "kind": "source_rights_profile_artifact_build",
+      "status": "completed_reviewed",
+      "record": "programs/executive-writing/experiments/ox-source-artifacts-implementation-v1.json",
+      "code_revision_start": "c3b3516",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "dataset_id": "named-sources-v1",
+      "settled_cost_usd": 0,
+      "disposition": "accept after Codex source, rights, provenance, and cross-artifact validation corrections"
     }
   ]
 }

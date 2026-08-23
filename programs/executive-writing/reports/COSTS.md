@@ -38,6 +38,8 @@ reference. Never record payment credentials.
 | 2026-08-23T05:14:54Z | Local Apple M3 Pro | Run genuine 40-iteration LoRA smoke fine-tune | `qwen2.5-0.5b-mlx-lora-smoke-v1` | completed; smoke pass | $0.00 | 4,198 trained tokens, 56 nonzero tensors, synthetic test loss 0.190, no remaining process |
 | 2026-08-23T05:19:47Z | Local Apple M3 Pro | Implement and freeze matched MLX B1 evaluation | `mlx-qwen2.5-0.5b-smoke-b1-runner-v1` | completed | $0.00 | exact base/adapter hashes, four matched candidates, green 54-test suite |
 | 2026-08-23T05:31:13Z | Local Apple M3 Pro | Run four matched MLX base/adapter B1 candidates | `mlx-qwen2.5-0.5b-smoke-b1-v1` | completed; adapter rejected for quality | $0.00 | 144 local generations, paired analysis, 158.463 seconds, no remaining process |
+| 2026-08-23T05:53:27Z | OpenRouter | Bounded all-profile public source discovery | `ox-source-discovery-v1` | completed and reviewed | $0.00 | exact Ox session, prompt/response hashes, and Codex primary-source verification |
+| 2026-08-23T06:54:38Z | OpenRouter | Draft typed source, rights, profile, eval, and run artifacts | `ox-source-artifacts-implementation-v1` | completed and reviewed with corrections | $0.00 | exact Ox session, 17 drafted files, scoped validation, and Codex review |
 
 ## Zero-cost feasibility snapshot
 
