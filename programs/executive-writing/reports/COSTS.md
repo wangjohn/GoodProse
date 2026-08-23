@@ -35,6 +35,8 @@ reference. Never record payment credentials.
 | 2026-08-23T04:34:10Z | Local Apple M3 Pro | Run and analyze compact ledger-draft iteration two | `goodprose-compact-ledger-draft-v2-analysis` | completed; kept | $0.00 | 48 local calls, corrected paired analysis, every frozen gate passed |
 | 2026-08-23T05:02:02Z | Local Apple M3 Pro | Install pinned MLX tooling and compile isolated smoke corpus | `goodprose-project-authored-smoke-v1-build` | completed | $0.00 | 48 reproducible records, exact hashes, B1 contamination pass, green suite |
 | 2026-08-23T05:07:55Z | Local Apple M3 Pro | Implement and validate bounded MLX training runner | `mlx-smoke-training-runner-v1` | completed | $0.00 | frozen config, mocked genuine-update proof, failure preservation, green suite |
+| 2026-08-23T05:14:54Z | Local Apple M3 Pro | Run genuine 40-iteration LoRA smoke fine-tune | `qwen2.5-0.5b-mlx-lora-smoke-v1` | completed; smoke pass | $0.00 | 4,198 trained tokens, 56 nonzero tensors, synthetic test loss 0.190, no remaining process |
+| 2026-08-23T05:19:47Z | Local Apple M3 Pro | Implement and freeze matched MLX B1 evaluation | `mlx-qwen2.5-0.5b-smoke-b1-runner-v1` | completed | $0.00 | exact base/adapter hashes, four matched candidates, green 54-test suite |
 
 ## Zero-cost feasibility snapshot
 

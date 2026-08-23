@@ -258,6 +258,43 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
 - Decision: execute one real run only after this frozen runner is committed.
 - Records: `../configs/training/SMOKE_LORA_v1.md` and its JSON companion.
 
+## 2026-08-22 — Genuine MLX LoRA smoke fine-tune
+
+- Hypothesis/candidate: the frozen `qwen2.5-0.5b-mlx-lora-smoke-v1` run can
+  prove the complete local update path for
+  `qwen2.5-0.5b-instruct-4bit-lora-smoke-v1`.
+- Revision/data/base: `dafa8f0` /
+  `goodprose-project-authored-smoke-v1` /
+  `mlx-community/Qwen2.5-0.5B-Instruct-4bit` at
+  `a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3`.
+- Result: 40 iterations and 4,198 trained tokens completed in 20.862 seconds
+  excluding download with 1.075 GB peak memory. Validation loss fell from
+  1.891 to 0.168; synthetic test loss was 0.190 (perplexity 1.209).
+- Artifact proof: the final adapter is 2,938,645 bytes with hash
+  `becaefb39f4f064ffc52bb8a02629b0d8c49406d83bc51087f04754359031f85`;
+  all 56 tensors are nonzero. No training process remained active. Cost $0.
+- Decision: pass as genuine smoke fine-tuning plumbing. The tiny templated
+  corpus makes the losses unsuitable for any model-quality claim.
+- Record: `../experiments/qwen2.5-0.5b-mlx-lora-smoke-v1.json`; large adapter
+  and logs remain ignored and can be reproduced from the frozen config.
+
+## 2026-08-22 — Matched MLX B1 evaluation runner validation
+
+- Question: what changes after the genuine adapter when base weights, prompt,
+  retrieval, decoding, and hardware are matched?
+- Candidates: base and tuned variants under profile single-pass and compact
+  ledger/draft, for four fixed candidates on all 24 B1 cases.
+- Analysis: scorer v1.1 summaries plus paired tuned-minus-base bootstrap
+  comparisons for each strategy; per-case outputs, scores, prompt hashes,
+  intermediate ledgers, latency, tokens, peak memory, and artifact hashes.
+- Validation: four focused tests and the complete 54-test repository suite,
+  Ruff lint/format, and Pyright pass. The exact adapter and base hashes are
+  frozen before B1 generation.
+- Decision: execute once at the committed revision and report regressions as
+  honestly as gains; no checkpoint or prompt reselection is allowed.
+- Records: `../configs/training/MLX_B1_SMOKE_EVAL_PREREGISTRATION_v1.md` and
+  its JSON companion.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

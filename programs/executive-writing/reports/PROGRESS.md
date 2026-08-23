@@ -325,3 +325,45 @@ historical entries.
 - Unresolved risks: Metal is intentionally unavailable inside the filesystem
   sandbox, so real training requires an approved unsandboxed local command;
   measured runtime and peak unified memory are not yet known.
+
+### 2026-08-22 — Phase 0 checkpoint: genuine MLX smoke fine-tune
+
+- Hypothesis: the frozen local run will complete a real parameter update and
+  produce validated inference-loadable adapter artifacts within the machine's
+  memory and time envelope.
+- Evidence: revision `dafa8f0`; exact 278,064,920-byte base weight; 4,198
+  trained tokens; train loss 1.421 at the first report to 0.099 at iteration
+  40; validation loss 1.891 before training to 0.168; synthetic test loss
+  0.190; 1.075 GB peak memory; 20.862 seconds excluding download; and a
+  2,938,645-byte adapter with all 56 tensors nonzero. No training process
+  remained active afterward and settled provider cost was $0.
+- Exit criteria: positive training tokens, nonempty/nonzero adapter, complete
+  synthetic test-loss evaluation, exact hashes and versions, bounded runtime,
+  ignored weights, preserved run manifest, and no leftover process.
+- Decision: pass the contract's genuine smoke fine-tune requirement. Treat all
+  loss values as templated-corpus plumbing evidence, not writing-quality proof.
+- Next actions: run the newly frozen exact-base versus exact-adapter B1
+  comparison under both profile and compact-ledger/draft inference.
+- Unresolved risks: the adapter is locally stored and reproducible but not
+  distributed; synthetic-template loss may reflect rapid template fitting and
+  says nothing about authentic executive-writing preference.
+
+### 2026-08-22 — Phase 0 checkpoint: matched MLX B1 evaluation runner
+
+- Hypothesis: exact-base versus adapter comparisons under two matched inference
+  strategies can isolate the smoke update's behavioral effect without
+  checkpoint or prompt selection after viewing B1 outputs.
+- Evidence: frozen base/adapter/cases hashes, deterministic decoding, exact
+  existing profile and retrieval prompts, per-step provenance, direct v1.1
+  scoring, paired bootstrap analysis, local-only raw outputs, and a mocked
+  runner. The complete suite passed: 54 tests, Ruff, format, and Pyright.
+- Exit criteria: four fixed candidates, same base and prompts within each
+  strategy, no rubric leakage, complete score/latency/token/memory evidence,
+  fixed final adapter, and explicit exploratory interpretation.
+- Decision: pass. Execute one $0 B1 comparison at this committed revision.
+- Next actions: preserve every output and comparison, publish the shared
+  first-evidence table and failure analysis, then choose the next hypothesis
+  from measured errors rather than synthetic loss.
+- Unresolved risks: MLX and Ollama packaging differ, so the matched MLX base is
+  the causal fine-tune baseline while earlier Ollama candidates remain useful
+  architecture references rather than exact weight-controlled comparators.

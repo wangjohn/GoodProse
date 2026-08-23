@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T05:07:55Z",
+  "updated_at": "2026-08-23T05:19:47Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -167,6 +167,33 @@
       "model_revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
       "settled_cost_usd": 0,
       "disposition": "execute one frozen real Apple-Metal smoke training run"
+    },
+    {
+      "experiment_id": "qwen2.5-0.5b-mlx-lora-smoke-v1",
+      "kind": "smoke_fine_tune",
+      "status": "completed_pass",
+      "record": "programs/executive-writing/experiments/qwen2.5-0.5b-mlx-lora-smoke-v1.json",
+      "code_revision_start": "dafa8f0",
+      "dataset_id": "goodprose-project-authored-smoke-v1",
+      "provider": "local_mlx",
+      "model_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+      "model_revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+      "adapter_sha256": "becaefb39f4f064ffc52bb8a02629b0d8c49406d83bc51087f04754359031f85",
+      "settled_cost_usd": 0,
+      "disposition": "genuine smoke update complete; evaluate under matched base and adapter inference without quality claim"
+    },
+    {
+      "experiment_id": "mlx-qwen2.5-0.5b-smoke-b1-runner-v1",
+      "kind": "inference_pipeline_validation",
+      "status": "completed_pass",
+      "record": "programs/executive-writing/configs/training/MLX_B1_SMOKE_EVAL_PREREGISTRATION_v1.md",
+      "code_revision_start": "dafa8f0",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_mlx",
+      "model_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+      "settled_cost_usd": 0,
+      "disposition": "run the four frozen exact-base versus adapter B1 candidates once"
     }
   ]
 }

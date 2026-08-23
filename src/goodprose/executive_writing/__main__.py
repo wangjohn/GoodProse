@@ -9,6 +9,7 @@ from pathlib import Path
 from goodprose.executive_writing.analysis import analyze_baselines, analyze_iteration
 from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
+from goodprose.executive_writing.mlx_evaluation import run_mlx_b1_evaluation
 from goodprose.executive_writing.smoke_data import compile_smoke_dataset
 from goodprose.executive_writing.training import run_smoke_training
 
@@ -84,6 +85,18 @@ def build_parser() -> argparse.ArgumentParser:
     smoke_train_run.add_argument("--repo-root", required=True)
     smoke_train_run.add_argument("--code-revision", required=True)
     smoke_train_run.add_argument("--started-at", required=True)
+
+    mlx_eval = commands.add_parser("mlx-eval", help="Run matched MLX B1 evaluation")
+    mlx_eval_commands = mlx_eval.add_subparsers(dest="mlx_eval_command", required=True)
+    mlx_eval_run = mlx_eval_commands.add_parser("run")
+    mlx_eval_run.add_argument("--config", required=True)
+    mlx_eval_run.add_argument("--cases", required=True)
+    mlx_eval_run.add_argument("--adapter-path", required=True)
+    mlx_eval_run.add_argument("--model-path", required=True)
+    mlx_eval_run.add_argument("--output-root", required=True)
+    mlx_eval_run.add_argument("--repo-root", required=True)
+    mlx_eval_run.add_argument("--code-revision", required=True)
+    mlx_eval_run.add_argument("--started-at", required=True)
     return parser
 
 
@@ -165,6 +178,19 @@ def _run(args: argparse.Namespace) -> int:
             started_at=args.started_at,
         )
         print(f"smoke training complete: {run_dir}")
+        return 0
+    if args.command == "mlx-eval" and args.mlx_eval_command == "run":
+        run_dir = run_mlx_b1_evaluation(
+            config_path=_path(args.config),
+            cases_path=_path(args.cases),
+            adapter_path=_path(args.adapter_path),
+            model_path=_path(args.model_path),
+            output_root=_path(args.output_root),
+            repo_root=_path(args.repo_root),
+            code_revision=args.code_revision,
+            started_at=args.started_at,
+        )
+        print(f"MLX B1 evaluation complete: {run_dir}")
         return 0
     raise AssertionError("unhandled command")
 
