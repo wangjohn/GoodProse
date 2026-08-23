@@ -180,6 +180,24 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   case results `../experiments/goodprose-structured-retrieval-v1-case-results.jsonl`,
   and `ITERATION_1_STRUCTURED.md`.
 
+## 2026-08-22 — Compact ledger-draft runner validation
+
+- Hypothesis: a newly generated two-stage candidate can retain the directional
+  ledger-draft benefit while removing the verifier/reviser responsible for the
+  iteration-one regression.
+- Candidate/baseline: `qwen2.5-0.5b-retrieval-ledger-draft-v2` versus
+  `qwen2.5-0.5b-retrieval-v1`; same local model, cases, retrieval examples,
+  temperature, seed, and context.
+- Change: compact non-tabular atomic ledger capped at 192 tokens, followed by
+  one 512-token retrieval-conditioned draft with a silent completeness check.
+- Frozen gates: +2 paired mean points, no regression from 37.50% hard gates,
+  no more than 14 omissions/one fabrication/one placeholder loss, mean latency
+  at most 4,257.554 ms, at most 9,450 generated tokens, and $0 cost.
+- Result: focused pipeline tests and the complete 41-test repository suite,
+  lint, format, and type checks passed.
+- Decision: execute one real B1 run only after committing the candidate.
+- Record: `../configs/baselines/LEDGER_DRAFT_ITERATION_v2.md`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

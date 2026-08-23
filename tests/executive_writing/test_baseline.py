@@ -10,6 +10,8 @@ from goodprose.executive_writing.baseline import (
     BaselineConfig,
     Generation,
     OllamaClient,
+    build_compact_ledger_prompt,
+    build_ledger_draft_prompt,
     build_ledger_prompt,
     build_prompt,
     build_revision_prompt,
@@ -19,6 +21,7 @@ from goodprose.executive_writing.baseline import (
     load_retrieval_examples,
     retrieve_example,
     run_baseline,
+    run_ledger_draft_pipeline,
     run_structured_pipeline,
 )
 from goodprose.executive_writing.benchmark import load_cases
@@ -59,6 +62,15 @@ def test_structured_config_is_pinned_and_uses_approved_retrieval() -> None:
     assert config.decoding.seed == 20260822
 
 
+def test_ledger_draft_config_has_frozen_step_limits() -> None:
+    config = load_config(CONFIG_ROOT / "qwen2.5-0.5b-retrieval-ledger-draft-v2.json")
+
+    assert config.strategy == "ledger_draft"
+    assert config.pipeline_token_limits is not None
+    assert config.pipeline_token_limits.ledger == 192
+    assert config.pipeline_token_limits.draft == 512
+
+
 def test_generation_accepts_omitted_optional_runtime_metrics() -> None:
     generation = Generation.model_validate(
         {
@@ -97,7 +109,9 @@ def test_structured_prompts_are_rubric_isolated() -> None:
     examples = load_retrieval_examples(CONFIG_ROOT / "retrieval-examples-v1.json")
     prompts = (
         build_ledger_prompt(case),
+        build_compact_ledger_prompt(case),
         build_structured_draft_prompt(case, "SUPPORTED FACTS — Wave 2", examples),
+        build_ledger_draft_prompt(case, "FACT — Wave 2", examples),
         build_verification_prompt(case, "SUPPORTED FACTS — Wave 2", "Draft artifact"),
         build_revision_prompt(
             case,
@@ -115,7 +129,9 @@ def test_structured_prompts_are_rubric_isolated() -> None:
 def test_structured_pipeline_records_all_steps(monkeypatch: pytest.MonkeyPatch) -> None:
     calls: list[str] = []
 
-    def fake_generate(self: OllamaClient, prompt: str) -> tuple[str, dict[str, int]]:
+    def fake_generate(
+        self: OllamaClient, prompt: str, *, num_predict: int | None = None
+    ) -> tuple[str, dict[str, int]]:
         calls.append(prompt)
         return (
             f"step output {len(calls)}",
@@ -151,10 +167,50 @@ def test_structured_pipeline_records_all_steps(monkeypatch: pytest.MonkeyPatch) 
     assert generation.output_tokens == 16
 
 
+def test_ledger_draft_pipeline_applies_per_step_token_limits(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    limits_seen: list[int | None] = []
+
+    def fake_generate(
+        self: OllamaClient, prompt: str, *, num_predict: int | None = None
+    ) -> tuple[str, dict[str, int]]:
+        limits_seen.append(num_predict)
+        return (
+            f"step output {len(limits_seen)}",
+            {
+                "prompt_tokens": 10,
+                "output_tokens": 4,
+                "total_duration_ns": 100,
+                "load_duration_ns": 10,
+            },
+        )
+
+    monkeypatch.setattr(OllamaClient, "generate", fake_generate)
+    config = load_config(CONFIG_ROOT / "qwen2.5-0.5b-retrieval-ledger-draft-v2.json")
+    case = load_cases(BENCHMARK_ROOT / "cases.jsonl")[0]
+    examples = load_retrieval_examples(CONFIG_ROOT / "retrieval-examples-v1.json")
+    assert config.pipeline_token_limits is not None
+
+    generation = run_ledger_draft_pipeline(
+        case,
+        OllamaClient(config),
+        examples,
+        candidate_id=config.candidate_id,
+        token_limits=config.pipeline_token_limits,
+    )
+
+    assert limits_seen == [192, 512]
+    assert [step.step_id for step in generation.pipeline_steps] == ["ledger", "draft"]
+    assert generation.output == "step output 2"
+
+
 def test_run_baseline_writes_provenance_complete_artifacts(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    def fake_generate(self: OllamaClient, prompt: str) -> tuple[str, dict[str, int]]:
+    def fake_generate(
+        self: OllamaClient, prompt: str, *, num_predict: int | None = None
+    ) -> tuple[str, dict[str, int]]:
         assert "Source material:" in prompt
         return (
             "Subject: Update\n\nPlease review the supplied facts and reply by Friday.",
@@ -194,7 +250,9 @@ def test_run_structured_baseline_writes_four_step_provenance(
 ) -> None:
     calls = 0
 
-    def fake_generate(self: OllamaClient, prompt: str) -> tuple[str, dict[str, int]]:
+    def fake_generate(
+        self: OllamaClient, prompt: str, *, num_predict: int | None = None
+    ) -> tuple[str, dict[str, int]]:
         nonlocal calls
         calls += 1
         return (

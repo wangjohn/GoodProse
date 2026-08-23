@@ -239,3 +239,22 @@ historical entries.
 - Unresolved risks: the ledger-conditioned draft diagnostic was selected after
   observing results and cannot itself advance; its 15 omission cases still
   regress the baseline despite a higher mean.
+
+### 2026-08-22 — Phase 0 checkpoint: compact ledger-draft runner
+
+- Hypothesis: removing the harmful verifier/reviser and constraining the ledger
+  to compact atomic source items can retain the draft-stage signal while
+  avoiding the omission and efficiency regressions from iteration one.
+- Evidence: newly frozen candidate config and preregistration; 192/512 per-step
+  token limits enforced in the local request; source-authoritative prompts with
+  no rubric leakage; complete two-step provenance; and a green 41-test
+  repository suite, Ruff, format, and Pyright.
+- Exit criteria: evidence-driven change isolated to the two-stage pipeline,
+  exact per-step limits and provenance, frozen comparison/error/efficiency
+  gates, same model and retrieval data, and complete engineering verification.
+- Decision: pass. The v2 candidate is eligible for one regenerated $0 B1 run.
+- Next actions: execute at the committed revision, score offline under v1.1,
+  and compare with retrieval v1 using the frozen gates.
+- Unresolved risks: even a compact ledger is model-generated and can omit or
+  alter facts; the prior draft signal was post hoc and its confidence interval
+  included zero.

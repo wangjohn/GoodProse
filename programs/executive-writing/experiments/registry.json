@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T04:21:41Z",
+  "updated_at": "2026-08-23T04:27:11Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -115,6 +115,19 @@
       "model_id": "qwen2.5:0.5b-instruct",
       "settled_cost_usd": 0,
       "disposition": "reject four-stage candidate; retain retrieval v1 and test a bounded two-stage ledger-draft candidate next"
+    },
+    {
+      "experiment_id": "compact-ledger-draft-runner-v2",
+      "kind": "inference_pipeline_validation",
+      "status": "completed_pass",
+      "record": "programs/executive-writing/configs/baselines/LEDGER_DRAFT_ITERATION_v2.md",
+      "code_revision_start": "3467e94",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_ollama",
+      "model_id": "qwen2.5:0.5b-instruct",
+      "settled_cost_usd": 0,
+      "disposition": "run the preregistered compact-ledger and single-draft candidate on B1"
     }
   ]
 }

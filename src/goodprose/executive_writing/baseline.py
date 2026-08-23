@@ -41,6 +41,11 @@ class DecodingConfig(StrictModel):
     num_ctx: int = Field(ge=512)
 
 
+class PipelineTokenLimits(StrictModel):
+    ledger: int = Field(ge=1)
+    draft: int = Field(ge=1)
+
+
 class BaselineConfig(StrictModel):
     version: Literal[1]
     candidate_id: NonEmpty
@@ -51,9 +56,10 @@ class BaselineConfig(StrictModel):
     model_manifest_sha256: Sha256
     model_blob_sha256: Sha256
     model_license: Literal["Apache-2.0"]
-    strategy: Literal["minimal", "profile", "retrieval", "structured"]
+    strategy: Literal["minimal", "profile", "retrieval", "structured", "ledger_draft"]
     prompt_version: NonEmpty
     retrieval_examples_path: str | None = None
+    pipeline_token_limits: PipelineTokenLimits | None = None
     decoding: DecodingConfig
     request_timeout_seconds: int = Field(default=180, ge=1)
 
@@ -62,11 +68,15 @@ class BaselineConfig(StrictModel):
         parsed = urlparse(self.endpoint)
         if parsed.scheme != "http" or parsed.hostname not in {"127.0.0.1", "localhost", "::1"}:
             raise ValueError("baseline endpoint must be local loopback HTTP")
-        uses_retrieval = self.strategy in {"retrieval", "structured"}
+        uses_retrieval = self.strategy in {"retrieval", "structured", "ledger_draft"}
         if uses_retrieval and not self.retrieval_examples_path:
             raise ValueError("retrieval and structured strategies require retrieval examples")
         if not uses_retrieval and self.retrieval_examples_path:
-            raise ValueError("only retrieval and structured strategies may use retrieval examples")
+            raise ValueError("only retrieval-based strategies may use retrieval examples")
+        if self.strategy == "ledger_draft" and self.pipeline_token_limits is None:
+            raise ValueError("ledger_draft strategy requires pipeline token limits")
+        if self.strategy != "ledger_draft" and self.pipeline_token_limits is not None:
+            raise ValueError("only ledger_draft strategy may set pipeline token limits")
         return self
 
 
@@ -142,13 +152,18 @@ class OllamaClient:
     def __init__(self, config: BaselineConfig) -> None:
         self._config = config
 
-    def generate(self, prompt: str) -> tuple[str, dict[str, int | None]]:
+    def generate(
+        self, prompt: str, *, num_predict: int | None = None
+    ) -> tuple[str, dict[str, int | None]]:
+        options = self._config.decoding.model_dump(mode="json")
+        if num_predict is not None:
+            options["num_predict"] = num_predict
         payload = {
             "model": self._config.model_id,
             "prompt": prompt,
             "stream": False,
             "keep_alive": 0,
-            "options": self._config.decoding.model_dump(mode="json"),
+            "options": options,
         }
         request = urllib.request.Request(
             f"{self._config.endpoint.rstrip('/')}/api/generate",
@@ -246,7 +261,7 @@ def build_prompt(
         )
     if config.strategy == "profile":
         return f"{PROFILE_CARD}\n\n{task}"
-    if config.strategy == "structured":
+    if config.strategy in {"structured", "ledger_draft"}:
         raise ValueError("structured strategy requires the multi-step pipeline")
     example = retrieve_example(case, retrieval_examples or [])
     example_constraints = "\n".join(f"- {item}" for item in example.constraints)
@@ -288,6 +303,25 @@ Do not invent facts or infer hidden requirements.
 {_task_prompt(case)}"""
 
 
+def build_compact_ledger_prompt(case: BenchmarkCase) -> str:
+    """Build the iteration-two compact atomic-ledger prompt."""
+
+    return f"""Extract a compact source ledger. Do not draft the artifact.
+Use at most 192 tokens. Use plain lines, never a table and never boilerplate.
+Copy exact source values; do not infer a year, cause, commitment, or fact.
+
+Write one line for every atomic item using only these labels:
+FACT — numbers, units, dates, names, decisions, owners, and supported claims
+QUALIFIER — every negation, uncertainty, dependency, scope limit, and caveat
+PRESERVE — every confidential placeholder and already-correct span
+DELIVERY — audience, format, objective, constraint, and requested next action
+
+Omitting a source item is worse than being terse. The source remains
+authoritative if this ledger is wrong.
+
+{_task_prompt(case)}"""
+
+
 def _example_prompt(case: BenchmarkCase, examples: list[RetrievalExample]) -> str:
     example = retrieve_example(case, examples)
     example_constraints = "\n".join(f"- {item}" for item in example.constraints)
@@ -320,6 +354,26 @@ SOURCE LEDGER:
 
 Now draft the requested artifact.
 
+{_task_prompt(case)}"""
+
+
+def build_ledger_draft_prompt(
+    case: BenchmarkCase, ledger: str, examples: list[RetrievalExample]
+) -> str:
+    return f"""{PROFILE_CARD}
+
+{_example_prompt(case, examples)}
+
+The compact ledger is a checklist, not a new source. Silently verify that the
+artifact covers every supported FACT, QUALIFIER, PRESERVE, and DELIVERY item.
+If the ledger conflicts with or omits source material, follow the authoritative
+source. Preserve exact numbers, dates, names, negations, caveats, placeholders,
+and requested actions. Output only the finished artifact.
+
+COMPACT LEDGER:
+{ledger}
+
+TASK AND AUTHORITATIVE SOURCE:
 {_task_prompt(case)}"""
 
 
@@ -363,10 +417,14 @@ VERIFIER NOTES:
 
 
 def _generate_step(
-    client: OllamaClient, *, step_id: str, prompt: str
+    client: OllamaClient,
+    *,
+    step_id: str,
+    prompt: str,
+    num_predict: int | None = None,
 ) -> tuple[str, GenerationStep]:
     start = time.perf_counter()
-    output, metrics = client.generate(prompt)
+    output, metrics = client.generate(prompt, num_predict=num_predict)
     latency_ms = (time.perf_counter() - start) * 1000
     return output, GenerationStep(
         step_id=step_id,
@@ -412,6 +470,46 @@ def run_structured_pipeline(
         prompt_sha256=revision_step.prompt_sha256,
         output=output,
         output_sha256=revision_step.output_sha256,
+        latency_ms=sum(step.latency_ms for step in steps),
+        prompt_tokens=_sum_optional([step.prompt_tokens for step in steps]),
+        output_tokens=_sum_optional([step.output_tokens for step in steps]),
+        total_duration_ns=_sum_optional([step.total_duration_ns for step in steps]),
+        load_duration_ns=_sum_optional([step.load_duration_ns for step in steps]),
+        pipeline_steps=steps,
+    )
+
+
+def run_ledger_draft_pipeline(
+    case: BenchmarkCase,
+    client: OllamaClient,
+    retrieval_examples: list[RetrievalExample],
+    *,
+    candidate_id: str,
+    token_limits: PipelineTokenLimits,
+) -> Generation:
+    """Run the bounded compact-ledger and single-draft iteration."""
+
+    ledger_prompt = build_compact_ledger_prompt(case)
+    ledger, ledger_step = _generate_step(
+        client,
+        step_id="ledger",
+        prompt=ledger_prompt,
+        num_predict=token_limits.ledger,
+    )
+    draft_prompt = build_ledger_draft_prompt(case, ledger, retrieval_examples)
+    output, draft_step = _generate_step(
+        client,
+        step_id="draft",
+        prompt=draft_prompt,
+        num_predict=token_limits.draft,
+    )
+    steps = (ledger_step, draft_step)
+    return Generation(
+        case_id=case.id,
+        candidate_id=candidate_id,
+        prompt_sha256=draft_step.prompt_sha256,
+        output=output,
+        output_sha256=draft_step.output_sha256,
         latency_ms=sum(step.latency_ms for step in steps),
         prompt_tokens=_sum_optional([step.prompt_tokens for step in steps]),
         output_tokens=_sum_optional([step.output_tokens for step in steps]),
@@ -504,6 +602,17 @@ def run_baseline(
                 case, client, retrieval_examples, candidate_id=config.candidate_id
             )
             output = generation.output
+        elif config.strategy == "ledger_draft":
+            if config.pipeline_token_limits is None:
+                raise AssertionError("validated ledger_draft config is missing token limits")
+            generation = run_ledger_draft_pipeline(
+                case,
+                client,
+                retrieval_examples,
+                candidate_id=config.candidate_id,
+                token_limits=config.pipeline_token_limits,
+            )
+            output = generation.output
         else:
             prompt = build_prompt(case, config, retrieval_examples)
             start = time.perf_counter()
@@ -544,7 +653,7 @@ def run_baseline(
         "pipeline_step_ids": (
             ["ledger", "draft", "verify", "revise"]
             if config.strategy == "structured"
-            else ["generate"]
+            else (["ledger", "draft"] if config.strategy == "ledger_draft" else ["generate"])
         ),
         "decoding": config.decoding.model_dump(mode="json"),
         "model_id": config.model_id,
