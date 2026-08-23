@@ -11,11 +11,13 @@ from goodprose.executive_writing.benchmark import load_cases, score_output_v1_1
 from goodprose.executive_writing.ox_ceiling import (
     OxInvocation,
     build_ox_prompt,
+    build_ox_revision_prompt,
     load_ox_baseline_correction,
     load_ox_ceiling_config,
     load_ox_run_metadata_correction,
     publish_ox_b1_ceiling_results,
     run_ox_b1_ceiling,
+    run_ox_b1_source_reviser,
 )
 from goodprose.jsonl import (
     atomic_write,
@@ -201,6 +203,46 @@ def _write_v2_fixture(tmp_path: Path) -> Path:
     return config_path
 
 
+def _write_v3_fixture(tmp_path: Path) -> Path:
+    config_path = _write_v2_fixture(tmp_path)
+    opencode_config = tmp_path / "opencode-reviser.json"
+    atomic_write_json(
+        opencode_config,
+        {
+            "$schema": "https://opencode.ai/config.json",
+            "agent": {
+                "goodprose-source-reviser-v1": {
+                    "description": "synthetic source reviser",
+                    "mode": "primary",
+                    "permission": {"*": "deny"},
+                    "steps": 2,
+                    "temperature": 0,
+                    "top_p": 1,
+                }
+            },
+        },
+    )
+    payload = json.loads(config_path.read_text())
+    payload.update(
+        {
+            "version": 3,
+            "experiment_id": "ox-alpha-b1-source-reviser-v1",
+            "candidate_id": "ox-alpha-b1-source-reviser-v1",
+            "prompt_version": "goodprose-ox-source-reviser-prompt-v1",
+            "pipeline": "draft_revise",
+        }
+    )
+    payload["harness"].update(
+        {
+            "agent": "goodprose-source-reviser-v1",
+            "opencode_config_path": "opencode-reviser.json",
+            "opencode_config_sha256": sha256_file(opencode_config),
+        }
+    )
+    atomic_write_json(config_path, payload)
+    return config_path
+
+
 def test_prompt_contains_only_input_side_material(tmp_path: Path) -> None:
     config_path, _ = _write_fixture(tmp_path)
     config = load_ox_ceiling_config(config_path, repo_root=tmp_path)
@@ -234,6 +276,84 @@ def test_v2_prompt_and_harness_are_version_bound(tmp_path: Path) -> None:
     atomic_write_json(config_path, payload)
     with pytest.raises(ValueError, match="version, candidate, prompt, agent, and gates"):
         load_ox_ceiling_config(config_path, repo_root=tmp_path)
+
+
+def test_source_reviser_prompt_contains_source_and_fresh_draft_only(tmp_path: Path) -> None:
+    config_path = _write_v3_fixture(tmp_path)
+    config = load_ox_ceiling_config(config_path, repo_root=tmp_path)
+    case = load_cases(B1_CASES)[0]
+    draft = "Subject: Draft\n\nA fresh draft with a plausible unsupported workflow."
+
+    prompt = build_ox_revision_prompt(case, draft, config)
+
+    assert case.input.source_material in prompt
+    assert draft in prompt
+    assert "reuse the source wording exactly" in prompt
+    assert "Remove anything merely plausible" in prompt
+    assert "required_facts" not in prompt
+    assert "forbidden_claims" not in prompt
+    assert "development_score" not in prompt
+
+
+def test_mocked_source_reviser_run_records_two_isolated_stages_per_case(
+    tmp_path: Path,
+) -> None:
+    config_path = _write_v3_fixture(tmp_path)
+    invoker = FakeInvoker()
+
+    run_dir = run_ox_b1_source_reviser(
+        config_path=config_path,
+        cases_path=B1_CASES,
+        output_root=tmp_path / "runs",
+        repo_root=tmp_path,
+        code_revision="3" * 40,
+        started_at="2026-08-23T21:30:00Z",
+        invoker=invoker,
+        inventory={"id": "stealth/ox-alpha", "pricing": {"prompt": "0"}},
+    )
+
+    manifest = json.loads((run_dir / "run-manifest.json").read_text())
+    assert manifest["status"] == "completed"
+    assert manifest["pipeline"] == "draft_revise"
+    assert manifest["case_count"] == 24
+    assert manifest["stage_session_count"] == 48
+    assert len(manifest["sessions"]) == 48
+    assert [item["stage"] for item in manifest["sessions"][:4]] == [
+        "draft",
+        "revision",
+        "draft",
+        "revision",
+    ]
+    assert manifest["aggregate_tokens"] == {
+        "input": 4800,
+        "output": 960,
+        "cache_read": 0,
+        "cache_write": 0,
+    }
+    assert len(invoker.prompts) == 48
+    outputs = [
+        Generation.model_validate_json(line)
+        for line in (run_dir / "outputs.jsonl").read_text().splitlines()
+    ]
+    assert len(outputs) == 24
+    assert all(item.candidate_id == "ox-alpha-b1-source-reviser-v1" for item in outputs)
+    assert all(item.prompt_tokens == 200 and item.output_tokens == 40 for item in outputs)
+
+
+def test_single_pass_runner_rejects_source_reviser_config(tmp_path: Path) -> None:
+    config_path = _write_v3_fixture(tmp_path)
+
+    with pytest.raises(ValueError, match="single-pass pipeline"):
+        run_ox_b1_ceiling(
+            config_path=config_path,
+            cases_path=B1_CASES,
+            output_root=tmp_path / "runs",
+            repo_root=tmp_path,
+            code_revision="3" * 40,
+            started_at="2026-08-23T21:30:00Z",
+            invoker=FakeInvoker(),
+            inventory={"id": "stealth/ox-alpha", "pricing": {"prompt": "0"}},
+        )
 
 
 def test_mocked_run_and_publisher_preserve_provenance(tmp_path: Path) -> None:

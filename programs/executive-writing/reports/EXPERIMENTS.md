@@ -524,6 +524,29 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   `../experiments/architecture-frontier-v1.json`, and
   `../experiments/hypothesis-registry-v1.json`.
 
+## 2026-08-23 — Ox Alpha source-verifier/reviser preregistration
+
+- Hypothesis: one fresh draft plus one independently isolated source-fidelity
+  revision can close Ox v2's unsupported-inference and operative-phrase gaps.
+- Candidate/baseline: `ox-alpha-b1-source-reviser-v1` versus directly pinned
+  `qwen2.5-0.5b-retrieval-ledger-draft-v2`, deterministic scorer v1.1, all 24
+  visible project-authored B1 cases.
+- Configuration: OpenRouter / `stealth/ox-alpha`, high reasoning, temperature
+  0, top-p 1, two maximum no-tools steps per stage, exactly 48 isolated stage
+  sessions and 24 final outputs. The final stage sees input-side task fields,
+  source material, and its fresh draft only. Retries are transport/empty-only;
+  a usable stage output is never quality-resampled.
+- Frozen gates: +2 paired mean points, no hard-gate regression, all 24 hard
+  gates, artifact-only output, no introduced placeholder or run date, no
+  material unsupported source expansion, and clean privacy, rights, leakage,
+  provider, provenance, zero-cost, and deployment-boundary checks.
+- Validation: config SHA-256 `9c8638b…`, preregistration `ef4652d…`, agent
+  config `aaedc442…`; resolved config is temperature 0, top-p 1, two steps,
+  wildcard denial. Nine focused tests, Ruff, format, and Pyright pass. No Ox B1
+  candidate was generated before this freeze.
+- Decision: execute once after the freeze commit. If rejected, refresh the
+  frontier and evaluate the one remaining contingent larger-local-model probe.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

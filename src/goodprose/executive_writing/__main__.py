@@ -45,6 +45,7 @@ from goodprose.executive_writing.mlx_evaluation import (
 from goodprose.executive_writing.ox_ceiling import (
     publish_ox_b1_ceiling_results,
     run_ox_b1_ceiling,
+    run_ox_b1_source_reviser,
 )
 from goodprose.executive_writing.ox_output_audit import audit_ox_b1_outputs
 from goodprose.executive_writing.profile_coverage import (
@@ -202,6 +203,13 @@ def build_parser() -> argparse.ArgumentParser:
     ox_ceiling_run.add_argument("--repo-root", required=True)
     ox_ceiling_run.add_argument("--code-revision", required=True)
     ox_ceiling_run.add_argument("--started-at", required=True)
+    ox_source_reviser_run = ox_ceiling_commands.add_parser("run-reviser")
+    ox_source_reviser_run.add_argument("--config", required=True)
+    ox_source_reviser_run.add_argument("--cases", required=True)
+    ox_source_reviser_run.add_argument("--output-root", required=True)
+    ox_source_reviser_run.add_argument("--repo-root", required=True)
+    ox_source_reviser_run.add_argument("--code-revision", required=True)
+    ox_source_reviser_run.add_argument("--started-at", required=True)
     ox_ceiling_publish = ox_ceiling_commands.add_parser("publish")
     ox_ceiling_publish.add_argument("--config", required=True)
     ox_ceiling_publish.add_argument("--run-dir", required=True)
@@ -542,6 +550,17 @@ def _run(args: argparse.Namespace) -> int:
             started_at=args.started_at,
         )
         print(f"Ox B1 ceiling run complete: {run_dir}")
+        return 0
+    if args.command == "ox-ceiling" and args.ox_ceiling_command == "run-reviser":
+        run_dir = run_ox_b1_source_reviser(
+            config_path=_path(args.config),
+            cases_path=_path(args.cases),
+            output_root=_path(args.output_root),
+            repo_root=_path(args.repo_root),
+            code_revision=args.code_revision,
+            started_at=args.started_at,
+        )
+        print(f"Ox B1 source-reviser run complete: {run_dir}")
         return 0
     if args.command == "ox-ceiling" and args.ox_ceiling_command == "publish":
         analysis = publish_ox_b1_ceiling_results(

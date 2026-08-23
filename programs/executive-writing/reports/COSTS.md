@@ -61,6 +61,7 @@ reference. Never record payment credentials.
 | 2026-08-23T21:12:45Z | OpenRouter | Generate 24 fresh source-only Ox Alpha v2 candidates | `ox-alpha-b1-ceiling-v2` | completed; raw candidate later rejected | $0.00 | 24 exact model/provider sessions, 26,478 input and 5,004 output tokens, zero file changes, output hash `f3d2dff…` |
 | 2026-08-23T21:17:34Z | Local Apple M3 Pro | Correct run metadata, score, and audit Ox Alpha v2 | `ox-alpha-b1-ceiling-v2-output-audit` | completed; harness repair passed, writing candidate rejected | $0.00 | +6.3457 paired score, 24 artifact-only outputs, one introduced placeholder, six source-expansion risks |
 | 2026-08-23T21:23:20Z | Local Apple M3 Pro | Build and validate the common architecture frontier and hypothesis registry | `goodprose-b1-common-architecture-frontier-v1` | completed; zero finalist-ready candidates | $0.00 | 13 comparable candidates, seven hash-pinned sources, 14 hypotheses, schema and source-drift validation |
+| 2026-08-23T21:34:44Z | Local Apple M3 Pro | Implement, validate, and freeze the Ox Alpha source-verifier/reviser candidate | `ox-alpha-b1-source-reviser-runner-v1` | completed; candidate generation not yet run | $0.00 | two isolated stages per case, source-only boundary, resolved no-tools config, nine focused tests |
 
 ## Zero-cost feasibility snapshot
 

@@ -74,10 +74,10 @@
     },
     {
       "category": "structured_generation",
-      "evidence": "V2's dominant remaining failures are unsupported inferred commitments and paraphrased operative facts; a source-only second pass directly targets both without evaluator access.",
+      "evidence": "V2's dominant remaining failures are unsupported inferred commitments and paraphrased operative facts. The separately frozen v1 candidate uses one fresh source-only draft and one isolated source-only revision, with no evaluator or prior-output access and exact all-hard-gate and qualitative gates.",
       "hypothesis_id": "h10-ox-source-verifier-reviser",
       "major_factor": "Generate a fresh draft, then use a separate no-tools Ox session to revise it against the same source and task fields with exact operative-phrase preservation.",
-      "next_action": "Preregister and run once; require all 24 hard gates and a clean output audit.",
+      "next_action": "Run the committed frozen candidate once; require all 24 hard gates and a clean hash-bound output audit.",
       "status": "planned_high_value"
     },
     {
@@ -115,6 +115,6 @@
   ],
   "registry_id": "executive-writing-hypotheses-v1",
   "source_frontier_sha256": "7f26785c66307f0349132b6b3b1d69e8f333eee53de3765bf05f19b5a270cb55",
-  "updated_at": "2026-08-23T21:23:20Z",
+  "updated_at": "2026-08-23T21:34:44Z",
   "version": 1
 }

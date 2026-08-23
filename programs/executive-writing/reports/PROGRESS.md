@@ -843,3 +843,31 @@ historical entries.
 - Unresolved risks: common B1 remains visible and lexical; source-profile
   coverage is only six cases; public suites, B2, Tier C, rights-approved
   authentic training, and human confirmation remain outside current evidence.
+
+### 2026-08-23 — Phase 3 checkpoint: Ox Alpha source-reviser freeze
+
+- Hypothesis: a fresh Ox draft followed by a separate source-only verification
+  and revision session can remove unsupported inferred process and preserve
+  operative source wording, the dominant residual failures in Ox v2.
+- Evidence: a version-bound `draft_revise` runner creates exactly two isolated
+  no-tools sessions per case, verifies every exported model/provider/version,
+  cost, file-change, event, token, latency, prompt, and output record, and
+  commits only final candidate hashes and compact results. The revision prompt
+  receives the same B1 input fields plus only its fresh draft; it receives no
+  expected answer, scorer, audit finding, previous candidate, B2, Tier C,
+  private material, or training example. The legacy single-pass runner rejects
+  this configuration. Nine focused tests, Ruff, formatting, and Pyright pass.
+- Freeze: candidate/config `ox-alpha-b1-source-reviser-v1`, config SHA-256
+  `9c8638b…`, preregistration `ef4652d…`, and OpenCode agent config `aaedc442…`.
+  The resolved agent is temperature 0, top-p 1, two maximum steps per stage,
+  and wildcard tool denial. No candidate generation occurred before freeze.
+- Decision gate: require at least +2 paired mean points, no hard-gate
+  regression, all 24 lexical hard gates, artifact-only output, zero introduced
+  placeholders or dates, zero material source expansion, and clean privacy,
+  rights, leakage, provider, provenance, and cost checks.
+- Next actions: commit this freeze, revalidate exact live inventory and all-zero
+  pricing, run 48 stage sessions once, publish the deterministic result, perform
+  the hash-bound permitted output audit, and refresh the common frontier.
+- Unresolved risks: a verifier may preserve or introduce subtle unsupported
+  implications and may trade readability for lexical copying; Ox remains an
+  unstable external endpoint unsuitable for private production evidence.

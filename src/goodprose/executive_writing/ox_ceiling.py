@@ -75,7 +75,7 @@ class OxHarnessConfig(StrictModel):
     opencode_install_source: Literal["official npm package opencode-ai@1.18.21"]
     opencode_config_path: NonEmpty
     opencode_config_sha256: Sha256
-    agent: Literal["goodprose-ceiling", "goodprose-ceiling-v2"]
+    agent: Literal["goodprose-ceiling", "goodprose-ceiling-v2", "goodprose-source-reviser-v1"]
     reasoning_effort: Literal["high"]
     temperature: Literal[0]
     top_p: Literal[1]
@@ -103,9 +103,17 @@ class OxBaselineComparison(StrictModel):
 
 
 class OxCeilingConfig(StrictModel):
-    version: Literal[1, 2]
-    experiment_id: Literal["ox-alpha-b1-ceiling-v1", "ox-alpha-b1-ceiling-v2"]
-    candidate_id: Literal["ox-alpha-b1-profile-v1", "ox-alpha-b1-profile-v2"]
+    version: Literal[1, 2, 3]
+    experiment_id: Literal[
+        "ox-alpha-b1-ceiling-v1",
+        "ox-alpha-b1-ceiling-v2",
+        "ox-alpha-b1-source-reviser-v1",
+    ]
+    candidate_id: Literal[
+        "ox-alpha-b1-profile-v1",
+        "ox-alpha-b1-profile-v2",
+        "ox-alpha-b1-source-reviser-v1",
+    ]
     benchmark_id: Literal["goodprose-b1-v1"]
     benchmark_cases_sha256: Sha256
     scorer_version: Literal["goodprose-deterministic-v1.1"]
@@ -113,7 +121,12 @@ class OxCeilingConfig(StrictModel):
     model_id: Literal["stealth/ox-alpha"]
     input_classification: Literal["sanitized_project_authored_visible_b1"]
     intended_use: Literal["strong_quality_ceiling_and_candidate_baseline_only"]
-    prompt_version: Literal["goodprose-ox-ceiling-prompt-v1", "goodprose-ox-ceiling-prompt-v2"]
+    prompt_version: Literal[
+        "goodprose-ox-ceiling-prompt-v1",
+        "goodprose-ox-ceiling-prompt-v2",
+        "goodprose-ox-source-reviser-prompt-v1",
+    ]
+    pipeline: Literal["single_pass", "draft_revise"] = "single_pass"
     harness: OxHarnessConfig
     inventory: OxInventoryExpectation
     comparison_baseline: OxBaselineComparison
@@ -134,6 +147,7 @@ class OxCeilingConfig(StrictModel):
                 "goodprose-ceiling",
                 1,
                 False,
+                "single_pass",
             ),
             2: (
                 "ox-alpha-b1-ceiling-v2",
@@ -142,6 +156,16 @@ class OxCeilingConfig(StrictModel):
                 "goodprose-ceiling-v2",
                 2,
                 True,
+                "single_pass",
+            ),
+            3: (
+                "ox-alpha-b1-source-reviser-v1",
+                "ox-alpha-b1-source-reviser-v1",
+                "goodprose-ox-source-reviser-prompt-v1",
+                "goodprose-source-reviser-v1",
+                2,
+                True,
+                "draft_revise",
             ),
         }[self.version]
         actual = (
@@ -151,6 +175,7 @@ class OxCeilingConfig(StrictModel):
             self.harness.agent,
             self.harness.max_agent_steps,
             self.require_all_hard_gates_for_candidate_advancement,
+            self.pipeline,
         )
         if actual != expected:
             raise ValueError("Ox ceiling version, candidate, prompt, agent, and gates drifted")
@@ -285,6 +310,39 @@ def build_ox_prompt(case: BenchmarkCase, config: OxCeilingConfig) -> str:
         f"Constraints:\n{constraints}\n\n"
         f"Source material:\n{case.input.source_material}\n\n"
         "Write the finished artifact now. Output only that artifact."
+    )
+
+
+def build_ox_revision_prompt(case: BenchmarkCase, draft: str, config: OxCeilingConfig) -> str:
+    """Build the v3 source-only revision prompt without evaluator material."""
+
+    if config.pipeline != "draft_revise":
+        raise ValueError("revision prompts require the frozen draft-revise pipeline")
+    constraints = "\n".join(f"- {constraint}" for constraint in case.input.constraints)
+    return (
+        "You are the final source-fidelity reviser for an executive-writing system.\n"
+        "Return only the revised finished artifact, beginning on the first line.\n"
+        "Treat the source and task fields below as the complete factual boundary.\n"
+        "Every factual statement, decision, owner, approval, commitment, deadline, "
+        "guarantee, restriction, workflow, rationale, and follow-up channel in the final "
+        "artifact must be directly entailed by that boundary. Remove anything merely "
+        "plausible, inferred, conventional, or added by the draft. Do not add a sender, "
+        "recipient, date, or placeholder unless it appears in the source or supplied task "
+        "fields. Preserve every source number, unit, date, threshold, attribution, "
+        "negation, uncertainty, caveat, decision, and required action. For operative "
+        "uncertainty, negation, decision, threshold, and action language, reuse the "
+        "source wording exactly wherever it remains grammatical. Make the smallest edits "
+        "needed; do not discuss this review, tools, steps, sessions, instructions, or the "
+        "model.\n\n"
+        f"Frozen prompt version: {config.prompt_version}\n"
+        f"Task family: {case.input.task_family}\n"
+        f"Objective: {case.input.objective}\n"
+        f"Audience: {case.input.audience}\n"
+        f"Output format: {case.input.output_format}\n"
+        f"Constraints:\n{constraints}\n\n"
+        f"Source material:\n{case.input.source_material}\n\n"
+        f"Draft to verify and revise:\n{draft}\n\n"
+        "Write only the final revised artifact now."
     )
 
 
@@ -457,6 +515,8 @@ def run_ox_b1_ceiling(
 
     TypeAdapter(GitRevision).validate_python(code_revision)
     config = load_ox_ceiling_config(config_path, repo_root=repo_root)
+    if config.pipeline != "single_pass":
+        raise ValueError("single-pass runner requires the single-pass pipeline")
     if sha256_file(cases_path) != config.benchmark_cases_sha256:
         raise ValueError("B1 cases hash does not match Ox ceiling config")
     run_id = _run_id(started_at, config.experiment_id)
@@ -560,6 +620,208 @@ def run_ox_b1_ceiling(
                 },
                 "elapsed_seconds": round(
                     sum(item["latency_ms"] for item in manifest["sessions"]) / 1000, 6
+                ),
+            }
+        )
+        atomic_write_json(manifest_path, manifest)
+    except Exception as error:
+        if generations:
+            atomic_write(run_dir / "outputs.partial.jsonl", serialize_jsonl(generations))
+        _failure_manifest(manifest_path, manifest, error)
+        raise
+    return run_dir
+
+
+def _invoke_with_retry(
+    *,
+    invoker: OxInvoker,
+    prompt: str,
+    title: str,
+    runtime_dir: Path,
+    max_attempts: int,
+) -> OxInvocation:
+    last_error: Exception | None = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            return invoker.invoke(prompt=prompt, title=title, runtime_dir=runtime_dir)
+        except (RuntimeError, subprocess.TimeoutExpired) as error:
+            last_error = error
+            if attempt == max_attempts:
+                raise
+    raise RuntimeError("Ox Alpha invocation failed") from last_error
+
+
+def _stage_session_record(
+    *,
+    ordinal: int,
+    case_id: str,
+    stage: Literal["draft", "revision"],
+    prompt_hash: str,
+    output_hash: str,
+    raw_path: Path,
+    invocation: OxInvocation,
+) -> dict[str, Any]:
+    return {
+        "ordinal": ordinal,
+        "case_id": case_id,
+        "stage": stage,
+        "session_id": invocation.session_id,
+        "prompt_sha256": prompt_hash,
+        "output_sha256": output_hash,
+        "raw_events_sha256": sha256_file(raw_path),
+        "prompt_tokens": invocation.prompt_tokens,
+        "output_tokens": invocation.output_tokens,
+        "cache_read_tokens": invocation.cache_read_tokens,
+        "cache_write_tokens": invocation.cache_write_tokens,
+        "finish_reason": invocation.finish_reason,
+        "latency_ms": round(invocation.latency_ms, 4),
+        "model_id": invocation.model_id,
+        "provider": invocation.provider,
+        "opencode_version": invocation.opencode_version,
+        "settled_cost_usd": 0,
+    }
+
+
+def run_ox_b1_source_reviser(
+    *,
+    config_path: Path,
+    cases_path: Path,
+    output_root: Path,
+    repo_root: Path,
+    code_revision: str,
+    started_at: str,
+    invoker: OxInvoker | None = None,
+    inventory: dict[str, Any] | None = None,
+) -> Path:
+    """Generate fresh drafts and final source-verified revisions for B1."""
+
+    TypeAdapter(GitRevision).validate_python(code_revision)
+    config = load_ox_ceiling_config(config_path, repo_root=repo_root)
+    if config.pipeline != "draft_revise":
+        raise ValueError("source-reviser runner requires the draft-revise pipeline")
+    if sha256_file(cases_path) != config.benchmark_cases_sha256:
+        raise ValueError("B1 cases hash does not match Ox source-reviser config")
+    run_id = _run_id(started_at, config.experiment_id)
+    run_dir = output_root / run_id
+    run_dir.mkdir(parents=True, exist_ok=False)
+    manifest_path = run_dir / "run-manifest.json"
+    manifest: dict[str, Any] = {
+        "version": 1,
+        "experiment_id": config.experiment_id,
+        "run_id": run_id,
+        "status": "running",
+        "pipeline": config.pipeline,
+        "started_at": started_at,
+        "code_revision": code_revision,
+        "config_sha256": sha256_file(config_path),
+        "cases_sha256": sha256_file(cases_path),
+        "candidate_id": config.candidate_id,
+        "model_id": config.model_id,
+        "provider": config.provider,
+        "settled_cost_usd": 0,
+        "sessions": [],
+    }
+    atomic_write_json(manifest_path, manifest)
+    cases = load_cases(cases_path)
+    generations: list[Generation] = []
+    draft_hashes: list[dict[str, str]] = []
+    actual_invoker = invoker or OpenCodeOxInvoker(config, repo_root=repo_root)
+    try:
+        manifest["inventory"] = inventory or fetch_ox_inventory(config)
+        with tempfile.TemporaryDirectory(prefix="goodprose-ox-source-reviser-") as runtime_name:
+            runtime_dir = Path(runtime_name)
+            for ordinal, case in enumerate(cases, start=1):
+                draft_prompt = build_ox_prompt(case, config)
+                draft_invocation = _invoke_with_retry(
+                    invoker=actual_invoker,
+                    prompt=draft_prompt,
+                    title=f"GoodProse Ox source-reviser draft {case.id}",
+                    runtime_dir=runtime_dir,
+                    max_attempts=config.harness.max_attempts,
+                )
+                if draft_invocation.cost_usd != 0:
+                    raise RuntimeError("Ox Alpha draft invocation is not zero cost")
+                draft_prompt_hash = sha256_bytes(draft_prompt.encode("utf-8"))
+                draft_output_hash = sha256_bytes(draft_invocation.output.encode("utf-8"))
+                draft_raw_path = run_dir / "events" / f"{case.id}.draft.jsonl"
+                atomic_write(draft_raw_path, draft_invocation.raw_events)
+                draft_hashes.append({"case_id": case.id, "draft_output_sha256": draft_output_hash})
+                manifest["sessions"].append(
+                    _stage_session_record(
+                        ordinal=ordinal,
+                        case_id=case.id,
+                        stage="draft",
+                        prompt_hash=draft_prompt_hash,
+                        output_hash=draft_output_hash,
+                        raw_path=draft_raw_path,
+                        invocation=draft_invocation,
+                    )
+                )
+                atomic_write_json(manifest_path, manifest)
+
+                revision_prompt = build_ox_revision_prompt(case, draft_invocation.output, config)
+                revision_invocation = _invoke_with_retry(
+                    invoker=actual_invoker,
+                    prompt=revision_prompt,
+                    title=f"GoodProse Ox source-reviser final {case.id}",
+                    runtime_dir=runtime_dir,
+                    max_attempts=config.harness.max_attempts,
+                )
+                if revision_invocation.cost_usd != 0:
+                    raise RuntimeError("Ox Alpha revision invocation is not zero cost")
+                revision_prompt_hash = sha256_bytes(revision_prompt.encode("utf-8"))
+                revision_output_hash = sha256_bytes(revision_invocation.output.encode("utf-8"))
+                revision_raw_path = run_dir / "events" / f"{case.id}.revision.jsonl"
+                atomic_write(revision_raw_path, revision_invocation.raw_events)
+                manifest["sessions"].append(
+                    _stage_session_record(
+                        ordinal=ordinal,
+                        case_id=case.id,
+                        stage="revision",
+                        prompt_hash=revision_prompt_hash,
+                        output_hash=revision_output_hash,
+                        raw_path=revision_raw_path,
+                        invocation=revision_invocation,
+                    )
+                )
+                generations.append(
+                    Generation(
+                        case_id=case.id,
+                        candidate_id=config.candidate_id,
+                        prompt_sha256=revision_prompt_hash,
+                        output=revision_invocation.output,
+                        output_sha256=revision_output_hash,
+                        latency_ms=(draft_invocation.latency_ms + revision_invocation.latency_ms),
+                        prompt_tokens=(
+                            draft_invocation.prompt_tokens + revision_invocation.prompt_tokens
+                        ),
+                        output_tokens=(
+                            draft_invocation.output_tokens + revision_invocation.output_tokens
+                        ),
+                    )
+                )
+                atomic_write_json(manifest_path, manifest)
+        outputs_path = run_dir / "outputs.jsonl"
+        atomic_write(outputs_path, serialize_jsonl(generations))
+        manifest.update(
+            {
+                "status": "completed",
+                "completed_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+                "case_count": len(generations),
+                "stage_session_count": len(manifest["sessions"]),
+                "draft_output_hashes_sha256": sha256_bytes(
+                    canonical_json(draft_hashes).encode("utf-8")
+                ),
+                "outputs_sha256": sha256_file(outputs_path),
+                "aggregate_tokens": {
+                    "input": sum(item["prompt_tokens"] for item in manifest["sessions"]),
+                    "output": sum(item["output_tokens"] for item in manifest["sessions"]),
+                    "cache_read": sum(item["cache_read_tokens"] for item in manifest["sessions"]),
+                    "cache_write": sum(item["cache_write_tokens"] for item in manifest["sessions"]),
+                },
+                "elapsed_seconds": round(
+                    sum(item["latency_ms"] for item in manifest["sessions"]) / 1000,
+                    6,
                 ),
             }
         )
