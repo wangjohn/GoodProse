@@ -22,6 +22,7 @@ reference. Never record payment credentials.
 | Timestamp | Provider | Purpose | Experiment | Status | Amount | Reference |
 | --- | --- | --- | --- | --- | ---: | --- |
 | 2026-08-23T02:02:50Z | OpenRouter | Ox Alpha harness capability gate | `harness-preflight-2026-08-22` | attempted and settled | $0.00 | local sanitized session metadata |
+| 2026-08-23T02:26:09Z | OpenRouter | Corrected Ox Alpha harness rerun | `harness-preflight-2026-08-22-rerun` | attempted and settled | $0.00 | local sanitized session metadata |
 
 ## Zero-cost feasibility snapshot
 
@@ -35,8 +36,9 @@ reference. Never record payment credentials.
   adapter smoke run are plausible. Production-scale claims require measured
   throughput and memory evidence; no larger download is justified yet.
 - Ox Alpha/OpenRouter: inventory reported zero prompt and completion prices and
-  no other pricing fields for `stealth/ox-alpha` on 2026-08-22. The harness
-  artifact-contract test failed, so delegation is disabled despite $0 pricing.
+  no other pricing fields for `stealth/ox-alpha` on 2026-08-22. The corrected
+  complete harness gate passed, so bounded delegation is enabled at $0 while
+  the runtime model and pricing remain unchanged.
 - Paid compute: not approved and not currently necessary for the next
   evidence-bearing checkpoint. No paid resource was started.
 

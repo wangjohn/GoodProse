@@ -8,10 +8,10 @@
 - Settled spend: $0 of $100
 - Starting revision: `20c27103de41a495cbe6795432f48e6794a46f6c`
 - First-evidence milestone: in progress; repository and harness feasibility audited
-- Harness preflight: failed closed on 2026-08-22; the read-only smoke passed
-  after one retry, but the artifact-contract response violated the RFC 3339
-  timestamp requirement. Ox Alpha delegation is disabled and Codex continues
-  directly. See `../experiments/2026-08-22-harness-preflight.json`.
+- Harness preflight: passed on a complete 2026-08-22 rerun after supplying a
+  trusted orchestrator timestamp to the artifact task. Exact model/provider,
+  repository `read` use, strict artifact JSON, unchanged Git tree, and $0 cost
+  were verified. See `../experiments/2026-08-22-harness-preflight.json`.
 - Human evaluation: not requested; finalist-readiness gate not reached
 
 ## Launch readiness
@@ -49,3 +49,24 @@ historical entries.
   small MLX experiments but not an assumed production-scale run. No training
   source is yet `training_approved`, so the starter corpus must be explicitly
   project-authored or synthetic and cannot establish production quality.
+
+### 2026-08-22 — Phase 0 checkpoint: corrected harness gate
+
+- Hypothesis: the artifact-contract failure was caused by withholding a trusted
+  wall-clock value, not by an inability to satisfy the output contract.
+- Evidence: a complete rerun reverified the live model inventory; smoke session
+  `ses_fd38f287bffeb6vUCx0WtNbAE6` used the `read` tool; artifact session
+  `ses_fd38eae4cffe5JTH1tdGTUwR7M` returned the exact required raw JSON; both
+  used `openrouter` / `stealth/ox-alpha`, cost $0, and preserved Git tree
+  `413a8c030722b17cf21cb6d74eef38f4aeb9e74d`.
+- Exit criteria: exact model/provider provenance, a successful read-only tool
+  call, contract-compliant artifact fields, no state change, and zero/approved
+  price are all verified.
+- Decision: pass. Ox Alpha may receive bounded, sanitized assignments; Codex
+  retains source verification, patch review, experiment execution, and final
+  decisions.
+- Next actions: delegate a bounded benchmark-design review while Codex builds
+  the first-evidence dataset and deterministic evaluation path.
+- Unresolved risks: model-generated research is not independent evaluation
+  evidence and must carry generator provenance; model availability and pricing
+  remain runtime facts that require revalidation after any change.

@@ -16,6 +16,14 @@ yet.
 - Decision: reject substantive delegation and continue directly with Codex.
 - Manifest: `../experiments/2026-08-22-harness-preflight.json`.
 
+### Corrected complete rerun
+
+The full gate was rerun with the exact RFC 3339 timestamp supplied as trusted
+orchestrator metadata. The read-only smoke and strict artifact contract both
+passed; session exports verified `openrouter` / `stealth/ox-alpha`, $0 cost,
+and an unchanged Git tree. The earlier negative result remains preserved in the
+manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

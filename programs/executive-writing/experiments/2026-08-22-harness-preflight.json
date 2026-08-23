@@ -61,8 +61,35 @@
     "result": "fail",
     "failure_reason": "timestamp was 2026-08-22 rather than an RFC 3339 date-time; the response itself stated that exact wall-clock time was unavailable"
   },
-  "gate_result": "fail",
-  "disposition": "Disable Ox Alpha delegation and continue the program directly with Codex until the complete gate is rerun successfully.",
+  "passing_rerun": {
+    "timestamp": "2026-08-23T02:26:09Z",
+    "worktree_tree_before": "413a8c030722b17cf21cb6d74eef38f4aeb9e74d",
+    "worktree_tree_after": "413a8c030722b17cf21cb6d74eef38f4aeb9e74d",
+    "inventory_reverified": true,
+    "smoke_test": {
+      "session_id": "ses_fd38f287bffeb6vUCx0WtNbAE6",
+      "result": "pass",
+      "model_id": "stealth/ox-alpha",
+      "provider": "openrouter",
+      "repository_tool_call": "read",
+      "file_read": "programs/executive-writing/reports/README.md",
+      "state_changed": false,
+      "settled_cost_usd": 0
+    },
+    "artifact_contract_test": {
+      "session_id": "ses_fd38eae4cffe5JTH1tdGTUwR7M",
+      "result": "pass",
+      "model_id": "stealth/ox-alpha",
+      "provider": "openrouter",
+      "strict_json_only": true,
+      "required_fields_present": true,
+      "timestamp": "2026-08-23T02:26:09Z",
+      "timestamp_source": "trusted orchestrator value supplied in the prompt",
+      "settled_cost_usd": 0
+    }
+  },
+  "gate_result": "pass",
+  "disposition": "Ox Alpha is eligible for bounded, sanitized assignments with Codex review under the research contract.",
   "approved_spend_usd": 0,
   "attempted_spend_usd": 0,
   "settled_spend_usd": 0
