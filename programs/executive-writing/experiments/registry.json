@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T19:12:22Z",
+  "updated_at": "2026-08-23T19:16:15Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -331,6 +331,20 @@
       "adapter_sha256": "3f2826e671c316dca9731179a66299a119ca98c31fefbfad33b747b4c03b2ee6",
       "settled_cost_usd": 0,
       "disposition": "genuine fixed-final unified update complete; evaluate against the exact base under matched B1 and profile-control prompts before any quality decision"
+    },
+    {
+      "experiment_id": "mlx-qwen2.5-0.5b-unified-pilot-b1-runner-v1",
+      "kind": "inference_pipeline_validation",
+      "status": "frozen_ready",
+      "record": "programs/executive-writing/configs/training/MLX_B1_UNIFIED_PILOT_EVAL_PREREGISTRATION_v1.md",
+      "code_revision_start": "70dada7",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_mlx",
+      "model_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+      "adapter_sha256": "3f2826e671c316dca9731179a66299a119ca98c31fefbfad33b747b4c03b2ee6",
+      "settled_cost_usd": 0,
+      "disposition": "run the four frozen exact-base versus unified-adapter B1 candidates once after this evaluator/config commit"
     }
   ]
 }

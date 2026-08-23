@@ -628,3 +628,31 @@ historical entries.
   uses an unseen house profile and lexical scoring; the adapter may regress
   factual gates or fail to generalize; authentic, sealed, and human evidence
   remain absent.
+
+### 2026-08-23 — Phase 2 checkpoint: unified matched-evaluation freeze
+
+- Hypothesis: the existing MLX base-versus-adapter evaluator can be generalized
+  without changing prompts, decoding, cases, scorer, or historical smoke IDs,
+  allowing the unified adapter's causal effect to be measured under the same
+  two inference strategies.
+- Evidence: strict adapter experiment/lineage pairing for smoke and unified
+  runs; exact final adapter, base weight, training revision, B1, profile config,
+  retrieval collection, and decoding commitments; deterministic four-candidate
+  order; full artifact hashing; training-record cross-validation; paired
+  10,000-resample analysis; and a publisher that defers cross-architecture
+  leadership rather than inferring it from an exact-base comparison.
+- Exit criteria: the unified JSON config and preregistration are frozen before
+  inference; crossed adapter lineages fail; historical smoke config remains
+  valid; 7 focused evaluator tests and the complete 181-test suite pass; Ruff,
+  format, Pyright, JSON validation, and `git diff --check` are clean.
+- Decision: commit evaluator SHA-256 `9ac0da6…` and config SHA-256 `fd628da…`,
+  then run the exact four candidates once. Advancement requires +2 mean B1
+  points with no hard-gate regression in at least one matched strategy, but a
+  pass remains exploratory and does not automatically become the architecture
+  leader.
+- Next actions: execute and independently publish compact per-case hashes,
+  paired effects, failure changes, latency, tokens, memory, and cost; inspect
+  only permitted B1 outputs after the run for qualitative failure analysis.
+- Unresolved risks: visible B1 and lexical scoring remain weak substitutes for
+  authentic or human endpoints, and the unified training profile vocabulary
+  does not exactly match B1's `executive-house-v1` profile.

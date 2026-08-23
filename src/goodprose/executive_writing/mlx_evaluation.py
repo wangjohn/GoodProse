@@ -60,10 +60,30 @@ class EvalBaseModel(StrictModel):
 
 
 class EvalAdapter(StrictModel):
-    training_experiment_id: Literal["qwen2.5-0.5b-mlx-lora-smoke-v1"]
-    candidate_lineage: Literal["qwen2.5-0.5b-instruct-4bit-lora-smoke-v1"]
+    training_experiment_id: Literal[
+        "qwen2.5-0.5b-mlx-lora-smoke-v1",
+        "qwen2.5-0.5b-mlx-lora-unified-pilot-v1",
+    ]
+    candidate_lineage: Literal[
+        "qwen2.5-0.5b-instruct-4bit-lora-smoke-v1",
+        "qwen2.5-0.5b-unified-pilot-lora-v1",
+    ]
     adapter_sha256: Sha256
     training_code_revision: GitRevision
+
+    @model_validator(mode="after")
+    def pair_experiment_and_lineage(self) -> Self:
+        expected = (
+            "qwen2.5-0.5b-instruct-4bit-lora-smoke-v1"
+            if self.training_experiment_id == "qwen2.5-0.5b-mlx-lora-smoke-v1"
+            else "qwen2.5-0.5b-unified-pilot-lora-v1"
+        )
+        if self.candidate_lineage != expected:
+            raise ValueError(
+                f"candidate lineage {self.candidate_lineage!r} does not match training "
+                f"experiment {self.training_experiment_id!r}"
+            )
+        return self
 
 
 class EvalDecoding(StrictModel):
@@ -91,7 +111,7 @@ class MlxB1EvalConfig(StrictModel):
     @model_validator(mode="after")
     def required_strategies(self) -> Self:
         if self.strategies != ("profile", "ledger_draft"):
-            raise ValueError("smoke comparison must run profile then ledger_draft")
+            raise ValueError("MLX comparison must run profile then ledger_draft")
         return self
 
 
@@ -282,8 +302,16 @@ def summarize_candidate(
     }
 
 
-def _candidate_id(*, tuned: bool, strategy: str) -> str:
-    state = "smoke-lora" if tuned else "base"
+def _adapter_slug(adapter: EvalAdapter) -> str:
+    return (
+        "smoke-lora"
+        if adapter.training_experiment_id == "qwen2.5-0.5b-mlx-lora-smoke-v1"
+        else "unified-pilot-lora"
+    )
+
+
+def _candidate_id(*, adapter: EvalAdapter, tuned: bool, strategy: str) -> str:
+    state = _adapter_slug(adapter) if tuned else "base"
     return f"mlx-qwen2.5-0.5b-{state}-{strategy}-v1"
 
 
@@ -291,13 +319,14 @@ def _run_candidate(
     *,
     cases: list[BenchmarkCase],
     generator: MlxTextGenerator,
+    adapter: EvalAdapter,
     tuned: bool,
     strategy: Literal["profile", "ledger_draft"],
     profile_config: BaselineConfig,
     retrieval_examples: list[RetrievalExample],
     decoding: EvalDecoding,
 ) -> tuple[list[Generation], list[CaseScore], dict[str, Any]]:
-    candidate_id = _candidate_id(tuned=tuned, strategy=strategy)
+    candidate_id = _candidate_id(adapter=adapter, tuned=tuned, strategy=strategy)
     generations: list[Generation] = []
     metrics: list[StepMetrics] = []
     for case in cases:
@@ -379,6 +408,7 @@ def run_mlx_b1_evaluation(
             generations, scores, summary = _run_candidate(
                 cases=cases,
                 generator=generator,
+                adapter=config.adapter,
                 tuned=tuned,
                 strategy=strategy,
                 profile_config=profile_config,
@@ -411,8 +441,8 @@ def run_mlx_b1_evaluation(
 
     comparisons: list[dict[str, Any]] = []
     for strategy in config.strategies:
-        base_id = _candidate_id(tuned=False, strategy=strategy)
-        tuned_id = _candidate_id(tuned=True, strategy=strategy)
+        base_id = _candidate_id(adapter=config.adapter, tuned=False, strategy=strategy)
+        tuned_id = _candidate_id(adapter=config.adapter, tuned=True, strategy=strategy)
         comparisons.append(
             paired_comparison(
                 _rescored(artifacts[base_id]["scores"], artifacts[base_id]["summary"]),
@@ -429,8 +459,9 @@ def run_mlx_b1_evaluation(
         "run_id": run_id,
         "status": "completed",
         "hypothesis": (
-            "A genuine smoke adapter changes B1 behavior under matched profile and "
-            "ledger-draft inference; direction is exploratory, not a quality claim."
+            f"The genuine {_adapter_slug(config.adapter)} adapter changes B1 behavior under "
+            "matched profile and ledger-draft inference; direction is exploratory, not a "
+            "quality claim."
         ),
         "config_sha256": sha256_file(config_path),
         "cases_sha256": sha256_file(cases_path),
@@ -452,7 +483,7 @@ def run_mlx_b1_evaluation(
         },
         "paired_comparisons_sha256": sha256_bytes(comparison_payload),
         "settled_cost_usd": 0,
-        "validity_status": "visible_b1_exploratory_smoke_comparison",
+        "validity_status": f"visible_b1_exploratory_{_adapter_slug(config.adapter)}_comparison",
     }
     atomic_write(
         run_dir / "run-manifest.json",
@@ -479,15 +510,27 @@ def publish_mlx_b1_results(
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if manifest.get("status") != "completed":
         raise ValueError("cannot publish an incomplete MLX evaluation")
+    adapter = EvalAdapter.model_validate(manifest.get("adapter"))
     if manifest.get("cases_sha256") != sha256_file(cases_path):
         raise ValueError("MLX evaluation cases hash does not match publish input")
+    training_record = json.loads(training_record_path.read_text(encoding="utf-8"))
+    if training_record.get("experiment_id") != adapter.training_experiment_id:
+        raise ValueError("training record experiment does not match evaluated adapter")
+    if training_record.get("code_revision") != adapter.training_code_revision:
+        raise ValueError("training record revision does not match evaluated adapter")
+    training_adapter = training_record.get("adapter")
+    if (
+        not isinstance(training_adapter, dict)
+        or training_adapter.get("safetensors_sha256") != adapter.adapter_sha256
+    ):
+        raise ValueError("training record hash does not match evaluated adapter")
     cases = load_cases(cases_path)
 
     ordered_ids = [
-        _candidate_id(tuned=False, strategy="profile"),
-        _candidate_id(tuned=False, strategy="ledger_draft"),
-        _candidate_id(tuned=True, strategy="profile"),
-        _candidate_id(tuned=True, strategy="ledger_draft"),
+        _candidate_id(adapter=adapter, tuned=False, strategy="profile"),
+        _candidate_id(adapter=adapter, tuned=False, strategy="ledger_draft"),
+        _candidate_id(adapter=adapter, tuned=True, strategy="profile"),
+        _candidate_id(adapter=adapter, tuned=True, strategy="ledger_draft"),
     ]
     summaries: list[dict[str, Any]] = []
     scores_by_candidate: dict[str, list[CaseScore]] = {}
@@ -551,11 +594,63 @@ def publish_mlx_b1_results(
     ledger_base = summaries[1]
     profile_tuned = summaries[2]
     ledger_tuned = summaries[3]
+    is_smoke = adapter.training_experiment_id == "qwen2.5-0.5b-mlx-lora-smoke-v1"
+    advances = [comparison for comparison in comparisons if comparison["meets_advancement_gate"]]
+    if is_smoke:
+        analysis_id = "mlx-qwen2.5-0.5b-smoke-b1-v1-analysis"
+        status = "completed_reject_smoke_adapter"
+        adapter_disposition = "reject_for_quality_use_retain_as_pipeline_evidence"
+        leader = "qwen2.5-0.5b-retrieval-ledger-draft-v2"
+        next_hypothesis = (
+            "Training requires diverse task-aligned targets and explicit negative fidelity "
+            "controls before another unified update; prioritize evaluation validity and "
+            "rights-safe authentic pairs rather than more synthetic template fitting."
+        )
+        reviewed_patterns = [
+            "template and heading repetition",
+            "source-fact and requested-action omission",
+            "retrieval-example fact leakage in an unrelated memo",
+            "overlearned generic caveat language",
+        ]
+        review_status = "completed_permitted_output_review"
+        limitations = [
+            "B1 is visible and project-authored, so the result is exploratory.",
+            "The lexical scorer misses some unsupported retrieval-example facts.",
+            "The smoke corpus is intentionally small and templated and cannot test quality.",
+            "Earlier Ollama runs use different packaging and are not exact weight controls.",
+        ]
+    else:
+        analysis_id = "mlx-qwen2.5-0.5b-unified-pilot-b1-v1-analysis"
+        status = (
+            "completed_keep_unified_adapter_exploratory"
+            if advances
+            else "completed_reject_unified_adapter"
+        )
+        adapter_disposition = (
+            "keep_for_cross_architecture_analysis_only"
+            if advances
+            else "reject_for_quality_use_retain_as_unified_training_evidence"
+        )
+        leader = "defer_to_cross_architecture_analysis"
+        next_hypothesis = (
+            "Compare the fixed unified adapter with the current retrieval and structured "
+            "leaders, then use deterministic failures and a separate profile-control "
+            "diagnostic to decide whether another data or architecture change is justified."
+        )
+        reviewed_patterns = []
+        review_status = "deterministic_counts_only_pending_separate_permitted_output_review"
+        limitations = [
+            "B1 is visible and project-authored, so the result is exploratory.",
+            "The lexical scorer can miss unsupported semantic claims and style collapse.",
+            "The unified corpus is synthetic and renderer-structured and cannot establish quality.",
+            "Earlier Ollama runs use different packaging and are architecture references, not "
+            "exact weight controls.",
+        ]
     analysis = {
         "version": 1,
-        "analysis_id": "mlx-qwen2.5-0.5b-smoke-b1-v1-analysis",
-        "status": "completed_reject_smoke_adapter",
-        "validity_status": "visible_b1_exploratory_smoke_comparison",
+        "analysis_id": analysis_id,
+        "status": status,
+        "validity_status": f"visible_b1_exploratory_{_adapter_slug(adapter)}_comparison",
         "generated_at": generated_at,
         "benchmark_id": "goodprose-b1-v1",
         "evaluation_id": "goodprose-b1-v1.1",
@@ -592,28 +687,17 @@ def publish_mlx_b1_results(
                 - ledger_base["error_counts"].get("poor_actionability", 0),
             },
             "reviewed_patterns": [
-                "template and heading repetition",
-                "source-fact and requested-action omission",
-                "retrieval-example fact leakage in an unrelated memo",
-                "overlearned generic caveat language",
+                *reviewed_patterns,
             ],
+            "review_status": review_status,
         },
         "decision": {
-            "adapter_disposition": "reject_for_quality_use_retain_as_pipeline_evidence",
-            "leader": "qwen2.5-0.5b-retrieval-ledger-draft-v2",
-            "next_hypothesis": (
-                "Training requires diverse task-aligned targets and explicit negative fidelity "
-                "controls before another unified update; prioritize evaluation validity and "
-                "rights-safe authentic pairs rather than more synthetic template fitting."
-            ),
+            "adapter_disposition": adapter_disposition,
+            "leader": leader,
+            "next_hypothesis": next_hypothesis,
         },
         "settled_cost_usd": 0,
-        "limitations": [
-            "B1 is visible and project-authored, so the result is exploratory.",
-            "The lexical scorer misses some unsupported retrieval-example facts.",
-            "The smoke corpus is intentionally small and templated and cannot test quality.",
-            "Earlier Ollama runs use different packaging and are not exact weight controls.",
-        ],
+        "limitations": limitations,
     }
     atomic_write(
         results_path,

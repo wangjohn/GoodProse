@@ -1,0 +1,33 @@
+{
+  "adapter": {
+    "adapter_sha256": "3f2826e671c316dca9731179a66299a119ca98c31fefbfad33b747b4c03b2ee6",
+    "candidate_lineage": "qwen2.5-0.5b-unified-pilot-lora-v1",
+    "training_code_revision": "370739dcae219480a75fc3571ee47e2f31a962bb",
+    "training_experiment_id": "qwen2.5-0.5b-mlx-lora-unified-pilot-v1"
+  },
+  "base_model": {
+    "license": "Apache-2.0",
+    "repo_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+    "revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+    "weight_sha256": "ddffab9cbc7bf6dde941c6724841eeca8981fcfa81ca20ff8efff1396326d153"
+  },
+  "benchmark_cases_sha256": "a15232a5d426dcb6f5161abc5644a8ed10f57b8b7b87fb771e62fe26e57ae352",
+  "benchmark_id": "goodprose-b1-v1",
+  "decoding": {
+    "direct_max_tokens": 512,
+    "draft_max_tokens": 512,
+    "ledger_max_tokens": 192,
+    "seed": 20260822,
+    "temperature": 0
+  },
+  "experiment_id": "mlx-qwen2.5-0.5b-unified-pilot-b1-v1",
+  "profile_config_path": "programs/executive-writing/configs/baselines/qwen2.5-0.5b-profile-v1.json",
+  "retrieval_examples_path": "programs/executive-writing/configs/baselines/retrieval-examples-v1.json",
+  "scorer_version": "goodprose-deterministic-v1.1",
+  "settled_cost_usd": 0,
+  "strategies": [
+    "profile",
+    "ledger_draft"
+  ],
+  "version": 1
+}

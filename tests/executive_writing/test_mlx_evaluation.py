@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -48,6 +49,29 @@ def test_eval_config_pins_adapter_base_and_matched_strategies() -> None:
     assert config.adapter.adapter_sha256.startswith("becaefb39f4f")
     assert config.decoding.temperature == 0
     assert config.settled_cost_usd == 0
+
+
+def test_unified_eval_config_pins_final_adapter_and_same_comparison() -> None:
+    config = load_eval_config(PROGRAM_CONFIG / "training" / "MLX_B1_UNIFIED_PILOT_EVAL_v1.json")
+
+    assert config.strategies == ("profile", "ledger_draft")
+    assert config.adapter.training_experiment_id == "qwen2.5-0.5b-mlx-lora-unified-pilot-v1"
+    assert config.adapter.candidate_lineage == "qwen2.5-0.5b-unified-pilot-lora-v1"
+    assert config.adapter.adapter_sha256 == (
+        "3f2826e671c316dca9731179a66299a119ca98c31fefbfad33b747b4c03b2ee6"
+    )
+    assert config.decoding.temperature == 0
+
+
+def test_eval_config_rejects_crossed_training_lineage(tmp_path: Path) -> None:
+    config_path = PROGRAM_CONFIG / "training" / "MLX_B1_UNIFIED_PILOT_EVAL_v1.json"
+    payload = json.loads(config_path.read_text(encoding="utf-8"))
+    payload["adapter"]["candidate_lineage"] = "qwen2.5-0.5b-instruct-4bit-lora-smoke-v1"
+    crossed = tmp_path / "crossed.json"
+    crossed.write_text(json.dumps(payload), encoding="utf-8")
+
+    with pytest.raises(Exception, match="does not match training experiment"):
+        load_eval_config(crossed)
 
 
 def test_profile_generation_uses_one_frozen_call() -> None:
