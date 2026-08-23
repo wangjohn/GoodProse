@@ -13,13 +13,14 @@ from collections import Counter
 from datetime import UTC, datetime
 from hashlib import sha256
 from pathlib import Path
-from typing import Annotated, Any, Literal
+from typing import Annotated, Any, Literal, Protocol
 from urllib.parse import urlparse
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 from goodprose.executive_writing.benchmark import (
     BenchmarkCase,
+    BenchmarkInput,
     CaseScore,
     OutputFormat,
     TaskFamily,
@@ -211,6 +212,14 @@ class OllamaClient:
         return result["response"].strip(), metrics
 
 
+class GenerationClient(Protocol):
+    """Minimal generation boundary used by local runners and unit-test fakes."""
+
+    def generate(
+        self, prompt: str, *, num_predict: int | None = None
+    ) -> tuple[str, dict[str, int | None]]: ...
+
+
 def _optional_int(value: Any) -> int | None:
     return value if isinstance(value, int) else None
 
@@ -339,6 +348,19 @@ def validate_local_resources(
     }
 
 
+def validate_identity_matches_config(config: BaselineConfig, identity: LocalModelIdentity) -> None:
+    """Reject an injected or fetched identity that does not match every frozen pin."""
+
+    if identity.model_id != config.model_id:
+        raise ValueError("local model identity does not match the config")
+    if identity.ollama_version != config.ollama_version:
+        raise ValueError("Ollama version does not match the config")
+    if identity.manifest_sha256 != config.model_manifest_sha256:
+        raise ValueError("local model manifest does not match the config")
+    if identity.blob_sha256 != config.model_blob_sha256:
+        raise ValueError("local model blob does not match the config")
+
+
 def load_retrieval_examples(path: Path) -> list[RetrievalExample]:
     value: Any = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, list):
@@ -357,19 +379,27 @@ def _repo_root(path: Path) -> Path:
     raise ValueError(f"cannot find repository root from {path}")
 
 
-def _task_words(case: BenchmarkCase) -> set[str]:
-    values = f"{case.input.task_family.value} {case.provenance.topic}"
+def _task_words(task: BenchmarkInput, topic: str) -> set[str]:
+    values = f"{task.task_family.value} {topic}"
     return set(values.replace("_", " ").casefold().split())
 
 
 def retrieve_example(case: BenchmarkCase, examples: list[RetrievalExample]) -> RetrievalExample:
+    return retrieve_example_for_input(case.input, case.provenance.topic, examples)
+
+
+def retrieve_example_for_input(
+    task: BenchmarkInput, topic: str, examples: list[RetrievalExample]
+) -> RetrievalExample:
+    """Select an approved example without requiring evaluation-only provenance."""
+
     if not examples:
         raise ValueError("retrieval example collection is empty")
-    case_words = _task_words(case)
+    case_words = _task_words(task, topic)
 
     def key(example: RetrievalExample) -> tuple[int, int, int, str]:
-        format_match = int(example.output_format == case.input.output_format)
-        family_match = int(example.task_family == case.input.task_family)
+        format_match = int(example.output_format == task.output_format)
+        family_match = int(example.task_family == task.task_family)
         example_words = set(example.task_family.value.replace("_", " ").split())
         overlap = len(case_words & example_words)
         return (-format_match, -family_match, -overlap, example.id)
@@ -378,16 +408,22 @@ def retrieve_example(case: BenchmarkCase, examples: list[RetrievalExample]) -> R
 
 
 def _task_prompt(case: BenchmarkCase) -> str:
-    constraints = "\n".join(f"- {item}" for item in case.input.constraints)
-    return f"""Output format: {case.input.output_format.value}
-Audience: {case.input.audience}
-Objective: {case.input.objective}
-Profile: {case.input.profile_id}
+    return task_prompt_from_input(case.input)
+
+
+def task_prompt_from_input(task: BenchmarkInput) -> str:
+    """Render the source-bound task section shared by evaluation and application."""
+
+    constraints = "\n".join(f"- {item}" for item in task.constraints)
+    return f"""Output format: {task.output_format.value}
+Audience: {task.audience}
+Objective: {task.objective}
+Profile: {task.profile_id}
 Constraints:
 {constraints}
 
 Source material:
-{case.input.source_material}"""
+{task.source_material}"""
 
 
 def build_prompt(
@@ -448,6 +484,12 @@ Do not invent facts or infer hidden requirements.
 def build_compact_ledger_prompt(case: BenchmarkCase) -> str:
     """Build the iteration-two compact atomic-ledger prompt."""
 
+    return build_compact_ledger_prompt_from_input(case.input)
+
+
+def build_compact_ledger_prompt_from_input(task: BenchmarkInput) -> str:
+    """Build the compact atomic-ledger prompt for a source-bound application task."""
+
     return f"""Extract a compact source ledger. Do not draft the artifact.
 Use at most 192 tokens. Use plain lines, never a table and never boilerplate.
 Copy exact source values; do not infer a year, cause, commitment, or fact.
@@ -461,11 +503,17 @@ DELIVERY — audience, format, objective, constraint, and requested next action
 Omitting a source item is worse than being terse. The source remains
 authoritative if this ledger is wrong.
 
-{_task_prompt(case)}"""
+{task_prompt_from_input(task)}"""
 
 
 def _example_prompt(case: BenchmarkCase, examples: list[RetrievalExample]) -> str:
-    example = retrieve_example(case, examples)
+    return example_prompt_from_input(case.input, case.provenance.topic, examples)
+
+
+def example_prompt_from_input(
+    task: BenchmarkInput, topic: str, examples: list[RetrievalExample]
+) -> str:
+    example = retrieve_example_for_input(task, topic, examples)
     example_constraints = "\n".join(f"- {item}" for item in example.constraints)
     return f"""Approved example for structure and abstract writing characteristics only.
 Do not copy its facts or phrases into the new artifact.
@@ -502,9 +550,18 @@ Now draft the requested artifact.
 def build_ledger_draft_prompt(
     case: BenchmarkCase, ledger: str, examples: list[RetrievalExample]
 ) -> str:
+    return build_ledger_draft_prompt_from_input(case.input, case.provenance.topic, ledger, examples)
+
+
+def build_ledger_draft_prompt_from_input(
+    task: BenchmarkInput,
+    topic: str,
+    ledger: str,
+    examples: list[RetrievalExample],
+) -> str:
     return f"""{PROFILE_CARD}
 
-{_example_prompt(case, examples)}
+{example_prompt_from_input(task, topic, examples)}
 
 The compact ledger is a checklist, not a new source. Silently verify that the
 artifact covers every supported FACT, QUALIFIER, PRESERVE, and DELIVERY item.
@@ -516,7 +573,7 @@ COMPACT LEDGER:
 {ledger}
 
 TASK AND AUTHORITATIVE SOURCE:
-{_task_prompt(case)}"""
+{task_prompt_from_input(task)}"""
 
 
 def build_verification_prompt(case: BenchmarkCase, ledger: str, draft: str) -> str:
@@ -559,7 +616,7 @@ VERIFIER NOTES:
 
 
 def _generate_step(
-    client: OllamaClient,
+    client: GenerationClient,
     *,
     step_id: str,
     prompt: str,
@@ -631,14 +688,37 @@ def run_ledger_draft_pipeline(
 ) -> Generation:
     """Run the bounded compact-ledger and single-draft iteration."""
 
-    ledger_prompt = build_compact_ledger_prompt(case)
+    return run_ledger_draft_input(
+        case.input,
+        case.provenance.topic,
+        case.id,
+        client,
+        retrieval_examples,
+        candidate_id=candidate_id,
+        token_limits=token_limits,
+    )
+
+
+def run_ledger_draft_input(
+    task: BenchmarkInput,
+    topic: str,
+    request_id: str,
+    client: GenerationClient,
+    retrieval_examples: list[RetrievalExample],
+    *,
+    candidate_id: str,
+    token_limits: PipelineTokenLimits,
+) -> Generation:
+    """Run the frozen compact-ledger pipeline for a non-evaluation input."""
+
+    ledger_prompt = build_compact_ledger_prompt_from_input(task)
     ledger, ledger_step = _generate_step(
         client,
         step_id="ledger",
         prompt=ledger_prompt,
         num_predict=token_limits.ledger,
     )
-    draft_prompt = build_ledger_draft_prompt(case, ledger, retrieval_examples)
+    draft_prompt = build_ledger_draft_prompt_from_input(task, topic, ledger, retrieval_examples)
     output, draft_step = _generate_step(
         client,
         step_id="draft",
@@ -647,7 +727,7 @@ def run_ledger_draft_pipeline(
     )
     steps = (ledger_step, draft_step)
     return Generation(
-        case_id=case.id,
+        case_id=request_id,
         candidate_id=candidate_id,
         prompt_sha256=draft_step.prompt_sha256,
         output=output,
@@ -726,14 +806,7 @@ def run_baseline(
 
     config = load_config(config_path)
     resolved_model_identity = model_identity or fetch_local_model_identity(config)
-    if resolved_model_identity.model_id != config.model_id:
-        raise ValueError("injected local model identity does not match the config")
-    if resolved_model_identity.ollama_version != config.ollama_version:
-        raise ValueError("injected Ollama version does not match the config")
-    if resolved_model_identity.manifest_sha256 != config.model_manifest_sha256:
-        raise ValueError("injected local model manifest does not match the config")
-    if resolved_model_identity.blob_sha256 != config.model_blob_sha256:
-        raise ValueError("injected local model blob does not match the config")
+    validate_identity_matches_config(config, resolved_model_identity)
     resolved_available_disk = (
         available_disk_bytes
         if available_disk_bytes is not None

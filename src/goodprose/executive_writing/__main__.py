@@ -7,6 +7,11 @@ import sys
 from pathlib import Path
 
 from goodprose.executive_writing.analysis import analyze_baselines, analyze_iteration
+from goodprose.executive_writing.application import (
+    DEFAULT_CONFIG_RELATIVE_PATH,
+    resolve_git_state,
+    run_application,
+)
 from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
 from goodprose.executive_writing.external_evals import (
@@ -67,6 +72,8 @@ from goodprose.executive_writing.smoke_data import compile_smoke_dataset
 from goodprose.executive_writing.training import run_mlx_training, run_smoke_training
 from goodprose.executive_writing.unified_data import compile_unified_dataset
 
+REPO_ROOT = Path(__file__).resolve().parents[3]
+
 
 def _path(value: str) -> Path:
     return Path(value).expanduser().resolve()
@@ -75,6 +82,13 @@ def _path(value: str) -> Path:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="python -m goodprose.executive_writing")
     commands = parser.add_subparsers(dest="command", required=True)
+    apply = commands.add_parser(
+        "apply",
+        help="Apply the provisional local research leader to rough source material",
+    )
+    apply.add_argument("--request", required=True)
+    apply.add_argument("--output", required=True)
+
     benchmark = commands.add_parser("benchmark", help="Build or validate benchmark artifacts")
     benchmark_commands = benchmark.add_subparsers(dest="benchmark_command", required=True)
 
@@ -429,6 +443,21 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _run(args: argparse.Namespace) -> int:
+    if args.command == "apply":
+        revision, dirty = resolve_git_state(REPO_ROOT)
+        result = run_application(
+            request_path=_path(args.request),
+            output_path=_path(args.output),
+            config_path=REPO_ROOT / DEFAULT_CONFIG_RELATIVE_PATH,
+            repo_root=REPO_ROOT,
+            code_revision=revision,
+            working_tree_dirty=dirty,
+        )
+        print(
+            f"research-preview artifact written to {_path(args.output)}; "
+            f"manual factual review required ({result.artifact_sha256})"
+        )
+        return 0
     if args.command == "benchmark" and args.benchmark_command == "build":
         manifest = build_benchmark(
             _path(args.source),

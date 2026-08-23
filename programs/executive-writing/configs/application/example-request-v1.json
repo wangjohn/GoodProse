@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "request_id": "example-launch-status-v1",
+  "task_family": "rough_notes_to_executive_email",
+  "output_format": "email",
+  "source_material": "Launch review notes: Security review is not complete. The owner is Priya. The next checkpoint is September 4. Do not announce a launch date.",
+  "audience": "Executive team",
+  "objective": "Give a concise, factual status and state the next checkpoint.",
+  "constraints": [
+    "Use fewer than 120 words.",
+    "Do not imply that launch is approved."
+  ],
+  "profile_id": "executive-house-v1",
+  "topic": "product launch"
+}
