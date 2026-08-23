@@ -1,0 +1,39 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "completed_at": {
+      "format": "date-time",
+      "title": "Completed At",
+      "type": "string"
+    },
+    "finalist_freeze_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Finalist Freeze Sha256",
+      "type": "string"
+    },
+    "protocol_id": {
+      "const": "holdout-lifecycle-v1",
+      "title": "Protocol Id",
+      "type": "string"
+    },
+    "receipt_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Receipt Sha256",
+      "type": "string"
+    },
+    "registration_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Registration Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "protocol_id",
+    "registration_sha256",
+    "finalist_freeze_sha256",
+    "receipt_sha256",
+    "completed_at"
+  ],
+  "title": "CompletedState",
+  "type": "object"
+}

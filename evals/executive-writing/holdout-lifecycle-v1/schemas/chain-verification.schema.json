@@ -1,0 +1,90 @@
+{
+  "$defs": {
+    "ReceiptVerification": {
+      "additionalProperties": false,
+      "properties": {
+        "authenticator_status": {
+          "default": "absent",
+          "enum": [
+            "verified",
+            "unverified_no_key",
+            "absent",
+            "invalid"
+          ],
+          "title": "Authenticator Status",
+          "type": "string"
+        },
+        "errors": {
+          "default": [],
+          "items": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "hash_intact": {
+          "default": false,
+          "title": "Hash Intact",
+          "type": "boolean"
+        },
+        "receipt_kind": {
+          "anyOf": [
+            {
+              "enum": [
+                "tier_b2",
+                "tier_c"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Receipt Kind"
+        },
+        "receipt_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Receipt Sha256"
+        }
+      },
+      "title": "ReceiptVerification",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "chain_intact": {
+      "title": "Chain Intact",
+      "type": "boolean"
+    },
+    "receipt_count": {
+      "title": "Receipt Count",
+      "type": "integer"
+    },
+    "verifications": {
+      "items": {
+        "$ref": "#/$defs/ReceiptVerification"
+      },
+      "title": "Verifications",
+      "type": "array"
+    }
+  },
+  "required": [
+    "receipt_count",
+    "chain_intact",
+    "verifications"
+  ],
+  "title": "ChainVerification",
+  "type": "object"
+}

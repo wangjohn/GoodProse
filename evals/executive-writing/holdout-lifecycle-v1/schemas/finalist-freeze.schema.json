@@ -1,0 +1,293 @@
+{
+  "$defs": {
+    "CandidateIdentity": {
+      "additionalProperties": false,
+      "description": "Every behavior-affecting field required by ``evals/AGENTS.md``.",
+      "properties": {
+        "adapter_checkpoint_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Adapter Checkpoint Sha256",
+          "type": "string"
+        },
+        "base_model": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Base Model",
+          "type": "string"
+        },
+        "candidate_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "code_revision": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Code Revision",
+          "type": "string"
+        },
+        "cost_token_accounting_policy": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Cost Token Accounting Policy",
+          "type": "string"
+        },
+        "dataset_split_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Dataset Split Id",
+          "type": "string"
+        },
+        "decoding_config_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Decoding Config Sha256",
+          "type": "string"
+        },
+        "grader_identifier": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Grader Identifier",
+          "type": "string"
+        },
+        "grader_version": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Grader Version",
+          "type": "string"
+        },
+        "hardware_provider": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Hardware Provider",
+          "type": "string"
+        },
+        "inference_provider": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Inference Provider",
+          "type": "string"
+        },
+        "model_identifier": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Model Identifier",
+          "type": "string"
+        },
+        "model_version": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Model Version",
+          "type": "string"
+        },
+        "prompt_version": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Prompt Version",
+          "type": "string"
+        },
+        "retrieval_config_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Retrieval Config Sha256",
+          "type": "string"
+        },
+        "retrieval_corpus_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Retrieval Corpus Sha256",
+          "type": "string"
+        },
+        "seed": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Seed",
+          "type": "string"
+        },
+        "system_instructions_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "System Instructions Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "model_identifier",
+        "model_version",
+        "base_model",
+        "adapter_checkpoint_sha256",
+        "prompt_version",
+        "system_instructions_sha256",
+        "decoding_config_sha256",
+        "inference_provider",
+        "retrieval_corpus_sha256",
+        "retrieval_config_sha256",
+        "dataset_split_id",
+        "grader_identifier",
+        "grader_version",
+        "seed",
+        "code_revision",
+        "hardware_provider",
+        "cost_token_accounting_policy"
+      ],
+      "title": "CandidateIdentity",
+      "type": "object"
+    },
+    "ContaminationAttestation": {
+      "additionalProperties": false,
+      "properties": {
+        "attesting_authority": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Attesting Authority",
+          "type": "string"
+        },
+        "canary_commitment_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Canary Commitment Sha256",
+          "type": "string"
+        },
+        "canary_scan_passed": {
+          "title": "Canary Scan Passed",
+          "type": "boolean"
+        },
+        "canary_suite_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Canary Suite Sha256",
+          "type": "string"
+        },
+        "content_commitment_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Content Commitment Sha256",
+          "type": "string"
+        },
+        "embedding_model_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Embedding Model Sha256",
+          "type": "string"
+        },
+        "embedding_scan_passed": {
+          "title": "Embedding Scan Passed",
+          "type": "boolean"
+        },
+        "exact_match_passed": {
+          "title": "Exact Match Passed",
+          "type": "boolean"
+        },
+        "exact_match_scanner_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Exact Match Scanner Sha256",
+          "type": "string"
+        },
+        "finalist_configuration_set_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Finalist Configuration Set Sha256",
+          "type": "string"
+        },
+        "ngram_scan_passed": {
+          "title": "Ngram Scan Passed",
+          "type": "boolean"
+        },
+        "ngram_scanner_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Ngram Scanner Sha256",
+          "type": "string"
+        },
+        "registration_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Registration Sha256",
+          "type": "string"
+        },
+        "scan_report_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Scan Report Sha256",
+          "type": "string"
+        },
+        "scanned_at": {
+          "format": "date-time",
+          "title": "Scanned At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "attesting_authority",
+        "registration_sha256",
+        "content_commitment_sha256",
+        "canary_commitment_sha256",
+        "finalist_configuration_set_sha256",
+        "scan_report_sha256",
+        "exact_match_passed",
+        "ngram_scan_passed",
+        "embedding_scan_passed",
+        "canary_scan_passed",
+        "exact_match_scanner_sha256",
+        "ngram_scanner_sha256",
+        "embedding_model_sha256",
+        "canary_suite_sha256",
+        "scanned_at"
+      ],
+      "title": "ContaminationAttestation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Immutable pre-read freeze of three to five finalist configurations.",
+  "properties": {
+    "contamination": {
+      "$ref": "#/$defs/ContaminationAttestation"
+    },
+    "declared_metric_names": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Declared Metric Names",
+      "type": "array"
+    },
+    "finalists": {
+      "items": {
+        "$ref": "#/$defs/CandidateIdentity"
+      },
+      "maxItems": 5,
+      "minItems": 3,
+      "title": "Finalists",
+      "type": "array"
+    },
+    "frozen_at": {
+      "format": "date-time",
+      "title": "Frozen At",
+      "type": "string"
+    },
+    "registration_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Registration Sha256",
+      "type": "string"
+    },
+    "selection_procedure_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Selection Procedure Sha256",
+      "type": "string"
+    },
+    "selection_rule": {
+      "const": "max_primary_among_hard_gate_passing_then_lexicographic_candidate_id",
+      "default": "max_primary_among_hard_gate_passing_then_lexicographic_candidate_id",
+      "title": "Selection Rule",
+      "type": "string"
+    },
+    "version": {
+      "const": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "version",
+    "registration_sha256",
+    "frozen_at",
+    "finalists",
+    "selection_procedure_sha256",
+    "declared_metric_names",
+    "contamination"
+  ],
+  "title": "FinalistFreeze",
+  "type": "object"
+}

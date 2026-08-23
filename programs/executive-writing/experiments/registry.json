@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T07:40:01Z",
+  "updated_at": "2026-08-23T15:31:13Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -257,6 +257,17 @@
       "model_id": "qwen2.5:0.5b-instruct",
       "settled_cost_usd": 0,
       "disposition": "coverage complete for all eleven profiles; retain all profiles and make no advancement or production decision from six visible cases"
+    },
+    {
+      "experiment_id": "ox-holdout-lifecycle-v1",
+      "kind": "holdout_protocol_implementation",
+      "status": "completed_reviewed",
+      "record": "programs/executive-writing/experiments/ox-holdout-lifecycle-v1.json",
+      "code_revision_start": "9ce94c9",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "accept after Codex lifecycle, authentication, semantic-verification, confidentiality, and regression-test corrections; infrastructure only"
     }
   ]
 }

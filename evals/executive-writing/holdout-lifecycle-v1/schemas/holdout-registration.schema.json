@@ -1,0 +1,350 @@
+{
+  "$defs": {
+    "AccessSeparationAttestation": {
+      "additionalProperties": false,
+      "description": "Structural attestation; validating it never proves the claim itself.",
+      "properties": {
+        "attested_at": {
+          "format": "date-time",
+          "title": "Attested At",
+          "type": "string"
+        },
+        "attesting_authority": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Attesting Authority",
+          "type": "string"
+        },
+        "evaluator_boundary": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Evaluator Boundary",
+          "type": "string"
+        },
+        "separated_parties": {
+          "items": {
+            "$ref": "#/$defs/SeparatedParty"
+          },
+          "title": "Separated Parties",
+          "type": "array"
+        },
+        "statement_reference": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Statement Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "attesting_authority",
+        "evaluator_boundary",
+        "separated_parties",
+        "attested_at",
+        "statement_reference"
+      ],
+      "title": "AccessSeparationAttestation",
+      "type": "object"
+    },
+    "B2CadencePolicy": {
+      "additionalProperties": false,
+      "description": "Frozen cadence/promotion policy inherited from Tier B1 evidence.",
+      "properties": {
+        "eligible_b1_evidence_fields": {
+          "items": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Eligible B1 Evidence Fields",
+          "type": "array"
+        },
+        "max_queries": {
+          "minimum": 1,
+          "title": "Max Queries",
+          "type": "integer"
+        },
+        "minimum_accepted_candidate_gap": {
+          "minimum": 0,
+          "title": "Minimum Accepted Candidate Gap",
+          "type": "integer"
+        },
+        "minimum_primary_improvement": {
+          "minimum": 0,
+          "title": "Minimum Primary Improvement",
+          "type": "number"
+        },
+        "reference_aggregates": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Reference Aggregates",
+          "type": "object"
+        },
+        "reference_candidate_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$",
+          "title": "Reference Candidate Id",
+          "type": "string"
+        },
+        "reference_candidate_identity_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Reference Candidate Identity Sha256",
+          "type": "string"
+        },
+        "regression_block_threshold": {
+          "minimum": 1,
+          "title": "Regression Block Threshold",
+          "type": "integer"
+        },
+        "regression_margin": {
+          "minimum": 0,
+          "title": "Regression Margin",
+          "type": "number"
+        }
+      },
+      "required": [
+        "eligible_b1_evidence_fields",
+        "minimum_primary_improvement",
+        "max_queries",
+        "minimum_accepted_candidate_gap",
+        "reference_candidate_id",
+        "reference_candidate_identity_sha256",
+        "reference_aggregates",
+        "regression_margin",
+        "regression_block_threshold"
+      ],
+      "title": "B2CadencePolicy",
+      "type": "object"
+    },
+    "HardGate": {
+      "additionalProperties": false,
+      "properties": {
+        "case_minimum": {
+          "title": "Case Minimum",
+          "type": "number"
+        },
+        "metric": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Metric",
+          "type": "string"
+        },
+        "minimum_pass_rate": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Minimum Pass Rate",
+          "type": "number"
+        }
+      },
+      "required": [
+        "metric",
+        "case_minimum",
+        "minimum_pass_rate"
+      ],
+      "title": "HardGate",
+      "type": "object"
+    },
+    "SeparatedParty": {
+      "enum": [
+        "training",
+        "retrieval",
+        "model_under_development",
+        "teacher_synthetic_generators",
+        "candidate_developers",
+        "orchestration_agents"
+      ],
+      "title": "SeparatedParty",
+      "type": "string"
+    },
+    "SplitDimension": {
+      "enum": [
+        "document",
+        "thread",
+        "source",
+        "person",
+        "publication",
+        "topic",
+        "time_period"
+      ],
+      "title": "SplitDimension",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Public registration. Contains no item-level material of any kind.",
+  "properties": {
+    "access_posture": {
+      "enum": [
+        "sealed",
+        "procedurally_held_out"
+      ],
+      "title": "Access Posture",
+      "type": "string"
+    },
+    "aggregate_metrics": {
+      "items": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Aggregate Metrics",
+      "type": "array"
+    },
+    "attestation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AccessSeparationAttestation"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "cadence_policy": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/B2CadencePolicy"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "canary_commitment_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Canary Commitment Sha256",
+      "type": "string"
+    },
+    "case_count": {
+      "minimum": 1,
+      "title": "Case Count",
+      "type": "integer"
+    },
+    "code_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Code Sha256",
+      "type": "string"
+    },
+    "contamination_scan_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Contamination Scan Sha256",
+      "type": "string"
+    },
+    "content_commitment_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Commitment Sha256",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "hard_gates": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/HardGate"
+      },
+      "title": "Hard Gates",
+      "type": "array"
+    },
+    "holdout_id": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Holdout Id",
+      "type": "string"
+    },
+    "judge_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Judge Sha256"
+    },
+    "primary_metric": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Primary Metric",
+      "type": "string"
+    },
+    "protocol_id": {
+      "const": "holdout-lifecycle-v1",
+      "title": "Protocol Id",
+      "type": "string"
+    },
+    "protocol_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Protocol Sha256",
+      "type": "string"
+    },
+    "responsible_authority": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Responsible Authority",
+      "type": "string"
+    },
+    "retention_location_id": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Retention Location Id",
+      "type": "string"
+    },
+    "scorer_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Scorer Sha256",
+      "type": "string"
+    },
+    "split_dimensions": {
+      "items": {
+        "$ref": "#/$defs/SplitDimension"
+      },
+      "minItems": 1,
+      "title": "Split Dimensions",
+      "type": "array"
+    },
+    "tier": {
+      "enum": [
+        "B2",
+        "C"
+      ],
+      "title": "Tier",
+      "type": "string"
+    },
+    "version": {
+      "const": 1,
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "version",
+    "protocol_id",
+    "tier",
+    "holdout_id",
+    "created_at",
+    "case_count",
+    "content_commitment_sha256",
+    "canary_commitment_sha256",
+    "split_dimensions",
+    "aggregate_metrics",
+    "primary_metric",
+    "scorer_sha256",
+    "contamination_scan_sha256",
+    "protocol_sha256",
+    "code_sha256",
+    "access_posture",
+    "retention_location_id",
+    "responsible_authority"
+  ],
+  "title": "HoldoutRegistration",
+  "type": "object"
+}

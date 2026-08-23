@@ -458,3 +458,37 @@ historical entries.
   controls are absent; deterministic scoring is lexical; several profiles
   increased rewriting or fabrication errors; and no named source is approved
   for training.
+
+### 2026-08-23 — Phase 1 checkpoint: aggregate-only holdout lifecycle
+
+- Hypothesis: a public protocol can enforce aggregate-only B2 cadence and a
+  burn-before-read Tier C lifecycle without exposing hidden cases, outputs,
+  rationales, rubrics, or slices to the development checkout.
+- Evidence: Ox Alpha drafted the bounded implementation under exact session,
+  prompt, response, token, timing, and zero-cost provenance. Codex then audited
+  and substantially corrected the trust boundary: registration/content/canary/
+  configuration commitments, exact B1 ordinal cadence, verified prior receipt
+  chains, hard-gate-aware decisions, cumulative regression semantics, sealed
+  signer requirements, confidential raw-byte hashes and sanitized failures,
+  contamination/finalist linkage, durable owner-only state, and independent
+  recomputation of the frozen Tier C winner.
+- Exit criteria: strict schemas; five synthetic example documents and sixteen
+  generated schemas; B2 duplicate, cadence, maximum-query, fork, regression,
+  and post-block rejection; Tier C three-to-five finalist freeze, exclusive
+  opened/completed/retired states, crash consumption, one-shot rejection,
+  hard-gate selection, external HMAC authentication, and repository-side
+  verification bound to registration/freeze. The focused 38-test suite and
+  complete 122-test repository suite pass; Ruff, format, Pyright, JSON checks,
+  and `git diff --check` are clean.
+- Decision: accept `holdout-lifecycle-v1` as tested public infrastructure and
+  synthetic procedural evidence only. No real B2 query or Tier C run occurred,
+  and nothing in the repository is genuinely sealed.
+- Next actions: integrate tested adapters and reproducible acquisition steps
+  for the contracted external evaluations, then build the unified candidate,
+  finalist-freeze, and human-packet workflow without touching true Tier C
+  material.
+- Unresolved risks: a separately controlled evaluator must retain and score
+  true hidden content, hold the authenticator key, enforce one durable state
+  location per registration, and attest real access separation. A genuinely
+  sealed run and final intended-audience human evaluation remain mandatory
+  stopping conditions.

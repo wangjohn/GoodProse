@@ -9,6 +9,25 @@ from pathlib import Path
 from goodprose.executive_writing.analysis import analyze_baselines, analyze_iteration
 from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
+from goodprose.executive_writing.holdout import (
+    PROTOCOL_ID,
+    AggregateUsage,
+    HiddenCaseScores,
+    complete_tier_c,
+    load_b2_request,
+    load_finalist_freeze,
+    load_hidden_scores,
+    load_receipt_document,
+    load_registration,
+    load_signer_key,
+    open_tier_c,
+    retire,
+    submit_b2_query,
+    validate_finalist_freeze,
+    validate_tier_c_completion_state,
+    verify_receipt_chain,
+    verify_receipt_document,
+)
 from goodprose.executive_writing.mlx_evaluation import (
     publish_mlx_b1_results,
     run_mlx_b1_evaluation,
@@ -127,6 +146,120 @@ def build_parser() -> argparse.ArgumentParser:
     coverage_publish.add_argument("--results", required=True)
     coverage_publish.add_argument("--case-results", required=True)
     coverage_publish.add_argument("--generated-at", required=True)
+
+    holdout = commands.add_parser(
+        "holdout",
+        help=f"Aggregate-only holdout lifecycle protocol {PROTOCOL_ID}",
+    )
+    holdout_commands = holdout.add_subparsers(dest="holdout_command", required=True)
+    registration_validate = holdout_commands.add_parser(
+        "validate-registration",
+        help="Validate a public holdout registration document",
+    )
+    registration_validate.add_argument("--registration", required=True)
+    registration_validate.add_argument(
+        "--expect-sha256",
+        help="Expected canonical document hash of the registration",
+    )
+
+    freeze_validate = holdout_commands.add_parser(
+        "validate-freeze",
+        help="Validate a finalist freeze against its registration",
+    )
+    freeze_validate.add_argument("--freeze", required=True)
+    freeze_validate.add_argument("--registration", required=True)
+    freeze_validate.add_argument("--expect-registration-sha256")
+    freeze_validate.add_argument("--expect-freeze-sha256")
+
+    receipt_verify = holdout_commands.add_parser(
+        "verify-receipt",
+        help="Repository-side verification of an aggregate-only receipt",
+    )
+    receipt_verify.add_argument("--receipt", required=True)
+    receipt_verify.add_argument("--registration", required=True)
+    receipt_verify.add_argument("--expect-registration-sha256")
+    receipt_verify.add_argument("--freeze")
+    receipt_verify.add_argument("--expect-freeze-sha256")
+    receipt_verify.add_argument(
+        "--key-file",
+        help="HMAC key held by the external evaluator; omit to skip authentication",
+    )
+
+    chain_verify = holdout_commands.add_parser(
+        "verify-chain",
+        help="Verify the append-only Tier B2 receipt chain",
+    )
+    chain_verify.add_argument("--state-dir", required=True)
+    chain_verify.add_argument("--registration", required=True)
+    chain_verify.add_argument("--expect-registration-sha256")
+    chain_verify.add_argument("--key-file")
+
+    b2_query = holdout_commands.add_parser(
+        "b2-query",
+        help="External Tier B2 broker path (evaluator-controlled environment only)",
+    )
+    b2_query.add_argument("--registration", required=True)
+    b2_query.add_argument("--expect-registration-sha256")
+    b2_query.add_argument("--request", required=True)
+    b2_query.add_argument("--expect-request-sha256", required=True)
+    b2_query.add_argument("--state-dir", required=True)
+    b2_query.add_argument("--requests", type=int, default=0)
+    b2_query.add_argument("--input-tokens", type=int, default=0)
+    b2_query.add_argument("--output-tokens", type=int, default=0)
+    b2_query.add_argument("--usd-cost", type=float, default=0.0)
+    b2_query.add_argument("--executed-at", required=True)
+    b2_query.add_argument("--code-revision", required=True)
+    b2_query.add_argument("--signing-key-file")
+
+    tier_c_open_cmd = holdout_commands.add_parser(
+        "tier-c-open",
+        help="Exclusive burn-before-read open of the Tier C one-shot benchmark",
+    )
+    tier_c_open_cmd.add_argument("--registration", required=True)
+    tier_c_open_cmd.add_argument("--expect-registration-sha256")
+    tier_c_open_cmd.add_argument("--freeze", required=True)
+    tier_c_open_cmd.add_argument("--expect-freeze-sha256")
+    tier_c_open_cmd.add_argument("--state-dir", required=True)
+    tier_c_open_cmd.add_argument("--opened-at", required=True)
+
+    tier_c_complete_cmd = holdout_commands.add_parser(
+        "tier-c-complete",
+        help="Complete the Tier C one-shot run and emit the single receipt",
+    )
+    tier_c_complete_cmd.add_argument("--registration", required=True)
+    tier_c_complete_cmd.add_argument("--expect-registration-sha256")
+    tier_c_complete_cmd.add_argument("--freeze", required=True)
+    tier_c_complete_cmd.add_argument("--expect-freeze-sha256")
+    tier_c_complete_cmd.add_argument("--state-dir", required=True)
+    tier_c_complete_cmd.add_argument(
+        "--scores",
+        action="append",
+        required=True,
+        metavar="CANDIDATE_ID=SHA256=PATH",
+        help="Hash-pinned hidden score JSON list per finalist candidate",
+    )
+    tier_c_complete_cmd.add_argument("--requests", type=int, default=0)
+    tier_c_complete_cmd.add_argument("--input-tokens", type=int, default=0)
+    tier_c_complete_cmd.add_argument("--output-tokens", type=int, default=0)
+    tier_c_complete_cmd.add_argument("--usd-cost", type=float, default=0.0)
+    tier_c_complete_cmd.add_argument("--completed-at", required=True)
+    tier_c_complete_cmd.add_argument("--code-revision", required=True)
+    tier_c_complete_cmd.add_argument("--signing-key-file")
+
+    retire_cmd = holdout_commands.add_parser(
+        "retire",
+        help="Retire the benchmark for authorized item-level inspection",
+    )
+    retire_cmd.add_argument("--registration", required=True)
+    retire_cmd.add_argument("--expect-registration-sha256")
+    retire_cmd.add_argument("--state-dir", required=True)
+    retire_cmd.add_argument("--authorized-by", required=True)
+    retire_cmd.add_argument(
+        "--reason",
+        required=True,
+        choices=["authorized_item_inspection", "superseded_by_new_version", "integrity_incident"],
+    )
+    retire_cmd.add_argument("--retired-at", required=True)
     return parser
 
 
@@ -252,7 +385,172 @@ def _run(args: argparse.Namespace) -> int:
         )
         print(f"profile-coverage published: {results['status']}")
         return 0
+    if args.command == "holdout":
+        return _run_holdout(args)
     raise AssertionError("unhandled command")
+
+
+def _optional_key(args: argparse.Namespace) -> bytes | None:
+    key_file = getattr(args, "key_file", None) or getattr(args, "signing_key_file", None)
+    return load_signer_key(_path(key_file)) if key_file else None
+
+
+def _run_holdout(args: argparse.Namespace) -> int:
+    if args.holdout_command == "validate-registration":
+        registration = load_registration(
+            _path(args.registration), expected_sha256=args.expect_sha256
+        )
+        print(
+            f"valid {registration.tier} registration {registration.holdout_id} "
+            f"({registration.access_posture}, case_count={registration.case_count})"
+        )
+        return 0
+    if args.holdout_command == "validate-freeze":
+        registration = load_registration(
+            _path(args.registration), expected_sha256=args.expect_registration_sha256
+        )
+        freeze = load_finalist_freeze(_path(args.freeze), expected_sha256=args.expect_freeze_sha256)
+        validate_finalist_freeze(freeze, registration)
+        print(f"valid finalist freeze: {len(freeze.finalists)} finalists")
+        return 0
+    if args.holdout_command == "verify-receipt":
+        key = _optional_key(args)
+        registration = load_registration(
+            _path(args.registration), expected_sha256=args.expect_registration_sha256
+        )
+        freeze = (
+            load_finalist_freeze(_path(args.freeze), expected_sha256=args.expect_freeze_sha256)
+            if args.freeze
+            else None
+        )
+        verification = verify_receipt_document(
+            load_receipt_document(_path(args.receipt)),
+            key=key,
+            registration=registration,
+            freeze=freeze,
+        )
+        print(verification.model_dump_json(indent=2, exclude_none=True))
+        if not verification.valid:
+            print("receipt verification failed", file=sys.stderr)
+            return 1
+        if verification.authenticator_status == "unverified_no_key":
+            print(
+                "note: schema and hash-chain integrity verified; "
+                "authentication unverified (no key supplied)"
+            )
+        return 0
+    if args.holdout_command == "verify-chain":
+        key = _optional_key(args)
+        registration = load_registration(
+            _path(args.registration), expected_sha256=args.expect_registration_sha256
+        )
+        chain = verify_receipt_chain(
+            _path(args.state_dir) / "receipts",
+            key=key,
+            registration=registration,
+        )
+        print(
+            f"chain receipts={chain.receipt_count} intact={chain.chain_intact} "
+            f"authenticator={'checked' if key else 'unverified_no_key'}"
+        )
+        for verification in chain.verifications:
+            for problem in verification.errors:
+                print(f"error: {problem}", file=sys.stderr)
+        return 0 if chain.chain_intact else 1
+    if args.holdout_command == "b2-query":
+        registration = load_registration(
+            _path(args.registration), expected_sha256=args.expect_registration_sha256
+        )
+        request = load_b2_request(_path(args.request), expected_sha256=args.expect_request_sha256)
+        receipt = submit_b2_query(
+            registration,
+            request,
+            state_dir=_path(args.state_dir),
+            usage=AggregateUsage(
+                requests=args.requests,
+                input_tokens=args.input_tokens,
+                output_tokens=args.output_tokens,
+                usd_cost=args.usd_cost,
+            ),
+            executed_at=args.executed_at,
+            code_revision=args.code_revision,
+            signer_key=_optional_key(args),
+        )
+        print(
+            f"b2 query {receipt.query_index} recorded for {receipt.candidate_id}: {receipt.outcome}"
+        )
+        return 0
+    if args.holdout_command == "tier-c-open":
+        registration = load_registration(
+            _path(args.registration), expected_sha256=args.expect_registration_sha256
+        )
+        freeze = load_finalist_freeze(_path(args.freeze), expected_sha256=args.expect_freeze_sha256)
+        state = open_tier_c(
+            registration,
+            freeze,
+            state_dir=_path(args.state_dir),
+            opened_at=args.opened_at,
+        )
+        print(f"tier C benchmark opened at {state.opened_at.isoformat()}; it is now consumed")
+        return 0
+    if args.holdout_command == "tier-c-complete":
+        registration = load_registration(
+            _path(args.registration), expected_sha256=args.expect_registration_sha256
+        )
+        freeze = load_finalist_freeze(_path(args.freeze), expected_sha256=args.expect_freeze_sha256)
+        state_dir = _path(args.state_dir)
+        key = _optional_key(args)
+        if registration.access_posture == "sealed" and key is None:
+            raise ValueError("sealed Tier C execution requires an external signing key")
+        validate_tier_c_completion_state(registration, freeze, state_dir=state_dir)
+        scores_by_candidate: dict[str, list[HiddenCaseScores]] = {}
+        for binding in args.scores:
+            parts = binding.split("=", 2)
+            if len(parts) != 3:
+                raise ValueError("--scores expects CANDIDATE_ID=SHA256=PATH")
+            candidate_id, score_sha256, score_path = parts
+            if candidate_id in scores_by_candidate:
+                raise ValueError("duplicate --scores candidate binding")
+            scores_by_candidate[candidate_id] = load_hidden_scores(
+                _path(score_path), expected_sha256=score_sha256
+            )
+        receipt = complete_tier_c(
+            registration,
+            freeze,
+            scores_by_candidate,
+            state_dir=state_dir,
+            usage=AggregateUsage(
+                requests=args.requests,
+                input_tokens=args.input_tokens,
+                output_tokens=args.output_tokens,
+                usd_cost=args.usd_cost,
+            ),
+            completed_at=args.completed_at,
+            code_revision=args.code_revision,
+            signer_key=key,
+        )
+        posture_note = (
+            "procedural evidence only; this is NOT sealed evidence"
+            if receipt.envelope.access_posture == "procedurally_held_out"
+            else "sealed per external access-separation attestation"
+        )
+        selection = receipt.selected_candidate_id or "none (no finalist passed hard gates)"
+        print(f"tier C run completed: selected {selection} ({posture_note})")
+        return 0
+    if args.holdout_command == "retire":
+        registration = load_registration(
+            _path(args.registration), expected_sha256=args.expect_registration_sha256
+        )
+        record = retire(
+            state_dir=_path(args.state_dir),
+            registration=registration,
+            authorized_by=args.authorized_by,
+            reason=args.reason,
+            retired_at=args.retired_at,
+        )
+        print(f"benchmark retired ({record.reason}); aggregate receipts remain verifiable")
+        return 0
+    raise AssertionError("unhandled holdout command")
 
 
 def main() -> int:

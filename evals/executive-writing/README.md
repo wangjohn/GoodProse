@@ -8,3 +8,8 @@ the final production recommendation.
 Public definitions and acquisition adapters may be committed. Hidden answers,
 private cases, and generated result payloads belong in the ignored `private/`
 and `results/` directories. Follow `evals/AGENTS.md` for every evaluation.
+
+For aggregate-only hidden-evaluation boundaries (Tier B2 shadow development
+and the Tier C one-shot holdout), use the frozen protocol at
+[`holdout-lifecycle-v1/`](holdout-lifecycle-v1/README.md). Everything in that
+directory is explicitly synthetic; no true hidden content exists here.

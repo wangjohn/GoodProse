@@ -379,6 +379,30 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   source-text-free case companion, and ignored raw artifacts identified by the
   committed hashes.
 
+## 2026-08-23 — Ox aggregate-only holdout lifecycle implementation
+
+- Assignment/model: `ox-holdout-lifecycle-v1` / `stealth/ox-alpha` through
+  OpenRouter, high reasoning, OpenCode 1.18.21; cost $0. The assignment and
+  exact response are hash-pinned, with 177,412 input, 54,431 output, and
+  3,429,504 cache-read tokens recorded.
+- Draft result: strict registration, hidden-score, receipt, finalist-freeze,
+  attestation, and lifecycle models; a B2 broker; Tier C open/complete/retire
+  paths; CLI commands; 16 schemas; five synthetic examples; and 29 focused
+  tests. No true hidden content or real holdout run was used.
+- Codex review: verified the prior B2 chain before reuse; froze B1 accepted-
+  candidate ordinal and evidence-artifact commitments; made hard gates and
+  repeated-regression semantics independently verifiable; required external
+  signing for sealed execution; linked registration, content, canary,
+  contamination, finalist, and configuration hashes; burned Tier C before
+  score loading; sanitized confidential failures; made state writes durable;
+  and made the public verifier recompute the frozen winner. Added nine tests
+  beyond the Ox draft, for 38 focused and 122 complete passing tests.
+- Decision: accept after substantial corrections as protocol infrastructure.
+  This is not a B2 result, sealed Tier C evidence, a finalist decision, or
+  human confirmation.
+- Record: `../experiments/ox-holdout-lifecycle-v1.json` and public protocol
+  package `../../../evals/executive-writing/holdout-lifecycle-v1/`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,
