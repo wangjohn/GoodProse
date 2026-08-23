@@ -1,0 +1,42 @@
+{
+  "adversarial_feature_counts": {
+    "caveat_preservation": 2,
+    "dates_and_deadlines": 2,
+    "negation_polarity": 2,
+    "numbers_and_units": 6,
+    "topic_swap": 6,
+    "uncertainty_calibration": 6
+  },
+  "benchmark_id": "source-profile-topic-controls-v2",
+  "case_count": 6,
+  "case_schema_sha256": "4485eb546dc37e02aef952103ae36de93e0d6935547727f48cf80c7294742a6b",
+  "cases_sha256": "086e950465737388bda69a33375493bfa4e5912ffd2962835bc26656bc492a38",
+  "creation_method": "project_authored",
+  "limitations": [
+    "Six project-authored cases form three paired topic swaps and provide exploratory robustness evidence only.",
+    "Lexical deterministic checks do not establish semantic writing quality or detect every unsupported claim.",
+    "The source-text-free profile-card candidate has no dated fitting corpus, so leave-time-out is not applicable here and remains required before corpus-trained profile evaluation."
+  ],
+  "output_format_counts": {
+    "email": 4,
+    "memo": 2
+  },
+  "rights_status": "evaluation_approved_project_owned",
+  "scorecard_weights": {
+    "audience_format": 0.1,
+    "clarity_coherence": 0.2,
+    "concision": 0.15,
+    "fidelity": 0.35,
+    "organization_actionability": 0.15,
+    "profile_control": 0.05
+  },
+  "scorer_version": "goodprose-deterministic-v1",
+  "source_cases_sha256": "17943ea831d5b014eb5a9c09488f1e18fd7852ba39df2105c1f39215704eab07",
+  "status": "search_development",
+  "task_family_counts": {
+    "rough_notes_to_executive_email": 4,
+    "rough_notes_to_internal_memo": 2
+  },
+  "tier": "B1",
+  "version": 1
+}

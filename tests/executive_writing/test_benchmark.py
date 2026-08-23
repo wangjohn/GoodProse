@@ -228,3 +228,36 @@ def test_committed_b1_benchmark_rebuilds_byte_for_byte(tmp_path: Path) -> None:
     assert rebuilt_cases.read_bytes() == (benchmark_root / "cases.jsonl").read_bytes()
     assert rebuilt_manifest.read_bytes() == (benchmark_root / "manifest.json").read_bytes()
     assert rebuilt_schema.read_bytes() == (benchmark_root / "case.schema.json").read_bytes()
+
+
+def test_build_benchmark_accepts_a_versioned_derived_evaluation_id(tmp_path: Path) -> None:
+    case = _case()
+    source_case = SourceCase(
+        version=case.version,
+        id=case.id,
+        tier=case.tier,
+        input=case.input,
+        expected=case.expected,
+        lineage_group=case.provenance.lineage_group,
+        topic=case.provenance.topic,
+        time_bucket=case.provenance.time_bucket,
+        adversarial_features=case.adversarial_features,
+        difficulty=case.difficulty,
+        authored_by="codex",
+        authored_at=case.provenance.authored_at,
+        rights_status="evaluation_approved_project_owned",
+    )
+    source_path = tmp_path / "source.json"
+    source_path.write_text(json.dumps([source_case.model_dump(mode="json")]), encoding="utf-8")
+
+    manifest = build_benchmark(
+        source_path,
+        tmp_path / "cases.jsonl",
+        tmp_path / "manifest.json",
+        tmp_path / "schema.json",
+        benchmark_id="source-profile-topic-controls-v2",
+        limitations=("Project-authored paired topic controls only.",),
+    )
+
+    assert manifest.benchmark_id == "source-profile-topic-controls-v2"
+    assert manifest.limitations == ("Project-authored paired topic controls only.",)

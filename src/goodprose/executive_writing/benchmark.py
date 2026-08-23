@@ -30,6 +30,12 @@ SCORECARD_WEIGHTS = {
     "profile_control": 0.05,
 }
 SCORER_VERSION = "goodprose-deterministic-v1"
+DEFAULT_B1_LIMITATIONS = (
+    "Twenty-four project-authored cases provide plumbing and directional search evidence only.",
+    "Lexical deterministic checks do not establish semantic writing quality "
+    "or detect every unsupported claim.",
+    "This B1 set is visible to developers and must never be represented as sealed or confirmatory.",
+)
 IDENTITY_SIGNAL_PATTERN = (
     r"(?i)\b(as|like)\s+(patrick collison|paul graham|sam altman|joel spolsky|"
     r"fred wilson|david heinemeier hansson|jason fried|simon willison|"
@@ -553,6 +559,9 @@ def build_benchmark(
     cases_path: Path,
     manifest_path: Path,
     schema_path: Path,
+    *,
+    benchmark_id: str = "goodprose-b1-v1",
+    limitations: tuple[str, ...] | None = None,
 ) -> BenchmarkManifest:
     """Build content-hashed JSONL cases and a manifest from reviewed source JSON."""
 
@@ -571,7 +580,7 @@ def build_benchmark(
     feature_counts = Counter(feature for case in cases for feature in case.adversarial_features)
     manifest = BenchmarkManifest(
         version=1,
-        benchmark_id="goodprose-b1-v1",
+        benchmark_id=benchmark_id,
         tier="B1",
         status="search_development",
         case_count=len(cases),
@@ -585,14 +594,7 @@ def build_benchmark(
         adversarial_feature_counts=dict(sorted(feature_counts.items())),
         creation_method="project_authored",
         rights_status="evaluation_approved_project_owned",
-        limitations=(
-            "Twenty-four project-authored cases provide plumbing and directional "
-            "search evidence only.",
-            "Lexical deterministic checks do not establish semantic writing quality "
-            "or detect every unsupported claim.",
-            "This B1 set is visible to developers and must never be represented as "
-            "sealed or confirmatory.",
-        ),
+        limitations=limitations or DEFAULT_B1_LIMITATIONS,
     )
     atomic_write(schema_path, schema_payload)
     atomic_write(cases_path, cases_payload)

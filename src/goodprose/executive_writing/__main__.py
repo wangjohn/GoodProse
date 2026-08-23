@@ -63,6 +63,10 @@ from goodprose.executive_writing.ox_ceiling import (
     run_ox_b1_source_reviser,
 )
 from goodprose.executive_writing.ox_output_audit import audit_ox_b1_outputs
+from goodprose.executive_writing.profile_controls import (
+    publish_topic_control_results,
+    run_topic_controls,
+)
 from goodprose.executive_writing.profile_coverage import (
     load_coverage_inputs,
     publish_coverage_results,
@@ -97,6 +101,8 @@ def build_parser() -> argparse.ArgumentParser:
     build.add_argument("--cases", required=True)
     build.add_argument("--manifest", required=True)
     build.add_argument("--schema", required=True)
+    build.add_argument("--benchmark-id", default="goodprose-b1-v1")
+    build.add_argument("--limitation", action="append")
 
     validate = benchmark_commands.add_parser("validate")
     validate.add_argument("--cases", required=True)
@@ -226,6 +232,21 @@ def build_parser() -> argparse.ArgumentParser:
     coverage_publish.add_argument("--results", required=True)
     coverage_publish.add_argument("--case-results", required=True)
     coverage_publish.add_argument("--generated-at", required=True)
+
+    controls = commands.add_parser(
+        "profile-controls", help="Run or publish paired source-profile topic controls"
+    )
+    controls_commands = controls.add_subparsers(dest="controls_command", required=True)
+    controls_run = controls_commands.add_parser("run")
+    controls_run.add_argument("--config", required=True)
+    controls_run.add_argument("--output-root", required=True)
+    controls_run.add_argument("--code-revision", required=True)
+    controls_publish = controls_commands.add_parser("publish")
+    controls_publish.add_argument("--config", required=True)
+    controls_publish.add_argument("--run-dir", required=True)
+    controls_publish.add_argument("--results", required=True)
+    controls_publish.add_argument("--case-results", required=True)
+    controls_publish.add_argument("--generated-at", required=True)
 
     ox_ceiling = commands.add_parser("ox-ceiling", help="Run or publish the Ox B1 ceiling")
     ox_ceiling_commands = ox_ceiling.add_subparsers(dest="ox_ceiling_command", required=True)
@@ -464,6 +485,8 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.cases),
             _path(args.manifest),
             _path(args.schema),
+            benchmark_id=args.benchmark_id,
+            limitations=tuple(args.limitation) if args.limitation else None,
         )
         print(f"built {manifest.benchmark_id}: {manifest.case_count} cases")
         return 0
@@ -621,6 +644,24 @@ def _run(args: argparse.Namespace) -> int:
             generated_at=args.generated_at,
         )
         print(f"profile-coverage published: {results['status']}")
+        return 0
+    if args.command == "profile-controls" and args.controls_command == "run":
+        run_dir = run_topic_controls(
+            config_path=_path(args.config),
+            output_root=_path(args.output_root),
+            code_revision=args.code_revision,
+        )
+        print(f"profile topic controls complete: {run_dir}")
+        return 0
+    if args.command == "profile-controls" and args.controls_command == "publish":
+        results = publish_topic_control_results(
+            config_path=_path(args.config),
+            run_dir=_path(args.run_dir),
+            results_path=_path(args.results),
+            case_results_path=_path(args.case_results),
+            generated_at=args.generated_at,
+        )
+        print(f"profile topic controls published: {results['status']}")
         return 0
     if args.command == "ox-ceiling" and args.ox_ceiling_command == "run":
         run_dir = run_ox_b1_ceiling(
