@@ -478,6 +478,30 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
 - Decision: freeze before any v2 B1 generation. A nonempty output is final and
   cannot be resampled for quality; v1 outputs will not be repaired or reused.
 
+## 2026-08-23 — Ox Alpha v2 harness-repair result
+
+- Execution: 24 fresh OpenRouter / `stealth/ox-alpha` sessions, high reasoning,
+  temperature 0, top-p 1, two maximum steps, wildcard tool denial, effective
+  revision `3ccce83f…`, 26,478 input and 5,004 output tokens, 433.761 seconds
+  summed latency, no file changes, settled cost $0.
+- Metadata correction: the launch command supplied a wrong full SHA expansion.
+  The clean-worktree HEAD was verified during the active run. The immutable
+  manifest value and corrected effective revision are both hash-bound;
+  generation was unaffected and usable responses were not resampled.
+- Score: 93.5438 mean and 54.17% hard gates versus compact ledger 87.1981 and
+  50%. Paired difference +6.3457, 95% interval +1.7683 to +11.3288, and
+  14/0/10 win/tie/loss. The score-only gate passed, but the candidate gate
+  failed because only 13/24 hard gates passed.
+- Harness outcome: v1-to-v2 mean improved +2.4700; meta preambles fell 8 to 0;
+  artifact-only outputs rose 16 to 24; run-date insertions fell five to zero;
+  mean latency fell 31.845 to 18.073 seconds.
+- Qualitative outcome: one non-source placeholder and six material unsupported
+  commitments, workflows, restrictions, or guarantees remained. Eighteen of
+  24 outputs had no audit flag, versus nine for v1.
+- Decision: successful harness repair, rejected writing candidate. Preserve as
+  visible-B1 ceiling diagnostic only. See `OX_B1_CEILING_V2_RESULTS.md` and the
+  compact analysis/audit records under `../experiments/`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

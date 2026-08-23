@@ -210,6 +210,7 @@ def build_parser() -> argparse.ArgumentParser:
     ox_ceiling_publish.add_argument("--case-results", required=True)
     ox_ceiling_publish.add_argument("--generated-at", required=True)
     ox_ceiling_publish.add_argument("--baseline-correction")
+    ox_ceiling_publish.add_argument("--run-metadata-correction")
     ox_ceiling_audit = ox_ceiling_commands.add_parser("audit")
     ox_ceiling_audit.add_argument("--config", required=True)
     ox_ceiling_audit.add_argument("--run-dir", required=True)
@@ -545,6 +546,9 @@ def _run(args: argparse.Namespace) -> int:
             generated_at=args.generated_at,
             baseline_correction_path=(
                 _path(args.baseline_correction) if args.baseline_correction else None
+            ),
+            run_metadata_correction_path=(
+                _path(args.run_metadata_correction) if args.run_metadata_correction else None
             ),
         )
         print(f"Ox B1 ceiling analysis complete: {analysis['status']}")

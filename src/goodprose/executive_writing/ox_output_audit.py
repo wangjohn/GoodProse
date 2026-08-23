@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 from typing import Annotated, Any, Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
+from pydantic import BaseModel, ConfigDict, StringConstraints, model_validator
 
 from goodprose.executive_writing.baseline import Generation
 from goodprose.executive_writing.benchmark import load_cases
@@ -31,7 +31,7 @@ class ManualFinding(StrictModel):
 
 class OxOutputAuditConfig(StrictModel):
     version: Literal[1]
-    audit_id: Literal["ox-alpha-b1-ceiling-v1-output-audit"]
+    audit_id: NonEmpty
     classification: Literal["post_run_exploratory_artifact_and_source_grounding_audit"]
     source_run_id: NonEmpty
     source_run_manifest_sha256: Sha256
@@ -40,7 +40,8 @@ class OxOutputAuditConfig(StrictModel):
     source_analysis_sha256: Sha256
     source_case_results_sha256: Sha256
     run_date_marker: NonEmpty
-    meta_preamble_prefixes: tuple[NonEmpty, ...] = Field(min_length=1)
+    meta_preamble_prefixes: tuple[NonEmpty, ...] = ()
+    forbidden_meta_substrings: tuple[NonEmpty, ...] = ()
     manual_findings: tuple[ManualFinding, ...]
 
     @model_validator(mode="after")
@@ -48,6 +49,8 @@ class OxOutputAuditConfig(StrictModel):
         case_ids = [finding.case_id for finding in self.manual_findings]
         if len(case_ids) != len(set(case_ids)):
             raise ValueError("manual findings must contain unique case IDs")
+        if not self.meta_preamble_prefixes and not self.forbidden_meta_substrings:
+            raise ValueError("at least one deterministic meta pattern is required")
         return self
 
 
@@ -121,6 +124,8 @@ def audit_ox_b1_outputs(
         folded_output = output.casefold().lstrip()
         meta_preamble = any(
             folded_output.startswith(prefix.casefold()) for prefix in config.meta_preamble_prefixes
+        ) or any(
+            substring.casefold() in folded_output for substring in config.forbidden_meta_substrings
         )
         introduced_placeholders = _introduced_placeholders(source, output)
         introduced_run_date = (
@@ -160,6 +165,18 @@ def audit_ox_b1_outputs(
     case_count = len(cases)
     artifact_only_count = case_count - len(meta_case_ids)
     no_flag_count = case_count - len(all_flagged)
+    score_gate_passed = bool(
+        analysis.get(
+            "candidate_meets_advancement_gate",
+            analysis.get("comparison", {}).get("meets_advancement_gate", False),
+        )
+    )
+    if all_flagged:
+        raw_candidate_disposition = "reject_for_artifact_contamination_and_source_grounding_risk"
+    elif score_gate_passed:
+        raw_candidate_disposition = "pass_output_audit_for_common_frontier"
+    else:
+        raw_candidate_disposition = "retain_as_diagnostic_only_score_gate_failed"
     result: dict[str, Any] = {
         "version": 1,
         "audit_id": config.audit_id,
@@ -186,13 +203,11 @@ def audit_ox_b1_outputs(
         },
         "case_findings": case_records,
         "decision": {
-            "raw_candidate_disposition": (
-                "reject_for_artifact_contamination_and_source_grounding_risk"
-            ),
+            "raw_candidate_disposition": raw_candidate_disposition,
             "score_evidence_disposition": "retain_as_visible_b1_quality_ceiling_diagnostic_only",
             "next_experiment": (
-                "preregister a new Ox harness candidate that avoids the one-step finalization "
-                "preamble; do not post-process this evaluated output in place"
+                "do not post-process this evaluated output in place; use the common frontier "
+                "and frozen hypothesis ledger to decide whether another candidate is justified"
             ),
         },
         "limitations": [

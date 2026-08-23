@@ -13,6 +13,7 @@ from goodprose.executive_writing.ox_ceiling import (
     build_ox_prompt,
     load_ox_baseline_correction,
     load_ox_ceiling_config,
+    load_ox_run_metadata_correction,
     publish_ox_b1_ceiling_results,
     run_ox_b1_ceiling,
 )
@@ -331,3 +332,60 @@ def test_evaluator_only_correction_binds_old_and_corrected_artifacts(tmp_path: P
 
     assert correction.generation_affected is False
     assert correction.corrected_scores_sha256 == sha256_file(corrected_scores)
+
+
+def test_run_metadata_correction_preserves_recorded_and_effective_revision(
+    tmp_path: Path,
+) -> None:
+    config_path = _write_v2_fixture(tmp_path)
+    run_dir = run_ox_b1_ceiling(
+        config_path=config_path,
+        cases_path=B1_CASES,
+        output_root=tmp_path / "runs",
+        repo_root=tmp_path,
+        code_revision="1" * 40,
+        started_at="2026-08-23T21:00:00Z",
+        invoker=FakeInvoker(),
+        inventory={"id": "stealth/ox-alpha", "pricing": {"prompt": "0"}},
+    )
+    manifest_path = run_dir / "run-manifest.json"
+    correction_path = tmp_path / "run-correction.json"
+    atomic_write_json(
+        correction_path,
+        {
+            "version": 1,
+            "correction_id": "ox-alpha-b1-ceiling-v2-code-revision-correction",
+            "correction_type": "operator_supplied_code_revision_metadata",
+            "discovered_at": "2026-08-23T21:01:00Z",
+            "source_run_id": run_dir.name,
+            "source_run_manifest_sha256": sha256_file(manifest_path),
+            "source_config_sha256": sha256_file(config_path),
+            "field": "code_revision",
+            "incorrect_value": "1" * 40,
+            "corrected_value": "2" * 40,
+            "generation_affected": False,
+            "evidence": "clean_worktree_head_verified_during_active_run",
+            "reason": "synthetic operator metadata correction",
+        },
+    )
+
+    correction = load_ox_run_metadata_correction(
+        correction_path,
+        config_path=config_path,
+        manifest_path=manifest_path,
+    )
+    result = publish_ox_b1_ceiling_results(
+        config_path=config_path,
+        run_dir=run_dir,
+        cases_path=B1_CASES,
+        repo_root=tmp_path,
+        results_path=tmp_path / "analysis.json",
+        case_results_path=tmp_path / "case-results.jsonl",
+        generated_at="2026-08-23T21:02:00Z",
+        run_metadata_correction_path=correction_path,
+    )
+
+    assert correction.generation_affected is False
+    assert result["recorded_code_revision"] == "1" * 40
+    assert result["effective_code_revision"] == "2" * 40
+    assert result["run_metadata_correction_sha256"] == sha256_file(correction_path)

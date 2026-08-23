@@ -1,0 +1,89 @@
+{
+  "analysis_id": "ox-alpha-b1-ceiling-v2-analysis",
+  "baseline_correction_sha256": null,
+  "benchmark_id": "goodprose-b1-v1",
+  "candidate": {
+    "candidate_id": "ox-alpha-b1-profile-v2",
+    "case_count": 24,
+    "dimension_means": {
+      "audience_format": 93.0556,
+      "clarity_coherence": 96.1204,
+      "concision": 97.4091,
+      "fidelity": 90.4365,
+      "organization_actionability": 91.6667,
+      "profile_control": 100.0
+    },
+    "error_counts": {
+      "omission": 11,
+      "poor_actionability": 3,
+      "structural_failure": 5
+    },
+    "evaluation_id": "goodprose-b1-v1.1",
+    "hard_gate_pass_rate": 0.5417,
+    "latency_ms": {
+      "mean": 18073.3946,
+      "median": 9936.0797,
+      "p95": 44577.5376
+    },
+    "mean_development_score": 93.5438,
+    "median_development_score": 93.8691,
+    "output_tokens": 5004,
+    "prompt_tokens": 26478,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "settled_cost_usd": 0
+  },
+  "candidate_meets_advancement_gate": false,
+  "candidate_passes_every_hard_gate": false,
+  "case_results_sha256": "1694c2af6bc2b687390ff74f7bca055db438a3533fe79fcd4bcdc856b52c00c1",
+  "comparison": {
+    "baseline_id": "qwen2.5-0.5b-retrieval-ledger-draft-v2",
+    "bootstrap_95_ci": {
+      "iterations": 10000,
+      "lower": 1.7683,
+      "seed": 20260822,
+      "upper": 11.3288
+    },
+    "candidate_id": "ox-alpha-b1-profile-v2",
+    "case_count": 24,
+    "hard_gate_pass_rate_difference": 0.0417,
+    "meets_advancement_gate": true,
+    "minimum_effect_points": 2.0,
+    "paired_mean_difference": 6.3457,
+    "paired_median_difference": 3.7812,
+    "win_tie_loss": {
+      "losses": 10,
+      "ties": 0,
+      "wins": 14
+    }
+  },
+  "comparison_validity": "frozen_matching_scorer_baseline_pins",
+  "config_sha256": "85b7994249969e66f58968869467df6dc9e3a65f7e32aca36d511d91bab092a2",
+  "decision": {
+    "automated_ceiling_disposition": "retain_as_strong_ceiling_diagnostic_only",
+    "production_disposition": "not_decided_pending_privacy_deployment_sealed_and_human_gates"
+  },
+  "effective_code_revision": "3ccce83f0d39556e90b57f88857b3af5261e8995",
+  "evaluation_id": "goodprose-b1-v1.1",
+  "generated_at": "2026-08-23T21:14:18Z",
+  "limitations": [
+    "B1 is visible, small, and project-authored, so this is exploratory search evidence.",
+    "Ox Alpha is an externally hosted model with an unstable stealth identifier and availability.",
+    "Zero price at execution is not a durable deployment-cost guarantee.",
+    "The deterministic scorer cannot replace semantic, sealed, or intended-audience human review."
+  ],
+  "model_id": "stealth/ox-alpha",
+  "outputs_sha256": "f3d2dff87a100ced260c94c315918508ccd26881372c0d02e17fd218036ba1fa",
+  "provider": "openrouter",
+  "recorded_code_revision": "3ccce83d71538ee8704a20f1e07a56f524355119",
+  "require_all_hard_gates_for_candidate_advancement": true,
+  "run_metadata_correction_sha256": "0101245dabc368a79e1fa74b06884ab0338df9a0f627a8d364132d487134770a",
+  "scorer_version": "goodprose-deterministic-v1.1",
+  "scores_sha256": "5a69737c1fb6ad13f87f122be41543693626a1f2e94cb6004fc4f3b3c833c206",
+  "settled_cost_usd": 0,
+  "source_run_id": "ox-alpha-b1-ceiling-v2-20260823T210528Z",
+  "source_run_manifest_sha256": "a3ffabbd07911b8734629bfa50298749ee34c4441e22ab43b6048eebbc0c996a",
+  "status": "completed_no_automated_advancement",
+  "summary_sha256": "05fa06e8b572f819e88dfd71b3f19a4354b6584a4f36cd3e140357c1ba6955c8",
+  "validity_status": "visible_b1_exploratory_strong_ceiling_baseline",
+  "version": 1
+}

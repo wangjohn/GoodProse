@@ -61,11 +61,12 @@ when corrected pins are used.
 | Measure | Ox Alpha | Compact ledger baseline | Difference |
 | --- | ---: | ---: | ---: |
 | Mean development score | 91.0738 | 87.1981 | +3.8757 |
-| Median development score | 92.1565 | 90.1724 | +1.9841 |
+| Median development score | 92.1565 | 91.2353 | +0.9212 |
 | Hard-gate pass rate | 50.00% | 50.00% | 0.00 pp |
 
-The paired 10,000-resample 95% interval was -0.8240 to +8.7727 points,
-with 12 wins, one tie, and 11 losses. The frozen numerical rule required at
+The paired median case effect was +1.9841 points. The paired 10,000-resample
+95% interval was -0.8240 to +8.7727 points, with 12 wins, one tie, and 11
+losses. The frozen numerical rule required at
 least +2 mean points and no hard-gate-rate regression, so the comparison
 records `meets_advancement_gate: true`. The candidate did not pass every hard
 gate and therefore was never finalist-ready.

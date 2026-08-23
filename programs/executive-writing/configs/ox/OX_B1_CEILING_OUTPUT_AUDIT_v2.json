@@ -1,0 +1,64 @@
+{
+  "audit_id": "ox-alpha-b1-ceiling-v2-output-audit",
+  "benchmark_cases_sha256": "a15232a5d426dcb6f5161abc5644a8ed10f57b8b7b87fb771e62fe26e57ae352",
+  "classification": "post_run_exploratory_artifact_and_source_grounding_audit",
+  "forbidden_meta_substrings": [
+    "maximum steps for this agent",
+    "no further tool calls",
+    "tools are disabled",
+    "no tools were",
+    "work accomplished:",
+    "remaining tasks:",
+    "artifact is complete",
+    "finished artifact follows",
+    "this session",
+    "goodprose constraints",
+    "as an ai",
+    "language model",
+    "agent steps",
+    "receiving the task",
+    "task status"
+  ],
+  "manual_findings": [
+    {
+      "case_id": "b1-003-incident-email",
+      "category": "material_source_expansion_risk",
+      "rationale": "Adds an unsupported commitment to share findings once the root cause is identified."
+    },
+    {
+      "case_id": "b1-007-launch-decision-memo",
+      "category": "material_source_expansion_risk",
+      "rationale": "Turns the June 19 status report into a new decision point to confirm or adjust an already recorded June 26 launch decision."
+    },
+    {
+      "case_id": "b1-015-europe-strategy-update",
+      "category": "material_source_expansion_risk",
+      "rationale": "Invents a post-integration launch-readiness and launch-funding decision workflow."
+    },
+    {
+      "case_id": "b1-018-restructure-message",
+      "category": "material_source_expansion_risk",
+      "rationale": "Adds a blanket prohibition on discussing or sharing the plan with anyone, beyond the source's confidentiality and naming controls."
+    },
+    {
+      "case_id": "b1-020-cache-blog",
+      "category": "material_source_expansion_risk",
+      "rationale": "Invents internal read paths and cache mechanics and upgrades cache-bypass evidence into absolute five-minute price and zero-staleness inventory guarantees."
+    },
+    {
+      "case_id": "b1-021-payment-delay-executive",
+      "category": "material_source_expansion_risk",
+      "rationale": "Converts a possible working-capital need and route recommendation into approval requests for $600,000 and route authorization."
+    }
+  ],
+  "meta_preamble_prefixes": [
+    "Maximum steps for this agent have been reached"
+  ],
+  "outputs_sha256": "f3d2dff87a100ced260c94c315918508ccd26881372c0d02e17fd218036ba1fa",
+  "run_date_marker": "August 23, 2026",
+  "source_analysis_sha256": "b0dedc83bd1c3cda43a3a5968051a5de4ebaed93652e7a4de9385c6c2a8b4617",
+  "source_case_results_sha256": "1694c2af6bc2b687390ff74f7bca055db438a3533fe79fcd4bcdc856b52c00c1",
+  "source_run_id": "ox-alpha-b1-ceiling-v2-20260823T210528Z",
+  "source_run_manifest_sha256": "a3ffabbd07911b8734629bfa50298749ee34c4441e22ab43b6048eebbc0c996a",
+  "version": 1
+}

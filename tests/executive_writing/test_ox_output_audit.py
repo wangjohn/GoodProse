@@ -31,6 +31,8 @@ def _fixture(tmp_path: Path) -> tuple[Path, Path, Path, Path, Path]:
             output = "Maximum steps for this agent have been reached.\n\nFinished artifact."
         elif index == 1:
             output = "Date: August 23, 2026\n[Date]\nFinished artifact."
+        elif index == 3:
+            output = "Finished artifact.\n\nWork accomplished: drafting is complete."
         outputs.append(
             Generation(
                 case_id=case.id,
@@ -78,6 +80,7 @@ def _fixture(tmp_path: Path) -> tuple[Path, Path, Path, Path, Path]:
             "source_case_results_sha256": sha256_file(case_results_path),
             "run_date_marker": "August 23, 2026",
             "meta_preamble_prefixes": ["Maximum steps for this agent have been reached"],
+            "forbidden_meta_substrings": ["Work accomplished:"],
             "manual_findings": [
                 {
                     "case_id": cases[2].id,
@@ -104,12 +107,12 @@ def test_ox_output_audit_binds_artifacts_and_records_compact_findings(tmp_path: 
         generated_at="2026-08-23T21:00:00Z",
     )
 
-    assert result["summary"]["agent_or_harness_meta_preamble_case_count"] == 1
+    assert result["summary"]["agent_or_harness_meta_preamble_case_count"] == 2
     assert result["summary"]["introduced_non_source_placeholder_case_count"] == 1
     assert result["summary"]["introduced_run_date_metadata_case_count"] == 1
     assert result["summary"]["material_source_expansion_risk_case_count"] == 1
-    assert result["summary"]["artifact_only_case_count"] == 23
-    assert result["summary"]["no_audit_flag_case_count"] == 21
+    assert result["summary"]["artifact_only_case_count"] == 22
+    assert result["summary"]["no_audit_flag_case_count"] == 20
     assert all("output" not in finding for finding in result["case_findings"])
     assert json.loads(output_path.read_text()) == result
 

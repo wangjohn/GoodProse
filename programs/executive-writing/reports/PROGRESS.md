@@ -782,3 +782,36 @@ historical entries.
 - Unresolved risks: the two-step hypothesis may not change first-response
   behavior; stronger prohibitions may reduce readability or lexical recall;
   visible B1 and external deployment limits remain unchanged.
+
+### 2026-08-23 — Phase 3 checkpoint: Ox Alpha v2 result and rejection
+
+- Hypothesis: two maximum agent steps with tools still denied would eliminate
+  v1's status preambles and, with stronger generic source instructions, produce
+  a candidate that clears every B1 hard gate and the post-run grounding audit.
+- Evidence: 24 fresh isolated sessions at effective revision `3ccce83f…`; exact
+  model/provider/config/session/event/output provenance; 26,478 input and 5,004
+  output tokens; 433.761 seconds summed latency; zero file changes; settled
+  cost $0; directly pinned v1.1 compact-ledger comparison; and a hash-bound
+  post-run audit with no output bodies committed.
+- Provenance correction: the command recorded a wrong 40-character expansion
+  of the correct short revision. The clean HEAD was verified during the active
+  run. The immutable value and corrected effective revision are both preserved
+  under correction SHA-256 `0101245…`; generation was unaffected and usable
+  outputs were not resampled.
+- Exit criteria: score-only comparison passed at +6.3457 paired mean points,
+  +1.7683 to +11.3288 interval, and +4.17 hard-gate percentage points. The
+  stricter gate failed because only 13/24 hard gates passed. Artifact-only
+  compliance improved from 16/24 to 24/24, meta preambles from 8 to zero,
+  run-date insertions from five to zero, and no-audit-flag cases from 9 to 18.
+  One non-source placeholder and six material source-expansion risks remained.
+- Decision: accept the two-step change as a successful harness repair but
+  reject `ox-alpha-b1-profile-v2` as a writing candidate. Retain score and
+  latency evidence only as a strong visible-B1 ceiling diagnostic.
+- Next actions: publish the common cross-architecture frontier and frozen
+  hypothesis ledger. Run a fresh source-verifier/reviser candidate only if that
+  analysis establishes it as the final high-value automated hypothesis; do not
+  post-process v2 outputs in place.
+- Unresolved risks: lexical hard gates undercount faithful paraphrases while
+  missing unsupported inference, but the contract still requires every frozen
+  hard gate; Ox privacy/deployment remain unresolved; B2, Tier C, and human
+  evidence remain unavailable until a finalist qualifies.

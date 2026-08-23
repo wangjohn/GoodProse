@@ -178,6 +178,22 @@ class OxBaselineCorrection(StrictModel):
     reason: NonEmpty
 
 
+class OxRunMetadataCorrection(StrictModel):
+    version: Literal[1]
+    correction_id: Literal["ox-alpha-b1-ceiling-v2-code-revision-correction"]
+    correction_type: Literal["operator_supplied_code_revision_metadata"]
+    discovered_at: NonEmpty
+    source_run_id: NonEmpty
+    source_run_manifest_sha256: Sha256
+    source_config_sha256: Sha256
+    field: Literal["code_revision"]
+    incorrect_value: GitRevision
+    corrected_value: GitRevision
+    generation_affected: Literal[False]
+    evidence: Literal["clean_worktree_head_verified_during_active_run"]
+    reason: NonEmpty
+
+
 @dataclass(frozen=True)
 class OxInvocation:
     output: str
@@ -230,6 +246,27 @@ def load_ox_baseline_correction(
     )
     if any(sha256_file(repo_root / name) != digest for name, digest in corrected_paths):
         raise ValueError("baseline correction artifact hash mismatch")
+    return correction
+
+
+def load_ox_run_metadata_correction(
+    path: Path,
+    *,
+    config_path: Path,
+    manifest_path: Path,
+) -> OxRunMetadataCorrection:
+    correction = OxRunMetadataCorrection.model_validate_json(path.read_text(encoding="utf-8"))
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if correction.source_run_manifest_sha256 != sha256_file(manifest_path):
+        raise ValueError("run metadata correction does not bind the source manifest")
+    if correction.source_config_sha256 != sha256_file(config_path):
+        raise ValueError("run metadata correction does not bind the source config")
+    if correction.source_run_id != manifest.get("run_id"):
+        raise ValueError("run metadata correction run ID mismatch")
+    if correction.incorrect_value != manifest.get(correction.field):
+        raise ValueError("run metadata correction does not bind the incorrect value")
+    if correction.corrected_value == correction.incorrect_value:
+        raise ValueError("run metadata correction must change the recorded value")
     return correction
 
 
@@ -590,6 +627,7 @@ def publish_ox_b1_ceiling_results(
     case_results_path: Path,
     generated_at: str,
     baseline_correction_path: Path | None = None,
+    run_metadata_correction_path: Path | None = None,
 ) -> dict[str, Any]:
     """Score, compare, and publish the frozen Ox ceiling candidate."""
 
@@ -607,6 +645,15 @@ def publish_ox_b1_ceiling_results(
     outputs_path = run_dir / "outputs.jsonl"
     if manifest.get("outputs_sha256") != sha256_file(outputs_path):
         raise ValueError("Ox ceiling outputs hash mismatch")
+    run_metadata_correction = (
+        load_ox_run_metadata_correction(
+            run_metadata_correction_path,
+            config_path=config_path,
+            manifest_path=manifest_path,
+        )
+        if run_metadata_correction_path is not None
+        else None
+    )
     generations = load_jsonl(outputs_path, Generation)
     cases = load_cases(cases_path)
     by_case = {item.case_id: item for item in generations}
@@ -711,6 +758,15 @@ def publish_ox_b1_ceiling_results(
         "scorer_version": config.scorer_version,
         "source_run_id": manifest["run_id"],
         "source_run_manifest_sha256": sha256_file(manifest_path),
+        "recorded_code_revision": manifest["code_revision"],
+        "effective_code_revision": (
+            run_metadata_correction.corrected_value
+            if run_metadata_correction
+            else manifest["code_revision"]
+        ),
+        "run_metadata_correction_sha256": (
+            sha256_file(run_metadata_correction_path) if run_metadata_correction_path else None
+        ),
         "config_sha256": sha256_file(config_path),
         "baseline_correction_sha256": (
             sha256_file(baseline_correction_path) if baseline_correction_path else None

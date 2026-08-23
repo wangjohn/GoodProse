@@ -58,6 +58,8 @@ reference. Never record payment credentials.
 | 2026-08-23T20:43:46Z | OpenRouter | Generate 24 frozen source-only Ox Alpha B1 candidates | `ox-alpha-b1-ceiling-v1` | completed; raw candidate later rejected | $0.00 | 24 exact model/provider sessions, 41,406 input and 8,865 output tokens, zero file changes, output hash `1092b955…` |
 | 2026-08-23T20:57:04Z | Local Apple M3 Pro | Correct evaluator pins and publish hash-bound Ox output audit | `ox-alpha-b1-ceiling-v1-output-audit` | completed; raw candidate rejected | $0.00 | corrected v1.1 paired result, preserved invalid record, 8 meta-preamble cases, no provider output bodies committed |
 | 2026-08-23T21:03:59Z | Local Apple M3 Pro | Implement, validate, and freeze Ox Alpha two-step harness candidate | `ox-alpha-b1-ceiling-runner-v2` | completed; candidate generation not yet run | $0.00 | version-bound v1/v2 runner, resolved two-step no-tools config, stronger output gates, focused tests |
+| 2026-08-23T21:12:45Z | OpenRouter | Generate 24 fresh source-only Ox Alpha v2 candidates | `ox-alpha-b1-ceiling-v2` | completed; raw candidate later rejected | $0.00 | 24 exact model/provider sessions, 26,478 input and 5,004 output tokens, zero file changes, output hash `f3d2dff…` |
+| 2026-08-23T21:17:34Z | Local Apple M3 Pro | Correct run metadata, score, and audit Ox Alpha v2 | `ox-alpha-b1-ceiling-v2-output-audit` | completed; harness repair passed, writing candidate rejected | $0.00 | +6.3457 paired score, 24 artifact-only outputs, one introduced placeholder, six source-expansion risks |
 
 ## Zero-cost feasibility snapshot
 
