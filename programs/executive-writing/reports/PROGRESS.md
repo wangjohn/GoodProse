@@ -754,3 +754,31 @@ historical entries.
   defects and marks some faithful paraphrases as lexical omissions; Ox remains
   externally hosted and unstable; no candidate passes every B1 hard gate; true
   B2, Tier C, and intended-audience human evidence remain absent.
+
+### 2026-08-23 — Phase 3 checkpoint: Ox Alpha v2 harness freeze
+
+- Hypothesis: the one-step OpenCode ceiling harness caused the v1 finalization
+  preambles; allowing two agent steps while continuing to deny every tool will
+  remove that artifact contamination without changing model, provider,
+  decoding, data boundary, or candidate-resampling policy.
+- Evidence: version-bound runner support for the v1 and v2 experiment,
+  candidate, prompt, agent, step count, and all-hard-gates policy; a v2 profile
+  card that prohibits tool/session/task commentary and unsupported metadata,
+  governance, owners, guarantees, workflows, and channels; directly pinned
+  corrected v1.1 compact-ledger baseline artifacts; and focused regression
+  coverage for cross-version drift and input-only prompt construction.
+- Exit criteria: resolved OpenCode 1.18.21 config reports temperature 0, top-p
+  1, two steps, and wildcard permission denial; v1 still loads with one step;
+  v2 config SHA-256 `85b7994…`, preregistration `7f04562…`, and agent config
+  `3d95cb8…`; no B1 generation before this checkpoint commit.
+- Decision: freeze `ox-alpha-b1-profile-v2` as a fresh candidate. Common-
+  frontier advancement now requires +2 paired mean points, no hard-gate
+  regression, all 24 hard gates, zero meta commentary, zero introduced
+  placeholders or run-date metadata, and no material source-grounding finding.
+- Next actions: commit the freeze, revalidate exact live inventory and zero
+  pricing, generate one usable candidate per case, publish the score, run the
+  preregistered artifact/source audit, and compare v2 with both v1 diagnostic
+  evidence and the local frontier.
+- Unresolved risks: the two-step hypothesis may not change first-response
+  behavior; stronger prohibitions may reduce readability or lexical recall;
+  visible B1 and external deployment limits remain unchanged.

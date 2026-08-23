@@ -159,6 +159,47 @@ def _write_fixture(tmp_path: Path) -> tuple[Path, Path]:
     return config_path, opencode_config
 
 
+def _write_v2_fixture(tmp_path: Path) -> Path:
+    config_path, _ = _write_fixture(tmp_path)
+    opencode_config = tmp_path / "opencode-v2.json"
+    atomic_write_json(
+        opencode_config,
+        {
+            "$schema": "https://opencode.ai/config.json",
+            "agent": {
+                "goodprose-ceiling-v2": {
+                    "description": "synthetic v2 agent",
+                    "mode": "primary",
+                    "permission": {"*": "deny"},
+                    "steps": 2,
+                    "temperature": 0,
+                    "top_p": 1,
+                }
+            },
+        },
+    )
+    payload = json.loads(config_path.read_text())
+    payload.update(
+        {
+            "version": 2,
+            "experiment_id": "ox-alpha-b1-ceiling-v2",
+            "candidate_id": "ox-alpha-b1-profile-v2",
+            "prompt_version": "goodprose-ox-ceiling-prompt-v2",
+            "require_all_hard_gates_for_candidate_advancement": True,
+        }
+    )
+    payload["harness"].update(
+        {
+            "agent": "goodprose-ceiling-v2",
+            "max_agent_steps": 2,
+            "opencode_config_path": "opencode-v2.json",
+            "opencode_config_sha256": sha256_file(opencode_config),
+        }
+    )
+    atomic_write_json(config_path, payload)
+    return config_path
+
+
 def test_prompt_contains_only_input_side_material(tmp_path: Path) -> None:
     config_path, _ = _write_fixture(tmp_path)
     config = load_ox_ceiling_config(config_path, repo_root=tmp_path)
@@ -171,6 +212,27 @@ def test_prompt_contains_only_input_side_material(tmp_path: Path) -> None:
     assert "required_facts" not in prompt
     assert "forbidden_claims" not in prompt
     assert "development_score" not in prompt
+
+
+def test_v2_prompt_and_harness_are_version_bound(tmp_path: Path) -> None:
+    config_path = _write_v2_fixture(tmp_path)
+    config = load_ox_ceiling_config(config_path, repo_root=tmp_path)
+    case = load_cases(B1_CASES)[0]
+
+    prompt = build_ox_prompt(case, config)
+
+    assert config.harness.max_agent_steps == 2
+    assert config.require_all_hard_gates_for_candidate_advancement is True
+    assert "Never discuss agent steps, tools, sessions, task status" in prompt
+    assert "Do not add a sender, recipient, date, or placeholder" in prompt
+    assert case.input.source_material in prompt
+    assert "required_facts" not in prompt
+
+    payload = json.loads(config_path.read_text())
+    payload["harness"]["max_agent_steps"] = 1
+    atomic_write_json(config_path, payload)
+    with pytest.raises(ValueError, match="version, candidate, prompt, agent, and gates"):
+        load_ox_ceiling_config(config_path, repo_root=tmp_path)
 
 
 def test_mocked_run_and_publisher_preserve_provenance(tmp_path: Path) -> None:

@@ -57,6 +57,7 @@ reference. Never record payment credentials.
 | 2026-08-23T20:29:04Z | Local Apple M3 Pro | Implement, test, and freeze source-only Ox Alpha B1 ceiling runner | `ox-alpha-b1-ceiling-runner-v1` | completed; candidate generation not yet run | $0.00 | temperature-zero no-tools agent config, frozen prompt and baseline hashes, mocked provenance/publisher tests |
 | 2026-08-23T20:43:46Z | OpenRouter | Generate 24 frozen source-only Ox Alpha B1 candidates | `ox-alpha-b1-ceiling-v1` | completed; raw candidate later rejected | $0.00 | 24 exact model/provider sessions, 41,406 input and 8,865 output tokens, zero file changes, output hash `1092b955…` |
 | 2026-08-23T20:57:04Z | Local Apple M3 Pro | Correct evaluator pins and publish hash-bound Ox output audit | `ox-alpha-b1-ceiling-v1-output-audit` | completed; raw candidate rejected | $0.00 | corrected v1.1 paired result, preserved invalid record, 8 meta-preamble cases, no provider output bodies committed |
+| 2026-08-23T21:03:59Z | Local Apple M3 Pro | Implement, validate, and freeze Ox Alpha two-step harness candidate | `ox-alpha-b1-ceiling-runner-v2` | completed; candidate generation not yet run | $0.00 | version-bound v1/v2 runner, resolved two-step no-tools config, stronger output gates, focused tests |
 
 ## Zero-cost feasibility snapshot
 

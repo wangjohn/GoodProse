@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T20:57:04Z",
+  "updated_at": "2026-08-23T21:03:59Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -446,6 +446,19 @@
       "model_id": null,
       "settled_cost_usd": 0,
       "disposition": "reject raw candidate: 8 of 24 outputs contain agent-step preambles, 3 introduce non-source placeholders, 5 add run-date metadata, and 6 have material source-expansion risks"
+    },
+    {
+      "experiment_id": "ox-alpha-b1-ceiling-runner-v2",
+      "kind": "strong_ceiling_harness_repair_preregistration",
+      "status": "frozen_ready",
+      "record": "programs/executive-writing/configs/ox/OX_B1_CEILING_PREREGISTRATION_v2.md",
+      "code_revision_start": "5dfb995",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "after this freeze commit, run one fresh 24-case candidate with two agent steps, wildcard tool denial, stronger artifact-only grounding instructions, and all-hard-gates advancement"
     }
   ]
 }

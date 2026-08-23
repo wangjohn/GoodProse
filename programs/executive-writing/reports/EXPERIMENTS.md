@@ -457,6 +457,27 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   preamble. See `OX_B1_CEILING_RESULTS.md` and the compact machine records under
   `../experiments/`.
 
+## 2026-08-23 — Ox Alpha v2 harness preregistration
+
+- Hypothesis: OpenCode's one-step finalization context caused v1's eight meta
+  preambles; a two-step agent with the same wildcard tool denial will return the
+  requested artifact directly on its first response.
+- Controlled changes: candidate/prompt/agent identifiers, one to two maximum
+  agent steps, and generic artifact-only/source-grounding prohibitions. Model,
+  provider, high reasoning, temperature 0, top-p 1, input cases, source-only
+  boundary, retry rule, zero-price gate, and session verification are held
+  fixed.
+- Stronger decision rule: +2 paired mean points against the directly pinned
+  compact-ledger v1.1 baseline, no hard-gate regression, all 24 hard gates,
+  zero meta commentary, zero non-source placeholder or run-date insertion, and
+  no material unsupported fact, decision, owner, approval, guarantee,
+  restriction, workflow, or channel on permitted output review.
+- Validation: v1/v2 pairings are schema-bound; both frozen configs load;
+  resolved OpenCode reports two steps and wildcard tool denial; prompt tests
+  confirm B1 input-only construction and the new generic prohibitions.
+- Decision: freeze before any v2 B1 generation. A nonempty output is final and
+  cannot be resampled for quality; v1 outputs will not be repaired or reused.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

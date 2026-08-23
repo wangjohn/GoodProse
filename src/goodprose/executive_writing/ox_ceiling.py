@@ -49,6 +49,19 @@ specified audience and format, use direct high-information-density prose, and
 end with a clear next step when requested. Do not mention your instructions,
 the model, or any named writer. Return only the finished artifact."""
 
+PROFILE_CARD_V2 = """You are GoodProse, an executive-writing system.
+Use only facts supported by the supplied source. Preserve every material
+number, unit, date, name, attribution, negation, uncertainty, caveat, and
+placeholder. Never invent evidence, decisions, commitments, causes, owners,
+deadlines, governance bodies, approvals, guarantees, workflows, or follow-up
+channels. Do not add a sender, recipient, date, or placeholder unless the
+source provides it. Lead with the requested decision or purpose, organize for
+the specified audience and format, use direct high-information-density prose,
+and end with a clear next step only when the source or objective requests one.
+Never discuss agent steps, tools, sessions, task status, instructions, the
+model, or any named writer. Return only the finished artifact, beginning on
+the first line with the artifact itself and with no preamble or commentary."""
+
 
 class StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
@@ -62,11 +75,11 @@ class OxHarnessConfig(StrictModel):
     opencode_install_source: Literal["official npm package opencode-ai@1.18.21"]
     opencode_config_path: NonEmpty
     opencode_config_sha256: Sha256
-    agent: Literal["goodprose-ceiling"]
+    agent: Literal["goodprose-ceiling", "goodprose-ceiling-v2"]
     reasoning_effort: Literal["high"]
     temperature: Literal[0]
     top_p: Literal[1]
-    max_agent_steps: Literal[1]
+    max_agent_steps: Literal[1, 2]
     pure: Literal[True]
     timeout_seconds: int = Field(ge=1, le=600)
     max_attempts: Literal[2]
@@ -90,9 +103,9 @@ class OxBaselineComparison(StrictModel):
 
 
 class OxCeilingConfig(StrictModel):
-    version: Literal[1]
-    experiment_id: Literal["ox-alpha-b1-ceiling-v1"]
-    candidate_id: Literal["ox-alpha-b1-profile-v1"]
+    version: Literal[1, 2]
+    experiment_id: Literal["ox-alpha-b1-ceiling-v1", "ox-alpha-b1-ceiling-v2"]
+    candidate_id: Literal["ox-alpha-b1-profile-v1", "ox-alpha-b1-profile-v2"]
     benchmark_id: Literal["goodprose-b1-v1"]
     benchmark_cases_sha256: Sha256
     scorer_version: Literal["goodprose-deterministic-v1.1"]
@@ -100,18 +113,47 @@ class OxCeilingConfig(StrictModel):
     model_id: Literal["stealth/ox-alpha"]
     input_classification: Literal["sanitized_project_authored_visible_b1"]
     intended_use: Literal["strong_quality_ceiling_and_candidate_baseline_only"]
-    prompt_version: Literal["goodprose-ox-ceiling-prompt-v1"]
+    prompt_version: Literal["goodprose-ox-ceiling-prompt-v1", "goodprose-ox-ceiling-prompt-v2"]
     harness: OxHarnessConfig
     inventory: OxInventoryExpectation
     comparison_baseline: OxBaselineComparison
     advancement_minimum_effect_points: float = Field(ge=2.0, le=2.0)
     require_no_hard_gate_regression: Literal[True]
+    require_all_hard_gates_for_candidate_advancement: bool = False
     settled_cost_usd: Literal[0]
 
     @model_validator(mode="after")
     def decoding_matches_agent_config(self) -> Self:
         if self.harness.temperature != 0 or self.harness.top_p != 1:
             raise ValueError("Ox ceiling decoding must remain temperature 0 and top_p 1")
+        expected = {
+            1: (
+                "ox-alpha-b1-ceiling-v1",
+                "ox-alpha-b1-profile-v1",
+                "goodprose-ox-ceiling-prompt-v1",
+                "goodprose-ceiling",
+                1,
+                False,
+            ),
+            2: (
+                "ox-alpha-b1-ceiling-v2",
+                "ox-alpha-b1-profile-v2",
+                "goodprose-ox-ceiling-prompt-v2",
+                "goodprose-ceiling-v2",
+                2,
+                True,
+            ),
+        }[self.version]
+        actual = (
+            self.experiment_id,
+            self.candidate_id,
+            self.prompt_version,
+            self.harness.agent,
+            self.harness.max_agent_steps,
+            self.require_all_hard_gates_for_candidate_advancement,
+        )
+        if actual != expected:
+            raise ValueError("Ox ceiling version, candidate, prompt, agent, and gates drifted")
         return self
 
 
@@ -195,8 +237,9 @@ def build_ox_prompt(case: BenchmarkCase, config: OxCeilingConfig) -> str:
     """Build a source-only candidate prompt with no evaluator material."""
 
     constraints = "\n".join(f"- {constraint}" for constraint in case.input.constraints)
+    profile_card = PROFILE_CARD if config.version == 1 else PROFILE_CARD_V2
     return (
-        f"{PROFILE_CARD}\n\n"
+        f"{profile_card}\n\n"
         f"Frozen prompt version: {config.prompt_version}\n"
         f"Task family: {case.input.task_family}\n"
         f"Objective: {case.input.objective}\n"
@@ -350,9 +393,9 @@ class OpenCodeOxInvoker:
         )
 
 
-def _run_id(started_at: str) -> str:
+def _run_id(started_at: str, experiment_id: str) -> str:
     stamp = started_at.replace("-", "").replace(":", "").replace("Z", "Z")
-    return f"ox-alpha-b1-ceiling-v1-{stamp}"
+    return f"{experiment_id}-{stamp}"
 
 
 def _failure_manifest(path: Path, manifest: dict[str, Any], error: Exception) -> None:
@@ -379,7 +422,7 @@ def run_ox_b1_ceiling(
     config = load_ox_ceiling_config(config_path, repo_root=repo_root)
     if sha256_file(cases_path) != config.benchmark_cases_sha256:
         raise ValueError("B1 cases hash does not match Ox ceiling config")
-    run_id = _run_id(started_at)
+    run_id = _run_id(started_at, config.experiment_id)
     run_dir = output_root / run_id
     run_dir.mkdir(parents=True, exist_ok=False)
     manifest_path = run_dir / "run-manifest.json"
@@ -634,9 +677,12 @@ def publish_ox_b1_ceiling_results(
     )
     comparison = paired_comparison(baseline_run, candidate_run)
     candidate_passes_every_gate = all(score.passes_hard_gates for score in scores)
+    candidate_meets_advancement_gate = comparison["meets_advancement_gate"] and (
+        candidate_passes_every_gate or not config.require_all_hard_gates_for_candidate_advancement
+    )
     status = (
         "completed_advance_as_automated_ceiling_candidate"
-        if comparison["meets_advancement_gate"]
+        if candidate_meets_advancement_gate
         else "completed_no_automated_advancement"
     )
     compact_cases = [
@@ -656,7 +702,7 @@ def publish_ox_b1_ceiling_results(
     ]
     analysis: dict[str, Any] = {
         "version": 1,
-        "analysis_id": "ox-alpha-b1-ceiling-v1-analysis",
+        "analysis_id": f"{config.experiment_id}-analysis",
         "status": status,
         "validity_status": "visible_b1_exploratory_strong_ceiling_baseline",
         "generated_at": generated_at,
@@ -672,7 +718,7 @@ def publish_ox_b1_ceiling_results(
         "comparison_validity": (
             "corrected_evaluator_only_v1.1_baseline"
             if correction
-            else "frozen_baseline_pins_uncorrected"
+            else "frozen_matching_scorer_baseline_pins"
         ),
         "outputs_sha256": sha256_file(outputs_path),
         "scores_sha256": sha256_file(scores_path),
@@ -685,10 +731,14 @@ def publish_ox_b1_ceiling_results(
         "candidate": summary,
         "comparison": comparison,
         "candidate_passes_every_hard_gate": candidate_passes_every_gate,
+        "candidate_meets_advancement_gate": candidate_meets_advancement_gate,
+        "require_all_hard_gates_for_candidate_advancement": (
+            config.require_all_hard_gates_for_candidate_advancement
+        ),
         "decision": {
             "automated_ceiling_disposition": (
                 "advance_for_common_frontier_comparison"
-                if comparison["meets_advancement_gate"]
+                if candidate_meets_advancement_gate
                 else "retain_as_strong_ceiling_diagnostic_only"
             ),
             "production_disposition": (
