@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T04:08:22Z",
+  "updated_at": "2026-08-23T04:13:23Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -89,6 +89,19 @@
       "model_id": "stealth/ox-alpha",
       "settled_cost_usd": 0,
       "disposition": "no review produced; continue directly because Ox delegation is an optimization, not a program blocker"
+    },
+    {
+      "experiment_id": "structured-retrieval-runner-v1",
+      "kind": "inference_pipeline_validation",
+      "status": "completed_pass",
+      "record": "programs/executive-writing/configs/baselines/STRUCTURED_ITERATION_v1.md",
+      "code_revision_start": "8cb851e",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_ollama",
+      "model_id": "qwen2.5:0.5b-instruct",
+      "settled_cost_usd": 0,
+      "disposition": "run the preregistered ledger-draft-verify-revise candidate on B1"
     }
   ]
 }

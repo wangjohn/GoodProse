@@ -198,3 +198,23 @@ historical entries.
 - Unresolved risks: public inventory presence does not establish live inference
   health; the endpoint may be transiently unavailable or incompatible with the
   current harness request path.
+
+### 2026-08-22 — Phase 0 checkpoint: structured retrieval runner
+
+- Hypothesis: a rubric-isolated `ledger -> draft -> verify -> revise` pipeline
+  can reduce retrieval-v1 omissions and unsupported transformations on the same
+  model and examples.
+- Evidence: committed frozen config and preregistration; deterministic prompt
+  builders; complete intermediate output, prompt, hash, latency, and token
+  provenance; local endpoint enforcement; 96-call mocked 24-case pipeline; and
+  a green 36-test repository suite, Ruff, format, and Pyright.
+- Exit criteria: no expected-check or scorer leakage, exact four-step
+  provenance, same model/retrieval assets, frozen advancement and efficiency
+  gates, and complete engineering verification.
+- Decision: pass. The candidate runner is eligible for one real $0 B1 run.
+- Next actions: execute at the committed revision, rescore offline under v1.1,
+  compare only against the frozen retrieval-v1 baseline, and keep or reject it
+  under the preregistered gates.
+- Unresolved risks: the 0.5B model may corrupt facts in its own ledger or
+  verifier, and four sequential calls can increase latency without improving
+  final fidelity.

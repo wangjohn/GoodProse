@@ -138,6 +138,24 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   revalidated before a later retry.
 - Record: `../experiments/ox-baseline-failure-review-v1.json`.
 
+## 2026-08-22 — Structured retrieval runner validation
+
+- Hypothesis: explicit source-ledger extraction and post-draft verification can
+  target the dominant retrieval-v1 omissions while preserving hard gates.
+- Candidate/baseline: `qwen2.5-0.5b-retrieval-ledger-verify-v1` versus
+  `qwen2.5-0.5b-retrieval-v1`.
+- Configuration: same local Qwen 2.5 0.5B model, B1 cases, retrieval examples,
+  temperature 0, seed 20260822, context 4,096, and 512-token per-call cap;
+  four sequential ledger, draft, verify, and revise calls.
+- Frozen gates: +2 paired mean points, no regression from 37.50% hard-gate
+  pass, fewer than 14 omission cases, at most one fabrication and placeholder
+  loss, mean latency at most 6,812.086 ms, at most 16,800 generated tokens, and
+  $0 settled provider cost.
+- Result: 36 full-repository tests plus lint, format, and type checks passed;
+  the mocked full run made 96 calls and preserved all intermediate provenance.
+- Decision: execute one real B1 run after committing the pipeline.
+- Record: `../configs/baselines/STRUCTURED_ITERATION_v1.md`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

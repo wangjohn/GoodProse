@@ -51,7 +51,7 @@ class BaselineConfig(StrictModel):
     model_manifest_sha256: Sha256
     model_blob_sha256: Sha256
     model_license: Literal["Apache-2.0"]
-    strategy: Literal["minimal", "profile", "retrieval"]
+    strategy: Literal["minimal", "profile", "retrieval", "structured"]
     prompt_version: NonEmpty
     retrieval_examples_path: str | None = None
     decoding: DecodingConfig
@@ -62,10 +62,11 @@ class BaselineConfig(StrictModel):
         parsed = urlparse(self.endpoint)
         if parsed.scheme != "http" or parsed.hostname not in {"127.0.0.1", "localhost", "::1"}:
             raise ValueError("baseline endpoint must be local loopback HTTP")
-        if self.strategy == "retrieval" and not self.retrieval_examples_path:
-            raise ValueError("retrieval strategy requires retrieval_examples_path")
-        if self.strategy != "retrieval" and self.retrieval_examples_path:
-            raise ValueError("only retrieval strategy may set retrieval_examples_path")
+        uses_retrieval = self.strategy in {"retrieval", "structured"}
+        if uses_retrieval and not self.retrieval_examples_path:
+            raise ValueError("retrieval and structured strategies require retrieval examples")
+        if not uses_retrieval and self.retrieval_examples_path:
+            raise ValueError("only retrieval and structured strategies may use retrieval examples")
         return self
 
 
@@ -84,6 +85,18 @@ class RetrievalExample(StrictModel):
     lineage_group: NonEmpty
 
 
+class GenerationStep(StrictModel):
+    step_id: NonEmpty
+    prompt_sha256: Sha256
+    output: str
+    output_sha256: Sha256
+    latency_ms: float = Field(ge=0)
+    prompt_tokens: int | None = None
+    output_tokens: int | None = None
+    total_duration_ns: int | None = None
+    load_duration_ns: int | None = None
+
+
 class Generation(StrictModel):
     case_id: NonEmpty
     candidate_id: NonEmpty
@@ -95,6 +108,7 @@ class Generation(StrictModel):
     output_tokens: int | None = None
     total_duration_ns: int | None = None
     load_duration_ns: int | None = None
+    pipeline_steps: tuple[GenerationStep, ...] = ()
 
 
 class RunSummary(StrictModel):
@@ -232,6 +246,8 @@ def build_prompt(
         )
     if config.strategy == "profile":
         return f"{PROFILE_CARD}\n\n{task}"
+    if config.strategy == "structured":
+        raise ValueError("structured strategy requires the multi-step pipeline")
     example = retrieve_example(case, retrieval_examples or [])
     example_constraints = "\n".join(f"- {item}" for item in example.constraints)
     return f"""{PROFILE_CARD}
@@ -252,6 +268,157 @@ Example output:
 Now complete the new task. The new source is authoritative; the example is not.
 
 {task}"""
+
+
+def build_ledger_prompt(case: BenchmarkCase) -> str:
+    """Build the rubric-isolated source-ledger extraction prompt."""
+
+    return f"""You are extracting a source ledger for an executive-writing task.
+Do not draft the artifact. Use only the supplied task and source. Return a
+compact plain-text ledger with these headings:
+
+SUPPORTED FACTS — exact numbers, units, dates, names, decisions, and owners
+QUALIFIERS — negations, uncertainty, dependencies, scope, and caveats
+DO NOT CLAIM — transformations directly contradicted by the source
+PRESERVE — confidential placeholders and already-correct wording
+DELIVERY — audience, format, objective, constraints, and requested next action
+
+Do not invent facts or infer hidden requirements.
+
+{_task_prompt(case)}"""
+
+
+def _example_prompt(case: BenchmarkCase, examples: list[RetrievalExample]) -> str:
+    example = retrieve_example(case, examples)
+    example_constraints = "\n".join(f"- {item}" for item in example.constraints)
+    return f"""Approved example for structure and abstract writing characteristics only.
+Do not copy its facts or phrases into the new artifact.
+
+Example format: {example.output_format.value}
+Example audience: {example.audience}
+Example objective: {example.objective}
+Example constraints:
+{example_constraints}
+Example source:
+{example.source_material}
+Example output:
+{example.output}"""
+
+
+def build_structured_draft_prompt(
+    case: BenchmarkCase, ledger: str, examples: list[RetrievalExample]
+) -> str:
+    return f"""{PROFILE_CARD}
+
+{_example_prompt(case, examples)}
+
+The extracted ledger below is a planning aid, not a new source. If it conflicts
+with the authoritative source, follow the source.
+
+SOURCE LEDGER:
+{ledger}
+
+Now draft the requested artifact.
+
+{_task_prompt(case)}"""
+
+
+def build_verification_prompt(case: BenchmarkCase, ledger: str, draft: str) -> str:
+    return f"""Audit the draft against the authoritative source and requested task.
+Do not rewrite the artifact. Return a concise correction list only, or exactly
+NO CORRECTIONS if none are needed. Check every number, unit, date, name,
+decision, attribution, negation, uncertainty, caveat, scope limit, confidential
+placeholder, format constraint, length constraint, and requested next action.
+Flag omissions and unsupported transformations. The source overrides the
+planning ledger.
+
+TASK AND SOURCE:
+{_task_prompt(case)}
+
+SOURCE LEDGER:
+{ledger}
+
+DRAFT:
+{draft}"""
+
+
+def build_revision_prompt(case: BenchmarkCase, ledger: str, draft: str, verification: str) -> str:
+    return f"""{PROFILE_CARD}
+
+Revise the draft using the smallest changes necessary to satisfy the task and
+authoritative source. Apply verifier notes only when the source supports them.
+Do not add commentary about the revision. Output only the finished artifact.
+
+TASK AND SOURCE:
+{_task_prompt(case)}
+
+SOURCE LEDGER:
+{ledger}
+
+DRAFT:
+{draft}
+
+VERIFIER NOTES:
+{verification}"""
+
+
+def _generate_step(
+    client: OllamaClient, *, step_id: str, prompt: str
+) -> tuple[str, GenerationStep]:
+    start = time.perf_counter()
+    output, metrics = client.generate(prompt)
+    latency_ms = (time.perf_counter() - start) * 1000
+    return output, GenerationStep(
+        step_id=step_id,
+        prompt_sha256=sha256(prompt.encode("utf-8")).hexdigest(),
+        output=output,
+        output_sha256=sha256(output.encode("utf-8")).hexdigest(),
+        latency_ms=latency_ms,
+        prompt_tokens=metrics["prompt_tokens"],
+        output_tokens=metrics["output_tokens"],
+        total_duration_ns=metrics["total_duration_ns"],
+        load_duration_ns=metrics["load_duration_ns"],
+    )
+
+
+def _sum_optional(values: list[int | None]) -> int | None:
+    present = [value for value in values if value is not None]
+    return sum(present) if present else None
+
+
+def run_structured_pipeline(
+    case: BenchmarkCase,
+    client: OllamaClient,
+    retrieval_examples: list[RetrievalExample],
+    *,
+    candidate_id: str,
+) -> Generation:
+    """Run ledger, draft, audit, and minimal-revision calls for one case."""
+
+    ledger_prompt = build_ledger_prompt(case)
+    ledger, ledger_step = _generate_step(client, step_id="ledger", prompt=ledger_prompt)
+    draft_prompt = build_structured_draft_prompt(case, ledger, retrieval_examples)
+    draft, draft_step = _generate_step(client, step_id="draft", prompt=draft_prompt)
+    verification_prompt = build_verification_prompt(case, ledger, draft)
+    verification, verification_step = _generate_step(
+        client, step_id="verify", prompt=verification_prompt
+    )
+    revision_prompt = build_revision_prompt(case, ledger, draft, verification)
+    output, revision_step = _generate_step(client, step_id="revise", prompt=revision_prompt)
+    steps = (ledger_step, draft_step, verification_step, revision_step)
+    return Generation(
+        case_id=case.id,
+        candidate_id=candidate_id,
+        prompt_sha256=revision_step.prompt_sha256,
+        output=output,
+        output_sha256=revision_step.output_sha256,
+        latency_ms=sum(step.latency_ms for step in steps),
+        prompt_tokens=_sum_optional([step.prompt_tokens for step in steps]),
+        output_tokens=_sum_optional([step.output_tokens for step in steps]),
+        total_duration_ns=_sum_optional([step.total_duration_ns for step in steps]),
+        load_duration_ns=_sum_optional([step.load_duration_ns for step in steps]),
+        pipeline_steps=steps,
+    )
 
 
 def _percentile(values: list[float], percentile: float) -> float:
@@ -332,19 +499,28 @@ def run_baseline(
     generations: list[Generation] = []
     scores: list[CaseScore] = []
     for case in cases:
-        prompt = build_prompt(case, config, retrieval_examples)
-        start = time.perf_counter()
-        output, metrics = client.generate(prompt)
-        latency_ms = (time.perf_counter() - start) * 1000
-        generation = Generation(
-            case_id=case.id,
-            candidate_id=config.candidate_id,
-            prompt_sha256=sha256(prompt.encode("utf-8")).hexdigest(),
-            output=output,
-            output_sha256=sha256(output.encode("utf-8")).hexdigest(),
-            latency_ms=latency_ms,
-            **metrics,
-        )
+        if config.strategy == "structured":
+            generation = run_structured_pipeline(
+                case, client, retrieval_examples, candidate_id=config.candidate_id
+            )
+            output = generation.output
+        else:
+            prompt = build_prompt(case, config, retrieval_examples)
+            start = time.perf_counter()
+            output, metrics = client.generate(prompt)
+            latency_ms = (time.perf_counter() - start) * 1000
+            generation = Generation(
+                case_id=case.id,
+                candidate_id=config.candidate_id,
+                prompt_sha256=sha256(prompt.encode("utf-8")).hexdigest(),
+                output=output,
+                output_sha256=sha256(output.encode("utf-8")).hexdigest(),
+                latency_ms=latency_ms,
+                prompt_tokens=metrics["prompt_tokens"],
+                output_tokens=metrics["output_tokens"],
+                total_duration_ns=metrics["total_duration_ns"],
+                load_duration_ns=metrics["load_duration_ns"],
+            )
         generations.append(generation)
         scores.append(score_output(case, output, candidate_id=config.candidate_id))
     summary = summarize_run(experiment_id, config, scores, generations)
@@ -364,6 +540,12 @@ def run_baseline(
         "config_sha256": sha256_file(config_path),
         "retrieval_examples_sha256": retrieval_sha256,
         "prompt_version": config.prompt_version,
+        "strategy": config.strategy,
+        "pipeline_step_ids": (
+            ["ledger", "draft", "verify", "revise"]
+            if config.strategy == "structured"
+            else ["generate"]
+        ),
         "decoding": config.decoding.model_dump(mode="json"),
         "model_id": config.model_id,
         "model_manifest_sha256": config.model_manifest_sha256,
