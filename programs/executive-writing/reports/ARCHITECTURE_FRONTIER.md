@@ -5,13 +5,14 @@
 No evaluated candidate is finalist-ready. The strongest local system remains
 `qwen2.5-0.5b-retrieval-ledger-draft-v2`; the strongest score ceiling is
 `ox-alpha-b1-profile-v2`, but its raw outputs are rejected for source-grounding
-risk. Zero of thirteen common 24-case candidates pass every hard gate without a
-disqualifying audit result.
+risk. The h10 source-reviser reduced audit findings but also failed its frozen
+hard gates. Zero of fourteen common 24-case candidates pass every hard gate
+without a disqualifying audit result.
 
 The plateau rule is not satisfied because the leading accepted local candidate
-passes only 50% of hard gates and two affordable high-information hypotheses
-remain: a source-only Ox verifier/reviser pipeline, followed conditionally by
-one larger local open-model probe with compact-ledger architecture held fixed.
+passes only 50% of hard gates and one affordable high-information hypothesis
+remains: a single larger local open-model probe with compact-ledger architecture
+held fixed.
 
 ## Comparable B1 evidence
 
@@ -33,6 +34,7 @@ Scores are development evidence, not sealed or human quality.
 | `mlx-qwen2.5-0.5b-unified-pilot-lora-ledger_draft-v1` | Unified LoRA ledger | 74.5449 | 29.17% | 2.435 s | Rejected: memorization risk |
 | `ox-alpha-b1-profile-v1` | External one-step single pass | 91.0738 | 50.00% | 31.845 s | Rejected: meta/grounding |
 | `ox-alpha-b1-profile-v2` | External two-step single pass | 93.5438 | 54.17% | 18.073 s | Rejected: grounding |
+| `ox-alpha-b1-source-reviser-v1` | External draft + source revision | 93.3607 | 54.17% | 21.232 s | Rejected: hard gates/grounding |
 
 The small-model fine-tunes are not competitive: the smoke adapter regressed
 both matched branches, and the unified adapter failed its +2-point gate and
@@ -44,6 +46,12 @@ compliance. It does not become a finalist because six outputs contain material
 unsupported commitments or guarantees and one introduces a placeholder. The
 external provider, stealth identifier, and private-input boundary also remain
 deployment risks.
+
+The h10 source-reviser reduced material source-expansion findings from six to
+two and eliminated the remaining introduced placeholder, but it still passed
+only 13 of 24 hard gates. It scored -0.1831 paired mean points versus v2 while
+using 3.14 times its prompt tokens and 1.17 times its mean latency. The branch
+is rejected rather than repaired in place.
 
 ## Evidence excluded from winner selection
 
@@ -57,24 +65,23 @@ deployment risks.
 
 ## Ranked unresolved hypotheses
 
-1. `h10-ox-source-verifier-reviser` — highest value. Generate a fresh draft,
-   then revise it in a second isolated no-tools Ox session using only the same
-   source/task fields and the draft. The revision must preserve operative source
-   wording and remove every non-entailed fact, commitment, owner, approval,
-   guarantee, restriction, workflow, and placeholder. Require +2 points, no
-   hard-gate regression, 24/24 hard gates, and a clean output audit.
-2. `h11-larger-local-open-model` — contingent exploration. If h10 fails, hold
-   the compact-ledger architecture fixed and probe one resource-feasible larger
-   local instruct model. Freeze exact model/hash/resource limits before B1.
-3. Authentic-task unified training — externally blocked. The synthetic unified
+1. `h11-larger-local-open-model` — highest value. Hold the compact-ledger
+   architecture fixed and probe exactly one resource-feasible larger local
+   instruct model. Freeze exact model/hash, download, disk, memory, latency,
+   and zero-cost limits before B1.
+2. Authentic-task unified training — externally blocked. The synthetic unified
    pilot failed, and no authentic named-source rows are both sufficient and
    training-approved.
-4. Public compatibility suites — externally blocked on canonical source-file
+3. Public compatibility suites — externally blocked on canonical source-file
    acquisition, not adapter implementation.
-5. Profile-specific LoRA sweep — not justified; no named profile clears both
+4. Profile-specific LoRA sweep — not justified; no named profile clears both
    rights and data-sufficiency gates.
 
+Completed and pruned: `h10-ox-source-verifier-reviser` improved the qualitative
+audit but failed 24/24 hard gates and zero-risk grounding. Do not repeat it
+without a materially new verifier or source-control mechanism.
+
 The hash-bound machine frontier and hypothesis registry live at
-`../experiments/architecture-frontier-v1.json` and
+`../experiments/architecture-frontier-v2.json` and
 `../experiments/hypothesis-registry-v1.json`. They prevent rejected ideas from
 being repeated without a material new factor.

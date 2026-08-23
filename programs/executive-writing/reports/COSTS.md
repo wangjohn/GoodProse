@@ -62,6 +62,8 @@ reference. Never record payment credentials.
 | 2026-08-23T21:17:34Z | Local Apple M3 Pro | Correct run metadata, score, and audit Ox Alpha v2 | `ox-alpha-b1-ceiling-v2-output-audit` | completed; harness repair passed, writing candidate rejected | $0.00 | +6.3457 paired score, 24 artifact-only outputs, one introduced placeholder, six source-expansion risks |
 | 2026-08-23T21:23:20Z | Local Apple M3 Pro | Build and validate the common architecture frontier and hypothesis registry | `goodprose-b1-common-architecture-frontier-v1` | completed; zero finalist-ready candidates | $0.00 | 13 comparable candidates, seven hash-pinned sources, 14 hypotheses, schema and source-drift validation |
 | 2026-08-23T21:34:44Z | Local Apple M3 Pro | Implement, validate, and freeze the Ox Alpha source-verifier/reviser candidate | `ox-alpha-b1-source-reviser-runner-v1` | completed; candidate generation not yet run | $0.00 | two isolated stages per case, source-only boundary, resolved no-tools config, nine focused tests |
+| 2026-08-23T21:36:06Z | OpenRouter | Generate and source-revise 24 fresh Ox Alpha B1 candidates | `ox-alpha-b1-source-reviser-v1` | completed; candidate rejected | $0.00 | 48 unique normal-stop sessions, 83,094 prompt and 12,304 output tokens, 509.579 seconds summed latency, zero file changes |
+| 2026-08-23T21:49:46Z | Local Apple M3 Pro | Score, audit, report, and refresh the common frontier after h10 | `ox-alpha-b1-source-reviser-v1-output-audit` | completed; hard-gate and grounding rejection | $0.00 | +6.1626 versus compact ledger, 13/24 hard gates, two source-expansion risks, 14-candidate frontier |
 
 ## Zero-cost feasibility snapshot
 

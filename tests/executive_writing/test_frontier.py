@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -99,6 +100,20 @@ def test_frontier_validator_rejects_source_drift(tmp_path: Path) -> None:
     source_path.write_text("{}\n", encoding="utf-8")
 
     with pytest.raises(ValueError, match="frontier source artifact hash mismatch"):
+        validate_architecture_frontier(
+            frontier_path=frontier_path,
+            hypotheses_path=hypotheses_path,
+            repo_root=tmp_path,
+        )
+
+
+def test_frontier_validator_rejects_version_id_drift(tmp_path: Path) -> None:
+    frontier_path, hypotheses_path, _ = _fixture(tmp_path)
+    frontier = json.loads(frontier_path.read_text())
+    frontier["version"] = 2
+    atomic_write_json(frontier_path, frontier)
+
+    with pytest.raises(ValueError, match="frontier version and ID drifted"):
         validate_architecture_frontier(
             frontier_path=frontier_path,
             hypotheses_path=hypotheses_path,

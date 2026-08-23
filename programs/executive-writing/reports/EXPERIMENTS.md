@@ -547,6 +547,31 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
 - Decision: execute once after the freeze commit. If rejected, refresh the
   frontier and evaluate the one remaining contingent larger-local-model probe.
 
+## 2026-08-23 — Ox Alpha source-verifier/reviser result
+
+- Execution: exact revision `3bcecc4c…`; 24 fresh source-only drafts and 24
+  separately isolated source/task/draft revisions; exact OpenRouter /
+  `stealth/ox-alpha`; 48 unique normal-stop sessions; 83,094 prompt, 12,304
+  output, and 33,280 cache-read tokens; 509.579 seconds summed latency; $0.
+- Primary result: mean 93.3607 and 13/24 hard gates versus compact ledger
+  87.1981 and 12/24. Paired effect +6.1626, 95% interval +2.0563 to +10.5460,
+  paired median +3.7654, and 15/2/7 wins/ties/losses. The score-only rule
+  passed; required 24/24 hard gates did not.
+- V2 comparison: -0.1831 paired mean and -0.1923 paired median points,
+  8/3/13 wins/ties/losses, three gates gained and three lost, same 13/24 total.
+  Prompt tokens were 3.14×, output tokens 2.46×, and mean latency 1.17× v2.
+- Output audit: zero meta preambles, introduced placeholders, or run dates;
+  24/24 artifact-only; 22/24 no flag. Material source-expansion risks fell from
+  six in v2 to two, but the cache article retained invented guarantees/internal
+  claims and the operations email retained a false Treasury attribution and
+  altered uncertainty.
+- Decision: reject the candidate on hard-gate and grounding requirements.
+  Preserve only diagnostic evidence; no in-place correction or quality
+  resampling. See `OX_B1_SOURCE_REVISER_RESULTS.md`, the compact machine
+  analysis/audit, and `../experiments/architecture-frontier-v2.json`.
+- Next hypothesis: h11, exactly one resource-bounded larger-local-model probe
+  with compact-ledger architecture held fixed.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

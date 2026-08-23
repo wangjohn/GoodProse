@@ -871,3 +871,31 @@ historical entries.
 - Unresolved risks: a verifier may preserve or introduce subtle unsupported
   implications and may trade readability for lexical copying; Ox remains an
   unstable external endpoint unsuitable for private production evidence.
+
+### 2026-08-23 — Phase 3 checkpoint: Ox Alpha source-reviser rejection
+
+- Hypothesis: a separate source-only revision session would eliminate Ox v2's
+  residual unsupported inference and preserve enough exact operative language
+  to pass all 24 deterministic hard gates.
+- Evidence: 48 unique OpenRouter / `stealth/ox-alpha` sessions at exact frozen
+  revision `3bcecc4c…`; 24 fresh drafts and 24 isolated revisions; all normal
+  stops; exact model/provider/OpenCode/config/input/output/event provenance;
+  83,094 prompt, 12,304 output, and 33,280 cache-read tokens; 509.579 seconds
+  summed stage latency; zero tool events, file changes, or settled cost.
+- Score: 93.3607 mean and 54.17% hard gates, +6.1626 paired mean points over
+  compact ledger with interval +2.0563 to +10.5460 and 15/2/7 wins/ties/losses.
+  The score-only rule passed, but only 13/24 hard gates passed. Versus Ox v2,
+  paired mean changed -0.1831 with 8/3/13 wins/ties/losses and unchanged gate
+  count; prompt tokens rose 3.14× and latency 1.17×.
+- Audit: artifact-only 24/24; zero meta preambles, introduced placeholders, or
+  run dates; two material expansion cases and 22/24 no-flag outputs. This
+  improves v2's six expansion cases and 18 no-flag outputs, but still fails the
+  frozen zero-risk gate.
+- Decision: reject h10 and never repair, filter, resample, train on, or promote
+  its evaluated outputs. The common frontier now has 14 comparable candidates
+  and zero finalists.
+- Next actions: execute a resource/model-pin feasibility check for h11, then
+  freeze at most one zero-cost larger-local-model compact-ledger candidate.
+- Unresolved risks: the accepted local leader still passes only half the hard
+  gates; external sources, authentic training approval, B2, Tier C, deployment
+  qualification, and intended-audience human evidence remain absent.

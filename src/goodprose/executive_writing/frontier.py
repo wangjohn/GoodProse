@@ -60,8 +60,11 @@ class SearchState(StrictModel):
 
 
 class ArchitectureFrontier(StrictModel):
-    version: Literal[1]
-    frontier_id: Literal["goodprose-b1-common-architecture-frontier-v1"]
+    version: Literal[1, 2]
+    frontier_id: Literal[
+        "goodprose-b1-common-architecture-frontier-v1",
+        "goodprose-b1-common-architecture-frontier-v2",
+    ]
     generated_at: NonEmpty
     benchmark_id: Literal["goodprose-b1-v1"]
     evaluation_id: Literal["goodprose-b1-v1.1"]
@@ -73,6 +76,9 @@ class ArchitectureFrontier(StrictModel):
 
     @model_validator(mode="after")
     def validate_frontier(self) -> Self:
+        expected_id = f"goodprose-b1-common-architecture-frontier-v{self.version}"
+        if self.frontier_id != expected_id:
+            raise ValueError("frontier version and ID drifted")
         source_paths = [artifact.path for artifact in self.source_artifacts]
         candidate_ids = [candidate.candidate_id for candidate in self.candidates]
         if len(source_paths) != len(set(source_paths)):

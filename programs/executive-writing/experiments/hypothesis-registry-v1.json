@@ -74,19 +74,19 @@
     },
     {
       "category": "structured_generation",
-      "evidence": "V2's dominant remaining failures are unsupported inferred commitments and paraphrased operative facts. The separately frozen v1 candidate uses one fresh source-only draft and one isolated source-only revision, with no evaluator or prior-output access and exact all-hard-gate and qualitative gates.",
+      "evidence": "The frozen source-reviser scored 93.3607 with 13 of 24 hard gates, -0.1831 points versus Ox v2. It reduced material source-expansion findings from six to two and eliminated introduced placeholders, but still invented cache guarantees/internal claims and a Treasury attribution while using 3.14 times v2 prompt tokens.",
       "hypothesis_id": "h10-ox-source-verifier-reviser",
       "major_factor": "Generate a fresh draft, then use a separate no-tools Ox session to revise it against the same source and task fields with exact operative-phrase preservation.",
-      "next_action": "Run the committed frozen candidate once; require all 24 hard gates and a clean hash-bound output audit.",
-      "status": "planned_high_value"
+      "next_action": "Reject the candidate and do not revise or resample its evaluated outputs; retain only the grounding-improvement diagnostic.",
+      "status": "completed_rejected"
     },
     {
       "category": "base_model_scale",
-      "evidence": "The 0.5B local family appears capacity-limited while external Ox demonstrates a large quality gap; 18 GiB unified memory may support one bounded larger local inference probe.",
+      "evidence": "The 0.5B local family remains capacity-limited, and h10 failed the hard-gate and clean-audit requirements despite stronger external-model quality. Eighteen GiB unified memory may support one bounded larger local inference probe without crossing a provider boundary.",
       "hypothesis_id": "h11-larger-local-open-model",
       "major_factor": "Hold compact-ledger architecture fixed and replace the 0.5B base with one resource-feasible larger local instruct model.",
-      "next_action": "Probe inventory, disk, and memory after h10; freeze one candidate only if the download and runtime remain zero-cost and bounded.",
-      "status": "planned_contingent"
+      "next_action": "Probe installed inventory, disk, memory, exact model pins, and download size now; freeze one compact-ledger candidate only if zero-cost resource bounds pass.",
+      "status": "planned_high_value"
     },
     {
       "category": "training_data",
@@ -114,7 +114,7 @@
     }
   ],
   "registry_id": "executive-writing-hypotheses-v1",
-  "source_frontier_sha256": "7f26785c66307f0349132b6b3b1d69e8f333eee53de3765bf05f19b5a270cb55",
-  "updated_at": "2026-08-23T21:34:44Z",
+  "source_frontier_sha256": "05efd63ea0cf27e37882e85a01245c158226611bd8dc912a052be8f545b18844",
+  "updated_at": "2026-08-23T21:49:46Z",
   "version": 1
 }
