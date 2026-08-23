@@ -721,3 +721,36 @@ historical entries.
 - Unresolved risks: a stealth model identifier and zero current price are not
   durable deployment properties; external-provider use may be unacceptable for
   private production inputs; B1 remains visible, lexical, and exploratory.
+
+### 2026-08-23 — Phase 3 checkpoint: Ox Alpha B1 result and output audit
+
+- Hypothesis: the frozen source-only Ox candidate would clear the +2-point
+  advancement rule without hard-gate regression and permitted output review
+  would reveal no disqualifying scorer-blind artifact or fidelity failure.
+- Evidence: 24 isolated OpenRouter / `stealth/ox-alpha` sessions at revision
+  `aeb6e1f`; exact config, input, model, provider, OpenCode, prompt, response,
+  event, token, latency, and zero-cost provenance; unchanged output SHA-256
+  `1092b955…`; corrected v1.1 comparison; preserved invalid first publication;
+  and a hash-bound post-run audit that commits no response bodies.
+- Exit criteria: the corrected preregistered score cleared the numeric rule at
+  +3.8757 paired mean points, with a -0.8240 to +8.7727 interval and unchanged
+  50% hard gates. It did not pass every hard gate. Qualitative review found
+  step-limit/tool-status preambles in 8/24 outputs, non-source placeholders in
+  3/24, run-date metadata in 5/24, and material source-expansion risks in 6/24;
+  only 9/24 had no audit flag.
+- Correction: the initial publication mixed the Ox v1.1 score with the compact-
+  ledger run's original v1 score. It is explicitly invalid. A generation-
+  unaffected correction pins the existing compact-ledger v1.1 rescore, and the
+  publisher now rejects scorer-version drift.
+- Decision: reject the raw candidate for artifact contamination and source-
+  grounding risk. Retain the corrected numeric result only as visible-B1
+  quality-ceiling diagnostic evidence. Do not post-process the evaluated
+  outputs in place.
+- Next actions: preregister a fresh Ox harness candidate that removes the one-
+  step finalization reminder while preserving tool denial and all provider,
+  privacy, cost, and source-only boundaries; rerun B1 once; require both score
+  and output-audit gates before common-frontier inclusion.
+- Unresolved risks: the deterministic scorer both misses meta/source-expansion
+  defects and marks some faithful paraphrases as lexical omissions; Ox remains
+  externally hosted and unstable; no candidate passes every B1 hard gate; true
+  B2, Tier C, and intended-audience human evidence remain absent.

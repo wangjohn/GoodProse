@@ -1,0 +1,20 @@
+{
+  "corrected_scorer_version": "goodprose-deterministic-v1.1",
+  "corrected_scores_path": "evals/executive-writing/results/goodprose-b1-v1.1/qwen2.5-0.5b-retrieval-ledger-draft-v2/scores.jsonl",
+  "corrected_scores_sha256": "5513298692250c52fee959ebdbcba0014c2a875fd1bd234d3507335df1ad15db",
+  "corrected_summary_path": "evals/executive-writing/results/goodprose-b1-v1.1/qwen2.5-0.5b-retrieval-ledger-draft-v2/summary.json",
+  "corrected_summary_sha256": "786647dc745adca03fbeb9f66a56b07760c85e3355eb1c1cd1633a6f46579db4",
+  "correction_id": "ox-alpha-b1-ceiling-baseline-v1.1-correction",
+  "correction_type": "evaluator_only_baseline_rescore_pin",
+  "discovered_at": "2026-08-23T20:45:00Z",
+  "generation_affected": false,
+  "incorrect_scores_path": "evals/executive-writing/results/goodprose-b1-v1/b1-v1-qwen2.5-0.5b-retrieval-ledger-draft-v2/scores.jsonl",
+  "incorrect_scores_sha256": "a87b41d8018bccdcf7c299151ec1813311a921129e275ec6ecf9fde0373c6c66",
+  "incorrect_summary_path": "evals/executive-writing/results/goodprose-b1-v1/b1-v1-qwen2.5-0.5b-retrieval-ledger-draft-v2/summary.json",
+  "incorrect_summary_sha256": "fe6280d7569dc53c1f7cbb3f11acd10be6fcd2724167d6233e25ea5b50a702d7",
+  "outputs_path": "evals/executive-writing/results/goodprose-b1-v1/b1-v1-qwen2.5-0.5b-retrieval-ledger-draft-v2/outputs.jsonl",
+  "outputs_sha256": "00f6fc0ac3895d656988ca8b584e7cbc6e4e1b01f79912d0b0280672683292cf",
+  "reason": "The frozen comparison config mistakenly pinned the compact-ledger run's original v1 score and summary artifacts. Candidate generation, prompts, outputs, model, and decoding are unchanged; only the comparison baseline is replaced by the already published hash-pinned v1.1 rescore used by the iteration analysis.",
+  "source_config_sha256": "376ce368134b742aedd7b1c78153e3eccf04512c0c845c69f38a0820949a5677",
+  "version": 1
+}

@@ -45,6 +45,7 @@ from goodprose.executive_writing.ox_ceiling import (
     publish_ox_b1_ceiling_results,
     run_ox_b1_ceiling,
 )
+from goodprose.executive_writing.ox_output_audit import audit_ox_b1_outputs
 from goodprose.executive_writing.profile_coverage import (
     load_coverage_inputs,
     publish_coverage_results,
@@ -208,6 +209,15 @@ def build_parser() -> argparse.ArgumentParser:
     ox_ceiling_publish.add_argument("--results", required=True)
     ox_ceiling_publish.add_argument("--case-results", required=True)
     ox_ceiling_publish.add_argument("--generated-at", required=True)
+    ox_ceiling_publish.add_argument("--baseline-correction")
+    ox_ceiling_audit = ox_ceiling_commands.add_parser("audit")
+    ox_ceiling_audit.add_argument("--config", required=True)
+    ox_ceiling_audit.add_argument("--run-dir", required=True)
+    ox_ceiling_audit.add_argument("--cases", required=True)
+    ox_ceiling_audit.add_argument("--source-analysis", required=True)
+    ox_ceiling_audit.add_argument("--source-case-results", required=True)
+    ox_ceiling_audit.add_argument("--output", required=True)
+    ox_ceiling_audit.add_argument("--generated-at", required=True)
 
     external = commands.add_parser(
         "external-evals",
@@ -533,8 +543,23 @@ def _run(args: argparse.Namespace) -> int:
             results_path=_path(args.results),
             case_results_path=_path(args.case_results),
             generated_at=args.generated_at,
+            baseline_correction_path=(
+                _path(args.baseline_correction) if args.baseline_correction else None
+            ),
         )
         print(f"Ox B1 ceiling analysis complete: {analysis['status']}")
+        return 0
+    if args.command == "ox-ceiling" and args.ox_ceiling_command == "audit":
+        audit = audit_ox_b1_outputs(
+            config_path=_path(args.config),
+            run_dir=_path(args.run_dir),
+            cases_path=_path(args.cases),
+            source_analysis_path=_path(args.source_analysis),
+            source_case_results_path=_path(args.source_case_results),
+            output_path=_path(args.output),
+            generated_at=args.generated_at,
+        )
+        print(f"Ox B1 output audit complete: {audit['decision']['raw_candidate_disposition']}")
         return 0
     if args.command == "external-evals":
         return _run_external(args)

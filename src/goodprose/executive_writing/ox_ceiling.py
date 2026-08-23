@@ -115,6 +115,27 @@ class OxCeilingConfig(StrictModel):
         return self
 
 
+class OxBaselineCorrection(StrictModel):
+    version: Literal[1]
+    correction_id: Literal["ox-alpha-b1-ceiling-baseline-v1.1-correction"]
+    correction_type: Literal["evaluator_only_baseline_rescore_pin"]
+    discovered_at: NonEmpty
+    source_config_sha256: Sha256
+    generation_affected: Literal[False]
+    outputs_path: NonEmpty
+    outputs_sha256: Sha256
+    incorrect_scores_path: NonEmpty
+    incorrect_scores_sha256: Sha256
+    incorrect_summary_path: NonEmpty
+    incorrect_summary_sha256: Sha256
+    corrected_scores_path: NonEmpty
+    corrected_scores_sha256: Sha256
+    corrected_summary_path: NonEmpty
+    corrected_summary_sha256: Sha256
+    corrected_scorer_version: Literal["goodprose-deterministic-v1.1"]
+    reason: NonEmpty
+
+
 @dataclass(frozen=True)
 class OxInvocation:
     output: str
@@ -142,6 +163,32 @@ def load_ox_ceiling_config(path: Path, *, repo_root: Path) -> OxCeilingConfig:
     if sha256_file(opencode_config) != config.harness.opencode_config_sha256:
         raise ValueError("OpenCode agent config hash does not match Ox ceiling config")
     return config
+
+
+def load_ox_baseline_correction(
+    path: Path, *, config: OxCeilingConfig, config_path: Path, repo_root: Path
+) -> OxBaselineCorrection:
+    correction = OxBaselineCorrection.model_validate_json(path.read_text(encoding="utf-8"))
+    baseline = config.comparison_baseline
+    if correction.source_config_sha256 != sha256_file(config_path):
+        raise ValueError("baseline correction does not bind the frozen Ox config")
+    if (
+        correction.outputs_path != baseline.outputs_path
+        or correction.outputs_sha256 != baseline.outputs_sha256
+        or correction.incorrect_scores_path != baseline.scores_path
+        or correction.incorrect_scores_sha256 != baseline.scores_sha256
+        or correction.incorrect_summary_path != baseline.summary_path
+        or correction.incorrect_summary_sha256 != baseline.summary_sha256
+    ):
+        raise ValueError("baseline correction does not exactly bind the incorrect frozen pins")
+    corrected_paths = (
+        (correction.corrected_scores_path, correction.corrected_scores_sha256),
+        (correction.corrected_summary_path, correction.corrected_summary_sha256),
+        (correction.outputs_path, correction.outputs_sha256),
+    )
+    if any(sha256_file(repo_root / name) != digest for name, digest in corrected_paths):
+        raise ValueError("baseline correction artifact hash mismatch")
+    return correction
 
 
 def build_ox_prompt(case: BenchmarkCase, config: OxCeilingConfig) -> str:
@@ -499,6 +546,7 @@ def publish_ox_b1_ceiling_results(
     results_path: Path,
     case_results_path: Path,
     generated_at: str,
+    baseline_correction_path: Path | None = None,
 ) -> dict[str, Any]:
     """Score, compare, and publish the frozen Ox ceiling candidate."""
 
@@ -532,18 +580,42 @@ def publish_ox_b1_ceiling_results(
     atomic_write_json(summary_path, summary)
 
     baseline_config = config.comparison_baseline
-    baseline_scores_path = repo_root / baseline_config.scores_path
+    correction = (
+        load_ox_baseline_correction(
+            baseline_correction_path,
+            config=config,
+            config_path=config_path,
+            repo_root=repo_root,
+        )
+        if baseline_correction_path is not None
+        else None
+    )
+    baseline_scores_path = repo_root / (
+        correction.corrected_scores_path if correction else baseline_config.scores_path
+    )
     baseline_outputs_path = repo_root / baseline_config.outputs_path
-    baseline_summary_path = repo_root / baseline_config.summary_path
+    baseline_summary_path = repo_root / (
+        correction.corrected_summary_path if correction else baseline_config.summary_path
+    )
     expected_paths = (
-        (baseline_scores_path, baseline_config.scores_sha256),
+        (
+            baseline_scores_path,
+            correction.corrected_scores_sha256 if correction else baseline_config.scores_sha256,
+        ),
         (baseline_outputs_path, baseline_config.outputs_sha256),
-        (baseline_summary_path, baseline_config.summary_sha256),
+        (
+            baseline_summary_path,
+            correction.corrected_summary_sha256 if correction else baseline_config.summary_sha256,
+        ),
     )
     if any(sha256_file(path) != expected for path, expected in expected_paths):
         raise ValueError("frozen comparison-baseline artifact hash mismatch")
     baseline_scores = load_jsonl(baseline_scores_path, CaseScore)
     baseline_summary = json.loads(baseline_summary_path.read_text(encoding="utf-8"))
+    if any(score.scorer_version != config.scorer_version for score in baseline_scores):
+        raise ValueError("comparison baseline scores do not use the declared scorer version")
+    if baseline_summary.get("scorer_version") != config.scorer_version:
+        raise ValueError("comparison baseline summary does not use the declared scorer version")
     baseline_run = RescoredRun(
         candidate_id=baseline_config.candidate_id,
         scores=baseline_scores,
@@ -594,6 +666,14 @@ def publish_ox_b1_ceiling_results(
         "source_run_id": manifest["run_id"],
         "source_run_manifest_sha256": sha256_file(manifest_path),
         "config_sha256": sha256_file(config_path),
+        "baseline_correction_sha256": (
+            sha256_file(baseline_correction_path) if baseline_correction_path else None
+        ),
+        "comparison_validity": (
+            "corrected_evaluator_only_v1.1_baseline"
+            if correction
+            else "frozen_baseline_pins_uncorrected"
+        ),
         "outputs_sha256": sha256_file(outputs_path),
         "scores_sha256": sha256_file(scores_path),
         "summary_sha256": sha256_file(summary_path),

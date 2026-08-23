@@ -1,0 +1,47 @@
+{
+  "audit_id": "ox-alpha-b1-ceiling-v1-output-audit",
+  "benchmark_cases_sha256": "a15232a5d426dcb6f5161abc5644a8ed10f57b8b7b87fb771e62fe26e57ae352",
+  "classification": "post_run_exploratory_artifact_and_source_grounding_audit",
+  "manual_findings": [
+    {
+      "case_id": "b1-001-migration-email",
+      "category": "material_source_expansion_risk",
+      "rationale": "Adds an unprovided process commitment to consolidate replies and confirm or reschedule the migration window."
+    },
+    {
+      "case_id": "b1-005-vendor-memo",
+      "category": "material_source_expansion_risk",
+      "rationale": "Assigns test initiation and a committee final-sign-off workflow not stated in the source."
+    },
+    {
+      "case_id": "b1-015-europe-strategy-update",
+      "category": "material_source_expansion_risk",
+      "rationale": "Invents a board strategy committee decision and launch-funding proposal process."
+    },
+    {
+      "case_id": "b1-018-restructure-message",
+      "category": "material_source_expansion_risk",
+      "rationale": "Adds communication restrictions and directs questions away from peers and HR without source support."
+    },
+    {
+      "case_id": "b1-020-cache-blog",
+      "category": "material_source_expansion_risk",
+      "rationale": "Upgrades cache-bypass facts into an always-current inventory guarantee and adds an unsupported support escalation."
+    },
+    {
+      "case_id": "b1-021-payment-delay-executive",
+      "category": "material_source_expansion_risk",
+      "rationale": "Invents a Finance Committee approval owner and claims the second route will preserve payment speed."
+    }
+  ],
+  "meta_preamble_prefixes": [
+    "Maximum steps for this agent have been reached"
+  ],
+  "outputs_sha256": "1092b9557f322577aa0b95a6bf55277fe15edd9a774da4d19c60575878ad6fb6",
+  "run_date_marker": "August 23, 2026",
+  "source_analysis_sha256": "e7c81e6cdf15038b20dac2d99e81debff7dad5a443de0b208993a017c968ce57",
+  "source_case_results_sha256": "91526dab25731b9d8fd19aad11c897b5e22f1824056762e411ae79368f1ddb71",
+  "source_run_id": "ox-alpha-b1-ceiling-v1-20260823T203037Z",
+  "source_run_manifest_sha256": "fae24fc4dc26e03e14c12f1a4f02a5c644ecdda0215de228c17d1cb74ff42ba6",
+  "version": 1
+}

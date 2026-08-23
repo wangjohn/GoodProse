@@ -55,6 +55,8 @@ reference. Never record payment credentials.
 | 2026-08-23T19:28:59Z | Local Apple M3 Pro | Publish integrity-bound post-run label-leakage and repetition audit | `mlx-qwen2.5-0.5b-unified-pilot-b1-v1-failure-audit` | completed; quality and memorization rejection confirmed | $0.00 | four frozen output hashes, compact case evidence, deterministic tests, no raw output committed |
 | 2026-08-23T19:34:21Z | OpenRouter | Validate Ox Alpha JSON event and session-export interface | `ox-b1-ceiling-interface-check-v1` | completed; pass | $0.00 | exact session/model/provider/prompt/response/token provenance and zero file changes |
 | 2026-08-23T20:29:04Z | Local Apple M3 Pro | Implement, test, and freeze source-only Ox Alpha B1 ceiling runner | `ox-alpha-b1-ceiling-runner-v1` | completed; candidate generation not yet run | $0.00 | temperature-zero no-tools agent config, frozen prompt and baseline hashes, mocked provenance/publisher tests |
+| 2026-08-23T20:43:46Z | OpenRouter | Generate 24 frozen source-only Ox Alpha B1 candidates | `ox-alpha-b1-ceiling-v1` | completed; raw candidate later rejected | $0.00 | 24 exact model/provider sessions, 41,406 input and 8,865 output tokens, zero file changes, output hash `1092b955…` |
+| 2026-08-23T20:57:04Z | Local Apple M3 Pro | Correct evaluator pins and publish hash-bound Ox output audit | `ox-alpha-b1-ceiling-v1-output-audit` | completed; raw candidate rejected | $0.00 | corrected v1.1 paired result, preserved invalid record, 8 meta-preamble cases, no provider output bodies committed |
 
 ## Zero-cost feasibility snapshot
 

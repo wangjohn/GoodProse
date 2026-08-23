@@ -424,6 +424,39 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   `UNIFIED_PILOT_B1_RESULTS.md` and the paired machine records under
   `../experiments/`.
 
+## 2026-08-23 — Ox Alpha source-only B1 ceiling
+
+- Question: can zero-price `stealth/ox-alpha` produce a materially stronger
+  source-only B1 candidate than the local compact-ledger leader under a frozen,
+  no-tools, one-step harness?
+- Configuration: revision `aeb6e1f`; 24 visible project-authored B1 cases;
+  deterministic scorer v1.1; high reasoning; temperature 0; top-p 1; OpenCode
+  1.18.21; one isolated session per case; wildcard tool denial; settled cost
+  $0. No expected answer, scorer, B2, Tier C, private input, or prior output was
+  sent to Ox Alpha.
+- Execution: all 24 sessions completed with exact OpenRouter/model/version/cost
+  checks and zero file changes. The run used 41,406 input and 8,865 output
+  tokens; mean/median/p95 latency was 31.845/17.430/113.853 seconds.
+- Evaluator correction: the first publication incorrectly used the compact-
+  ledger run's original v1 score pins. That record is preserved as invalid.
+  The corrected publication binds unchanged Ox outputs to the already-published
+  compact-ledger v1.1 rescore, and the publisher now rejects scorer-version
+  drift.
+- Corrected score: Ox mean 91.0738 and 50% hard gates versus compact ledger
+  87.1981 and 50%. Paired mean difference +3.8757, 95% interval -0.8240 to
+  +8.7727, 12/1/11 win/tie/loss. The frozen numerical advancement rule passed,
+  but the candidate did not pass every hard gate.
+- Post-run review: a hash-bound audit found agent/harness preambles in 8/24
+  outputs, introduced non-source placeholders in 3/24, introduced run-date
+  metadata in 5/24, and material source-expansion risk in 6/24. Only 9/24 had
+  no audit flag. No output bodies are committed.
+- Decision: reject the raw candidate for artifact contamination and source-
+  grounding risk; retain only the corrected score as visible-B1 ceiling
+  diagnostic evidence. The next candidate must be separately preregistered and
+  freshly generated with a harness that avoids the one-step finalization
+  preamble. See `OX_B1_CEILING_RESULTS.md` and the compact machine records under
+  `../experiments/`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

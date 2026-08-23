@@ -11,6 +11,7 @@ from goodprose.executive_writing.benchmark import load_cases, score_output_v1_1
 from goodprose.executive_writing.ox_ceiling import (
     OxInvocation,
     build_ox_prompt,
+    load_ox_baseline_correction,
     load_ox_ceiling_config,
     publish_ox_b1_ceiling_results,
     run_ox_b1_ceiling,
@@ -95,7 +96,13 @@ def _write_fixture(tmp_path: Path) -> tuple[Path, Path]:
     summary_path = baseline_dir / "summary.json"
     atomic_write(outputs_path, serialize_jsonl(outputs))
     atomic_write(scores_path, serialize_jsonl(scores))
-    atomic_write_json(summary_path, {"candidate_id": baseline_id})
+    atomic_write_json(
+        summary_path,
+        {
+            "candidate_id": baseline_id,
+            "scorer_version": "goodprose-deterministic-v1.1",
+        },
+    )
 
     config_path = tmp_path / "config.json"
     atomic_write_json(
@@ -216,3 +223,49 @@ def test_config_rejects_agent_config_hash_drift(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="agent config hash"):
         load_ox_ceiling_config(config_path, repo_root=tmp_path)
+
+
+def test_evaluator_only_correction_binds_old_and_corrected_artifacts(tmp_path: Path) -> None:
+    config_path, _ = _write_fixture(tmp_path)
+    config = load_ox_ceiling_config(config_path, repo_root=tmp_path)
+    baseline = config.comparison_baseline
+    corrected_dir = tmp_path / "corrected"
+    corrected_dir.mkdir()
+    corrected_scores = corrected_dir / "scores.jsonl"
+    corrected_summary = corrected_dir / "summary.json"
+    corrected_scores.write_bytes((tmp_path / baseline.scores_path).read_bytes())
+    corrected_summary.write_bytes((tmp_path / baseline.summary_path).read_bytes())
+    correction_path = tmp_path / "correction.json"
+    atomic_write_json(
+        correction_path,
+        {
+            "version": 1,
+            "correction_id": "ox-alpha-b1-ceiling-baseline-v1.1-correction",
+            "correction_type": "evaluator_only_baseline_rescore_pin",
+            "discovered_at": "2026-08-23T20:45:00Z",
+            "source_config_sha256": sha256_file(config_path),
+            "generation_affected": False,
+            "outputs_path": baseline.outputs_path,
+            "outputs_sha256": baseline.outputs_sha256,
+            "incorrect_scores_path": baseline.scores_path,
+            "incorrect_scores_sha256": baseline.scores_sha256,
+            "incorrect_summary_path": baseline.summary_path,
+            "incorrect_summary_sha256": baseline.summary_sha256,
+            "corrected_scores_path": "corrected/scores.jsonl",
+            "corrected_scores_sha256": sha256_file(corrected_scores),
+            "corrected_summary_path": "corrected/summary.json",
+            "corrected_summary_sha256": sha256_file(corrected_summary),
+            "corrected_scorer_version": "goodprose-deterministic-v1.1",
+            "reason": "synthetic evaluator-only correction",
+        },
+    )
+
+    correction = load_ox_baseline_correction(
+        correction_path,
+        config=config,
+        config_path=config_path,
+        repo_root=tmp_path,
+    )
+
+    assert correction.generation_affected is False
+    assert correction.corrected_scores_sha256 == sha256_file(corrected_scores)

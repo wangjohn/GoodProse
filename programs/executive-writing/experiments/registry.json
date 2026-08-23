@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T20:29:04Z",
+  "updated_at": "2026-08-23T20:57:04Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -386,7 +386,7 @@
     {
       "experiment_id": "ox-alpha-b1-ceiling-runner-v1",
       "kind": "strong_ceiling_candidate_preregistration",
-      "status": "frozen_ready",
+      "status": "completed_executed",
       "record": "programs/executive-writing/configs/ox/OX_B1_CEILING_PREREGISTRATION_v1.md",
       "code_revision_start": "7856578",
       "dataset_id": "goodprose-b1-v1",
@@ -394,7 +394,58 @@
       "provider": "openrouter",
       "model_id": "stealth/ox-alpha",
       "settled_cost_usd": 0,
-      "disposition": "after this freeze commit, revalidate exact zero pricing and run one source-only Ox candidate per visible B1 case"
+      "disposition": "completed 24 source-only generations at revision aeb6e1f with exact model/provider and zero-cost provenance; use the corrected score record and post-run output audit for disposition"
+    },
+    {
+      "experiment_id": "ox-alpha-b1-ceiling-v1-analysis-invalid-v1",
+      "kind": "invalidated_external_ceiling_evaluation",
+      "status": "completed_evaluator_invalidated_wrong_baseline_scores",
+      "record": "programs/executive-writing/experiments/ox-alpha-b1-ceiling-v1-analysis-invalid-v1.json",
+      "code_revision_start": "aeb6e1f",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "mixed_invalid_v1_candidate_v1_baseline",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "preserve for audit only; the first publication compared Ox v1.1 scores to the compact-ledger run's original v1 scores and must not be used"
+    },
+    {
+      "experiment_id": "ox-alpha-b1-ceiling-baseline-v1.1-correction",
+      "kind": "evaluator_only_baseline_correction",
+      "status": "completed_corrected",
+      "record": "programs/executive-writing/configs/ox/OX_B1_CEILING_BASELINE_CORRECTION_v1.json",
+      "code_revision_start": "aeb6e1f",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_offline",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "bind the unchanged Ox outputs to the compact-ledger candidate's corrected v1.1 score and summary artifacts; generation unaffected"
+    },
+    {
+      "experiment_id": "ox-alpha-b1-ceiling-v1-analysis",
+      "kind": "external_strong_ceiling_evaluation",
+      "status": "completed_preregistered_score_pass_qualitative_reject",
+      "record": "programs/executive-writing/experiments/ox-alpha-b1-ceiling-v1-analysis.json",
+      "code_revision_start": "aeb6e1f",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "corrected preregistered comparison passed at +3.8757 mean points with unchanged 50% hard gates, but the raw candidate is rejected by the separate output audit"
+    },
+    {
+      "experiment_id": "ox-alpha-b1-ceiling-v1-output-audit",
+      "kind": "post_run_output_artifact_audit",
+      "status": "completed_reject_raw_candidate",
+      "record": "programs/executive-writing/experiments/ox-alpha-b1-ceiling-v1-output-audit.json",
+      "code_revision_start": "aeb6e1f",
+      "dataset_id": "goodprose-b1-v1",
+      "provider": "local_offline",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "reject raw candidate: 8 of 24 outputs contain agent-step preambles, 3 introduce non-source placeholders, 5 add run-date metadata, and 6 have material source-expansion risks"
     }
   ]
 }
