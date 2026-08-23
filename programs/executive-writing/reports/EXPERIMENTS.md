@@ -71,6 +71,30 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   passed.
 - Decision: keep and execute real matched runs after committing the runner.
 
+## 2026-08-22 — Initial matched B1 baseline generation
+
+- Hypothesis: strong profile instructions and retrieval conditioning will
+  improve fidelity and task compliance over minimal instructions on the same
+  local model.
+- Candidate IDs: `qwen2.5-0.5b-minimal-v1`,
+  `qwen2.5-0.5b-profile-v1`, and `qwen2.5-0.5b-retrieval-v1`.
+- Dataset/scorer/revision: `goodprose-b1-v1` /
+  `goodprose-deterministic-v1` / `b5beef1`; matched temperature 0 and seed
+  20260822; local Ollama 0.9.6 on Apple M3 Pro; $0.
+- Raw result: the three means were 67.3438, 84.0755, and 84.6200; hard-gate
+  rates were 20.83%, 16.67%, and 33.33%. These figures are retained for audit,
+  not accepted for comparison.
+- Validity finding: all three outputs correctly retained the caveat “should not
+  assume ... applies to enterprise,” but literal substring matching marked it
+  as an affirmative forbidden claim. The outputs, timings, and token records
+  remain valid; the v1 score and summary artifacts are evaluator-invalidated.
+- Decision: no winner. Freeze `goodprose-deterministic-v1.1` in
+  `../../../evals/executive-writing/goodprose-b1-v1/SCORER_CALIBRATION_v1.1.md`,
+  implement only the registered negation correction, and rescore identical
+  output bytes. This is post-generation evaluator calibration, not
+  confirmatory evidence.
+- Record: `../experiments/b1-v1-initial-baselines.json`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

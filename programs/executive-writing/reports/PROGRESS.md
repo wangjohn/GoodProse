@@ -135,3 +135,23 @@ historical entries.
 - Unresolved risks: the 494M-parameter quantized instruction model is a plumbing
   baseline, not a quality ceiling; temperature zero does not guarantee perfect
   reproducibility across Ollama/runtime versions.
+
+### 2026-08-22 — Phase 0 checkpoint: initial B1 baseline generation and scorer calibration
+
+- Hypothesis: matched minimal, profile-card, and retrieval prompts will expose
+  directional quality and compliance differences on the same local model.
+- Evidence: all three 24-case generations completed at revision `b5beef1` with
+  exact output hashes, latency and token records, and $0 settled cost. The raw
+  v1 means were 67.3438, 84.0755, and 84.6200 respectively, but scorer review
+  found a shared false fabrication failure on case `b1-011`.
+- Exit criteria: complete matched artifacts plus a scorer-validity inspection
+  before comparative inference.
+- Decision: generation artifacts pass; v1 comparative scores fail calibration.
+  Preserve every artifact, freeze a narrowly scoped v1.1 negation correction,
+  and rescore the exact outputs without new inference. Do not select a winner
+  from the v1 aggregates.
+- Next actions: implement the frozen regression tests and v1.1 matcher, publish
+  paired bootstrap results under the corrected scorer, then send the bounded
+  failure analysis and next-hypothesis critique to Ox Alpha.
+- Unresolved risks: v1.1 remains lexical and can still miss paraphrases or
+  unsupported semantic claims; B1 is visible, small, and project-authored.
