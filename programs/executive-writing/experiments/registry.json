@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T05:02:02Z",
+  "updated_at": "2026-08-23T05:07:55Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -154,6 +154,19 @@
       "model_id": null,
       "settled_cost_usd": 0,
       "disposition": "permit one local pipeline smoke fine-tune only; do not use as model-quality evidence"
+    },
+    {
+      "experiment_id": "mlx-smoke-training-runner-v1",
+      "kind": "training_pipeline_validation",
+      "status": "completed_pass",
+      "record": "programs/executive-writing/configs/training/SMOKE_LORA_v1.md",
+      "code_revision_start": "a6831e2",
+      "dataset_id": "goodprose-project-authored-smoke-v1",
+      "provider": "local_mlx",
+      "model_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+      "model_revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+      "settled_cost_usd": 0,
+      "disposition": "execute one frozen real Apple-Metal smoke training run"
     }
   ]
 }

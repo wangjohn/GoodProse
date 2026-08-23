@@ -1,0 +1,60 @@
+{
+  "base_model": {
+    "license": "Apache-2.0",
+    "quantization_bits": 4,
+    "repo_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+    "revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+    "source_model_id": "Qwen/Qwen2.5-0.5B-Instruct"
+  },
+  "candidate_id": "qwen2.5-0.5b-instruct-4bit-lora-smoke-v1",
+  "checkpoint_selection": "fixed_final_iteration",
+  "dataset": {
+    "dataset_id": "goodprose-project-authored-smoke-v1",
+    "dataset_sha256": "0fd45daddbd67dbb616866fea099f421ca2e8c3470f6e268f0a70431e6a05f15",
+    "manifest_path": "data/executive-writing/smoke-v1/manifest.json",
+    "manifest_sha256": "35fa388b9da3032f348e5b4f19db59546f2c812921cf16cbf121db4679f4b8a0",
+    "preference_pairs_ratio": 0.0,
+    "rights_status": "training_permitted_project_owned_smoke",
+    "split_sha256": {
+      "test": "b86b61bb920b33e58ed18230d6517747d299ca8cceeee3875c8396b6d9dc7292",
+      "train": "8968222614dfa52d09547044cf31acec3a053678db7e729dafc3f7fed9e1df10",
+      "valid": "66efc046a574caae8ba6171a7e371817549418289f03a071ae4aa5ace302161d"
+    },
+    "style_targets_ratio": 0.0,
+    "task_pairs_ratio": 1.0
+  },
+  "expected_hardware": "Apple M3 Pro 18GiB unified memory",
+  "experiment_id": "qwen2.5-0.5b-mlx-lora-smoke-v1",
+  "framework": {
+    "mlx_version": "0.32.1",
+    "name": "mlx-lm",
+    "version": "0.31.3"
+  },
+  "lora": {
+    "dropout": 0.0,
+    "rank": 8,
+    "scale": 20.0
+  },
+  "optimization": {
+    "batch_size": 1,
+    "fine_tune_type": "lora",
+    "grad_accumulation_steps": 1,
+    "grad_checkpoint": false,
+    "iterations": 40,
+    "learning_rate": 0.0001,
+    "mask_prompt": true,
+    "max_seq_length": 1024,
+    "num_layers": 4,
+    "optimizer": "adam",
+    "save_every": 20,
+    "seed": 20260822,
+    "steps_per_eval": 10,
+    "steps_per_report": 5,
+    "test_batches": -1,
+    "validation_batches": -1
+  },
+  "run_kind": "pipeline_smoke_fine_tune",
+  "settled_cost_usd": 0,
+  "timeout_seconds": 1800,
+  "version": 1
+}

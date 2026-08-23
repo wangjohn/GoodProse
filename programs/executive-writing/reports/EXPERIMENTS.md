@@ -240,6 +240,24 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   to one bounded real LoRA run and matched untuned/tuned evaluation.
 - Record: `../../../data/executive-writing/smoke-v1/manifest.json`.
 
+## 2026-08-22 — MLX smoke-training runner validation
+
+- Hypothesis: the frozen MLX runner can produce and prove a genuine adapter
+  update while preserving enough evidence to reproduce or diagnose the run.
+- Candidate/base: `qwen2.5-0.5b-instruct-4bit-lora-smoke-v1` from
+  `mlx-community/Qwen2.5-0.5B-Instruct-4bit` at revision
+  `a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3`.
+- Frozen update: 40 iterations, four layers, rank 8, scale 20, learning rate
+  1e-4, batch size 1, prompt masking, seed 20260822, final-checkpoint selection,
+  full synthetic test-loss evaluation, 30-minute timeout, and $0 local cost.
+- Validation: mocked snapshot download, model hashes, resolved MLX config,
+  subprocess run, nonempty/nonzero Safetensors adapter, parsed metrics, and
+  complete success manifest all passed. The runner also preserves failed
+  attempts and refuses to overwrite a run ID.
+- Engineering result: 50 repository tests, Ruff lint/format, and Pyright pass.
+- Decision: execute one real run only after this frozen runner is committed.
+- Records: `../configs/training/SMOKE_LORA_v1.md` and its JSON companion.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

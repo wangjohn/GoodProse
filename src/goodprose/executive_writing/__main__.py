@@ -10,6 +10,7 @@ from goodprose.executive_writing.analysis import analyze_baselines, analyze_iter
 from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
 from goodprose.executive_writing.smoke_data import compile_smoke_dataset
+from goodprose.executive_writing.training import run_smoke_training
 
 
 def _path(value: str) -> Path:
@@ -73,6 +74,16 @@ def build_parser() -> argparse.ArgumentParser:
     smoke_build.add_argument("--output-dir", required=True)
     smoke_build.add_argument("--manifest", required=True)
     smoke_build.add_argument("--b1-cases", required=True)
+
+    smoke_train = commands.add_parser("smoke-train", help="Run the MLX smoke fine-tune")
+    smoke_train_commands = smoke_train.add_subparsers(dest="smoke_train_command", required=True)
+    smoke_train_run = smoke_train_commands.add_parser("run")
+    smoke_train_run.add_argument("--config", required=True)
+    smoke_train_run.add_argument("--data-dir", required=True)
+    smoke_train_run.add_argument("--output-root", required=True)
+    smoke_train_run.add_argument("--repo-root", required=True)
+    smoke_train_run.add_argument("--code-revision", required=True)
+    smoke_train_run.add_argument("--started-at", required=True)
     return parser
 
 
@@ -143,6 +154,17 @@ def _run(args: argparse.Namespace) -> int:
             b1_cases_path=_path(args.b1_cases),
         )
         print(f"built {manifest['dataset_id']}: {manifest['record_count']} records")
+        return 0
+    if args.command == "smoke-train" and args.smoke_train_command == "run":
+        run_dir = run_smoke_training(
+            config_path=_path(args.config),
+            data_dir=_path(args.data_dir),
+            output_root=_path(args.output_root),
+            repo_root=_path(args.repo_root),
+            code_revision=args.code_revision,
+            started_at=args.started_at,
+        )
+        print(f"smoke training complete: {run_dir}")
         return 0
     raise AssertionError("unhandled command")
 

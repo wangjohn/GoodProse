@@ -303,3 +303,25 @@ historical entries.
 - Unresolved risks: only twelve independent synthetic lineages and four
   deterministic templates are represented; model download availability and
   actual Metal memory/throughput remain unmeasured until the real run.
+
+### 2026-08-22 — Phase 0 checkpoint: MLX smoke-training runner
+
+- Hypothesis: a frozen local runner can preserve a real adapter update and all
+  evidence required to distinguish a genuine fine-tune from a configuration
+  or inference-only artifact.
+- Evidence: pinned base repository and immutable revision; fixed 40-iteration
+  LoRA configuration; dataset/right/hash validation; local model resolution;
+  complete base and adapter hashing; parsed train/validation/test metrics;
+  nonzero-tensor validation; failure manifests; and a mocked end-to-end run.
+  The complete suite passed: 50 tests, Ruff lint and format, and Pyright.
+- Exit criteria: no post-result checkpoint selection, no overwrite of prior
+  attempts, exact framework/data/model/config evidence, bounded timeout, $0
+  cost, weights ignored by Git, and deterministic mocked validation.
+- Decision: pass. The runner and preregistration are eligible for exactly one
+  real local Apple-Metal smoke run at the committed revision.
+- Next actions: download the 278 MB pinned base snapshot, execute the frozen
+  run, preserve success or failure, and inspect that no task-owned compute
+  remains active.
+- Unresolved risks: Metal is intentionally unavailable inside the filesystem
+  sandbox, so real training requires an approved unsandboxed local command;
+  measured runtime and peak unified memory are not yet known.
