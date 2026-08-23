@@ -403,6 +403,27 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
 - Record: `../experiments/ox-holdout-lifecycle-v1.json` and public protocol
   package `../../../evals/executive-writing/holdout-lifecycle-v1/`.
 
+## 2026-08-23 — Unified LoRA matched B1 evaluation
+
+- Question: does the genuine 80-iteration unified LoRA update improve its
+  exact 4-bit base by at least two B1 points without hard-gate regression under
+  matched profile or compact-ledger inference?
+- Configuration: frozen revision `d29adab`; 24 visible B1 cases; deterministic
+  scorer v1.1; temperature 0; seed 20260822; exact adapter SHA-256 `3f2826e…`;
+  four candidates and 96 local generations; settled cost $0.
+- Preregistered result: profile changed -0.6715 points (95% interval -13.2339
+  to +11.8394), while ledger-draft changed +0.6820 (-7.6786 to +9.1114).
+  Neither passed the +2 advancement gate.
+- Post-run review: an integrity-bound exact-label and repetition audit found
+  introduced fictional training-scenario labels in 20/24 tuned profile cases
+  and 15/24 tuned ledger-draft cases, versus zero in both exact-base controls.
+  Severe repetition remained in 10/24 and 8/24 tuned cases, including two
+  extreme profile collapses with more than 160 repeated lines.
+- Decision: reject the adapter for quality and memorization risk. Preserve it
+  as genuine unified-training and negative-result evidence only. See
+  `UNIFIED_PILOT_B1_RESULTS.md` and the paired machine records under
+  `../experiments/`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

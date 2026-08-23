@@ -17,6 +17,7 @@ from goodprose.executive_writing.external_evals import (
     cli_validate_predictions_file,
     cli_validate_registry,
 )
+from goodprose.executive_writing.failure_audit import audit_mlx_b1_failures
 from goodprose.executive_writing.holdout import (
     PROTOCOL_ID,
     AggregateUsage,
@@ -162,6 +163,14 @@ def build_parser() -> argparse.ArgumentParser:
     mlx_eval_publish.add_argument("--results", required=True)
     mlx_eval_publish.add_argument("--case-results", required=True)
     mlx_eval_publish.add_argument("--generated-at", required=True)
+    mlx_eval_audit = mlx_eval_commands.add_parser(
+        "audit-failures", help="Publish a post-run exact-label and repetition diagnostic"
+    )
+    mlx_eval_audit.add_argument("--config", required=True)
+    mlx_eval_audit.add_argument("--run-dir", required=True)
+    mlx_eval_audit.add_argument("--cases", required=True)
+    mlx_eval_audit.add_argument("--output", required=True)
+    mlx_eval_audit.add_argument("--generated-at", required=True)
 
     coverage = commands.add_parser(
         "profile-coverage", help="Run or publish descriptive profile-card coverage"
@@ -452,6 +461,16 @@ def _run(args: argparse.Namespace) -> int:
             generated_at=args.generated_at,
         )
         print(f"MLX B1 analysis complete: {analysis['status']}")
+        return 0
+    if args.command == "mlx-eval" and args.mlx_eval_command == "audit-failures":
+        audit = audit_mlx_b1_failures(
+            config_path=_path(args.config),
+            run_dir=_path(args.run_dir),
+            cases_path=_path(args.cases),
+            output_path=_path(args.output),
+            generated_at=args.generated_at,
+        )
+        print(f"MLX B1 failure audit complete: {audit['decision']['adapter_disposition']}")
         return 0
     if args.command == "profile-coverage" and args.coverage_command == "run":
         inputs = load_coverage_inputs(_path(args.config))

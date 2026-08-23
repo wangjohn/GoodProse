@@ -51,6 +51,8 @@ reference. Never record payment credentials.
 | 2026-08-23T19:07:59Z | Local Apple M3 Pro | Author, scan, compile, audit, and freeze the project-owned unified pilot | `goodprose-project-authored-unified-pilot-v1-build` | completed; synthetic architecture data only | $0.00 | 90 records, 30 lineages, zero privacy or B1 contamination findings, exact frozen config, no model loaded |
 | 2026-08-23T19:10:11Z | Local Apple M3 Pro | Run fixed 80-iteration unified profile-conditioned LoRA pilot | `qwen2.5-0.5b-mlx-lora-unified-pilot-v1` | completed; genuine architecture-pilot update | $0.00 | 10,917 trained tokens, 112 nonzero tensors, 1.471 GiB peak memory, 27.593 seconds, no remaining process |
 | 2026-08-23T19:16:15Z | Local Apple M3 Pro | Generalize and freeze matched unified-adapter B1 evaluation | `mlx-qwen2.5-0.5b-unified-pilot-b1-runner-v1` | completed; inference not yet run | $0.00 | exact adapter/base/prompt/eval pins, 7 focused and 181 full tests, Ruff, format, and Pyright clean |
+| 2026-08-23T19:20:34Z | Local Apple M3 Pro | Run and publish four frozen exact-base/unified-adapter B1 candidates | `mlx-qwen2.5-0.5b-unified-pilot-b1-v1` | completed; adapter rejected | $0.00 | 96 local generations, 186.847 seconds, paired analysis, exact artifact hashes, no remaining process |
+| 2026-08-23T19:28:59Z | Local Apple M3 Pro | Publish integrity-bound post-run label-leakage and repetition audit | `mlx-qwen2.5-0.5b-unified-pilot-b1-v1-failure-audit` | completed; quality and memorization rejection confirmed | $0.00 | four frozen output hashes, compact case evidence, deterministic tests, no raw output committed |
 
 ## Zero-cost feasibility snapshot
 

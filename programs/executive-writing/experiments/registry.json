@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T19:16:15Z",
+  "updated_at": "2026-08-23T19:28:59Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -335,7 +335,7 @@
     {
       "experiment_id": "mlx-qwen2.5-0.5b-unified-pilot-b1-runner-v1",
       "kind": "inference_pipeline_validation",
-      "status": "frozen_ready",
+      "status": "completed_pass",
       "record": "programs/executive-writing/configs/training/MLX_B1_UNIFIED_PILOT_EVAL_PREREGISTRATION_v1.md",
       "code_revision_start": "70dada7",
       "dataset_id": "goodprose-b1-v1",
@@ -344,7 +344,33 @@
       "model_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
       "adapter_sha256": "3f2826e671c316dca9731179a66299a119ca98c31fefbfad33b747b4c03b2ee6",
       "settled_cost_usd": 0,
-      "disposition": "run the four frozen exact-base versus unified-adapter B1 candidates once after this evaluator/config commit"
+      "disposition": "frozen evaluator executed once at revision d29adab; preserve the run and publish the preregistered comparison"
+    },
+    {
+      "experiment_id": "mlx-qwen2.5-0.5b-unified-pilot-b1-v1-analysis",
+      "kind": "matched_unified_adapter_evaluation",
+      "status": "completed_reject_unified_adapter",
+      "record": "programs/executive-writing/experiments/mlx-qwen2.5-0.5b-unified-pilot-b1-v1-analysis.json",
+      "code_revision_start": "d29adab",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_mlx",
+      "model_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+      "adapter_sha256": "3f2826e671c316dca9731179a66299a119ca98c31fefbfad33b747b4c03b2ee6",
+      "settled_cost_usd": 0,
+      "disposition": "reject adapter: neither matched strategy cleared the frozen advancement gate; retain as genuine unified-training evidence only"
+    },
+    {
+      "experiment_id": "mlx-qwen2.5-0.5b-unified-pilot-b1-v1-failure-audit",
+      "kind": "post_run_failure_audit",
+      "status": "completed_reject_for_quality_and_memorization_risk",
+      "record": "programs/executive-writing/experiments/mlx-qwen2.5-0.5b-unified-pilot-b1-v1-failure-audit.json",
+      "code_revision_start": "d29adab",
+      "dataset_id": "goodprose-b1-v1",
+      "provider": "local_offline",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "exact-base controls introduced zero training labels; tuned profile and ledger-draft outputs introduced them in 20 and 15 of 24 cases and retained severe repetition failures"
     }
   ]
 }

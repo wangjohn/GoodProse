@@ -1,0 +1,591 @@
+{
+  "audit_config_sha256": "cc87132dcb4313db07956bf25899affcfa975ad5c800daeb7153ccf11d6be7dc",
+  "audit_id": "mlx-qwen2.5-0.5b-unified-pilot-b1-v1-failure-audit",
+  "benchmark_cases_sha256": "a15232a5d426dcb6f5161abc5644a8ed10f57b8b7b87fb771e62fe26e57ae352",
+  "candidates": {
+    "mlx-qwen2.5-0.5b-base-ledger_draft-v1": {
+      "affected_cases": [
+        {
+          "case_id": "b1-004-hiring-memo",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 21,
+          "max_ngram_repetition": 22,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-005-vendor-memo",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 4,
+          "max_ngram_repetition": 6,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-009-token-rotation-document",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 11,
+          "max_ngram_repetition": 12,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-017-beta-announcement",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 8,
+          "max_ngram_repetition": 8,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-018-restructure-message",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 95,
+          "max_ngram_repetition": 92,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-020-cache-blog",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 55,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-021-payment-delay-executive",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 18,
+          "max_ngram_repetition": 20,
+          "severe_repetition": true
+        }
+      ],
+      "case_count": 24,
+      "introduced_training_label_case_count": 0,
+      "severe_repetition_case_count": 7
+    },
+    "mlx-qwen2.5-0.5b-base-profile-v1": {
+      "affected_cases": [
+        {
+          "case_id": "b1-003-incident-email",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 46,
+          "max_ngram_repetition": 45,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-004-hiring-memo",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 7,
+          "max_ngram_repetition": 7,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-005-vendor-memo",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 10,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-006-budget-memo",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 2,
+          "max_ngram_repetition": 9,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-008-database-decision-memo",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 4,
+          "max_ngram_repetition": 9,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-009-token-rotation-document",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 48,
+          "max_ngram_repetition": 51,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-010-queue-backpressure-document",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 15,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-013-coherent-support-revision",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 7,
+          "max_ngram_repetition": 8,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-014-coherent-roadmap-revision",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 6,
+          "max_ngram_repetition": 25,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-015-europe-strategy-update",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 5,
+          "max_ngram_repetition": 19,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-016-partner-strategy-update",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 5,
+          "max_ngram_repetition": 5,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-018-restructure-message",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 57,
+          "max_ngram_repetition": 56,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-020-cache-blog",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 8,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-021-payment-delay-executive",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 12,
+          "max_ngram_repetition": 15,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-022-payment-delay-operations",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 6,
+          "max_ngram_repetition": 8,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-024-profile-rendering",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 58,
+          "max_ngram_repetition": 58,
+          "severe_repetition": true
+        }
+      ],
+      "case_count": 24,
+      "introduced_training_label_case_count": 0,
+      "severe_repetition_case_count": 16
+    },
+    "mlx-qwen2.5-0.5b-unified-pilot-lora-ledger_draft-v1": {
+      "affected_cases": [
+        {
+          "case_id": "b1-002-pricing-pilot-email",
+          "introduced_training_scenario_labels": [
+            "Ember"
+          ],
+          "max_exact_line_repetition": 6,
+          "max_ngram_repetition": 8,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-003-incident-email",
+          "introduced_training_scenario_labels": [
+            "Indigo"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 2,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-005-vendor-memo",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 21,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-008-database-decision-memo",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 2,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-009-token-rotation-document",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 1,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-010-queue-backpressure-document",
+          "introduced_training_scenario_labels": [
+            "Indigo"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 1,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-011-concise-onboarding-revision",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 10,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-012-concise-renewal-revision",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 11,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-013-coherent-support-revision",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 15,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-014-coherent-roadmap-revision",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 1,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-015-europe-strategy-update",
+          "introduced_training_scenario_labels": [
+            "Summit"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 6,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-016-partner-strategy-update",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 6,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-018-restructure-message",
+          "introduced_training_scenario_labels": [
+            "Ember"
+          ],
+          "max_exact_line_repetition": 8,
+          "max_ngram_repetition": 9,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-019-incident-short-post",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 7,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-020-cache-blog",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 7,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-021-payment-delay-executive",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 1,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-022-payment-delay-operations",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 45,
+          "max_ngram_repetition": 45,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-024-profile-rendering",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 13,
+          "severe_repetition": true
+        }
+      ],
+      "case_count": 24,
+      "introduced_training_label_case_count": 15,
+      "severe_repetition_case_count": 8
+    },
+    "mlx-qwen2.5-0.5b-unified-pilot-lora-profile-v1": {
+      "affected_cases": [
+        {
+          "case_id": "b1-001-migration-email",
+          "introduced_training_scenario_labels": [
+            "Ember"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 1,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-002-pricing-pilot-email",
+          "introduced_training_scenario_labels": [
+            "Ember"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 1,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-003-incident-email",
+          "introduced_training_scenario_labels": [
+            "Lantern"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 2,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-004-hiring-memo",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 2,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-005-vendor-memo",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 16,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-006-budget-memo",
+          "introduced_training_scenario_labels": [
+            "Summit"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 7,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-007-launch-decision-memo",
+          "introduced_training_scenario_labels": [
+            "Lantern"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 2,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-008-database-decision-memo",
+          "introduced_training_scenario_labels": [
+            "Summit"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 37,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-009-token-rotation-document",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 1,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-010-queue-backpressure-document",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 2,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-012-concise-renewal-revision",
+          "introduced_training_scenario_labels": [
+            "Summit"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 25,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-013-coherent-support-revision",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 7,
+          "max_ngram_repetition": 23,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-014-coherent-roadmap-revision",
+          "introduced_training_scenario_labels": [
+            "Summit"
+          ],
+          "max_exact_line_repetition": 4,
+          "max_ngram_repetition": 4,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-015-europe-strategy-update",
+          "introduced_training_scenario_labels": [
+            "Summit"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 2,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-016-partner-strategy-update",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 5,
+          "max_ngram_repetition": 6,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-017-beta-announcement",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 1,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-018-restructure-message",
+          "introduced_training_scenario_labels": [
+            "Ember"
+          ],
+          "max_exact_line_repetition": 164,
+          "max_ngram_repetition": 163,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-019-incident-short-post",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 8,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-020-cache-blog",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 7,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-021-payment-delay-executive",
+          "introduced_training_scenario_labels": [
+            "Summit"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 1,
+          "severe_repetition": false
+        },
+        {
+          "case_id": "b1-022-payment-delay-operations",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 100,
+          "max_ngram_repetition": 90,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-023-minimal-edit-policy",
+          "introduced_training_scenario_labels": [],
+          "max_exact_line_repetition": 162,
+          "max_ngram_repetition": 161,
+          "severe_repetition": true
+        },
+        {
+          "case_id": "b1-024-profile-rendering",
+          "introduced_training_scenario_labels": [
+            "Northstar"
+          ],
+          "max_exact_line_repetition": 1,
+          "max_ngram_repetition": 2,
+          "severe_repetition": false
+        }
+      ],
+      "case_count": 24,
+      "introduced_training_label_case_count": 20,
+      "severe_repetition_case_count": 10
+    }
+  },
+  "classification": "post_run_exploratory_diagnostic",
+  "comparisons": [
+    {
+      "baseline_id": "mlx-qwen2.5-0.5b-base-profile-v1",
+      "candidate_id": "mlx-qwen2.5-0.5b-unified-pilot-lora-profile-v1",
+      "introduced_training_label_case_difference": 20,
+      "severe_repetition_case_difference": -6,
+      "strategy": "profile"
+    },
+    {
+      "baseline_id": "mlx-qwen2.5-0.5b-base-ledger_draft-v1",
+      "candidate_id": "mlx-qwen2.5-0.5b-unified-pilot-lora-ledger_draft-v1",
+      "introduced_training_label_case_difference": 15,
+      "severe_repetition_case_difference": 1,
+      "strategy": "ledger_draft"
+    }
+  ],
+  "decision": {
+    "adapter_disposition": "reject_for_quality_and_memorization_risk",
+    "reason": "The tuned candidates introduce training-scenario labels in unseen B1 cases while both exact-base controls introduce none, and both tuned strategies retain severe repetition failures.",
+    "training_evidence_disposition": "retain_as_genuine_unified_training_evidence_only"
+  },
+  "generated_at": "2026-08-23T19:28:59Z",
+  "limitations": [
+    "This diagnostic was specified after generation and cannot replace the preregistered score.",
+    "Exact label matching can miss paraphrased memorization and can flag a coincidental whole-token use.",
+    "The repetition rule is a deterministic collapse heuristic, not a semantic quality measure.",
+    "B1 is visible, small, and project-authored, so the evidence remains exploratory."
+  ],
+  "method": {
+    "introduced_training_label": "case-insensitive whole-token match to one of the 30 frozen fictional scenario labels in output and no match in that case's source material",
+    "severe_repetition": "an exact nonempty line repeated at least 4 times or an exact contiguous 4-word n-gram repeated at least 8 times"
+  },
+  "source_experiment_id": "mlx-qwen2.5-0.5b-unified-pilot-b1-v1",
+  "source_records_sha256": "e8dc22f8bfddcb2c1dc8b6a25c4a6a414f7fbb52037c71a75033e478dcc3be62",
+  "source_run_id": "mlx-qwen2.5-0.5b-unified-pilot-b1-v1-20260823T191717Z",
+  "source_run_manifest_sha256": "e751378164d56488b55d661ba2edf7d8cf6b51bab1243778b546afdfa5e306b2",
+  "version": 1
+}

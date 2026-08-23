@@ -2,15 +2,15 @@
 
 ## Current state
 
-- Phase: Phase 0 feasibility and first-evidence vertical slice
+- Phase: Phase 2/3 unified candidate evaluation and architecture selection
 - Canonical project name: GoodProse
 - Program branch: `codex/executive-model-program`
 - Settled spend: $0 of $100
 - Starting revision: `20c27103de41a495cbe6795432f48e6794a46f6c`
-- First-evidence milestone: in progress; the 24-case B1 benchmark, frozen
-  schema, preregistration, deterministic scorer, and validation path are
-  complete; three baselines, shared results, failure analysis, and smoke
-  fine-tune remain
+- First-evidence milestone: complete; the 24-case B1 benchmark, three matched
+  baselines, shared results, two evidence-driven inference iterations, genuine
+  smoke fine-tune, failure analysis, and reproducible engineering checks are
+  committed
 - Harness preflight: passed on a complete 2026-08-22 rerun after supplying a
   trusted orchestrator timestamp to the artifact task. Exact model/provider,
   repository `read` use, strict artifact JSON, unchanged Git tree, and $0 cost
@@ -656,3 +656,35 @@ historical entries.
 - Unresolved risks: visible B1 and lexical scoring remain weak substitutes for
   authentic or human endpoints, and the unified training profile vocabulary
   does not exactly match B1's `executive-house-v1` profile.
+
+### 2026-08-23 — Phase 2 checkpoint: unified matched B1 result and failure audit
+
+- Hypothesis: the fixed unified adapter will improve B1 by at least two points
+  without regressing hard gates under either matched profile or ledger-draft
+  inference, and permitted-output review will not reveal a disqualifying
+  failure hidden by the lexical scorer.
+- Evidence: one frozen four-candidate run at revision `d29adab`; 96 local MLX
+  generations; exact config, adapter, model, prompt, output, score, and summary
+  hashes; 10,000-resample paired intervals; full latency, token, memory, and
+  cost records; compact case-level results; permitted-output review; and an
+  integrity-bound post-run exact-label/repetition audit with deterministic
+  tests and no raw output in the committed result.
+- Exit criteria: +2 paired B1 points and no hard-gate regression in at least one
+  strategy, followed by qualitative review for scorer-blind failures. Profile
+  changed -0.6715 points (95% interval -13.2339 to +11.8394); ledger-draft
+  changed +0.6820 (-7.6786 to +9.1114). Neither advanced. The tuned candidates
+  introduced frozen training-scenario labels in 20/24 profile and 15/24
+  ledger-draft cases versus zero for both exact-base controls; severe
+  repetition remained in 10/24 and 8/24 tuned cases.
+- Decision: reject the adapter for quality, fidelity, and memorization risk.
+  Retain the checkpoint only as genuine unified-training and negative-result
+  evidence. Do not retrain on the same synthetic renderer to manufacture a
+  win, and do not infer useful profile control from synthetic loss.
+- Next actions: complete the common cross-architecture comparison using the
+  frozen B1 evidence, formalize the plateau/high-value hypothesis ledger, and
+  advance only strong hard-gate-passing diverse candidates toward the B2,
+  finalist-freeze, sealed Tier C, and human packet workflow.
+- Unresolved risks: every current B1 candidate has substantial deterministic
+  or qualitative failures; B1 is visible and lexical; true B2 and Tier C access
+  separation, authentic human task evidence, and final intended-audience
+  ratings remain absent.
