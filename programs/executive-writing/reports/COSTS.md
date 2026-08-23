@@ -48,6 +48,7 @@ reference. Never record payment credentials.
 | 2026-08-23T17:16:41Z | Local Apple M3 Pro | Audit all seven adapters against pinned local source artifacts | `external-eval-adapters-v1-validation` | completed; adapters only, benchmarks unexecuted | $0.00 | 27 focused and 149 full tests, seven real-source adaptations, Ruff, format, Pyright, and exact source/usable counts |
 | 2026-08-23T18:05:11Z | OpenRouter | Draft unified three-corpus compiler and generic MLX pilot runner | `ox-unified-pilot-pipeline-v1` | completed and reviewed with substantial corrections | $0.00 | exact sanitized Ox session; no real pilot examples, benchmark rows, hidden content, or model calls sent |
 | 2026-08-23T18:57:33Z | Local Apple M3 Pro | Audit unified compiler and MLX runner integrity | `unified-pilot-pipeline-v1-validation` | completed; infrastructure only | $0.00 | 34 focused and 179 full tests, exact schema/ratio/hash/provenance checks, Ruff, format, Pyright, and no training run |
+| 2026-08-23T19:07:59Z | Local Apple M3 Pro | Author, scan, compile, audit, and freeze the project-owned unified pilot | `goodprose-project-authored-unified-pilot-v1-build` | completed; synthetic architecture data only | $0.00 | 90 records, 30 lineages, zero privacy or B1 contamination findings, exact frozen config, no model loaded |
 
 ## Zero-cost feasibility snapshot
 

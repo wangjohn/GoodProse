@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T18:57:33Z",
+  "updated_at": "2026-08-23T19:07:59Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -291,6 +291,32 @@
       "model_id": "stealth/ox-alpha",
       "settled_cost_usd": 0,
       "disposition": "accept after Codex schema, exact-ratio, provenance, preference-equality, runner-integrity, file-scope, and regression-test corrections; infrastructure only"
+    },
+    {
+      "experiment_id": "goodprose-project-authored-unified-pilot-v1-build",
+      "kind": "training_dataset_build",
+      "status": "completed_pass",
+      "record": "programs/executive-writing/experiments/goodprose-project-authored-unified-pilot-v1-build.json",
+      "code_revision_start": "9f8a2aa",
+      "dataset_id": "goodprose-project-authored-unified-pilot-v1",
+      "dataset_sha256": "31847b91212cc279f83241cb39f536f185bbb143a7f3a903e7eff8083f4bc375",
+      "provider": "local",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "freeze for one local unified profile-conditioning architecture pilot only; no authentic-task or production-quality claim"
+    },
+    {
+      "experiment_id": "qwen2.5-0.5b-mlx-lora-unified-pilot-v1-preregistration",
+      "kind": "unified_training_preregistration",
+      "status": "frozen_ready",
+      "record": "programs/executive-writing/configs/training/UNIFIED_PILOT_LORA_v1.md",
+      "code_revision_start": "9f8a2aa",
+      "dataset_id": "goodprose-project-authored-unified-pilot-v1",
+      "provider": "local_mlx",
+      "model_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+      "model_revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+      "settled_cost_usd": 0,
+      "disposition": "commit frozen dataset, config, and selection policy before one fixed-final-iteration local run"
     }
   ]
 }

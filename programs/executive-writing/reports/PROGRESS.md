@@ -566,3 +566,35 @@ historical entries.
   backed by exact rational evidence; authentic task pairs, named-source
   training rights, sealed evidence, and intended-audience human review remain
   mandatory for the research contract.
+
+### 2026-08-23 — Phase 2 checkpoint: unified pilot dataset and run freeze
+
+- Hypothesis: 30 fictional scenario lineages rendered across three profiles,
+  seven genres, and three explicit corpora are sufficient to test whether the
+  hardened pipeline can learn and preserve profile control without using
+  external, named-source, private, B1, or hidden material.
+- Evidence: 90 locally authored project-owned records; exact 60/15/15 lineage
+  splits; 54 task pairs, 22 style targets, and 14 preference pairs; 30 records
+  per profile; 12 or 13 per genre; unique hashes for all 90 prompts and chosen
+  targets; 11,635 user words and 9,053 target words. Strict compilation passed
+  against the committed schema and compiler. Built-in privacy scanner v1 found
+  zero findings across all records, and B1 separation found zero shared
+  lineages, normalized exact hashes, or contiguous 12-word n-grams.
+- Exit criteria: source and derived bodies ignored; compact manifest and
+  dataset card committed; project-only rights and architecture-only use
+  explicit; exact source/dataset/split/preference/schema/compiler/B1/privacy
+  hashes recorded; full materialized-row validation rerun from the frozen
+  training config; and no model loaded before the fixed run configuration and
+  final-iteration selection rule are committed.
+- Decision: freeze `goodprose-project-authored-unified-pilot-v1` and the one-run
+  `qwen2.5-0.5b-mlx-lora-unified-pilot-v1` configuration. Use 80 fixed
+  iterations on the final eight layers with no checkpoint search. Preference
+  rejected responses remain preserved but v1 uses chosen responses for SFT
+  only.
+- Next actions: commit this freeze, execute the single $0 local MLX run, verify
+  genuine nonzero adapter updates and test loss, then bind the final adapter
+  hash into the preregistered matched B1 comparison before any inference.
+- Unresolved risks: the renderer deliberately repeats profile/genre patterns,
+  all scenarios and preferences are synthetic, the exact Codex serving-model
+  build was not exposed, and the small dataset cannot establish authentic-task
+  quality, human preference, source fidelity, or production readiness.

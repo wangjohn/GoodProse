@@ -1,10 +1,9 @@
 # Unified three-corpus architecture pilot v1
 
-This directory stores only public documentation and the frozen source-record
-schema for the unified profile-conditioned architecture pilot. The real
-provenance manifest (`manifest.json`) is **not committed yet**: it will be
-generated only after the 90 project-authored source records are independently
-authored and reviewed.
+This directory stores public documentation, the frozen source-record schema,
+dataset card, and compact provenance manifest for the unified
+profile-conditioned architecture pilot. The 90 project-authored source records
+were independently authored and reviewed locally; their bodies remain ignored.
 
 ## Paths
 
@@ -13,9 +12,9 @@ authored and reviewed.
 - Derived MLX chat files: ignored `data/derived/executive-writing/unified-pilot-v1/`
   (`train.jsonl`, `valid.jsonl`, `test.jsonl`, `preferences.jsonl`). They are
   rebuilt deterministically from the source; nothing derived is committed.
-- Committed artifacts: this README, `record-schema.json`, and (later) the
-  compact `manifest.json` with hashes, counts, ratios, contamination evidence,
-  and limitations. No source records or chat rows are ever committed.
+- Committed artifacts: this README, `DATASET_CARD.md`, `record-schema.json`,
+  and the compact `manifest.json` with hashes, counts, ratios, contamination
+  evidence, and limitations. No source records or chat rows are committed.
 
 ## Rights and intended use
 
