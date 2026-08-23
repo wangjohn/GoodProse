@@ -70,3 +70,21 @@ historical entries.
 - Unresolved risks: model-generated research is not independent evaluation
   evidence and must carry generator provenance; model availability and pricing
   remain runtime facts that require revalidation after any change.
+
+### 2026-08-22 — Phase 0 checkpoint: B1 design review
+
+- Hypothesis: a bounded Ox Alpha review can expose missing validity controls
+  before the first benchmark version is implemented.
+- Evidence: committed prompt and reviewed result for
+  `ox-benchmark-design-review-v1`; exact model/provider/prompt provenance; $0
+  cost; unchanged repository snapshot during the assignment.
+- Exit criteria: coverage and schema recommendations are concrete, checked by
+  Codex against the contract, and isolated from training and evaluation data.
+- Decision: accept structured fidelity entities, edit budgets, project-authored
+  provenance, format rules, and slice tags. Reject deferring contracted genres;
+  use a program-specific schema to cover them now.
+- Next actions: implement and preregister the 24-case B1 benchmark, validator,
+  deterministic scorer, and three matched baseline configurations.
+- Unresolved risks: 24 cases provide plumbing and screening evidence only;
+  semantic quality and unsupported-claim detection still require independent
+  calibrated or human assessment in later phases.
