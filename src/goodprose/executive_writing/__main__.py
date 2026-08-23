@@ -41,6 +41,10 @@ from goodprose.executive_writing.mlx_evaluation import (
     publish_mlx_b1_results,
     run_mlx_b1_evaluation,
 )
+from goodprose.executive_writing.ox_ceiling import (
+    publish_ox_b1_ceiling_results,
+    run_ox_b1_ceiling,
+)
 from goodprose.executive_writing.profile_coverage import (
     load_coverage_inputs,
     publish_coverage_results,
@@ -186,6 +190,24 @@ def build_parser() -> argparse.ArgumentParser:
     coverage_publish.add_argument("--results", required=True)
     coverage_publish.add_argument("--case-results", required=True)
     coverage_publish.add_argument("--generated-at", required=True)
+
+    ox_ceiling = commands.add_parser("ox-ceiling", help="Run or publish the Ox B1 ceiling")
+    ox_ceiling_commands = ox_ceiling.add_subparsers(dest="ox_ceiling_command", required=True)
+    ox_ceiling_run = ox_ceiling_commands.add_parser("run")
+    ox_ceiling_run.add_argument("--config", required=True)
+    ox_ceiling_run.add_argument("--cases", required=True)
+    ox_ceiling_run.add_argument("--output-root", required=True)
+    ox_ceiling_run.add_argument("--repo-root", required=True)
+    ox_ceiling_run.add_argument("--code-revision", required=True)
+    ox_ceiling_run.add_argument("--started-at", required=True)
+    ox_ceiling_publish = ox_ceiling_commands.add_parser("publish")
+    ox_ceiling_publish.add_argument("--config", required=True)
+    ox_ceiling_publish.add_argument("--run-dir", required=True)
+    ox_ceiling_publish.add_argument("--cases", required=True)
+    ox_ceiling_publish.add_argument("--repo-root", required=True)
+    ox_ceiling_publish.add_argument("--results", required=True)
+    ox_ceiling_publish.add_argument("--case-results", required=True)
+    ox_ceiling_publish.add_argument("--generated-at", required=True)
 
     external = commands.add_parser(
         "external-evals",
@@ -490,6 +512,29 @@ def _run(args: argparse.Namespace) -> int:
             generated_at=args.generated_at,
         )
         print(f"profile-coverage published: {results['status']}")
+        return 0
+    if args.command == "ox-ceiling" and args.ox_ceiling_command == "run":
+        run_dir = run_ox_b1_ceiling(
+            config_path=_path(args.config),
+            cases_path=_path(args.cases),
+            output_root=_path(args.output_root),
+            repo_root=_path(args.repo_root),
+            code_revision=args.code_revision,
+            started_at=args.started_at,
+        )
+        print(f"Ox B1 ceiling run complete: {run_dir}")
+        return 0
+    if args.command == "ox-ceiling" and args.ox_ceiling_command == "publish":
+        analysis = publish_ox_b1_ceiling_results(
+            config_path=_path(args.config),
+            run_dir=_path(args.run_dir),
+            cases_path=_path(args.cases),
+            repo_root=_path(args.repo_root),
+            results_path=_path(args.results),
+            case_results_path=_path(args.case_results),
+            generated_at=args.generated_at,
+        )
+        print(f"Ox B1 ceiling analysis complete: {analysis['status']}")
         return 0
     if args.command == "external-evals":
         return _run_external(args)

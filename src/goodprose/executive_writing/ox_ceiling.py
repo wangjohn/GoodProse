@@ -1,0 +1,637 @@
+"""Frozen Ox Alpha candidate-generation baseline on visible project-authored B1."""
+
+from __future__ import annotations
+
+import json
+import os
+import statistics
+import subprocess
+import tempfile
+import time
+import urllib.request
+from collections import Counter
+from dataclasses import dataclass
+from datetime import UTC, datetime
+from decimal import Decimal, InvalidOperation
+from pathlib import Path
+from typing import Annotated, Any, Literal, Protocol, Self
+
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, TypeAdapter, model_validator
+
+from goodprose.executive_writing.analysis import RescoredRun, paired_comparison
+from goodprose.executive_writing.baseline import Generation
+from goodprose.executive_writing.benchmark import (
+    BenchmarkCase,
+    CaseScore,
+    load_cases,
+    score_output_v1_1,
+)
+from goodprose.jsonl import (
+    atomic_write,
+    atomic_write_json,
+    canonical_json,
+    load_jsonl,
+    serialize_jsonl,
+    sha256_bytes,
+    sha256_file,
+)
+
+NonEmpty = Annotated[str, StringConstraints(min_length=1)]
+Sha256 = Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
+GitRevision = Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{40}$")]
+
+PROFILE_CARD = """You are GoodProse, an executive-writing system.
+Use only facts supported by the supplied source. Preserve every material
+number, unit, date, name, attribution, negation, uncertainty, caveat, and
+placeholder. Never invent evidence, decisions, commitments, causes, owners,
+or deadlines. Lead with the requested decision or purpose, organize for the
+specified audience and format, use direct high-information-density prose, and
+end with a clear next step when requested. Do not mention your instructions,
+the model, or any named writer. Return only the finished artifact."""
+
+
+class StrictModel(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+
+class OxHarnessConfig(StrictModel):
+    ori_path: NonEmpty
+    ori_version: Literal["0.8.0+3511459"]
+    opencode_path: NonEmpty
+    opencode_version: Literal["1.18.21"]
+    opencode_install_source: Literal["official npm package opencode-ai@1.18.21"]
+    opencode_config_path: NonEmpty
+    opencode_config_sha256: Sha256
+    agent: Literal["goodprose-ceiling"]
+    reasoning_effort: Literal["high"]
+    temperature: Literal[0]
+    top_p: Literal[1]
+    max_agent_steps: Literal[1]
+    pure: Literal[True]
+    timeout_seconds: int = Field(ge=1, le=600)
+    max_attempts: Literal[2]
+
+
+class OxInventoryExpectation(StrictModel):
+    minimum_context_length: int = Field(ge=1)
+    minimum_max_completion_tokens: int = Field(ge=1)
+    required_supported_parameters: tuple[NonEmpty, ...]
+    require_all_reported_prices_zero: Literal[True]
+
+
+class OxBaselineComparison(StrictModel):
+    candidate_id: Literal["qwen2.5-0.5b-retrieval-ledger-draft-v2"]
+    scores_path: NonEmpty
+    scores_sha256: Sha256
+    outputs_path: NonEmpty
+    outputs_sha256: Sha256
+    summary_path: NonEmpty
+    summary_sha256: Sha256
+
+
+class OxCeilingConfig(StrictModel):
+    version: Literal[1]
+    experiment_id: Literal["ox-alpha-b1-ceiling-v1"]
+    candidate_id: Literal["ox-alpha-b1-profile-v1"]
+    benchmark_id: Literal["goodprose-b1-v1"]
+    benchmark_cases_sha256: Sha256
+    scorer_version: Literal["goodprose-deterministic-v1.1"]
+    provider: Literal["openrouter"]
+    model_id: Literal["stealth/ox-alpha"]
+    input_classification: Literal["sanitized_project_authored_visible_b1"]
+    intended_use: Literal["strong_quality_ceiling_and_candidate_baseline_only"]
+    prompt_version: Literal["goodprose-ox-ceiling-prompt-v1"]
+    harness: OxHarnessConfig
+    inventory: OxInventoryExpectation
+    comparison_baseline: OxBaselineComparison
+    advancement_minimum_effect_points: float = Field(ge=2.0, le=2.0)
+    require_no_hard_gate_regression: Literal[True]
+    settled_cost_usd: Literal[0]
+
+    @model_validator(mode="after")
+    def decoding_matches_agent_config(self) -> Self:
+        if self.harness.temperature != 0 or self.harness.top_p != 1:
+            raise ValueError("Ox ceiling decoding must remain temperature 0 and top_p 1")
+        return self
+
+
+@dataclass(frozen=True)
+class OxInvocation:
+    output: str
+    session_id: str
+    raw_events: bytes
+    latency_ms: float
+    prompt_tokens: int
+    output_tokens: int
+    cache_read_tokens: int
+    cache_write_tokens: int
+    finish_reason: str
+    cost_usd: Decimal
+    model_id: str
+    provider: str
+    opencode_version: str
+
+
+class OxInvoker(Protocol):
+    def invoke(self, *, prompt: str, title: str, runtime_dir: Path) -> OxInvocation: ...
+
+
+def load_ox_ceiling_config(path: Path, *, repo_root: Path) -> OxCeilingConfig:
+    config = OxCeilingConfig.model_validate_json(path.read_text(encoding="utf-8"))
+    opencode_config = repo_root / config.harness.opencode_config_path
+    if sha256_file(opencode_config) != config.harness.opencode_config_sha256:
+        raise ValueError("OpenCode agent config hash does not match Ox ceiling config")
+    return config
+
+
+def build_ox_prompt(case: BenchmarkCase, config: OxCeilingConfig) -> str:
+    """Build a source-only candidate prompt with no evaluator material."""
+
+    constraints = "\n".join(f"- {constraint}" for constraint in case.input.constraints)
+    return (
+        f"{PROFILE_CARD}\n\n"
+        f"Frozen prompt version: {config.prompt_version}\n"
+        f"Task family: {case.input.task_family}\n"
+        f"Objective: {case.input.objective}\n"
+        f"Audience: {case.input.audience}\n"
+        f"Output format: {case.input.output_format}\n"
+        f"Constraints:\n{constraints}\n\n"
+        f"Source material:\n{case.input.source_material}\n\n"
+        "Write the finished artifact now. Output only that artifact."
+    )
+
+
+def fetch_ox_inventory(config: OxCeilingConfig) -> dict[str, Any]:
+    """Revalidate public model availability and every reported price before use."""
+
+    with urllib.request.urlopen("https://openrouter.ai/api/v1/models", timeout=30) as response:
+        payload = json.load(response)
+    matches = [item for item in payload.get("data", []) if item.get("id") == config.model_id]
+    if len(matches) != 1:
+        raise ValueError("exact Ox Alpha model inventory entry is unavailable or ambiguous")
+    entry = matches[0]
+    context_length = int(entry.get("context_length", 0))
+    top_provider = entry.get("top_provider") or {}
+    max_completion_tokens = int(top_provider.get("max_completion_tokens", 0))
+    supported = tuple(sorted(entry.get("supported_parameters") or ()))
+    pricing = entry.get("pricing") or {}
+    if context_length < config.inventory.minimum_context_length:
+        raise ValueError("Ox Alpha context length is below the frozen minimum")
+    if max_completion_tokens < config.inventory.minimum_max_completion_tokens:
+        raise ValueError("Ox Alpha completion limit is below the frozen minimum")
+    if not set(config.inventory.required_supported_parameters).issubset(supported):
+        raise ValueError("Ox Alpha no longer reports every required parameter")
+    for name, raw_value in pricing.items():
+        try:
+            value = Decimal(str(raw_value))
+        except InvalidOperation as error:
+            raise ValueError(f"unparseable Ox Alpha price field {name}") from error
+        if value != 0:
+            raise ValueError(f"Ox Alpha price field {name} is no longer zero")
+    if not {"prompt", "completion"}.issubset(pricing):
+        raise ValueError("Ox Alpha prompt/completion price fields are missing")
+    return {
+        "id": entry["id"],
+        "name": entry.get("name"),
+        "context_length": context_length,
+        "max_completion_tokens": max_completion_tokens,
+        "supported_parameters": list(supported),
+        "pricing": dict(sorted(pricing.items())),
+    }
+
+
+class OpenCodeOxInvoker:
+    def __init__(self, config: OxCeilingConfig, *, repo_root: Path) -> None:
+        self._config = config
+        self._opencode_config_path = repo_root / config.harness.opencode_config_path
+
+    def invoke(self, *, prompt: str, title: str, runtime_dir: Path) -> OxInvocation:
+        harness = self._config.harness
+        command = [
+            harness.ori_path,
+            "opencode",
+            "--model",
+            self._config.model_id,
+            "--reasoning-effort",
+            harness.reasoning_effort,
+            "run",
+            "--pure",
+            "--format",
+            "json",
+            "--agent",
+            harness.agent,
+            "--title",
+            title,
+            "--dir",
+            str(runtime_dir),
+            prompt,
+        ]
+        environment = dict(os.environ)
+        environment["OPENCODE_CONFIG"] = str(self._opencode_config_path)
+        started = time.perf_counter()
+        completed = subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=harness.timeout_seconds,
+            env=environment,
+        )
+        latency_ms = (time.perf_counter() - started) * 1000
+        if completed.returncode != 0:
+            raise RuntimeError(f"Ox Alpha harness exited {completed.returncode}")
+        events = [json.loads(line) for line in completed.stdout.splitlines() if line.strip()]
+        if not events:
+            raise RuntimeError("Ox Alpha harness returned no JSON events")
+        if any(event.get("type") in {"tool_use", "tool_result"} for event in events):
+            raise RuntimeError("Ox Alpha ceiling candidate attempted a forbidden tool call")
+        session_ids = {event.get("sessionID") for event in events if event.get("sessionID")}
+        if len(session_ids) != 1:
+            raise RuntimeError("Ox Alpha event stream has an ambiguous session ID")
+        session_id = str(next(iter(session_ids)))
+        text_parts = [
+            str(event.get("part", {}).get("text", ""))
+            for event in events
+            if event.get("type") == "text"
+        ]
+        output = "".join(text_parts).strip()
+        if not output:
+            raise RuntimeError("Ox Alpha harness returned an empty candidate")
+        finishes = [event["part"] for event in events if event.get("type") == "step_finish"]
+        if len(finishes) != 1:
+            raise RuntimeError("Ox Alpha event stream must contain exactly one finish event")
+        finish = finishes[0]
+        tokens = finish.get("tokens") or {}
+        cost = Decimal(str(finish.get("cost", "-1")))
+
+        exported = subprocess.run(
+            [harness.opencode_path, "export", session_id],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            env=environment,
+        )
+        session = json.loads(exported.stdout)
+        info = session.get("info") or {}
+        model = info.get("model") or {}
+        if model.get("id") != self._config.model_id or model.get("providerID") != "openrouter":
+            raise RuntimeError(
+                "exported session model/provider does not match the frozen Ox config"
+            )
+        if info.get("version") != harness.opencode_version:
+            raise RuntimeError("exported session OpenCode version does not match the frozen config")
+        if Decimal(str(info.get("cost", "-1"))) != 0 or cost != 0:
+            raise RuntimeError("Ox Alpha session reported nonzero or missing cost")
+        if (info.get("summary") or {}).get("files", 0) != 0:
+            raise RuntimeError("Ox Alpha ceiling session changed repository files")
+
+        return OxInvocation(
+            output=output,
+            session_id=session_id,
+            raw_events=completed.stdout.encode("utf-8"),
+            latency_ms=latency_ms,
+            prompt_tokens=int(tokens.get("input", 0)),
+            output_tokens=int(tokens.get("output", 0)),
+            cache_read_tokens=int((tokens.get("cache") or {}).get("read", 0)),
+            cache_write_tokens=int((tokens.get("cache") or {}).get("write", 0)),
+            finish_reason=str(finish.get("reason", "unknown")),
+            cost_usd=cost,
+            model_id=str(model["id"]),
+            provider=str(model["providerID"]),
+            opencode_version=str(info["version"]),
+        )
+
+
+def _run_id(started_at: str) -> str:
+    stamp = started_at.replace("-", "").replace(":", "").replace("Z", "Z")
+    return f"ox-alpha-b1-ceiling-v1-{stamp}"
+
+
+def _failure_manifest(path: Path, manifest: dict[str, Any], error: Exception) -> None:
+    manifest["status"] = "failed"
+    manifest["failure"] = {"type": type(error).__name__, "message": str(error)[:500]}
+    manifest["completed_at"] = datetime.now(UTC).isoformat().replace("+00:00", "Z")
+    atomic_write_json(path, manifest)
+
+
+def run_ox_b1_ceiling(
+    *,
+    config_path: Path,
+    cases_path: Path,
+    output_root: Path,
+    repo_root: Path,
+    code_revision: str,
+    started_at: str,
+    invoker: OxInvoker | None = None,
+    inventory: dict[str, Any] | None = None,
+) -> Path:
+    """Generate one frozen Ox candidate per visible B1 case with complete provenance."""
+
+    TypeAdapter(GitRevision).validate_python(code_revision)
+    config = load_ox_ceiling_config(config_path, repo_root=repo_root)
+    if sha256_file(cases_path) != config.benchmark_cases_sha256:
+        raise ValueError("B1 cases hash does not match Ox ceiling config")
+    run_id = _run_id(started_at)
+    run_dir = output_root / run_id
+    run_dir.mkdir(parents=True, exist_ok=False)
+    manifest_path = run_dir / "run-manifest.json"
+    manifest: dict[str, Any] = {
+        "version": 1,
+        "experiment_id": config.experiment_id,
+        "run_id": run_id,
+        "status": "running",
+        "started_at": started_at,
+        "code_revision": code_revision,
+        "config_sha256": sha256_file(config_path),
+        "cases_sha256": sha256_file(cases_path),
+        "candidate_id": config.candidate_id,
+        "model_id": config.model_id,
+        "provider": config.provider,
+        "settled_cost_usd": 0,
+        "sessions": [],
+    }
+    atomic_write_json(manifest_path, manifest)
+    cases = load_cases(cases_path)
+    generations: list[Generation] = []
+    actual_invoker = invoker or OpenCodeOxInvoker(config, repo_root=repo_root)
+    try:
+        inventory_record = inventory or fetch_ox_inventory(config)
+        manifest["inventory"] = inventory_record
+        with tempfile.TemporaryDirectory(prefix="goodprose-ox-ceiling-") as runtime_name:
+            runtime_dir = Path(runtime_name)
+            for ordinal, case in enumerate(cases, start=1):
+                prompt = build_ox_prompt(case, config)
+                last_error: Exception | None = None
+                invocation: OxInvocation | None = None
+                for attempt in range(1, config.harness.max_attempts + 1):
+                    try:
+                        invocation = actual_invoker.invoke(
+                            prompt=prompt,
+                            title=f"GoodProse Ox B1 ceiling {case.id}",
+                            runtime_dir=runtime_dir,
+                        )
+                        break
+                    except (RuntimeError, subprocess.TimeoutExpired) as error:
+                        last_error = error
+                        if attempt == config.harness.max_attempts:
+                            raise
+                if invocation is None:
+                    raise RuntimeError("Ox Alpha invocation failed") from last_error
+                if invocation.cost_usd != 0:
+                    raise RuntimeError("Ox Alpha invocation is not zero cost")
+                prompt_hash = sha256_bytes(prompt.encode("utf-8"))
+                output_hash = sha256_bytes(invocation.output.encode("utf-8"))
+                raw_path = run_dir / "events" / f"{case.id}.jsonl"
+                atomic_write(raw_path, invocation.raw_events)
+                generations.append(
+                    Generation(
+                        case_id=case.id,
+                        candidate_id=config.candidate_id,
+                        prompt_sha256=prompt_hash,
+                        output=invocation.output,
+                        output_sha256=output_hash,
+                        latency_ms=invocation.latency_ms,
+                        prompt_tokens=invocation.prompt_tokens,
+                        output_tokens=invocation.output_tokens,
+                    )
+                )
+                manifest["sessions"].append(
+                    {
+                        "ordinal": ordinal,
+                        "case_id": case.id,
+                        "session_id": invocation.session_id,
+                        "prompt_sha256": prompt_hash,
+                        "output_sha256": output_hash,
+                        "raw_events_sha256": sha256_file(raw_path),
+                        "prompt_tokens": invocation.prompt_tokens,
+                        "output_tokens": invocation.output_tokens,
+                        "cache_read_tokens": invocation.cache_read_tokens,
+                        "cache_write_tokens": invocation.cache_write_tokens,
+                        "finish_reason": invocation.finish_reason,
+                        "latency_ms": round(invocation.latency_ms, 4),
+                        "model_id": invocation.model_id,
+                        "provider": invocation.provider,
+                        "opencode_version": invocation.opencode_version,
+                        "settled_cost_usd": 0,
+                    }
+                )
+                atomic_write_json(manifest_path, manifest)
+        outputs_path = run_dir / "outputs.jsonl"
+        atomic_write(outputs_path, serialize_jsonl(generations))
+        manifest.update(
+            {
+                "status": "completed",
+                "completed_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+                "case_count": len(generations),
+                "outputs_sha256": sha256_file(outputs_path),
+                "aggregate_tokens": {
+                    "input": sum(item.prompt_tokens or 0 for item in generations),
+                    "output": sum(item.output_tokens or 0 for item in generations),
+                    "cache_read": sum(item["cache_read_tokens"] for item in manifest["sessions"]),
+                    "cache_write": sum(item["cache_write_tokens"] for item in manifest["sessions"]),
+                },
+                "elapsed_seconds": round(
+                    sum(item["latency_ms"] for item in manifest["sessions"]) / 1000, 6
+                ),
+            }
+        )
+        atomic_write_json(manifest_path, manifest)
+    except Exception as error:
+        if generations:
+            atomic_write(run_dir / "outputs.partial.jsonl", serialize_jsonl(generations))
+        _failure_manifest(manifest_path, manifest, error)
+        raise
+    return run_dir
+
+
+def _percentile(values: list[float], percentile: float) -> float:
+    ordered = sorted(values)
+    if not ordered:
+        return 0.0
+    position = (len(ordered) - 1) * percentile
+    lower = int(position)
+    upper = min(lower + 1, len(ordered) - 1)
+    fraction = position - lower
+    return ordered[lower] * (1 - fraction) + ordered[upper] * fraction
+
+
+def _summary(
+    config: OxCeilingConfig, scores: list[CaseScore], generations: list[Generation]
+) -> dict[str, Any]:
+    dimensions = scores[0].dimensions if scores else {}
+    latencies = [item.latency_ms for item in generations]
+    errors = Counter(error for score in scores for error in score.errors)
+    return {
+        "candidate_id": config.candidate_id,
+        "case_count": len(scores),
+        "evaluation_id": "goodprose-b1-v1.1",
+        "scorer_version": config.scorer_version,
+        "mean_development_score": round(statistics.fmean(s.development_score for s in scores), 4),
+        "median_development_score": round(
+            statistics.median(s.development_score for s in scores), 4
+        ),
+        "hard_gate_pass_rate": round(
+            sum(score.passes_hard_gates for score in scores) / max(1, len(scores)), 4
+        ),
+        "dimension_means": {
+            name: round(statistics.fmean(score.dimensions[name] for score in scores), 4)
+            for name in dimensions
+        },
+        "error_counts": dict(sorted(errors.items())),
+        "latency_ms": {
+            "mean": round(statistics.fmean(latencies), 4),
+            "median": round(statistics.median(latencies), 4),
+            "p95": round(_percentile(latencies, 0.95), 4),
+        },
+        "prompt_tokens": sum(item.prompt_tokens or 0 for item in generations),
+        "output_tokens": sum(item.output_tokens or 0 for item in generations),
+        "settled_cost_usd": 0,
+    }
+
+
+def publish_ox_b1_ceiling_results(
+    *,
+    config_path: Path,
+    run_dir: Path,
+    cases_path: Path,
+    repo_root: Path,
+    results_path: Path,
+    case_results_path: Path,
+    generated_at: str,
+) -> dict[str, Any]:
+    """Score, compare, and publish the frozen Ox ceiling candidate."""
+
+    if results_path.exists() or case_results_path.exists():
+        raise FileExistsError("Ox ceiling result paths must not already exist")
+    config = load_ox_ceiling_config(config_path, repo_root=repo_root)
+    manifest_path = run_dir / "run-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("status") != "completed":
+        raise ValueError("Ox ceiling run must be completed before publication")
+    if manifest.get("config_sha256") != sha256_file(config_path):
+        raise ValueError("Ox ceiling run config hash mismatch")
+    if manifest.get("cases_sha256") != sha256_file(cases_path):
+        raise ValueError("Ox ceiling run cases hash mismatch")
+    outputs_path = run_dir / "outputs.jsonl"
+    if manifest.get("outputs_sha256") != sha256_file(outputs_path):
+        raise ValueError("Ox ceiling outputs hash mismatch")
+    generations = load_jsonl(outputs_path, Generation)
+    cases = load_cases(cases_path)
+    by_case = {item.case_id: item for item in generations}
+    if set(by_case) != {case.id for case in cases} or len(by_case) != len(generations):
+        raise ValueError("Ox ceiling outputs must cover every B1 case exactly once")
+    scores = [
+        score_output_v1_1(case, by_case[case.id].output, candidate_id=config.candidate_id)
+        for case in cases
+    ]
+    summary = _summary(config, scores, generations)
+    scores_path = run_dir / "scores.jsonl"
+    summary_path = run_dir / "summary.json"
+    atomic_write(scores_path, serialize_jsonl(scores))
+    atomic_write_json(summary_path, summary)
+
+    baseline_config = config.comparison_baseline
+    baseline_scores_path = repo_root / baseline_config.scores_path
+    baseline_outputs_path = repo_root / baseline_config.outputs_path
+    baseline_summary_path = repo_root / baseline_config.summary_path
+    expected_paths = (
+        (baseline_scores_path, baseline_config.scores_sha256),
+        (baseline_outputs_path, baseline_config.outputs_sha256),
+        (baseline_summary_path, baseline_config.summary_sha256),
+    )
+    if any(sha256_file(path) != expected for path, expected in expected_paths):
+        raise ValueError("frozen comparison-baseline artifact hash mismatch")
+    baseline_scores = load_jsonl(baseline_scores_path, CaseScore)
+    baseline_summary = json.loads(baseline_summary_path.read_text(encoding="utf-8"))
+    baseline_run = RescoredRun(
+        candidate_id=baseline_config.candidate_id,
+        scores=baseline_scores,
+        generations=[],
+        summary=baseline_summary,
+        artifact_hashes={},
+        source_artifact_hashes={},
+    )
+    candidate_run = RescoredRun(
+        candidate_id=config.candidate_id,
+        scores=scores,
+        generations=generations,
+        summary=summary,
+        artifact_hashes={},
+        source_artifact_hashes={},
+    )
+    comparison = paired_comparison(baseline_run, candidate_run)
+    candidate_passes_every_gate = all(score.passes_hard_gates for score in scores)
+    status = (
+        "completed_advance_as_automated_ceiling_candidate"
+        if comparison["meets_advancement_gate"]
+        else "completed_no_automated_advancement"
+    )
+    compact_cases = [
+        {
+            "case_id": score.case_id,
+            "task_family": case.input.task_family,
+            "output_format": case.input.output_format,
+            "output_sha256": by_case[case.id].output_sha256,
+            "development_score": score.development_score,
+            "passes_hard_gates": score.passes_hard_gates,
+            "failed_critical_check_ids": [
+                check.id for check in score.checks if check.critical and not check.passed
+            ],
+            "errors": list(score.errors),
+        }
+        for case, score in zip(cases, scores, strict=True)
+    ]
+    analysis: dict[str, Any] = {
+        "version": 1,
+        "analysis_id": "ox-alpha-b1-ceiling-v1-analysis",
+        "status": status,
+        "validity_status": "visible_b1_exploratory_strong_ceiling_baseline",
+        "generated_at": generated_at,
+        "benchmark_id": config.benchmark_id,
+        "evaluation_id": "goodprose-b1-v1.1",
+        "scorer_version": config.scorer_version,
+        "source_run_id": manifest["run_id"],
+        "source_run_manifest_sha256": sha256_file(manifest_path),
+        "config_sha256": sha256_file(config_path),
+        "outputs_sha256": sha256_file(outputs_path),
+        "scores_sha256": sha256_file(scores_path),
+        "summary_sha256": sha256_file(summary_path),
+        "case_results_sha256": sha256_bytes(
+            ("\n".join(canonical_json(row) for row in compact_cases) + "\n").encode("utf-8")
+        ),
+        "provider": config.provider,
+        "model_id": config.model_id,
+        "candidate": summary,
+        "comparison": comparison,
+        "candidate_passes_every_hard_gate": candidate_passes_every_gate,
+        "decision": {
+            "automated_ceiling_disposition": (
+                "advance_for_common_frontier_comparison"
+                if comparison["meets_advancement_gate"]
+                else "retain_as_strong_ceiling_diagnostic_only"
+            ),
+            "production_disposition": (
+                "not_decided_pending_privacy_deployment_sealed_and_human_gates"
+            ),
+        },
+        "limitations": [
+            "B1 is visible, small, and project-authored, so this is exploratory search evidence.",
+            (
+                "Ox Alpha is an externally hosted model with an unstable stealth "
+                "identifier and availability."
+            ),
+            "Zero price at execution is not a durable deployment-cost guarantee.",
+            (
+                "The deterministic scorer cannot replace semantic, sealed, or "
+                "intended-audience human review."
+            ),
+        ],
+        "settled_cost_usd": 0,
+    }
+    atomic_write(
+        case_results_path,
+        ("\n".join(canonical_json(row) for row in compact_cases) + "\n").encode("utf-8"),
+    )
+    atomic_write_json(results_path, analysis)
+    return analysis

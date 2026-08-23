@@ -53,6 +53,8 @@ reference. Never record payment credentials.
 | 2026-08-23T19:16:15Z | Local Apple M3 Pro | Generalize and freeze matched unified-adapter B1 evaluation | `mlx-qwen2.5-0.5b-unified-pilot-b1-runner-v1` | completed; inference not yet run | $0.00 | exact adapter/base/prompt/eval pins, 7 focused and 181 full tests, Ruff, format, and Pyright clean |
 | 2026-08-23T19:20:34Z | Local Apple M3 Pro | Run and publish four frozen exact-base/unified-adapter B1 candidates | `mlx-qwen2.5-0.5b-unified-pilot-b1-v1` | completed; adapter rejected | $0.00 | 96 local generations, 186.847 seconds, paired analysis, exact artifact hashes, no remaining process |
 | 2026-08-23T19:28:59Z | Local Apple M3 Pro | Publish integrity-bound post-run label-leakage and repetition audit | `mlx-qwen2.5-0.5b-unified-pilot-b1-v1-failure-audit` | completed; quality and memorization rejection confirmed | $0.00 | four frozen output hashes, compact case evidence, deterministic tests, no raw output committed |
+| 2026-08-23T19:34:21Z | OpenRouter | Validate Ox Alpha JSON event and session-export interface | `ox-b1-ceiling-interface-check-v1` | completed; pass | $0.00 | exact session/model/provider/prompt/response/token provenance and zero file changes |
+| 2026-08-23T20:29:04Z | Local Apple M3 Pro | Implement, test, and freeze source-only Ox Alpha B1 ceiling runner | `ox-alpha-b1-ceiling-runner-v1` | completed; candidate generation not yet run | $0.00 | temperature-zero no-tools agent config, frozen prompt and baseline hashes, mocked provenance/publisher tests |
 
 ## Zero-cost feasibility snapshot
 

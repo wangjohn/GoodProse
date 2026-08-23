@@ -688,3 +688,36 @@ historical entries.
   or qualitative failures; B1 is visible and lexical; true B2 and Tier C access
   separation, authentic human task evidence, and final intended-audience
   ratings remain absent.
+
+### 2026-08-23 — Phase 3 checkpoint: Ox Alpha quality-ceiling freeze
+
+- Hypothesis: the exact free Ox Alpha endpoint can establish a materially
+  stronger source-only quality ceiling than the local compact-ledger leader,
+  whose B1 hard-gate pass rate is only 50%, without receiving evaluator or
+  hidden material and without acting as teacher or judge.
+- Evidence: a zero-cost interface check returned the exact requested object in
+  one text event under session `ses_fcfe…`, with verified OpenRouter /
+  `stealth/ox-alpha`, high reasoning, OpenCode 1.18.21, 8,092 input and seven
+  output tokens, and zero file changes. The frozen runner independently checks
+  public inventory and every price field before use, builds prompts from B1
+  input fields only, runs each case in an isolated no-tools session, validates
+  exported model/provider/version/cost, and commits only compact hashes and
+  scores. The resolved agent config is temperature 0, top-p 1, one step, and
+  wildcard tool denial.
+- Exit criteria: config and prompt freeze before B1 generation; exact model and
+  all reported prices remain zero; no expected answers, scorer rules, B2/Tier C,
+  private material, or prior outputs cross the provider boundary; single
+  candidate per case with retry only before a usable response; matched paired
+  comparison to the pinned compact-ledger leader; mocked run/publisher and
+  config-drift tests; full engineering verification.
+- Decision: freeze `ox-alpha-b1-profile-v1` for one 24-case generation run after
+  this checkpoint commit. Advancement requires at least +2 paired points and
+  no hard-gate-rate regression, but cannot decide production without privacy,
+  deployment, sealed, and human gates.
+- Next actions: commit the runner/config, revalidate live inventory, execute the
+  approved sanitized transfer, publish the paired result, inspect permitted B1
+  outputs for scorer-blind failures, then update the common architecture
+  frontier.
+- Unresolved risks: a stealth model identifier and zero current price are not
+  durable deployment properties; external-provider use may be unacceptable for
+  private production inputs; B1 remains visible, lexical, and exploratory.

@@ -1,0 +1,37 @@
+{
+  "assignment_id": "ox-b1-ceiling-interface-check-v1",
+  "generated_at": "2026-08-23T19:34:21Z",
+  "input_classification": "sanitized_harness_validation_only",
+  "intended_use": "validate OpenCode JSON event parsing before the frozen B1 candidate run",
+  "model_id": "stealth/ox-alpha",
+  "opencode_version": "1.18.21",
+  "ori_version": "0.8.0+3511459",
+  "prompt_sha256": "954574d3679b320586db9be1925f7ad9b5f0436a551af473333228f7f09d33c9",
+  "provider": "openrouter",
+  "reasoning_effort": "high",
+  "response_sha256": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93",
+  "result": "pass",
+  "session_id": "ses_fcfe217b8ffeAeaxIlaQvHm5rL",
+  "settled_cost_usd": 0,
+  "state_change": {
+    "additions": 0,
+    "deletions": 0,
+    "files": 0
+  },
+  "tokens": {
+    "cache_read": 0,
+    "cache_write": 0,
+    "input": 8092,
+    "output": 7,
+    "reasoning": 0
+  },
+  "validated": [
+    "one JSON step_start event",
+    "one text event containing the exact requested JSON object",
+    "one zero-cost stop step_finish event",
+    "one unambiguous session identifier",
+    "exported exact model, provider, reasoning variant, and OpenCode version",
+    "zero repository file changes"
+  ],
+  "version": 1
+}
