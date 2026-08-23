@@ -18,7 +18,10 @@ from goodprose.executive_writing.external_evals import (
     cli_validate_registry,
 )
 from goodprose.executive_writing.failure_audit import audit_mlx_b1_failures
-from goodprose.executive_writing.frontier import validate_architecture_frontier
+from goodprose.executive_writing.frontier import (
+    publish_h11_frontier,
+    validate_architecture_frontier,
+)
 from goodprose.executive_writing.holdout import (
     PROTOCOL_ID,
     AggregateUsage,
@@ -38,6 +41,13 @@ from goodprose.executive_writing.holdout import (
     verify_receipt_chain,
     verify_receipt_document,
 )
+from goodprose.executive_writing.human_evaluation import (
+    aggregate_human_ratings,
+)
+from goodprose.executive_writing.human_evaluation import (
+    load_registration as load_human_registration,
+)
+from goodprose.executive_writing.local_output_audit import audit_local_b1_outputs
 from goodprose.executive_writing.mlx_evaluation import (
     publish_mlx_b1_results,
     run_mlx_b1_evaluation,
@@ -113,6 +123,14 @@ def build_parser() -> argparse.ArgumentParser:
     iteration.add_argument("--max-mean-latency-ms", type=float, default=6812.086)
     iteration.add_argument("--max-output-tokens", type=int, default=16800)
     iteration.add_argument("--require-all-hard-gates", action="store_true")
+    baseline_audit = baseline_commands.add_parser("audit")
+    baseline_audit.add_argument("--config", required=True)
+    baseline_audit.add_argument("--run-dir", required=True)
+    baseline_audit.add_argument("--cases", required=True)
+    baseline_audit.add_argument("--source-analysis", required=True)
+    baseline_audit.add_argument("--source-case-results", required=True)
+    baseline_audit.add_argument("--output", required=True)
+    baseline_audit.add_argument("--generated-at", required=True)
 
     smoke_data = commands.add_parser("smoke-data", help="Build smoke-training data")
     smoke_data_commands = smoke_data.add_subparsers(dest="smoke_data_command", required=True)
@@ -236,6 +254,15 @@ def build_parser() -> argparse.ArgumentParser:
     frontier_validate.add_argument("--frontier", required=True)
     frontier_validate.add_argument("--hypotheses", required=True)
     frontier_validate.add_argument("--repo-root", required=True)
+    frontier_h11 = commands.add_parser(
+        "frontier-publish-h11", help="Publish the frozen h11 frontier update"
+    )
+    frontier_h11.add_argument("--previous-frontier", required=True)
+    frontier_h11.add_argument("--analysis", required=True)
+    frontier_h11.add_argument("--audit", required=True)
+    frontier_h11.add_argument("--output", required=True)
+    frontier_h11.add_argument("--repo-root", required=True)
+    frontier_h11.add_argument("--generated-at", required=True)
 
     external = commands.add_parser(
         "external-evals",
@@ -272,6 +299,18 @@ def build_parser() -> argparse.ArgumentParser:
     yap_score.add_argument("--predictions", required=True)
     yap_score.add_argument("--result", required=True)
     yap_score.add_argument("--seed", type=int, default=None)
+
+    human = commands.add_parser(
+        "human-eval", help="Validate or aggregate the blinded human-evaluation protocol"
+    )
+    human_commands = human.add_subparsers(dest="human_command", required=True)
+    human_validate = human_commands.add_parser("validate-registration")
+    human_validate.add_argument("--registration", required=True)
+    human_aggregate = human_commands.add_parser("aggregate")
+    human_aggregate.add_argument("--registration", required=True)
+    human_aggregate.add_argument("--ratings", required=True)
+    human_aggregate.add_argument("--output", required=True)
+    human_aggregate.add_argument("--generated-at", required=True)
 
     holdout = commands.add_parser(
         "holdout",
@@ -450,6 +489,18 @@ def _run(args: argparse.Namespace) -> int:
         )
         print(f"iteration analysis complete: {result['analysis_id']} ({result['status']})")
         return 0
+    if args.command == "baseline" and args.baseline_command == "audit":
+        audit = audit_local_b1_outputs(
+            config_path=_path(args.config),
+            run_dir=_path(args.run_dir),
+            cases_path=_path(args.cases),
+            source_analysis_path=_path(args.source_analysis),
+            source_case_results_path=_path(args.source_case_results),
+            output_path=_path(args.output),
+            generated_at=args.generated_at,
+        )
+        print(f"local B1 output audit complete: {audit['decision']['candidate_disposition']}")
+        return 0
     if args.command == "smoke-data" and args.smoke_data_command == "build":
         manifest = compile_smoke_dataset(
             output_dir=_path(args.output_dir),
@@ -606,8 +657,35 @@ def _run(args: argparse.Namespace) -> int:
             f"{summary['finalist_ready_count']} finalist-ready"
         )
         return 0
+    if args.command == "frontier-publish-h11":
+        frontier = publish_h11_frontier(
+            previous_frontier_path=_path(args.previous_frontier),
+            analysis_path=_path(args.analysis),
+            audit_path=_path(args.audit),
+            output_path=_path(args.output),
+            repo_root=_path(args.repo_root),
+            generated_at=args.generated_at,
+        )
+        print(
+            f"Architecture frontier published: {frontier['frontier_id']} "
+            f"({len(frontier['candidates'])} candidates)"
+        )
+        return 0
     if args.command == "external-evals":
         return _run_external(args)
+    if args.command == "human-eval" and args.human_command == "validate-registration":
+        registration = load_human_registration(_path(args.registration))
+        print(f"human-evaluation registration valid: {registration.study_id}")
+        return 0
+    if args.command == "human-eval" and args.human_command == "aggregate":
+        result = aggregate_human_ratings(
+            registration_path=_path(args.registration),
+            ratings_path=_path(args.ratings),
+            output_path=_path(args.output),
+            generated_at=args.generated_at,
+        )
+        print(f"human-evaluation aggregate complete: {result['overall']['rating_count']} ratings")
+        return 0
     if args.command == "holdout":
         return _run_holdout(args)
     raise AssertionError("unhandled command")

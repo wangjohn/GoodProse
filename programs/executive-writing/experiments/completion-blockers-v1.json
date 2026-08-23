@@ -1,0 +1,75 @@
+{
+  "blocker_audit_id": "executive-writing-completion-blockers-v1",
+  "classification": "post_h11_safe_automated_search_exhaustion_audit",
+  "frontier_sha256": "d05dfe024a622b031a5bf9ac3885d5f0951590b47545f47b4310c20082a8d8fa",
+  "generated_at": "2026-08-23T22:22:04Z",
+  "hypothesis_registry_sha256": "f6bc29b8f54031a1e926e29c17e0a2b6e4c3ecce4d96d0ae7d242ad227d0dae9",
+  "model_selection_state": {
+    "automated_frontier_candidate_count": 15,
+    "finalist_ready_count": 0,
+    "high_value_safe_affordable_hypotheses_remaining": 0,
+    "local_directional_leader": "qwen2.5-0.5b-retrieval-ledger-draft-v2",
+    "local_leader_hard_gate_pass_rate": 0.5,
+    "plateau_satisfied": false,
+    "production_candidate_selected": false,
+    "reason": "The plateau rule requires the leader to pass every hard gate; the leader passes only 12 of 24."
+  },
+  "remaining_conditions": [
+    {
+      "condition_id": "authentic_training_approved_task_pairs",
+      "current_state": "blocked_external_authority_and_data",
+      "evidence": "The project-owned unified pilot proved the pipeline but failed quality and memorization gates. No authentic rough-to-final task pair corpus is both available and training-approved.",
+      "required_authority_or_input": "The user or qualified counsel must approve a specifically documented corpus for training, or the user must contribute rights-cleared authentic rough-to-final pairs.",
+      "why_codex_cannot_complete_it": "Codex and Ox Alpha are prohibited from promoting provisional or unresolved material to training_approved.",
+      "unblocked_action": "Compile, scan, freeze, and run a new unified candidate with explicit with/without-synthetic ablation and matched B1 comparison."
+    },
+    {
+      "condition_id": "source_specific_training",
+      "current_state": "blocked_rights_and_statistical_sufficiency",
+      "evidence": "All eleven profiles have lower-cost source-text-free coverage and run configurations, but none clears both the standalone data threshold and training-approved rights gate.",
+      "required_authority_or_input": "Training approval plus at least 50,000 effective clean tokens, 100 independent examples, three genres, and 30 held-out cases for any standalone source run.",
+      "why_codex_cannot_complete_it": "Public availability is not training permission, and weak adapters may not be manufactured to satisfy symmetry.",
+      "unblocked_action": "Run only profiles that newly clear both frozen sufficiency and rights requirements."
+    },
+    {
+      "condition_id": "b2_shadow_development",
+      "current_state": "blocked_by_zero_eligible_candidates_and_missing_hidden_operator",
+      "evidence": "The aggregate-only B2 lifecycle is implemented and tested, but no candidate passes the B1 finalist-readiness gate and no true B2 hidden operator/data exists in the agent-readable repository.",
+      "required_authority_or_input": "A separately controlled B2 operator and hidden case set after an eligible candidate exists.",
+      "why_codex_cannot_complete_it": "Creating or inspecting true hidden cases here would destroy the required access boundary.",
+      "unblocked_action": "Submit only the frozen aggregate query through the existing receipt protocol."
+    },
+    {
+      "condition_id": "tier_c_one_shot_holdout",
+      "current_state": "blocked_by_zero_finalists_and_missing_access_separated_holdout",
+      "evidence": "The Tier C registration, freeze, one-shot open, signed aggregate receipt, verification, and retirement lifecycle is implemented and tested only with synthetic fixtures.",
+      "required_authority_or_input": "A user-controlled or separately quarantined real Tier C holdout and signer after three to five eligible finalists and every behavior-affecting configuration are frozen.",
+      "why_codex_cannot_complete_it": "Codex must not author, inspect, retrieve, or transform the true Tier C content after registration/finalist work begins.",
+      "unblocked_action": "Open exactly once and retain only the preregistered aggregate and immutable receipt."
+    },
+    {
+      "condition_id": "intended_audience_human_confirmation",
+      "current_state": "blocked_by_finalist_readiness",
+      "evidence": "The blinded Tier D protocol and deterministic aggregate boundary are implemented, but the contract prohibits asking raters to evaluate immature candidates and the frontier has zero eligible finalists.",
+      "required_authority_or_input": "Three to five hard-gate-passing frozen finalists, then intended-audience raters supplied or recruited by the user/authorized study operator.",
+      "why_codex_cannot_complete_it": "Human judgments cannot be fabricated or replaced by automated metrics, and no valid packet may be created before finalist readiness.",
+      "unblocked_action": "Select two or three candidates by the frozen rule and run the preregistered blinded study."
+    },
+    {
+      "condition_id": "external_compatibility_residuals",
+      "current_state": "partially_blocked_not_completion_critical",
+      "evidence": "Exact real sources for six suite IDs were acquired and adapted; WritingBench has no exact judge model pin and YapBench has no dataset license metadata. No candidate predictions or scores were produced.",
+      "required_authority_or_input": "A frozen exact WritingBench judge configuration and explicit YapBench dataset rights clarification.",
+      "why_codex_cannot_complete_it": "Leaderboard parity cannot be claimed from an unpinned judge, and an unlicensed dataset may not be executed.",
+      "unblocked_action": "Execute only after the missing behavior and rights pins are frozen; retain the current six-suite compatibility record meanwhile."
+    }
+  ],
+  "safe_work_completed_after_search_exhaustion": [
+    "rescored and fully audited the one frozen h11 candidate without retry",
+    "refreshed and validated the 15-candidate common frontier and hypothesis registry",
+    "acquired and exact-hash adapted six requested external suite IDs while preserving local-only evaluator material",
+    "implemented and tested the blinded intended-audience human-evaluation protocol without creating a premature packet"
+  ],
+  "status": "genuine_external_blockers_remain_goal_not_complete",
+  "version": 1
+}

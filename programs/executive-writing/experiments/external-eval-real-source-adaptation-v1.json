@@ -1,0 +1,120 @@
+{
+  "adapter_version": "goodprose-external-adapters-v1",
+  "classification": "real_source_acquisition_and_adapter_compatibility_not_model_evaluation",
+  "generated_at": "2026-08-23T22:22:04Z",
+  "record_id": "external-eval-real-source-adaptation-v1",
+  "settled_cost_usd": 0,
+  "source_groups": [
+    {
+      "acquisition_status": "exact_pin_acquired_and_adapted",
+      "benchmark_results_produced": false,
+      "local_source_sha256": "18fee37c645166eb2e206b36366b2e354265b1e4201db2c86e759e825eaddcbe",
+      "rights_status": "evaluation_only",
+      "source_revision": "ae2d5176449b7b769815482641d35926f26793eb",
+      "source_row_count": 1000,
+      "source_url": "https://github.com/X-PLUG/WritingBench",
+      "suites": [
+        {
+          "adapted_case_count": 115,
+          "adapted_cases_sha256": "1726c542cb6059c801e53caa7387805447078c38ed3d37c1aa37c5eae71d6846",
+          "benchmark_id": "writingbench-business",
+          "candidate_payload_count": 32,
+          "candidate_payload_sha256": "9c4fd724dab9d6b836d885cb23c7e26eabf31e2b8c2553359112fa23e57006de",
+          "execution_status": "adapter_tested_unexecuted_judge_unpinned",
+          "manifest_sha256": "ef6b95181d5ee73d5dd86417479130766a85f66083aefb21e6bad9321d706930"
+        },
+        {
+          "adapted_case_count": 107,
+          "adapted_cases_sha256": "e4c5d5dbcbf42dc43ac05d965a5ca68d6ad6995ab59db0636de7dd5a5276c43b",
+          "benchmark_id": "writingbench-engineering",
+          "candidate_payload_count": 32,
+          "candidate_payload_sha256": "02cf012c414608214098aad78172a910c9a912886ddad6e0c38b641609a32612",
+          "execution_status": "adapter_tested_unexecuted_judge_unpinned",
+          "manifest_sha256": "14187c2894864387e9f8c2f438f06b822e3b60b92ec80b8a612480df6308b044"
+        }
+      ]
+    },
+    {
+      "acquisition_status": "exact_pin_acquired_and_adapted",
+      "benchmark_results_produced": false,
+      "local_source_sha256": "1a30452c33bd5379ff56159016d68ecd7e2669ede1e4ea77244c6e300952e9cb",
+      "rights_status": "open_verified",
+      "source_revision": "e22e0371dac444239b944f9293f5b491d62b73f0",
+      "source_row_count": 364,
+      "source_url": "https://huggingface.co/datasets/wanyu/IteraTeR_human_sent",
+      "suites": [
+        {
+          "adapted_case_count": 308,
+          "adapted_cases_sha256": "64f65170fd2d8fbacefed43b222e9b86cff67d3d4fd51eac85559cf088cfc01b",
+          "benchmark_id": "iterater-diagnostic",
+          "candidate_payload_count": 308,
+          "candidate_payload_sha256": "65ea7cc49d096444b6eff4d1d24211d780009ab9e57d4d790e400643677e5153",
+          "execution_status": "adapter_tested_not_executed",
+          "manifest_sha256": "add34a40d06d7839987a1d01a856545a5c0b778fa627d3742431388125964fbe"
+        },
+        {
+          "adapted_case_count": 185,
+          "adapted_cases_sha256": "50780f07853b7ae8851bb0a849991ebbc4b8fb33a0fa5a3f77b840aeb4d04fe3",
+          "benchmark_id": "editeval-clarity",
+          "candidate_payload_count": 185,
+          "candidate_payload_sha256": "cb575b46eee72c508e211ab1e566fd77389bc4583b1112ca7e4ad8aa924ceb7e",
+          "execution_status": "adapter_tested_not_executed",
+          "manifest_sha256": "e7311eb9dedfa878b6ae74dbcb82381dff0066cbc48d7a9f169ce481628f3166"
+        },
+        {
+          "adapted_case_count": 35,
+          "adapted_cases_sha256": "c90f165febe3742d6a1af6437bc4ea148909e02455467f5a20a77bd264e8aef2",
+          "benchmark_id": "editeval-coherence",
+          "candidate_payload_count": 35,
+          "candidate_payload_sha256": "ae6ff4257948d5ed926d690ae4ca56d28c5e5dbf32e5154e0a3c3ae2961c46d4",
+          "execution_status": "adapter_tested_not_executed",
+          "manifest_sha256": "137b5bdae212381e1e67579d0203122803c33be9439d26f798256c83ebd2ae57"
+        }
+      ]
+    },
+    {
+      "acquisition_status": "exact_pin_acquired_and_adapted",
+      "benchmark_results_produced": false,
+      "local_source_sha256": "77f05c87f48f3e6dd25197bc921d38032ef145d834fce2d35e6e0125e798889e",
+      "rights_status": "evaluation_only",
+      "source_archive_sha256": "6ae45cc974caf9ffc7d7eca305b2f6d5fe1045af34bbe4073c30cd103652d9b2",
+      "source_revision": "DOI 10.18653/v1/2022.tsar-1.6",
+      "source_row_count": 536,
+      "source_url": "https://aclanthology.org/2022.tsar-1.6/",
+      "suites": [
+        {
+          "adapted_case_count": 536,
+          "adapted_cases_sha256": "2032c7657c1e9899bd25b2d3fb041d96d2936ca99716ab0fe50d38c2846abea7",
+          "benchmark_id": "revision-for-concision",
+          "candidate_payload_count": 536,
+          "candidate_payload_sha256": "bbe5f52ffd5bcbc5f1afa8f2ff437f0b5c7f31edf2569cab85189df1341d84bc",
+          "execution_status": "adapter_tested_not_executed",
+          "manifest_sha256": "68154e0fceb71cf42171a3b1bd0553c0952c44bcf2f94d2224ac41d88a2a4414"
+        }
+      ]
+    },
+    {
+      "acquisition_status": "not_acquired_execution_blocked",
+      "benchmark_results_produced": false,
+      "blocker": "The dataset repository has no license metadata; the Apache-2.0 leaderboard Space does not grant dataset rights.",
+      "rights_status": "unverified",
+      "source_revision": "be8427ddf7780201b73676c1563bc3ea6d0a71ca",
+      "source_url": "https://huggingface.co/datasets/tabularisai/yapbench_dataset",
+      "suites": [
+        {
+          "benchmark_id": "yapbench",
+          "execution_status": "execution_blocked_rights_unverified"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "adapted_case_count_sum_across_suite_views": 1286,
+    "candidate_payload_count_sum": 1128,
+    "candidate_results_produced": 0,
+    "exact_source_groups_acquired": 3,
+    "suite_ids_adapted": 6,
+    "suite_ids_blocked": 1
+  },
+  "version": 1
+}

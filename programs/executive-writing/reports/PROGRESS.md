@@ -927,3 +927,57 @@ historical entries.
 - Unresolved risks: the non-B1 single-pass smoke added placeholders and
   unsupported follow-ups; a larger model may remain lexically incomplete,
   semantically expansive, or too slow despite fitting memory.
+
+### 2026-08-23 — Phase 3 checkpoint: larger-local-model h11 rejection
+
+- Execution: exact frozen revision `db79b083…`; 24 B1 cases, 24 ledger and 24
+  draft calls, exact Ollama/model/blob/manifest/resource validation, 23,261
+  prompt and 6,257 output tokens, 370.163 seconds summed latency, $0.
+- Score: 90.6529 mean and 7/24 hard gates versus compact ledger 87.1981 and
+  12/24. Paired effect +3.4548, 95% interval -1.3847 to +8.8440, paired
+  median +4.3003, and 13/1/10 wins/ties/losses. Mean-effect, latency, token,
+  deterministic fabrication/placeholder, identity, provenance, and cost gates
+  passed; hard-gate non-regression, 24/24 gates, and zero omissions failed.
+- Deterministic failures: 17 omission cases, two poor-actionability cases, and
+  one excessive-rewriting case. Mean latency was 15.423 seconds; the ledger
+  and draft stage means were 6.660 and 8.764 seconds.
+- Full-output audit: 15 material source-expansion risks, five model/prompt/
+  instruction/process-commentary cases, two introduced-placeholder cases,
+  19/24 artifact-only outputs, and 7/24 outputs with no audit flag.
+- Decision: reject h11 without retry, repair, alternate size, quantization, or
+  prompt. The common frontier now contains 15 candidates and zero finalists.
+  All identified safe, affordable, high-value automated architecture
+  hypotheses are exhausted, but the plateau is not satisfied because the
+  accepted local leader passes only half the hard gates.
+- Artifacts: `QWEN2_5_7B_H11_RESULTS.md`, compact analysis/case/audit records,
+  `../experiments/architecture-frontier-v3.json`, and the updated hypothesis
+  registry.
+
+### 2026-08-23 — Post-h11 safe-work and external-blocker audit
+
+- External suites: acquired exact public pins for WritingBench, IteraTeR, and
+  Revision for Concision in the ignored local cache. Real-source adaptation
+  passed for six suite IDs: 115/107 WritingBench cases, 308 IteraTeR, 185/35
+  EditEval clarity/coherence, and 536 concision cases. Candidate-only payloads
+  contain 1,128 rows with references and criteria excluded. No candidate
+  prediction or benchmark score was produced.
+- Residual external limits: WritingBench does not pin an exact judge model;
+  YapBench has no dataset license metadata and was not acquired or executed.
+- Tier D gap closed: implemented and tested a versioned intended-audience
+  human protocol with three rater cohorts, 50–100-case registration bounds,
+  opaque candidate labels, three-rating minimums, publish-readiness endpoint,
+  critical-error veto, edit burden, pairwise preference, agreement, and cohort
+  aggregates. No packet or rating was created because zero candidates satisfy
+  finalist readiness.
+- Genuine blockers: authentic `training_approved` task pairs, standalone
+  source rights/sufficiency, a separately controlled B2 operator, a truly
+  access-separated Tier C holdout, and intended-audience human judgment after
+  a valid finalist freeze. Codex and Ox cannot supply or infer those inputs.
+- Provisional recommendation: retain the 0.5B retrieval compact-ledger system
+  as the research leader and do not deploy it unsupervised. The highest-value
+  continuation trigger is specifically approved authentic rough-to-final data,
+  followed by a new unified run and with/without-synthetic ablation—not another
+  prompt or model sweep.
+- Evidence: `BLOCKERS_AND_PROVISIONAL_RECOMMENDATION.md`,
+  `../experiments/completion-blockers-v1.json`, and
+  `../experiments/external-eval-real-source-adaptation-v1.json`.

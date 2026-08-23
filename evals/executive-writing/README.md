@@ -16,6 +16,13 @@ directory is explicitly synthetic; no true hidden content exists here.
 
 For external benchmark adapters and acquisition metadata (WritingBench,
 IteraTeR/EditEval, Revision for Concision, YapBench), see
-[`external-v1/`](external-v1/README.md). Adapters are tested but unexecuted;
-no external benchmark rows, references, criteria, predictions, or results are
-committed.
+[`external-v1/`](external-v1/README.md). Six suite IDs have been exercised
+against exact real-source pins in the ignored cache, but no candidate benchmark
+run exists; no external benchmark rows, references, criteria, predictions, or
+results are committed.
+
+For the blinded intended-audience Tier D protocol, rating schema, critical-
+error veto, and aggregate boundary, see
+[`human-evaluation-v1/`](human-evaluation-v1/README.md). The protocol is tested,
+but no study or packet exists because the current frontier has no candidate
+that passes the finalist-readiness gate.

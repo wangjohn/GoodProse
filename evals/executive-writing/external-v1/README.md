@@ -1,9 +1,11 @@
 # External evaluation adapters v1 (`external-v1`)
 
-Status: **adapters implemented and tested; nothing has been executed.** This
-directory contains acquisition metadata only. No benchmark rows, references,
-checklist criteria, predictions, or results are committed. All locally adapted
-artifacts belong in ignored output directories.
+Status: **adapters implemented and tested; six suite IDs exercised against
+exact real-source pins; no candidate benchmark run.** This directory contains
+acquisition metadata only. No benchmark rows, references, checklist criteria,
+predictions, or results are committed. All locally adapted artifacts belong in
+ignored output directories. The compact real-source compatibility record is
+`programs/executive-writing/experiments/external-eval-real-source-adaptation-v1.json`.
 
 A passing adapter test proves schema and acquisition compatibility only. It is
 never a benchmark result, never a leaderboard reproduction, and never a
@@ -13,12 +15,12 @@ quality claim.
 
 | # | Benchmark ID | Source | Expected rows | Rights | Execution status |
 |---|--------------|--------|---------------|--------|------------------|
-| 1 | `writingbench-business` | WritingBench `benchmark_all.jsonl` (Finance & Business) | 1,000 file / 210 domain / 115 English eligible | `evaluation_only` | adapter tested; judge unpinned |
-| 2 | `writingbench-engineering` | same file (Academic & Engineering) | 1,000 file / 167 domain / 107 English eligible | `evaluation_only` | adapter tested; judge unpinned |
-| 3 | `iterater-diagnostic` | `wanyu/IteraTeR_human_sent` test split (clarity+coherence+fluency) | 364 test / 310 labeled / 308 usable | Apache-2.0 | adapter tested; not executed |
-| 4 | `editeval-clarity` | same IteraTeR test split, EditEval semantics | 186 labeled / 185 usable | dataset: IteraTeR Apache-2.0 (not EditEval's CC0 code license) | adapter tested; not executed |
-| 5 | `editeval-coherence` | same IteraTeR test split, EditEval semantics | 36 labeled / 35 usable | same as above | adapter tested; not executed |
-| 6 | `revision-for-concision` | ACL 2022.tsar-1.6 `sac.xlsx` | 536 sentence pairs | `evaluation_only`; do not redistribute | adapter tested; not executed |
+| 1 | `writingbench-business` | WritingBench `benchmark_all.jsonl` (Finance & Business) | 1,000 file / 210 domain / 115 English eligible | `evaluation_only` | real source adapted; judge unpinned; no candidate run |
+| 2 | `writingbench-engineering` | same file (Academic & Engineering) | 1,000 file / 167 domain / 107 English eligible | `evaluation_only` | real source adapted; judge unpinned; no candidate run |
+| 3 | `iterater-diagnostic` | `wanyu/IteraTeR_human_sent` test split (clarity+coherence+fluency) | 364 test / 310 labeled / 308 usable | Apache-2.0 | real source adapted; no candidate run |
+| 4 | `editeval-clarity` | same IteraTeR test split, EditEval semantics | 186 labeled / 185 usable | dataset: IteraTeR Apache-2.0 (not EditEval's CC0 code license) | real source adapted; no candidate run |
+| 5 | `editeval-coherence` | same IteraTeR test split, EditEval semantics | 36 labeled / 35 usable | same as above | real source adapted; no candidate run |
+| 6 | `revision-for-concision` | ACL 2022.tsar-1.6 `sac.xlsx` | 536 sentence pairs | `evaluation_only`; do not redistribute | real source adapted; no candidate run |
 | 7 | `yapbench` | `tabularisai/yapbench_dataset` train parquet → local normalized JSONL | 304 source / 300 nonempty-prompt cases | **unverified — execution blocked until clarified** | blocked |
 
 ## Source pins

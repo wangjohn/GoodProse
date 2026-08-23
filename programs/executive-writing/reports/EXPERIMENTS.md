@@ -595,6 +595,60 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
 - Decision: freeze exactly one B1 run after commit. No alternative size,
   quantization, prompt, or retry is authorized under h11.
 
+## 2026-08-23 — Qwen2.5 7B compact-ledger h11 result
+
+- Execution: one immutable 24-case run at revision `db79b083…`, 48 exact local
+  calls, 23,261 prompt and 6,257 output tokens, 370.163 seconds total, $0.
+- Primary result: 90.6529 mean, 29.17% hard gates, and +3.4548 paired points
+  versus compact ledger. The paired interval was -1.3847 to +8.8440, median
+  effect +4.3003, and wins/ties/losses 13/1/10.
+- Gate result: rejected. Hard gates regressed by 20.83 percentage points; only
+  7/24 passed and 17 cases had deterministic omissions. Latency, tokens, exact
+  model/resource pins, deterministic fabrication/placeholder, privacy,
+  provenance, and cost bounds passed.
+- Output audit: 15 material unsupported expansions, five model/prompt/
+  instruction/process-commentary cases, two introduced-placeholder cases,
+  and 7/24 no-flag outputs. The deterministic scorer's zero fabrication count
+  therefore did not establish semantic fidelity.
+- Decision: model scale alone is not a supported fix. Do not retry, repair,
+  change quantization, or run another size under h11. Preserve the result as
+  bounded negative evidence.
+
+## 2026-08-23 — Real-source external adapter compatibility
+
+- Acquisition: exact-hash local sources for WritingBench commit `ae2d517…`,
+  IteraTeR revision `e22e037…`, and Revision for Concision DOI dataset ZIP.
+- Adaptation: six requested suite IDs passed real-source parsing and boundaries,
+  producing 1,286 local suite-view cases and 1,128 candidate-only payload rows.
+  Outputs remain ignored and source/reference/checklist material is not
+  committed.
+- Status: acquisition and adapter compatibility only. No candidate was run,
+  no judge or metric was invoked, and no benchmark score or leaderboard claim
+  exists.
+- Blockers: WritingBench lacks an exact judge API version; YapBench execution
+  remains prohibited while the separate dataset has no license metadata.
+- Record: `../experiments/external-eval-real-source-adaptation-v1.json`.
+
+## 2026-08-23 — Intended-audience protocol and completion-blocker audit
+
+- Protocol: implemented strict Tier D registration and rating boundaries for
+  three intended-audience cohorts, source-visible blinded review, 50–100
+  cases, at least three ratings per assignment, four operational labels,
+  critical factual-error veto, edit burden, structured errors, pairwise
+  preference, agreement, and cohort aggregates.
+- Validity boundary: no human study, packet, finalist mapping, or rating exists.
+  Creating one now is prohibited because the 15-candidate frontier contains
+  zero hard-gate-passing finalists.
+- Search state: no safe, affordable, high-value automated hypothesis remains,
+  yet the plateau is not satisfied because the local leader passes only 50%
+  of hard gates.
+- Remaining external inputs: authentic rights-approved task pairs; qualified
+  source rights/sufficiency; true access-separated B2/Tier C operators and
+  data; and intended-audience ratings after a valid finalist freeze.
+- Recommendation: keep compact ledger/draft as a provisional research leader,
+  not a production system. Resume candidate optimization only when authentic
+  approved task data permits a materially new unified-training hypothesis.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

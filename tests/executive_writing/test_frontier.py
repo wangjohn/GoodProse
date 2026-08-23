@@ -5,7 +5,10 @@ from pathlib import Path
 
 import pytest
 
-from goodprose.executive_writing.frontier import validate_architecture_frontier
+from goodprose.executive_writing.frontier import (
+    publish_h11_frontier,
+    validate_architecture_frontier,
+)
 from goodprose.jsonl import atomic_write_json, sha256_file
 
 
@@ -119,3 +122,55 @@ def test_frontier_validator_rejects_version_id_drift(tmp_path: Path) -> None:
             hypotheses_path=hypotheses_path,
             repo_root=tmp_path,
         )
+
+
+def test_publish_h11_frontier_appends_rejected_candidate(tmp_path: Path) -> None:
+    frontier_path, _, source_path = _fixture(tmp_path)
+    frontier = json.loads(frontier_path.read_text())
+    frontier["version"] = 2
+    frontier["frontier_id"] = "goodprose-b1-common-architecture-frontier-v2"
+    atomic_write_json(frontier_path, frontier)
+    outputs_sha256 = "a" * 64
+    analysis_path = tmp_path / "h11-analysis.json"
+    atomic_write_json(
+        analysis_path,
+        {
+            "status": "completed_reject",
+            "candidate": {
+                "candidate_id": "qwen2.5-7b-retrieval-ledger-draft-h11-v1",
+                "mean_development_score": 90.0,
+                "hard_gate_pass_rate": 0.25,
+                "latency_ms": {"mean": 15000},
+                "settled_cost_usd": 0,
+                "source_artifact_hashes": {"outputs_jsonl": outputs_sha256},
+            },
+        },
+    )
+    audit_path = tmp_path / "h11-audit.json"
+    atomic_write_json(
+        audit_path,
+        {
+            "candidate_id": "qwen2.5-7b-retrieval-ledger-draft-h11-v1",
+            "outputs_sha256": outputs_sha256,
+            "decision": {
+                "candidate_disposition": (
+                    "reject_for_artifact_contamination_or_source_grounding_risk"
+                )
+            },
+        },
+    )
+    output_path = tmp_path / "frontier-v3.json"
+
+    result = publish_h11_frontier(
+        previous_frontier_path=frontier_path,
+        analysis_path=analysis_path,
+        audit_path=audit_path,
+        output_path=output_path,
+        repo_root=tmp_path,
+        generated_at="2026-08-23T22:30:00Z",
+    )
+
+    assert result["version"] == 3
+    assert len(result["candidates"]) == 2
+    assert result["candidates"][-1]["output_audit_status"] == "fail"
+    assert result["source_artifacts"][0]["sha256"] == sha256_file(source_path)

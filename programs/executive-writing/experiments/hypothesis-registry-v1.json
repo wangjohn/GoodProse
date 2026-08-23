@@ -82,11 +82,11 @@
     },
     {
       "category": "base_model_scale",
-      "evidence": "The exact same-family Qwen2.5 7B Q4_K_M artifact is now hash-pinned and frozen for one compact-ledger probe. A non-B1 smoke loaded 6.0 GB fully on GPU, retained 24% free memory with zero throttled pages, completed cold in 14.038 seconds, and left 35.09 GiB disk available.",
+      "evidence": "The exact pinned Qwen2.5 7B compact-ledger probe improved mean score by 3.4548 points, but its 95% paired interval crossed zero, hard-gate pass rate regressed from 50.00% to 29.17%, 17 cases had deterministic omissions, and full-output review found 15 material source-expansion risks, five artifact-commentary cases, and two introduced-placeholder cases.",
       "hypothesis_id": "h11-larger-local-open-model",
       "major_factor": "Hold compact-ledger architecture fixed and replace the 0.5B base with one resource-feasible larger local instruct model.",
-      "next_action": "Run the committed frozen 24-case candidate once, rescore offline with deterministic v1.1, and require 24/24 hard gates plus a clean full-output audit.",
-      "status": "planned_high_value"
+      "next_action": "Reject without retry, repair, alternate model size, or prompt change under h11; retain the resource-feasibility and scale negative evidence.",
+      "status": "completed_rejected"
     },
     {
       "category": "training_data",
@@ -98,10 +98,10 @@
     },
     {
       "category": "external_evaluation",
-      "evidence": "Seven pinned adapters and real-source schemas validate, but benchmark source artifacts have not been acquired or executed.",
+      "evidence": "Exact public pins were acquired and hash-validated for WritingBench, IteraTeR/EditEval, and Revision for Concision. Six suite IDs adapted successfully to 1,286 local suite-view cases and emitted 1,128 reference-free candidate payload rows. No candidate predictions or benchmark scores were produced; WritingBench lacks an exact judge pin and YapBench remains rights-unverified.",
       "hypothesis_id": "h13-public-evaluation-compatibility",
       "major_factor": "Run the pinned WritingBench, IteraTeR, EditEval, Revision for Concision, and YapBench adapters on acquired source files.",
-      "next_action": "Acquire only from documented canonical sources under the frozen rights and hash workflow.",
+      "next_action": "Retain the six real-source compatibility artifacts locally; do not run WritingBench without an exact frozen judge and do not acquire or execute YapBench without clarified dataset rights.",
       "status": "blocked_external"
     },
     {
@@ -114,7 +114,7 @@
     }
   ],
   "registry_id": "executive-writing-hypotheses-v1",
-  "source_frontier_sha256": "05efd63ea0cf27e37882e85a01245c158226611bd8dc912a052be8f545b18844",
-  "updated_at": "2026-08-23T22:02:47Z",
+  "source_frontier_sha256": "d05dfe024a622b031a5bf9ac3885d5f0951590b47545f47b4310c20082a8d8fa",
+  "updated_at": "2026-08-23T22:22:04Z",
   "version": 1
 }

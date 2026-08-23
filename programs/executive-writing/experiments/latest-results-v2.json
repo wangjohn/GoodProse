@@ -1,0 +1,57 @@
+{
+  "artifact_id": "goodprose-current-results-v2",
+  "automated_frontier": {
+    "candidate_count": 15,
+    "finalist_ready_count": 0,
+    "frontier_id": "goodprose-b1-common-architecture-frontier-v3",
+    "path": "programs/executive-writing/experiments/architecture-frontier-v3.json",
+    "sha256": "d05dfe024a622b031a5bf9ac3885d5f0951590b47545f47b4310c20082a8d8fa"
+  },
+  "benchmark_id": "goodprose-b1-v1",
+  "benchmark_status": "visible_search_development",
+  "completion_status": "genuine_external_blockers_remain_goal_not_complete",
+  "external_evaluations": {
+    "candidate_benchmark_results_produced": 0,
+    "real_source_adapted_suite_ids": 6,
+    "record_path": "programs/executive-writing/experiments/external-eval-real-source-adaptation-v1.json",
+    "record_sha256": "3f71cf4000068cd2a8b4f76440f9bcab4bc97ba6c8b845c51a79ca684ac38ef1",
+    "rights_blocked_suite_ids": 1
+  },
+  "final_automated_probe": {
+    "audit_no_flag_case_count": 7,
+    "candidate_id": "qwen2.5-7b-retrieval-ledger-draft-h11-v1",
+    "development_score": 90.6529,
+    "disposition": "rejected_for_hard_gate_and_source_grounding_failures",
+    "hard_gate_pass_rate": 0.2917,
+    "paired_mean_difference_vs_leader": 3.4548,
+    "source_expansion_risk_case_count": 15
+  },
+  "generated_at": "2026-08-23T22:22:04Z",
+  "human_evaluation": {
+    "packet_exists": false,
+    "protocol_id": "goodprose-intended-audience-human-v1",
+    "protocol_status": "implemented_and_tested_blocked_by_zero_eligible_finalists",
+    "ratings_exist": false
+  },
+  "hypothesis_registry": {
+    "path": "programs/executive-writing/experiments/hypothesis-registry-v1.json",
+    "planned_high_value_count": 0,
+    "sha256": "f6bc29b8f54031a1e926e29c17e0a2b6e4c3ecce4d96d0ae7d242ad227d0dae9"
+  },
+  "provisional_leader": {
+    "candidate_id": "qwen2.5-0.5b-retrieval-ledger-draft-v2",
+    "development_score": 87.1981,
+    "hard_gate_pass_rate": 0.5,
+    "latency_mean_ms": 2850.46,
+    "production_eligible": false,
+    "recommendation": "retain_as_research_leader_do_not_deploy_unsupervised"
+  },
+  "remaining_blockers": {
+    "path": "programs/executive-writing/experiments/completion-blockers-v1.json",
+    "sha256": "d031500c0fbfd7c519970b4fa3e3471ffb17023a75454a0b18bf7c07e083c601",
+    "summary": "Authentic training-approved task pairs, source rights and sufficiency, access-separated B2/Tier C data and operators, and intended-audience ratings after a valid finalist freeze remain external."
+  },
+  "scorer_version": "goodprose-deterministic-v1.1",
+  "settled_cost_usd": 0,
+  "version": 2
+}
