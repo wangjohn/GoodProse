@@ -1,0 +1,65 @@
+{
+  "assignment_id": "ox-profile-coverage-runner-v1",
+  "session_id": "ses_fd285acdaffeoFnb54c5kFDHCi",
+  "model_id": "stealth/ox-alpha",
+  "provider": "openrouter",
+  "reasoning_variant": "high",
+  "opencode_version": "1.18.21",
+  "prompt_path": "programs/executive-writing/configs/ox/profile-coverage-runner-v1.md",
+  "prompt_sha256": "1a46acff915c4a88d5a400d1cc3fb60eb6cd3fab447a45a64e6793ff1248d802",
+  "response_sha256": "3aa4820fdd7282a8ac3c8cb394f0d25cb138d3e2403146f8be860e746778cd08",
+  "started_at": "2026-08-23T07:16:26Z",
+  "completed_at": "2026-08-23T07:23:32Z",
+  "code_revision_start": "9bba56e",
+  "intended_use": "implementation draft of a source-text-free local coverage runner and offline publisher for eleven descriptive profiles plus the GoodProse house control",
+  "input_classification": "public repository metadata, project-authored B1 cases, and conservative source-profile metadata without third-party source bodies",
+  "settled_cost_usd": 0,
+  "tokens": {
+    "input": 687802,
+    "output": 62399,
+    "reasoning": 0,
+    "cache_read": 6482432,
+    "cache_write": 0
+  },
+  "repository_state_changed": true,
+  "generated_file_count": 4,
+  "modified_file_count": 1,
+  "ox_validation": {
+    "focused_tests_passed": 7,
+    "ruff_check": "passed",
+    "ruff_format_check": "passed",
+    "pyright_errors": 0,
+    "live_model_calls": 0
+  },
+  "codex_validation": {
+    "focused_tests_passed": 9,
+    "full_repository_tests_passed": 84,
+    "corpus_validation": "passed",
+    "ruff_check": "passed",
+    "ruff_format_check": "passed",
+    "pyright_errors": 0,
+    "git_diff_check": "passed",
+    "live_model_calls": 0
+  },
+  "codex_review": {
+    "status": "accepted_with_corrections",
+    "accepted": [
+      "dedicated deterministic profile-coverage runner and CLI",
+      "exact 12-candidate by 6-case execution plan with retrieval disabled",
+      "source-text-free descriptive prompt construction and pre-call policy checks",
+      "v1.1 scoring, raw artifact hashing, non-overwrite behavior, and compact publication",
+      "mock-only tests and no live generation during implementation"
+    ],
+    "corrections": [
+      "made the house-control prompt byte-identical to the existing frozen profile baseline",
+      "added the coverage config, Ox assignment, scorer correction, and all eleven profile-config hashes",
+      "verified the B1 cases bytes against the benchmark manifest",
+      "made the publisher rebuild and hash every prompt and independently recompute every v1.1 score",
+      "made the publisher recompute candidate summaries and require the exact frozen candidate and case order",
+      "corrected the even-sized paired median calculation",
+      "made timestamps timezone-aware and froze config version, prompt version, call count, retrieval posture, and zero cost",
+      "strengthened tests for the exact house prompt, all source IDs, meaningful anti-impersonation assertions, saved-score tampering, and median calculation"
+    ],
+    "excluded_use": "the implementation draft and coverage run are not training data, legal advice, impersonation evidence, a production gate, or confirmatory model-quality evidence"
+  }
+}

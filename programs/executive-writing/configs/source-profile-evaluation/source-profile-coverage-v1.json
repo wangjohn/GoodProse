@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "evaluation_id": "source-profile-coverage-v1",
+  "assignment_id": "ox-profile-coverage-runner-v1",
+  "purpose": "exploratory_profile_card_coverage_not_impersonation_or_endorsement",
+  "named_source_manifest_path": "data/executive-writing/sources/named-sources-v1.json",
+  "source_profiles_eval_manifest_path": "evals/executive-writing/source-profiles-v1/manifest.json",
+  "source_profiles_configs_dir": "programs/executive-writing/configs/source-profiles",
+  "b1_cases_path": "evals/executive-writing/goodprose-b1-v1/cases.jsonl",
+  "benchmark_manifest_path": "evals/executive-writing/goodprose-b1-v1/manifest.json",
+  "baseline_config_path": "programs/executive-writing/configs/baselines/qwen2.5-0.5b-profile-v1.json",
+  "scorer_correction_path": "evals/executive-writing/goodprose-b1-v1/SCORER_CALIBRATION_v1.1.md",
+  "ox_assignment_path": "programs/executive-writing/configs/ox/profile-coverage-runner-v1.md",
+  "house_control_candidate_id": "qwen2.5-0.5b-profile-v1",
+  "descriptive_prompt_version": "descriptive-source-profile-v1",
+  "shared_case_ids": [
+    "b1-001-migration-email",
+    "b1-004-hiring-memo",
+    "b1-007-launch-decision-memo",
+    "b1-011-concise-onboarding-revision",
+    "b1-015-europe-strategy-update",
+    "b1-020-cache-blog"
+  ],
+  "expected_generation_calls": 72,
+  "retrieval_enabled": false,
+  "no_third_party_text_in_prompts": true,
+  "settled_cost_usd": 0
+}

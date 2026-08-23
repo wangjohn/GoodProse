@@ -13,6 +13,11 @@ from goodprose.executive_writing.mlx_evaluation import (
     publish_mlx_b1_results,
     run_mlx_b1_evaluation,
 )
+from goodprose.executive_writing.profile_coverage import (
+    load_coverage_inputs,
+    publish_coverage_results,
+    run_coverage,
+)
 from goodprose.executive_writing.smoke_data import compile_smoke_dataset
 from goodprose.executive_writing.training import run_smoke_training
 
@@ -107,6 +112,21 @@ def build_parser() -> argparse.ArgumentParser:
     mlx_eval_publish.add_argument("--results", required=True)
     mlx_eval_publish.add_argument("--case-results", required=True)
     mlx_eval_publish.add_argument("--generated-at", required=True)
+
+    coverage = commands.add_parser(
+        "profile-coverage", help="Run or publish descriptive profile-card coverage"
+    )
+    coverage_commands = coverage.add_subparsers(dest="coverage_command", required=True)
+    coverage_run = coverage_commands.add_parser("run")
+    coverage_run.add_argument("--config", required=True)
+    coverage_run.add_argument("--output-root", required=True)
+    coverage_run.add_argument("--code-revision", required=True)
+    coverage_publish = coverage_commands.add_parser("publish")
+    coverage_publish.add_argument("--config", required=True)
+    coverage_publish.add_argument("--run-dir", required=True)
+    coverage_publish.add_argument("--results", required=True)
+    coverage_publish.add_argument("--case-results", required=True)
+    coverage_publish.add_argument("--generated-at", required=True)
     return parser
 
 
@@ -212,6 +232,25 @@ def _run(args: argparse.Namespace) -> int:
             generated_at=args.generated_at,
         )
         print(f"MLX B1 analysis complete: {analysis['status']}")
+        return 0
+    if args.command == "profile-coverage" and args.coverage_command == "run":
+        inputs = load_coverage_inputs(_path(args.config))
+        run_dir = run_coverage(
+            inputs=inputs,
+            output_root=_path(args.output_root),
+            code_revision=args.code_revision,
+        )
+        print(f"profile-coverage run complete: {run_dir}")
+        return 0
+    if args.command == "profile-coverage" and args.coverage_command == "publish":
+        results = publish_coverage_results(
+            config_path=_path(args.config),
+            run_dir=_path(args.run_dir),
+            results_path=_path(args.results),
+            case_results_path=_path(args.case_results),
+            generated_at=args.generated_at,
+        )
+        print(f"profile-coverage published: {results['status']}")
         return 0
     raise AssertionError("unhandled command")
 

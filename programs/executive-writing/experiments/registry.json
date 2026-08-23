@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T07:01:04Z",
+  "updated_at": "2026-08-23T07:23:32Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -231,6 +231,19 @@
       "dataset_id": "named-sources-v1",
       "settled_cost_usd": 0,
       "disposition": "accept after Codex source, rights, provenance, and cross-artifact validation corrections"
+    },
+    {
+      "experiment_id": "ox-profile-coverage-runner-v1",
+      "kind": "inference_pipeline_validation",
+      "status": "completed_reviewed",
+      "record": "programs/executive-writing/experiments/ox-profile-coverage-runner-v1.json",
+      "code_revision_start": "9bba56e",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "accept runner after Codex prompt-equivalence, provenance, publisher-integrity, median, and test corrections; execute locally only"
     }
   ]
 }

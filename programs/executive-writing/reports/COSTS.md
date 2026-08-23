@@ -40,6 +40,7 @@ reference. Never record payment credentials.
 | 2026-08-23T05:31:13Z | Local Apple M3 Pro | Run four matched MLX base/adapter B1 candidates | `mlx-qwen2.5-0.5b-smoke-b1-v1` | completed; adapter rejected for quality | $0.00 | 144 local generations, paired analysis, 158.463 seconds, no remaining process |
 | 2026-08-23T05:53:27Z | OpenRouter | Bounded all-profile public source discovery | `ox-source-discovery-v1` | completed and reviewed | $0.00 | exact Ox session, prompt/response hashes, and Codex primary-source verification |
 | 2026-08-23T06:54:38Z | OpenRouter | Draft typed source, rights, profile, eval, and run artifacts | `ox-source-artifacts-implementation-v1` | completed and reviewed with corrections | $0.00 | exact Ox session, 17 drafted files, scoped validation, and Codex review |
+| 2026-08-23T07:23:32Z | OpenRouter | Draft the source-text-free profile coverage runner and publisher | `ox-profile-coverage-runner-v1` | completed and reviewed with corrections | $0.00 | exact Ox session, prompt/response hashes, mocked tests, and Codex integrity review |
 
 ## Zero-cost feasibility snapshot
 
