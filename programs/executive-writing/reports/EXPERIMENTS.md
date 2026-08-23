@@ -350,6 +350,35 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   milestone. Profile-card runs remain configured but unexecuted. Record:
   `../experiments/ox-source-artifacts-implementation-v1.json`.
 
+## 2026-08-23 — All-eleven source-text-free profile coverage
+
+- Question: can each descriptive source profile execute on identical
+  project-authored content without source text, retrieval, identity prompting,
+  or a standalone adapter?
+- Candidates/control: eleven descriptive profile cards versus the frozen
+  `qwen2.5-0.5b-profile-v1` house control; six shared B1 cases each; 72 local
+  calls total in exact manifest order.
+- Configuration: revision `c472575`; Ollama 0.9.6;
+  `qwen2.5:0.5b-instruct`; temperature 0; seed 20260822; 512-token cap;
+  retrieval disabled; deterministic scorer v1.1; $0.
+- Result: house control 85.3381 / 33.33% hard gates. Descriptive means ranged
+  from 76.7911 to 93.5057. Technical Link Commentary had the largest paired
+  mean (+8.1677, 4/1/1 win/tie/loss) and 66.67% hard gates; Conversational
+  Essay Memo (+5.5779), Policy Polemical Analysis (+4.9226), Institutional
+  Narrative Letter (+3.8249), and Operational Executive Update (+2.7250) were
+  also directionally positive. These are visible six-case estimates, not
+  winner-selection evidence.
+- Integrity: the publisher verified all raw hashes and exact pair order,
+  rebuilt all 72 prompts, independently recomputed all v1.1 scores and summary
+  statistics, corrected even-sized medians, and emitted no generated text.
+  An output scan found no requested-person identity strings.
+- Decision: complete coverage for all eleven profiles and retain all of them.
+  Set `advancement_decision` to `none_coverage_only`; do not alter the existing
+  24-case directional leader or claim impersonation quality.
+- Records: `../experiments/source-profile-coverage-v1-results.json`, its
+  source-text-free case companion, and ignored raw artifacts identified by the
+  committed hashes.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

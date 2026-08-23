@@ -427,3 +427,34 @@ historical entries.
   require rights promotion and measurement before training; Bezos and Jassy
   are clearly insufficient for standalone adapters; topic swaps and
   leave-time-out cases remain unbuilt; no public-email corpus was verified.
+
+### 2026-08-23 — Phase 0 checkpoint: all-eleven source-profile coverage
+
+- Hypothesis: every descriptive profile can execute as a source-text-free
+  prompt-time control on identical project-authored content with complete
+  provenance and without identity, retrieval, or rights leakage.
+- Evidence: Ox Alpha drafted the runner under exact session and prompt/response
+  provenance; Codex corrected and froze it at revision `c472575`; the local
+  matrix completed exactly 72 calls (twelve candidates by six cases) in 157.0
+  seconds with zero settled cost. The offline publisher rebuilt every prompt,
+  verified all prompt/output/artifact hashes, independently recomputed every
+  v1.1 score, and published 72 source-text-free case records.
+- Result: all eleven profiles are executable. The house control scored 85.3381
+  with 33.33% hard gates. Directionally, Technical Link Commentary was highest
+  at 93.5057 and 66.67% hard gates (+8.1677 paired points); Conversational
+  Essay Memo, Policy Polemical Analysis, Institutional Narrative Letter, and
+  Operational Executive Update also had positive six-case paired means.
+- Exit criteria: exact candidate/case order, no third-party source text or
+  retrieval, no requested-person names or source IDs in prompts, v1.1 scoring,
+  independently verified compact publication, all eleven retained, and no
+  advancement claim from the visible six-case slice.
+- Decision: pass the coverage milestone only. No profile advances, becomes a
+  production default, or changes the directional 24-case B1 leader. Continue
+  to label the apparent ranking exploratory and retain every profile.
+- Next actions: implement B2 aggregate-only reporting and Tier C one-shot
+  lifecycle controls, then add external-evaluation adapters before another
+  unified-model update.
+- Unresolved risks: n=6 is small and visible; topic-swap and leave-time-out
+  controls are absent; deterministic scoring is lexical; several profiles
+  increased rewriting or fabrication errors; and no named source is approved
+  for training.

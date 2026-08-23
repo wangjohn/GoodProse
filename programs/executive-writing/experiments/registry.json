@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T07:23:32Z",
+  "updated_at": "2026-08-23T07:40:01Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -244,6 +244,19 @@
       "model_id": "stealth/ox-alpha",
       "settled_cost_usd": 0,
       "disposition": "accept runner after Codex prompt-equivalence, provenance, publisher-integrity, median, and test corrections; execute locally only"
+    },
+    {
+      "experiment_id": "source-profile-coverage-v1",
+      "kind": "source_text_free_profile_card_coverage",
+      "status": "completed_exploratory",
+      "record": "programs/executive-writing/experiments/source-profile-coverage-v1-results.json",
+      "code_revision_start": "c472575",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_ollama",
+      "model_id": "qwen2.5:0.5b-instruct",
+      "settled_cost_usd": 0,
+      "disposition": "coverage complete for all eleven profiles; retain all profiles and make no advancement or production decision from six visible cases"
     }
   ]
 }

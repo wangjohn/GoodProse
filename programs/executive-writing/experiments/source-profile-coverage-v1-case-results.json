@@ -1,0 +1,965 @@
+[
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 91.1587,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "b99d64c1329dbe4308b94c89278d47b3b725072eed3adcea845e15d79502b869",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 135
+  },
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 77.75,
+    "errors": [
+      "omission",
+      "poor_actionability"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "02c0a454bd815d4de2c7879680ff8b768f2a160be452b37c71132e9a99a67c02",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 200
+  },
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 67.3333,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "c23a79a6c0f11e27e20acef308593b2cfdff338f952f64622fc7277afd4f3858",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 49
+  },
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 98.2353,
+    "errors": [],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "75a387fc8891721cfa9386718729335a4e871a251bbabd67d360923372e35caf",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 119
+  },
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 80.8846,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "c27d05d5da3bb6e4f5a0fe9eed06e0de7bca29cbf0043d604de7ca80c60cb3ec",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 51
+  },
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 96.6667,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "0b6f3a87e0bae17acaa68063400ee59b8ac53ca27f2a6293c355b4a3bc981c86",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 300
+  },
+  {
+    "candidate_id": "profile-coverage-concise-curation-brief-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "0ca1ebc254db6c2c01899f9ec9fab333f3b3bf8c7348643c4373e8e645fd0a7a",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 118
+  },
+  {
+    "candidate_id": "profile-coverage-concise-curation-brief-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 39.8819,
+    "errors": [
+      "fabrication",
+      "omission",
+      "poor_actionability",
+      "structural_failure",
+      "unnecessary_expansion"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "b5bf99290f01819f54d86b0675465c234824d4b5c7c0a007c463780660e886e0",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 395
+  },
+  {
+    "candidate_id": "profile-coverage-concise-curation-brief-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 92.0,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "60237e1fd34af324beeca7b39f57902132210f44e0bbbc198936b996386278d4",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 62
+  },
+  {
+    "candidate_id": "profile-coverage-concise-curation-brief-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 90.0141,
+    "errors": [
+      "excessive_rewriting",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "94c0bda0167555798117c0d40be577ee08719fdb645ff2784c9d3847ca7a619e",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 118
+  },
+  {
+    "candidate_id": "profile-coverage-concise-curation-brief-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 88.0,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "0849050bdc77ed72daa9a405299315cb7c100899f3d85295c6f2651f9ff75a80",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 202
+  },
+  {
+    "candidate_id": "profile-coverage-concise-curation-brief-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 86.145,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "fd5de0da242a29b2e95d5d5f4eca381cf08268258f21850f5a6de8f734d92bce",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 409
+  },
+  {
+    "candidate_id": "profile-coverage-conversational-essay-memo-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "76f369651ce56815721cb1e200ed9c0098a28367827495f7b83409286ea30d25",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 130
+  },
+  {
+    "candidate_id": "profile-coverage-conversational-essay-memo-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 90.8959,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "082da039e39512e91f1ff82ee82557815fc18399658bc7137a067ab24c102959",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 221
+  },
+  {
+    "candidate_id": "profile-coverage-conversational-essay-memo-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 91.5,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "d89feef9719da6723b4c6184efe03e48c22002c684ed3ba0c2bc3731f141d5ac",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 59
+  },
+  {
+    "candidate_id": "profile-coverage-conversational-essay-memo-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 98.2353,
+    "errors": [],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "75a387fc8891721cfa9386718729335a4e871a251bbabd67d360923372e35caf",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 119
+  },
+  {
+    "candidate_id": "profile-coverage-conversational-essay-memo-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 90.0507,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "d599be8ce427189500a530e5dd2bff37e6ae24d9ed775fd9656fee5a842f0136",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 296
+  },
+  {
+    "candidate_id": "profile-coverage-conversational-essay-memo-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 92.1474,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "f3fa50d6d2d94e39977ddafc03ae543fe9bd08eb964102bbc50ba0395e5d3c54",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 416
+  },
+  {
+    "candidate_id": "profile-coverage-declarative-trajectory-update-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "86122af5b44f12cf5cdd8bac53546ea723132204f8cbd87b8b6bae30dbfb3087",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 106
+  },
+  {
+    "candidate_id": "profile-coverage-declarative-trajectory-update-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 75.1667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "1fe9f60c9d9e8cbae8a51391c1f2895fdb15c1629d7562a0e96f7cfff0c9ba3a",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 139
+  },
+  {
+    "candidate_id": "profile-coverage-declarative-trajectory-update-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 92.0,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "60237e1fd34af324beeca7b39f57902132210f44e0bbbc198936b996386278d4",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 62
+  },
+  {
+    "candidate_id": "profile-coverage-declarative-trajectory-update-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 86.6808,
+    "errors": [
+      "excessive_rewriting",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "1ff422fd04ac7ed57d6cb32a02fd47eed83f4079c866d182ab151ce343d6f8c3",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 118
+  },
+  {
+    "candidate_id": "profile-coverage-declarative-trajectory-update-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 90.0,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "f850890486adc0347141da6aba034daeee26fb6fd99e85c2e78bda46188c48b0",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 149
+  },
+  {
+    "candidate_id": "profile-coverage-declarative-trajectory-update-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 86.8777,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "8fe7b94d9798ba0d6b4463382d03d70ff0699c2a5ebdad0220b2938c464a36db",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 387
+  },
+  {
+    "candidate_id": "profile-coverage-narrative-anecdote-advisory-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 96.6667,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "e804f0959f63527643d711f70765ffc458a77fbbc21f981941179e6665cb1be9",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 59
+  },
+  {
+    "candidate_id": "profile-coverage-narrative-anecdote-advisory-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 26.012,
+    "errors": [
+      "fabrication",
+      "omission",
+      "poor_actionability",
+      "structural_failure",
+      "unnecessary_expansion"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "ef0110b032275f36cc6cd1d11d2d444cfa24a438b53320a158d1ca9db64880e8",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 388
+  },
+  {
+    "candidate_id": "profile-coverage-narrative-anecdote-advisory-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 91.3333,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "99c6e7f32f80dd272438552666878a5646c60c7adcc80b2b4591cc56421e6811",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 58
+  },
+  {
+    "candidate_id": "profile-coverage-narrative-anecdote-advisory-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 90.0141,
+    "errors": [
+      "excessive_rewriting",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "94c0bda0167555798117c0d40be577ee08719fdb645ff2784c9d3847ca7a619e",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 118
+  },
+  {
+    "candidate_id": "profile-coverage-narrative-anecdote-advisory-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 90.0,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "cb72c61502aa868fc132d387fd4e06ebcd6db9aa78d1c2a2b0ccf1f7bc43bf07",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 244
+  },
+  {
+    "candidate_id": "profile-coverage-narrative-anecdote-advisory-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 86.9697,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "006ce887f259840767fb5f68ac42740c75d97791bf0464a3fb47201789a4cce5",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 396
+  },
+  {
+    "candidate_id": "profile-coverage-daily-cadence-note-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 82.2189,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "1e039a0df1c83bc6918b35d4dbcfa79b6be974d12ec88191211f5c1337cd85f0",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 134
+  },
+  {
+    "candidate_id": "profile-coverage-daily-cadence-note-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 81.3734,
+    "errors": [
+      "structural_failure",
+      "unnecessary_expansion"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "58decb8d9e24781bc45b648a98ac5cfde4080f5e5df30b882c564d7993c2e56c",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 325
+  },
+  {
+    "candidate_id": "profile-coverage-daily-cadence-note-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 91.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "2e739c7fd5a45706613a56156e8c6c53bc0ef3f2e167a10913f25f34cb5c4e49",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 97
+  },
+  {
+    "candidate_id": "profile-coverage-daily-cadence-note-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 91.25,
+    "errors": [
+      "excessive_rewriting",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "3c948d338e316262370c71b1e82766cd69fd726aa4e0091ac42ef7e7389dfacc",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 108
+  },
+  {
+    "candidate_id": "profile-coverage-daily-cadence-note-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 85.0,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "c17c6b79dfdabdbce6bc0c166970c201c4ac0ab8b1cf25c3fbb92fb57cf7a8bd",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 184
+  },
+  {
+    "candidate_id": "profile-coverage-daily-cadence-note-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 76.301,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "931bec8b0d64ed33bab98381e85d6d6202ee909297bfb92a45074c7677003f36",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 418
+  },
+  {
+    "candidate_id": "profile-coverage-polemical-product-philosophy-note-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 91.0833,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "bb4ee5d31f8394a41ccd59a1fb34eeab19870414ebc12eb9be4e6b7920ebddb0",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 86
+  },
+  {
+    "candidate_id": "profile-coverage-polemical-product-philosophy-note-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 71.5667,
+    "errors": [
+      "fabrication",
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "dc670c7d9408a04ebc4c632b8400b6ac52f5bc3ea09bab4e9063cfb303cc8ed8",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 133
+  },
+  {
+    "candidate_id": "profile-coverage-polemical-product-philosophy-note-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 82.5,
+    "errors": [
+      "omission",
+      "poor_actionability"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "c6221e6fd5b495ee155e7aa92d4efebb1540eaa4f9da6328f6acc321731cf03d",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 173
+  },
+  {
+    "candidate_id": "profile-coverage-polemical-product-philosophy-note-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 86.6808,
+    "errors": [
+      "excessive_rewriting",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "1ff422fd04ac7ed57d6cb32a02fd47eed83f4079c866d182ab151ce343d6f8c3",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 118
+  },
+  {
+    "candidate_id": "profile-coverage-polemical-product-philosophy-note-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 82.0385,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "8ef19c42cf2af593ddb5336c13bc2458fe05c327fa6fe29bbb43c3043d5262f7",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 61
+  },
+  {
+    "candidate_id": "profile-coverage-polemical-product-philosophy-note-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 74.9117,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "f292f6994cf6da989bed91017e0c279e774eb6c6df10b47237d5586b7422b0d0",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 396
+  },
+  {
+    "candidate_id": "profile-coverage-principle-driven-manifesto-memo-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "41999b5988e418ed1afd28adffe8654e9f8e8181c91c614239acac572f6b0f60",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 111
+  },
+  {
+    "candidate_id": "profile-coverage-principle-driven-manifesto-memo-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 51.1586,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "0ba2ce83ff42d4862aa89c5d8e8f3885038f4133a200baf7b7b1d8efdbccfe46",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 248
+  },
+  {
+    "candidate_id": "profile-coverage-principle-driven-manifesto-memo-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 93.5,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "89cf492cfe8d5b53c326716e1fe4d186d0e09f397d64c8818bff4c340e11554b",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 83
+  },
+  {
+    "candidate_id": "profile-coverage-principle-driven-manifesto-memo-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 89.902,
+    "errors": [
+      "excessive_rewriting",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "a368d4ac88574ac4c28d65700326ccd2e6089290584b22f99dd37b5e80043adc",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 119
+  },
+  {
+    "candidate_id": "profile-coverage-principle-driven-manifesto-memo-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 89.117,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "67477ba2d21aea2c7603fbb19da9b5ce50d937556aee4961a832dda7a08e062f",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 265
+  },
+  {
+    "candidate_id": "profile-coverage-principle-driven-manifesto-memo-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 54.4025,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "566424ee6ce1823881e95b8e962855fd4624b7f3416948359f02be34cab75cc2",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 424
+  },
+  {
+    "candidate_id": "profile-coverage-technical-link-commentary-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 93.3333,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "24d693ce39926366443f6192d700f0d3a41b8ed8c8d60c33ed7d959ece75f196",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 51
+  },
+  {
+    "candidate_id": "profile-coverage-technical-link-commentary-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 85.579,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "d30a7ac3bdf5e84d14e91f13cc7bece0be26dc5b5752e2ff4e6f327598e6532c",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 238
+  },
+  {
+    "candidate_id": "profile-coverage-technical-link-commentary-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 96.6667,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "8b6aad7d0df0506a405ebe15f7389407e04763174a762215efef3be271532755",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 95
+  },
+  {
+    "candidate_id": "profile-coverage-technical-link-commentary-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 98.2353,
+    "errors": [],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "75a387fc8891721cfa9386718729335a4e871a251bbabd67d360923372e35caf",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 119
+  },
+  {
+    "candidate_id": "profile-coverage-technical-link-commentary-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 95.0,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "31778cefa3f620e349b8cb7489400c7356418782ae7bff46948257a87d6dde6a",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 238
+  },
+  {
+    "candidate_id": "profile-coverage-technical-link-commentary-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 92.2202,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "bc19d35b703697f60d89296d513e2c2cf359e69d990fe90307f799c4aa5ac86c",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 387
+  },
+  {
+    "candidate_id": "profile-coverage-policy-polemical-analysis-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 96.6667,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "e804f0959f63527643d711f70765ffc458a77fbbc21f981941179e6665cb1be9",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 59
+  },
+  {
+    "candidate_id": "profile-coverage-policy-polemical-analysis-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 83.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "b4de2b12e40e1ea0c6b80f719f4ac0f09f1f96fe5a28adffa5e0ac11b89b2226",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 137
+  },
+  {
+    "candidate_id": "profile-coverage-policy-polemical-analysis-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 96.6667,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "86cc390a9f72cea5ced9647b3b9b5525b818ae8b3a4f98b0cf67a4b487c2d1c0",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 101
+  },
+  {
+    "candidate_id": "profile-coverage-policy-polemical-analysis-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 81.6228,
+    "errors": [
+      "excessive_rewriting",
+      "structural_failure",
+      "unnecessary_expansion"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "317980d5f2deefe7d630c0da03d1ff9374fccd6f623b3ac1548935d1d77fc221",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 190
+  },
+  {
+    "candidate_id": "profile-coverage-policy-polemical-analysis-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 90.0,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "0ce0147fd9650f8d50c43c7f6dda754fec2101033dad9f49eaec95939bed4f45",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 246
+  },
+  {
+    "candidate_id": "profile-coverage-policy-polemical-analysis-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 92.9412,
+    "errors": [],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "1f1bdf72ac8c34841292fcde0182ab1a6528e3a21478d47616aeca79a8d21815",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 90
+  },
+  {
+    "candidate_id": "profile-coverage-institutional-narrative-letter-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "ce2edd5e503f7b78800bdb57582b1a94ec007ea7c422e722212ff36ea8d3008d",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 104
+  },
+  {
+    "candidate_id": "profile-coverage-institutional-narrative-letter-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 87.2603,
+    "errors": [
+      "unnecessary_expansion"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "35571ef567e5474a6d202d471a66001af3e28a3272cca8e3991e1934acdbc552",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 292
+  },
+  {
+    "candidate_id": "profile-coverage-institutional-narrative-letter-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 93.8333,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "4612bce77b00709a000208d8b00914fe1055c63c341c035725a01071c25fd98c",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 73
+  },
+  {
+    "candidate_id": "profile-coverage-institutional-narrative-letter-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 98.2353,
+    "errors": [],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "75a387fc8891721cfa9386718729335a4e871a251bbabd67d360923372e35caf",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 119
+  },
+  {
+    "candidate_id": "profile-coverage-institutional-narrative-letter-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 95.0,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "5d02dd6197b8502de4062f837592b942d2bba66b204c34db94f5beafef463eb9",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 161
+  },
+  {
+    "candidate_id": "profile-coverage-institutional-narrative-letter-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 77.9823,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "dd59fd8e0cd3b8b4feae9406873babeb71d99f01186e7ace2ae7981a8becacf7",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 406
+  },
+  {
+    "candidate_id": "profile-coverage-operational-executive-update-v1",
+    "case_id": "b1-001-migration-email",
+    "development_score": 93.3333,
+    "errors": [
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "6bd89266b5069252e78cd90220998500e8df5b51af895a80f69e7f0a93fd900e",
+    "passes_hard_gates": true,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 94
+  },
+  {
+    "candidate_id": "profile-coverage-operational-executive-update-v1",
+    "case_id": "b1-004-hiring-memo",
+    "development_score": 89.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "5e27bf29276bf06c1d31aa69ff4708a2e48107c62a69a3a7dcf1fedcc9c437b7",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 171
+  },
+  {
+    "candidate_id": "profile-coverage-operational-executive-update-v1",
+    "case_id": "b1-007-launch-decision-memo",
+    "development_score": 86.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "4f4493850a8101356d28b73d781f7478ba11b970aa8b1143f29ead5b3d6abae2",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 95
+  },
+  {
+    "candidate_id": "profile-coverage-operational-executive-update-v1",
+    "case_id": "b1-011-concise-onboarding-revision",
+    "development_score": 83.3785,
+    "errors": [
+      "excessive_rewriting",
+      "structural_failure"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "47923534d1a0a7993994f161ea6caa9b1a1d4ffa67996d7f8927595404a27ea8",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 141
+  },
+  {
+    "candidate_id": "profile-coverage-operational-executive-update-v1",
+    "case_id": "b1-015-europe-strategy-update",
+    "development_score": 90.0,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "e0d47cac84f312ed208f9f67af1e5e58632f4dc89ca23c7d75cfba7065288c42",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 246
+  },
+  {
+    "candidate_id": "profile-coverage-operational-executive-update-v1",
+    "case_id": "b1-020-cache-blog",
+    "development_score": 85.3333,
+    "errors": [
+      "omission"
+    ],
+    "evaluation_id": "source-profile-coverage-v1",
+    "output_sha256": "4f26b786fb26403df72333b08d2f5b42f47adf62be4c52edb36c54b6277944e0",
+    "passes_hard_gates": false,
+    "scorer_version": "goodprose-deterministic-v1.1",
+    "word_count": 224
+  }
+]

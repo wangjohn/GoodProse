@@ -1,0 +1,408 @@
+{
+  "advancement_decision": "none_coverage_only",
+  "assignment_id": "ox-profile-coverage-runner-v1",
+  "benchmark_id": "goodprose-b1-v1",
+  "candidates": [
+    {
+      "candidate_id": "qwen2.5-0.5b-profile-v1",
+      "case_count": 6,
+      "error_counts": {
+        "omission": 4,
+        "poor_actionability": 2,
+        "structural_failure": 2
+      },
+      "hard_gate_pass_rate": 0.3333,
+      "mean_development_score": 85.3381,
+      "mean_latency_ms": 1838.2709,
+      "output_tokens": 1145,
+      "person": null,
+      "profile_id": null,
+      "prompt_tokens": 1735,
+      "role": "house_control"
+    },
+    {
+      "candidate_id": "profile-coverage-concise-curation-brief-v1",
+      "case_count": 6,
+      "error_counts": {
+        "excessive_rewriting": 1,
+        "fabrication": 1,
+        "omission": 4,
+        "poor_actionability": 1,
+        "structural_failure": 4,
+        "unnecessary_expansion": 1
+      },
+      "hard_gate_pass_rate": 0.1667,
+      "mean_development_score": 79.7846,
+      "mean_latency_ms": 2387.292,
+      "output_tokens": 1687,
+      "person": "Patrick Collison",
+      "profile_id": "concise-curation-brief-v1",
+      "prompt_tokens": 2731,
+      "role": "descriptive_profile"
+    },
+    {
+      "candidate_id": "profile-coverage-conversational-essay-memo-v1",
+      "case_count": 6,
+      "error_counts": {
+        "omission": 4,
+        "structural_failure": 2
+      },
+      "hard_gate_pass_rate": 0.3333,
+      "mean_development_score": 90.916,
+      "mean_latency_ms": 2295.0227,
+      "output_tokens": 1602,
+      "person": "Paul Graham",
+      "profile_id": "conversational-essay-memo-v1",
+      "prompt_tokens": 2767,
+      "role": "descriptive_profile"
+    },
+    {
+      "candidate_id": "profile-coverage-declarative-trajectory-update-v1",
+      "case_count": 6,
+      "error_counts": {
+        "excessive_rewriting": 1,
+        "omission": 4,
+        "structural_failure": 4
+      },
+      "hard_gate_pass_rate": 0.1667,
+      "mean_development_score": 85.5653,
+      "mean_latency_ms": 1915.6167,
+      "output_tokens": 1269,
+      "person": "Sam Altman",
+      "profile_id": "declarative-trajectory-update-v1",
+      "prompt_tokens": 2725,
+      "role": "descriptive_profile"
+    },
+    {
+      "candidate_id": "profile-coverage-narrative-anecdote-advisory-v1",
+      "case_count": 6,
+      "error_counts": {
+        "excessive_rewriting": 1,
+        "fabrication": 1,
+        "omission": 3,
+        "poor_actionability": 1,
+        "structural_failure": 4,
+        "unnecessary_expansion": 1
+      },
+      "hard_gate_pass_rate": 0.3333,
+      "mean_development_score": 80.166,
+      "mean_latency_ms": 2406.7249,
+      "output_tokens": 1641,
+      "person": "Joel Spolsky",
+      "profile_id": "narrative-anecdote-advisory-v1",
+      "prompt_tokens": 2725,
+      "role": "descriptive_profile"
+    },
+    {
+      "candidate_id": "profile-coverage-daily-cadence-note-v1",
+      "case_count": 6,
+      "error_counts": {
+        "excessive_rewriting": 1,
+        "omission": 4,
+        "structural_failure": 4,
+        "unnecessary_expansion": 1
+      },
+      "hard_gate_pass_rate": 0.0,
+      "mean_development_score": 84.635,
+      "mean_latency_ms": 2360.911,
+      "output_tokens": 1662,
+      "person": "Fred Wilson",
+      "profile_id": "daily-cadence-note-v1",
+      "prompt_tokens": 2779,
+      "role": "descriptive_profile"
+    },
+    {
+      "candidate_id": "profile-coverage-polemical-product-philosophy-note-v1",
+      "case_count": 6,
+      "error_counts": {
+        "excessive_rewriting": 1,
+        "fabrication": 1,
+        "omission": 4,
+        "poor_actionability": 1,
+        "structural_failure": 3
+      },
+      "hard_gate_pass_rate": 0.1667,
+      "mean_development_score": 81.4635,
+      "mean_latency_ms": 2004.3567,
+      "output_tokens": 1328,
+      "person": "David Heinemeier Hansson",
+      "profile_id": "polemical-product-philosophy-note-v1",
+      "prompt_tokens": 2803,
+      "role": "descriptive_profile"
+    },
+    {
+      "candidate_id": "profile-coverage-principle-driven-manifesto-memo-v1",
+      "case_count": 6,
+      "error_counts": {
+        "excessive_rewriting": 1,
+        "omission": 4,
+        "poor_actionability": 1,
+        "structural_failure": 4
+      },
+      "hard_gate_pass_rate": 0.1667,
+      "mean_development_score": 76.7911,
+      "mean_latency_ms": 2510.8103,
+      "output_tokens": 1779,
+      "person": "Jason Fried",
+      "profile_id": "principle-driven-manifesto-memo-v1",
+      "prompt_tokens": 2743,
+      "role": "descriptive_profile"
+    },
+    {
+      "candidate_id": "profile-coverage-technical-link-commentary-v1",
+      "case_count": 6,
+      "error_counts": {
+        "omission": 2,
+        "structural_failure": 3
+      },
+      "hard_gate_pass_rate": 0.6667,
+      "mean_development_score": 93.5057,
+      "mean_latency_ms": 2290.7113,
+      "output_tokens": 1569,
+      "person": "Simon Willison",
+      "profile_id": "technical-link-commentary-v1",
+      "prompt_tokens": 2737,
+      "role": "descriptive_profile"
+    },
+    {
+      "candidate_id": "profile-coverage-policy-polemical-analysis-v1",
+      "case_count": 6,
+      "error_counts": {
+        "excessive_rewriting": 1,
+        "omission": 2,
+        "structural_failure": 4,
+        "unnecessary_expansion": 1
+      },
+      "hard_gate_pass_rate": 0.5,
+      "mean_development_score": 90.2607,
+      "mean_latency_ms": 1744.5645,
+      "output_tokens": 1104,
+      "person": "Cory Doctorow",
+      "profile_id": "policy-polemical-analysis-v1",
+      "prompt_tokens": 2761,
+      "role": "descriptive_profile"
+    },
+    {
+      "candidate_id": "profile-coverage-institutional-narrative-letter-v1",
+      "case_count": 6,
+      "error_counts": {
+        "omission": 3,
+        "structural_failure": 2,
+        "unnecessary_expansion": 1
+      },
+      "hard_gate_pass_rate": 0.3333,
+      "mean_development_score": 89.163,
+      "mean_latency_ms": 2356.7653,
+      "output_tokens": 1665,
+      "person": "Jeff Bezos",
+      "profile_id": "institutional-narrative-letter-v1",
+      "prompt_tokens": 2761,
+      "role": "descriptive_profile"
+    },
+    {
+      "candidate_id": "profile-coverage-operational-executive-update-v1",
+      "case_count": 6,
+      "error_counts": {
+        "excessive_rewriting": 1,
+        "omission": 4,
+        "structural_failure": 4
+      },
+      "hard_gate_pass_rate": 0.1667,
+      "mean_development_score": 88.0631,
+      "mean_latency_ms": 2038.5329,
+      "output_tokens": 1305,
+      "person": "Andy Jassy",
+      "profile_id": "operational-executive-update-v1",
+      "prompt_tokens": 2725,
+      "role": "descriptive_profile"
+    }
+  ],
+  "code_revision": "c472575",
+  "evaluation_id": "source-profile-coverage-v1",
+  "generation_call_count": 72,
+  "generated_at": "2026-08-23T07:40:01Z",
+  "no_third_party_text_in_prompts": true,
+  "input_file_hashes": {
+    "b1_cases": "a15232a5d426dcb6f5161abc5644a8ed10f57b8b7b87fb771e62fe26e57ae352",
+    "baseline_config": "20109afb2d23671df139cff3f3439276f4c1966494de9d8376ea3374daf5c752",
+    "benchmark_manifest": "b7028df1eb7536473ac35b64109f70896b0ffbcdec0326b375a33f8e2caeaf95",
+    "coverage_run_config": "ec871f08c1bdb396c226299a0734a6ada780327de70de9f8b0404a3556a39251",
+    "named_source_manifest": "de129d6fd01a421aa9510faf6b104dd918e9ef07a855a03c66b10e6edbd86e6c",
+    "ox_assignment": "1a46acff915c4a88d5a400d1cc3fb60eb6cd3fab447a45a64e6793ff1248d802",
+    "scorer_correction": "e620c4c5213af18784475c22bc409b487c4d2336a9ec117a3d8df91e447d60eb",
+    "source_profile_config:concise-curation-brief-v1": "62bde4a3850c4ae0f59d2bd2b8d2fd6dbedb8bf66fbcdbdf06114a1d08240fde",
+    "source_profile_config:conversational-essay-memo-v1": "8e43b44c5fae8c65cb476f182f70ebb3a72e8f992f788abad13caf68cf719681",
+    "source_profile_config:daily-cadence-note-v1": "8c986b60ee64d8bc110b0a70af0f01e27b7e950505d38deddd1eeadef2c4567b",
+    "source_profile_config:declarative-trajectory-update-v1": "2a3937d3e545a0fa704adfa09ffc5409846b66bcb4ecccdc2a428c49f7e7b565",
+    "source_profile_config:institutional-narrative-letter-v1": "506da1d6a004602ba5f5afec63328e91a7af3d187c90321d255c310166411e5f",
+    "source_profile_config:narrative-anecdote-advisory-v1": "8579162182cf0da5580128b73ffc73b173d28b01b68eec04046587e6025c146d",
+    "source_profile_config:operational-executive-update-v1": "e072d14c14e4c34bef33c9850110025438acd8b62f29123fba13edbaef6e674a",
+    "source_profile_config:polemical-product-philosophy-note-v1": "d6dcab7d0caf8e8f2165350b47abc5d77f603dcbfa791fce547c7121cf1c28d9",
+    "source_profile_config:policy-polemical-analysis-v1": "18b2ebd7a5669c4806019e683884dcde101098fec442a119569d69ccdf8318e7",
+    "source_profile_config:principle-driven-manifesto-memo-v1": "a933e8478358985da401fa9a3f0da8bfdec92886140b997b3e1ca3806e32a3c3",
+    "source_profile_config:technical-link-commentary-v1": "928e3ba48696ebb056fe1d3612efc1663ddc08f9ef57bb07c069a245ff784373",
+    "source_profiles_eval_manifest": "ce707d39236a0653dd3be23076233f7d1f27f219dc4f4b96674b7ddcce28b472"
+  },
+  "limitations": [
+    "Six project-authored cases provide plumbing-level coverage evidence only.",
+    "Paired differences are exploratory; no advancement winner or production default may be set from this run.",
+    "Topic-swap variants of the shared cases do not exist yet, so trait and topic effects are not separated.",
+    "Leave-time-out evaluation is unavailable because collection dating metadata is not yet verified.",
+    "All eleven descriptive profiles remain in the program regardless of score."
+  ],
+  "model_identity": {
+    "decoding": {
+      "num_ctx": 4096,
+      "num_predict": 512,
+      "seed": 20260822,
+      "temperature": 0.0
+    },
+    "descriptive_prompt_version": "descriptive-source-profile-v1",
+    "endpoint": "http://127.0.0.1:11434",
+    "house_prompt_version": "executive-profile-card-v1",
+    "model_blob_sha256": "c5396e06af294bd101b30dce59131a76d2b773e76950acc870eda801d3ab0515",
+    "model_id": "qwen2.5:0.5b-instruct",
+    "model_license": "Apache-2.0",
+    "model_manifest_sha256": "a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+    "ollama_version": "0.9.6",
+    "provider": "local_ollama",
+    "request_timeout_seconds": 180
+  },
+  "retrieval_enabled": false,
+  "rights_posture": "project-authored B1 tasks only; descriptive profiles are abstract registers; no third-party source text was prompted",
+  "run_completed_at": "2026-08-23T07:39:40.843539Z",
+  "run_started_at": "2026-08-23T07:37:03.808428Z",
+  "scorer_version": "goodprose-deterministic-v1.1",
+  "settled_cost_usd": 0,
+  "paired_versus_house_control": [
+    {
+      "candidate_id": "profile-coverage-concise-curation-brief-v1",
+      "case_count": 6,
+      "paired_mean_difference": -5.5535,
+      "paired_median_difference": -8.3566,
+      "win_tie_loss": {
+        "losses": 4,
+        "ties": 0,
+        "wins": 2
+      }
+    },
+    {
+      "candidate_id": "profile-coverage-conversational-essay-memo-v1",
+      "case_count": 6,
+      "paired_mean_difference": 5.5779,
+      "paired_median_difference": 4.5831,
+      "win_tie_loss": {
+        "losses": 2,
+        "ties": 1,
+        "wins": 3
+      }
+    },
+    {
+      "candidate_id": "profile-coverage-declarative-trajectory-update-v1",
+      "case_count": 6,
+      "paired_mean_difference": 0.2272,
+      "paired_median_difference": -5.5376,
+      "win_tie_loss": {
+        "losses": 4,
+        "ties": 0,
+        "wins": 2
+      }
+    },
+    {
+      "candidate_id": "profile-coverage-narrative-anecdote-advisory-v1",
+      "case_count": 6,
+      "paired_mean_difference": -5.1721,
+      "paired_median_difference": -1.3566,
+      "win_tie_loss": {
+        "losses": 3,
+        "ties": 0,
+        "wins": 3
+      }
+    },
+    {
+      "candidate_id": "profile-coverage-daily-cadence-note-v1",
+      "case_count": 6,
+      "paired_mean_difference": -0.7031,
+      "paired_median_difference": -1.6809,
+      "win_tie_loss": {
+        "losses": 3,
+        "ties": 0,
+        "wins": 3
+      }
+    },
+    {
+      "candidate_id": "profile-coverage-polemical-product-philosophy-note-v1",
+      "case_count": 6,
+      "paired_mean_difference": -3.8746,
+      "paired_median_difference": -3.1294,
+      "win_tie_loss": {
+        "losses": 4,
+        "ties": 0,
+        "wins": 2
+      }
+    },
+    {
+      "candidate_id": "profile-coverage-principle-driven-manifesto-memo-v1",
+      "case_count": 6,
+      "paired_mean_difference": -8.547,
+      "paired_median_difference": -8.4126,
+      "win_tie_loss": {
+        "losses": 4,
+        "ties": 0,
+        "wins": 2
+      }
+    },
+    {
+      "candidate_id": "profile-coverage-technical-link-commentary-v1",
+      "case_count": 6,
+      "paired_mean_difference": 8.1677,
+      "paired_median_difference": 5.0018,
+      "win_tie_loss": {
+        "losses": 1,
+        "ties": 1,
+        "wins": 4
+      }
+    },
+    {
+      "candidate_id": "profile-coverage-policy-polemical-analysis-v1",
+      "case_count": 6,
+      "paired_mean_difference": 4.9226,
+      "paired_median_difference": 5.7124,
+      "win_tie_loss": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 4
+      }
+    },
+    {
+      "candidate_id": "profile-coverage-institutional-narrative-letter-v1",
+      "case_count": 6,
+      "paired_mean_difference": 3.8249,
+      "paired_median_difference": 4.7552,
+      "win_tie_loss": {
+        "losses": 2,
+        "ties": 1,
+        "wins": 3
+      }
+    },
+    {
+      "candidate_id": "profile-coverage-operational-executive-update-v1",
+      "case_count": 6,
+      "paired_mean_difference": 2.725,
+      "paired_median_difference": 5.645,
+      "win_tie_loss": {
+        "losses": 2,
+        "ties": 0,
+        "wins": 4
+      }
+    }
+  ],
+  "source_artifact_hashes": {
+    "outputs_jsonl": "e4c072746bb869e6bbca3c58148b06633293cb58bd892ed85950614dc7bf9d44",
+    "run_manifest_json": "ec91a90131826807b537672445894489a4cd6e27b860ca8e0ac4b17ddcc0ee78",
+    "scores_jsonl": "1e2d953857ff3809aadc24bbe95ad5e63e1ac2459976a463846ef1eb50279345",
+    "summary_json": "ee6daacc7e7bd6b88c314531cb74a196287da1394703c27c1b6388cfb7c0f79b"
+  },
+  "status": "exploratory_coverage_complete",
+  "version": 1
+}

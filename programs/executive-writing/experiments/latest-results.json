@@ -125,7 +125,7 @@
     "settled_cost_usd": 0,
     "synthetic_test_loss": 0.19
   },
-  "generated_at": "2026-08-23T05:34:11Z",
+  "generated_at": "2026-08-23T07:40:01Z",
   "leader": {
     "candidate_id": "qwen2.5-0.5b-retrieval-ledger-draft-v2",
     "status": "directional_visible_b1_leader_not_production_recommendation"
@@ -135,7 +135,28 @@
     "compact_iteration": "programs/executive-writing/experiments/goodprose-compact-ledger-draft-v2-analysis.json",
     "fine_tune_record": "programs/executive-writing/experiments/qwen2.5-0.5b-mlx-lora-smoke-v1.json",
     "mlx_comparison": "programs/executive-writing/experiments/mlx-qwen2.5-0.5b-smoke-b1-v1-analysis.json",
+    "source_profile_coverage": "programs/executive-writing/experiments/source-profile-coverage-v1-results.json",
     "structured_iteration": "programs/executive-writing/experiments/goodprose-structured-retrieval-v1-analysis.json"
+  },
+  "source_profile_coverage": {
+    "advancement_decision": "none_coverage_only",
+    "candidate_count": 12,
+    "case_count_per_candidate": 6,
+    "directional_highest": {
+      "candidate_id": "profile-coverage-technical-link-commentary-v1",
+      "development_score": 93.5057,
+      "hard_gate_pass_rate": 0.6667,
+      "paired_mean_difference_vs_house": 8.1677
+    },
+    "evaluation_id": "source-profile-coverage-v1",
+    "generation_call_count": 72,
+    "house_control": {
+      "candidate_id": "qwen2.5-0.5b-profile-v1",
+      "development_score": 85.3381,
+      "hard_gate_pass_rate": 0.3333
+    },
+    "limitations": "visible six-case source-text-free coverage; no winner, production default, standalone-adapter evidence, or change to the 24-case B1 leader",
+    "settled_cost_usd": 0
   },
   "scorer_version": "goodprose-deterministic-v1.1",
   "settled_cost_usd": 0,

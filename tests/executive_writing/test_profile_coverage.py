@@ -185,6 +185,10 @@ def test_publisher_publishes_compact_source_text_free_results(
         generated_at="2026-08-22T01:00:00+00:00",
     )
     assert results["advancement_decision"] == "none_coverage_only"
+    assert results["generation_call_count"] == 72
+    assert results["retrieval_enabled"] is False
+    assert results["no_third_party_text_in_prompts"] is True
+    assert results["settled_cost_usd"] == 0
     assert len(results["paired_versus_house_control"]) == 11
     assert results["paired_versus_house_control"][0]["win_tie_loss"]["wins"] >= 1
 

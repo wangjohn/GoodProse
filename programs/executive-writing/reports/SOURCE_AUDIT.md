@@ -49,8 +49,29 @@ Each profile references the same six project-authored B1 cases across email,
 memo, decision, revision, strategy, and blog tasks. This defines a neutral
 content-controlled comparison. Topic-swap variants and leave-time-out cases
 remain explicit limitations; leave-topic-out reporting is declared. The
-profile-card runs are configured but not yet executed, so this audit establishes
-reproducible coverage definitions rather than model-quality evidence.
+profile-card matrix completed at revision `c472575` with exactly 72 local calls,
+retrieval disabled, no third-party source text, and $0 settled cost. The table
+below is exploratory coverage on six visible cases, not model-quality or
+standalone-adapter evidence.
+
+| Descriptive profile | Mean score | Hard gates | Paired mean vs house |
+| --- | ---: | ---: | ---: |
+| Concise Curated Brief | 79.7846 | 16.67% | -5.5535 |
+| Conversational Essay Memo | 90.9160 | 33.33% | +5.5779 |
+| Declarative Trajectory Update | 85.5653 | 16.67% | +0.2272 |
+| Narrative Anecdote Advisory | 80.1660 | 33.33% | -5.1721 |
+| Daily Cadence Note | 84.6350 | 0.00% | -0.7031 |
+| Polemical Product Philosophy Note | 81.4635 | 16.67% | -3.8746 |
+| Principle-Driven Manifesto Memo | 76.7911 | 16.67% | -8.5470 |
+| Technical Link Commentary | 93.5057 | 66.67% | +8.1677 |
+| Policy Polemical Analysis | 90.2607 | 50.00% | +4.9226 |
+| Institutional Narrative Letter | 89.1630 | 33.33% | +3.8249 |
+| Operational Executive Update | 88.0631 | 16.67% | +2.7250 |
+
+The house-profile control scored 85.3381 with 33.33% hard gates. All eleven
+profiles remain in the program regardless of these estimates. The independent
+publisher rebuilt every prompt, verified prompt/output/artifact hashes,
+rescored every output under v1.1, and emitted no raw generated text.
 
 Machine artifacts:
 
@@ -59,6 +80,9 @@ Machine artifacts:
 - `programs/executive-writing/configs/source-profiles/`
 - `programs/executive-writing/experiments/ox-source-discovery-v1.json`
 - `programs/executive-writing/experiments/ox-source-artifacts-implementation-v1.json`
+- `programs/executive-writing/experiments/ox-profile-coverage-runner-v1.json`
+- `programs/executive-writing/experiments/source-profile-coverage-v1-results.json`
+- `programs/executive-writing/experiments/source-profile-coverage-v1-case-results.json`
 
 Ox Alpha supplied public research leads and a mechanical implementation draft
 at $0. Codex independently verified canonical routes, removed unsupported or
