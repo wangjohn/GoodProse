@@ -68,6 +68,7 @@ reference. Never record payment credentials.
 | 2026-08-23T22:16:38Z | Local Ollama / Apple M3 Pro | Execute, rescore, and fully audit the frozen Qwen2.5 7B h11 candidate | `qwen2.5-7b-retrieval-ledger-draft-h11-v1` | completed; rejected on hard gates and grounding | $0.00 | 48 local calls, +3.4548 paired mean, 7/24 hard gates, 15 source-expansion risks, zero retry |
 | 2026-08-23T22:22:04Z | Local acquisition and parsing | Exact-hash real-source compatibility for six external suite IDs | `external-eval-real-source-adaptation-v1` | completed; no candidate evaluation | $0.00 | 1,286 adapted suite-view cases and 1,128 reference-free candidate rows in ignored cache; WritingBench judge and YapBench rights remain blocked |
 | 2026-08-23T22:22:04Z | Local deterministic tooling | Implement Tier D protocol and audit completion blockers | `executive-writing-completion-blockers-v1` | completed; genuine external blockers remain | $0.00 | no human packet, rating, hidden case, paid resource, or fabricated result |
+| 2026-08-23T22:59:05Z | Local Ollama / Apple M3 Pro | Paired topic-swap coverage for house plus eleven descriptive profiles | `source-profile-topic-controls-v2` | completed; no profile advanced | $0.00 | one provenance-invalid precursor archived, then 72 fresh accepted calls; 31,020 prompt and 14,208 output tokens |
 
 ## Zero-cost feasibility snapshot
 

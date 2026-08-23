@@ -1,0 +1,934 @@
+[
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 77.2143,
+    "errors": [
+      "omission",
+      "poor_actionability"
+    ],
+    "output_sha256": "c3d11e20cd05791bf6b957df1cd608337deca5d1599ac81f786ed33f3353c5ec",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 93.0,
+    "errors": [
+      "omission"
+    ],
+    "output_sha256": "e0b36810ac21f35094e56b7372193d0c7612b10bd3eb06b3e28f48fe940a2a83",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 94.6667,
+    "errors": [
+      "structural_failure"
+    ],
+    "output_sha256": "6baca23a61165701b2fb4e86e914d57817315fba229ee2583f61366593f1dc17",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": true,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 96.6667,
+    "errors": [
+      "structural_failure"
+    ],
+    "output_sha256": "e2233b728346d67021f9a69f567b3f8a6a8db93d97ab91842767040e49306406",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": true,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 84.5,
+    "errors": [
+      "omission"
+    ],
+    "output_sha256": "ac686508a324fe9cbb6963c768843ac2737b0f210ba23ae7b2e9e5222cfc8fde",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "qwen2.5-0.5b-profile-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 68.1667,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "output_sha256": "71cc21c70d8e98f69d6a7a07ea45ab0127c656c98f3cef884d55b8ead8eead6d",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "courier incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-concise-curation-brief-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 80.8991,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "output_sha256": "9a98f28b877ae967dee6ae772840caedbf89389d3f719e1e14af1a2cfede2d85",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "profile-topic-control-concise-curation-brief-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 75.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "24a4bdefa7c062398a23208726fb5fab5b44e06a6b7379ab60cf9577d801a2a0",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "profile-topic-control-concise-curation-brief-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 96.6667,
+    "errors": [
+      "structural_failure"
+    ],
+    "output_sha256": "64cc4bbfdf55a226c0470e16efec26c71118bd35ff42ab299035869e86aae222",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": true,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-concise-curation-brief-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 68.6436,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure",
+      "unnecessary_expansion"
+    ],
+    "output_sha256": "b8b50701e28ef74d304031f2feb51f08f72fdaf72e7ef36607650a6dbdd0fdf1",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-concise-curation-brief-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "bec3a61f8ea9c7840320ead615a5794b1e3f9dc73c997095e1725b5509f36543",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-concise-curation-brief-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 88.5417,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "5f86dea96e7bf968851eec294ec540592637132ba6b1c8a3c29777f9693c6138",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "courier incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-conversational-essay-memo-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "86dca3c8aa9b98de55bf46617b8f4211042f34c82571cdeb49116c20f7b9c44b",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "profile-topic-control-conversational-essay-memo-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 81.1667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "edf245586eb15a3b05e9b386f0dc866757b97a43ec02ac9b4d009894790ec859",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "profile-topic-control-conversational-essay-memo-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 85.067,
+    "errors": [
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "output_sha256": "ddca563a6e942aac825e013ab9a30be33c6cf6a3b29903badf66067bd7476d0f",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": true,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-conversational-essay-memo-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 77.2143,
+    "errors": [
+      "omission",
+      "poor_actionability"
+    ],
+    "output_sha256": "690ed1af8537c4e3479074d5a145eeadcb3656fc74754e70bd8f4b3d2f9bcf7d",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-conversational-essay-memo-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "8e951ba6ed9ff83003cec5e7104d9776685abb33b83d2355dac751c3651ca089",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-conversational-essay-memo-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 81.381,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "42ec678c3ea80a2171763f76d88688f99172e0628dc31d8fc42a3c19bd75c19d",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "courier incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-declarative-trajectory-update-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "8b2de7efc4f162247cfdd7950470373d093fd311831725ae6756868b9a8d2234",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "profile-topic-control-declarative-trajectory-update-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 75.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "ed539f06de8e4994fdbdc9f73fc3099c6c2471d550a4fdd69d11c46254c12273",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "profile-topic-control-declarative-trajectory-update-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 95.6667,
+    "errors": [
+      "structural_failure"
+    ],
+    "output_sha256": "e212ebba3502d4d6e53bd0cfe4ff1a3e5979de943b239a2699a11be919f106a4",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": true,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-declarative-trajectory-update-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 90.1795,
+    "errors": [
+      "omission"
+    ],
+    "output_sha256": "0eace52060a3b694354c5ffb7e15af0ac6b216922c25b75a047c1bbbd0b7fa93",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-declarative-trajectory-update-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 71.8985,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "output_sha256": "b8eef40af6fb5e801ec1493d12b6235939df8562d9ec69600fc440f0ea4b7ac1",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-declarative-trajectory-update-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 80.3173,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "b948547c7ddea74346de66be71b507c0cd36fe63b192d81e1742680f07034fe6",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "courier incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-narrative-anecdote-advisory-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 81.5952,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "16555e62756d101bcb7c8d025e3f239032a75d851f4dc6d0dab7953b405678f0",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "profile-topic-control-narrative-anecdote-advisory-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 72.0566,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "output_sha256": "346e9284781397f84185f9344e95108bd246e442be980b1b8ff4c6120f80b33c",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "profile-topic-control-narrative-anecdote-advisory-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 96.6667,
+    "errors": [
+      "structural_failure"
+    ],
+    "output_sha256": "37153b38e7c0f0c700e10cac1ed4887456484e76caf971c1a912903e286dec18",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": true,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-narrative-anecdote-advisory-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 77.9238,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "output_sha256": "e4944af1ea33c036694a58a93dbb97e68c382e2ee8f36d1e9e6f54678bf059e2",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-narrative-anecdote-advisory-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 62.0812,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "unnecessary_expansion"
+    ],
+    "output_sha256": "81503bcece6e4be4c2394ff773c565cf687310a5eb4b302f4831dd58ce1b0177",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-narrative-anecdote-advisory-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 84.5,
+    "errors": [
+      "omission"
+    ],
+    "output_sha256": "155814bc53d44e867696d141e36688b9a05ca75dcb1a6b2459beb1fab153f066",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "courier incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-daily-cadence-note-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 89.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "49b1926434b48952a46cd35853771f96fd313fbcec825bf8132ba569c1eaf151",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "profile-topic-control-daily-cadence-note-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 88.1667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "cb1d3ab263b4ae60ace560345985af6aac579c761c6f5b2f0749d92fbcdc9ad1",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "profile-topic-control-daily-cadence-note-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 60.6667,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "output_sha256": "3f7fd7d5de5790c5a800955702f74a7de5391d84889fdd60142486b3e9b03f23",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-daily-cadence-note-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 81.1667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "b13facbdeff6b5bd40630f293ca8481958b24006ebb73c1ad5990bc613de9085",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-daily-cadence-note-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 90.3333,
+    "errors": [
+      "omission"
+    ],
+    "output_sha256": "3f5200b3dd72f4ce3db3372109cf960dc28b8702cb66379eb6fa96e96dfe0380",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-daily-cadence-note-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 95.0524,
+    "errors": [
+      "structural_failure"
+    ],
+    "output_sha256": "dc9da9c0cc47f9192741adb0768f7bb7bc441ec6205da21fb36c2a3a846fd9c0",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": true,
+    "topic": "courier incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-polemical-product-philosophy-note-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 85.5,
+    "errors": [
+      "omission",
+      "poor_actionability"
+    ],
+    "output_sha256": "0818c6eaec3f0465c7a2d768586f8358d95dfff3ca652af1dba8784a59601df1",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "profile-topic-control-polemical-product-philosophy-note-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 81.7971,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "8dee23049789e84789625a30fb9faf9367a11cdafe1da404ad26bbecc0cb0f47",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "profile-topic-control-polemical-product-philosophy-note-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 94.4167,
+    "errors": [
+      "structural_failure"
+    ],
+    "output_sha256": "82ed9694e58ef46fc283f5e7ac63e9d230f59703d92534b040df8b53c4c1c41f",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": true,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-polemical-product-philosophy-note-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 58.7205,
+    "errors": [
+      "omission",
+      "poor_actionability"
+    ],
+    "output_sha256": "e4b167f892f8b04fa8147c2ba067459384a8996df1a5fc8bf438a1fcec94e5a4",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-polemical-product-philosophy-note-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "72e3256ac545a98dab2a261f5a8526b0ca2904e08148a58cd20f00910afd2ef6",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-polemical-product-philosophy-note-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 77.4798,
+    "errors": [
+      "omission",
+      "structural_failure",
+      "unnecessary_expansion"
+    ],
+    "output_sha256": "5785cb70297b5c6d77a90b0cec6bae11ca812f6005de8f6aeadfae9b6b94ed6f",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "courier incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-principle-driven-manifesto-memo-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 75.0049,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "67e5524f62499198536a4dd817b1b1b00aa685f8f341b4f6506eee6c0aeb92f3",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "profile-topic-control-principle-driven-manifesto-memo-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "23483c994f813ea9590d011f81195509bc973fc3f3c8d77207c80adcf62637d4",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "profile-topic-control-principle-driven-manifesto-memo-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 73.3556,
+    "errors": [
+      "fabrication",
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "0150b05f3fc3d6f5fdff6a8287198cb88a36ccdc52e0e36690fe2c7910674d81",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-principle-driven-manifesto-memo-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 87.8889,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "8a8030fc1027551eca92c3938eb4278a79e217a24c1abb0b7f0f1e55f9a2e9c7",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-principle-driven-manifesto-memo-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "f8bf9a3d371c40fefea9417ecbfa89535467fe10f80791db1880ea7676423648",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-principle-driven-manifesto-memo-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 77.3889,
+    "errors": [
+      "omission",
+      "structural_failure",
+      "unnecessary_expansion"
+    ],
+    "output_sha256": "ab570dcfd5b1bbc89627c326674d741d1b107c5a45070b57ede2461f2c690d37",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "courier incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-technical-link-commentary-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 84.4483,
+    "errors": [
+      "omission"
+    ],
+    "output_sha256": "a6a22240d1a3e297125b80befc663cdeb5d156e1b1001bb0663c273f463967a7",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "profile-topic-control-technical-link-commentary-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "0e32075b331bbbf4d16ee1fbd7bf33c5e7055bb8fe1bdc64d60792fded677035",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "profile-topic-control-technical-link-commentary-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 70.147,
+    "errors": [
+      "poor_actionability",
+      "structural_failure",
+      "unnecessary_expansion"
+    ],
+    "output_sha256": "14c4e12b1237c67ddaa3d7cdf6c3e79e5cb197c2ecb9252827e0409a9687613c",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-technical-link-commentary-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 71.752,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "output_sha256": "989f23bf7aa9b07f7379b6cbe4710f551394e312f852eb7f65e07ddabb23656f",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-technical-link-commentary-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 93.0,
+    "errors": [
+      "omission"
+    ],
+    "output_sha256": "e9444a670e5c615e28a8441760a71af1c721e5f3a65b5ee96d66dd9ccafd3cf6",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-technical-link-commentary-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 89.5749,
+    "errors": [
+      "omission"
+    ],
+    "output_sha256": "43b40b039a2c52f402a81e81b8ddf4c12dac2b12cba36598323e6dab3c01bf39",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "courier incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-policy-polemical-analysis-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 93.3333,
+    "errors": [
+      "structural_failure"
+    ],
+    "output_sha256": "c43871b8b3e96a75227fc41cf7b493ea123a70f70a4ab667ccda45a110ded7aa",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": true,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "profile-topic-control-policy-polemical-analysis-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 95.1667,
+    "errors": [
+      "structural_failure"
+    ],
+    "output_sha256": "20d7939ee6b1cd91172e7c706447037a0ed7754ddc59659c08b7d63d3e251f72",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": true,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "profile-topic-control-policy-polemical-analysis-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 94.4167,
+    "errors": [
+      "structural_failure"
+    ],
+    "output_sha256": "1e63df69ae27ffc63f0754bd958a8605b630a939b88b66e25ba3c40ed05ffa63",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": true,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-policy-polemical-analysis-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 67.6786,
+    "errors": [
+      "omission",
+      "poor_actionability"
+    ],
+    "output_sha256": "d9c6f4eba5fa7f7c561d88c01d465b991af3c4709d7f495e342c8c45285f71fc",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-policy-polemical-analysis-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 84.5,
+    "errors": [
+      "omission"
+    ],
+    "output_sha256": "fe07a5d26f11f0a2b0bb3543c76c06e9bea2be18038d6dfe6984f51ae0a3e633",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-policy-polemical-analysis-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 58.9848,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "output_sha256": "f46de4e325e79d4eaacd11a8da4d2c800899c5777680cb8c1c1cf6414c4c7c76",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "courier incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-institutional-narrative-letter-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 89.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "431a5db73f3a7e7ce986f4a3f06a7051df190cd43736a7a9cd765e4f8106a11e",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "profile-topic-control-institutional-narrative-letter-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 82.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "f3efab643af3e3f84a6e85a40a30018d78c8699aef693d4cddfcaf75afe8b79b",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "profile-topic-control-institutional-narrative-letter-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 88.1667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "5533b86f3d155b5e6558b088fbb46ec24277040f778577275f5ea25b52bda7c1",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-institutional-narrative-letter-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 78.0,
+    "errors": [
+      "omission",
+      "poor_actionability"
+    ],
+    "output_sha256": "1f310c3ae00539b2c1baaf4ed6a7702a581d4a0c8405bf6a5ffd01c9af7e200c",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-institutional-narrative-letter-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 79.5985,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "e8c59d96bb9940cc80de6ee15e0cf7000f6e9457487dacb7187fe7aacd75e28b",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-institutional-narrative-letter-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 72.096,
+    "errors": [
+      "omission",
+      "poor_actionability"
+    ],
+    "output_sha256": "4795ba85ea61b3b4de19eb3c705587e6df65c8fc72d61962a066a70bdd385b83",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "courier incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-operational-executive-update-v1",
+    "case_id": "profile-swap-001-office-move",
+    "development_score": 96.6667,
+    "errors": [
+      "structural_failure"
+    ],
+    "output_sha256": "e5b1ae4aeba27e208e220b25faa2e97177b65a86741f14da4a0789dd5e9543d1",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": true,
+    "topic": "office move"
+  },
+  {
+    "candidate_id": "profile-topic-control-operational-executive-update-v1",
+    "case_id": "profile-swap-001-platform-move",
+    "development_score": 89.6667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "412ad3706c460a0fe854ac101c97943b69f13ccb72401569d8afb58a7db75171",
+    "pair_id": "profile-swap-pair-001",
+    "passes_hard_gates": false,
+    "topic": "software platform move"
+  },
+  {
+    "candidate_id": "profile-topic-control-operational-executive-update-v1",
+    "case_id": "profile-swap-002-hiring-plan",
+    "development_score": 75.1667,
+    "errors": [
+      "omission",
+      "structural_failure"
+    ],
+    "output_sha256": "6bc6f16a6891085f9d9ccd79333b2b12ba97ebdba8c08fee0ba4a0e4bb24edb4",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "hiring plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-operational-executive-update-v1",
+    "case_id": "profile-swap-002-lab-plan",
+    "development_score": 80.1212,
+    "errors": [
+      "omission",
+      "poor_actionability",
+      "structural_failure"
+    ],
+    "output_sha256": "6760b8ed51789d6ce1eef3f06cb896a057f69795f0039736b52073acb7f8fa35",
+    "pair_id": "profile-swap-pair-002",
+    "passes_hard_gates": false,
+    "topic": "lab equipment plan"
+  },
+  {
+    "candidate_id": "profile-topic-control-operational-executive-update-v1",
+    "case_id": "profile-swap-003-api-incident",
+    "development_score": 70.0,
+    "errors": [
+      "omission",
+      "poor_actionability"
+    ],
+    "output_sha256": "69766f6a5c121160f9cd4731be14bad20baeefe57c400e5d9b0e9a8310419c43",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "software incident"
+  },
+  {
+    "candidate_id": "profile-topic-control-operational-executive-update-v1",
+    "case_id": "profile-swap-003-courier-incident",
+    "development_score": 77.25,
+    "errors": [
+      "omission",
+      "unnecessary_expansion"
+    ],
+    "output_sha256": "3295f248db6a2877cf5a3c735e6cb19afc53407763c63fc3f5aee7171ba4f156",
+    "pair_id": "profile-swap-pair-003",
+    "passes_hard_gates": false,
+    "topic": "courier incident"
+  }
+]

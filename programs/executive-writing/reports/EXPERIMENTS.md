@@ -654,3 +654,26 @@ dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,
 failure analysis, and keep/reject decision. Link to the corresponding
 machine-readable manifest under `../experiments/`.
+
+## 2026-08-23 — Source-profile paired topic controls v2
+
+- Hypothesis: descriptive profile behavior that reflects abstract register
+  control rather than topic association should remain directionally stable
+  across paired tasks with matched evidence structure and swapped domains.
+- Freeze: six project-authored cases, three pairs, 11 descriptive profile cards
+  plus house control, no retrieval, exact Qwen2.5 0.5B/Ollama pins,
+  temperature 0, scorer v1.1, 72 calls, $0, coverage-only disposition.
+- Integrity event: one completed precursor matrix was invalidated before
+  staging because case authorship metadata postdated execution by six minutes.
+  Corrected bytes were committed and the accepted run started from zero at
+  revision `059c3500…`.
+- Accepted execution: 31,020 prompt tokens, 14,208 output tokens, 127.581
+  seconds wall time, exact raw output hash `09381e11…` and score hash
+  `23aa9e13…`.
+- Result: no candidate passed all six gates. House control passed 2/6;
+  descriptive cards passed 0/6–3/6. Mean absolute within-pair score gaps ranged
+  from 2.2706 to 18.0289 and omissions affected every candidate.
+- Decision: retain only as negative exploratory topic-robustness coverage. Do
+  not select a profile, create a finalist, or infer authentic-task quality.
+  See `SOURCE_PROFILE_TOPIC_CONTROLS_V2_RESULTS.md` and the compact result
+  records under `../experiments/`.

@@ -981,3 +981,24 @@ historical entries.
 - Evidence: `BLOCKERS_AND_PROVISIONAL_RECOMMENDATION.md`,
   `../experiments/completion-blockers-v1.json`, and
   `../experiments/external-eval-real-source-adaptation-v1.json`.
+
+### 2026-08-23 — Paired source-profile topic controls v2
+
+- Gap closed: added six project-authored cases in three explicit topic-swap
+  pairs, a hash-bound 12-by-6 local runner, compact publisher, exact model
+  identity checks, and byte-for-byte rebuild tests without changing v1.
+- Integrity correction: the first full local matrix used an impossible rounded
+  source-authorship time and was invalidated before staging. Corrected source,
+  case, and manifest bytes were committed, then a fresh matrix ran at exact
+  revision `059c3500…`.
+- Result: 72 calls, 31,020 prompt and 14,208 output tokens, $0. House control
+  scored 85.7024 with 2/6 hard gates. Descriptive profiles scored
+  79.1373–84.1754 with 0/6–3/6 hard gates and mean absolute paired topic gaps
+  of 2.2706–18.0289.
+- Decision: coverage complete, no advancement. Every candidate showed material
+  omissions; topic robustness did not produce a hard-gate-passing profile.
+- Control posture: leave-topic-out holds by construction for source-text-free
+  cards; leave-time-out is inapplicable here and remains required before any
+  future dated corpus-trained or corpus-retrieval profile evaluation.
+- Evidence: `SOURCE_PROFILE_TOPIC_CONTROLS_V2_RESULTS.md` and the two compact
+  `source-profile-topic-controls-v2` experiment records.
