@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T21:17:34Z",
+  "updated_at": "2026-08-23T21:23:20Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -496,6 +496,31 @@
       "model_id": null,
       "settled_cost_usd": 0,
       "disposition": "reject raw candidate: meta preambles fell from 8 to 0 and 24 of 24 outputs were artifact-only, but one non-source placeholder and six material source-expansion risks remain"
+    },
+    {
+      "experiment_id": "goodprose-b1-common-architecture-frontier-v1",
+      "kind": "cross_architecture_frontier",
+      "status": "completed_no_finalist_ready",
+      "record": "programs/executive-writing/experiments/architecture-frontier-v1.json",
+      "code_revision_start": "a32f5a8",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_offline",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "thirteen comparable candidates validated; compact ledger is the local leader, Ox v2 is the rejected score ceiling, zero candidates are finalist-ready, and plateau is not satisfied"
+    },
+    {
+      "experiment_id": "executive-writing-hypotheses-v1",
+      "kind": "hypothesis_registry",
+      "status": "active_high_value_hypothesis_remaining",
+      "record": "programs/executive-writing/experiments/hypothesis-registry-v1.json",
+      "code_revision_start": "a32f5a8",
+      "dataset_id": "goodprose-b1-v1",
+      "provider": "local_offline",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "run the preregistered Ox source-verifier/reviser next; keep one larger local open-model probe contingent; do not repeat rejected training or one-step branches"
     }
   ]
 }

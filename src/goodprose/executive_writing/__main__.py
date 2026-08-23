@@ -18,6 +18,7 @@ from goodprose.executive_writing.external_evals import (
     cli_validate_registry,
 )
 from goodprose.executive_writing.failure_audit import audit_mlx_b1_failures
+from goodprose.executive_writing.frontier import validate_architecture_frontier
 from goodprose.executive_writing.holdout import (
     PROTOCOL_ID,
     AggregateUsage,
@@ -219,6 +220,13 @@ def build_parser() -> argparse.ArgumentParser:
     ox_ceiling_audit.add_argument("--source-case-results", required=True)
     ox_ceiling_audit.add_argument("--output", required=True)
     ox_ceiling_audit.add_argument("--generated-at", required=True)
+
+    frontier_validate = commands.add_parser(
+        "frontier-validate", help="Validate the common architecture frontier"
+    )
+    frontier_validate.add_argument("--frontier", required=True)
+    frontier_validate.add_argument("--hypotheses", required=True)
+    frontier_validate.add_argument("--repo-root", required=True)
 
     external = commands.add_parser(
         "external-evals",
@@ -564,6 +572,18 @@ def _run(args: argparse.Namespace) -> int:
             generated_at=args.generated_at,
         )
         print(f"Ox B1 output audit complete: {audit['decision']['raw_candidate_disposition']}")
+        return 0
+    if args.command == "frontier-validate":
+        summary = validate_architecture_frontier(
+            frontier_path=_path(args.frontier),
+            hypotheses_path=_path(args.hypotheses),
+            repo_root=_path(args.repo_root),
+        )
+        print(
+            "Architecture frontier valid: "
+            f"{summary['candidate_count']} candidates, "
+            f"{summary['finalist_ready_count']} finalist-ready"
+        )
         return 0
     if args.command == "external-evals":
         return _run_external(args)

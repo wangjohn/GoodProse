@@ -815,3 +815,31 @@ historical entries.
   missing unsupported inference, but the contract still requires every frozen
   hard gate; Ox privacy/deployment remain unresolved; B2, Tier C, and human
   evidence remain unavailable until a finalist qualifies.
+
+### 2026-08-23 — Phase 3 checkpoint: common architecture frontier
+
+- Question: after prompt, retrieval, structured, smoke-training, unified-
+  training, and two Ox branches, which candidates remain on the common B1
+  quality/fidelity/cost frontier and which hypotheses still have high value?
+- Evidence: a hash-bound 13-candidate table under identical 24-case B1 and
+  deterministic v1.1 scoring; source pins for the shared first-evidence table,
+  unified analysis/audit, and both corrected Ox analyses/audits; schema checks
+  for source drift, unique candidates, finalist accounting, and hypothesis-
+  frontier linkage; and a fourteen-entry hypothesis registry.
+- Result: compact ledger/draft remains the local directional leader at 87.1981
+  and 50% hard gates. Ox v2 is the score ceiling at 93.5438 and 54.17% but is
+  rejected for grounding. Every fine-tuned candidate is dominated or rejected.
+  Zero of thirteen candidates are finalist-ready.
+- Decision: plateau is not satisfied because the accepted leader fails hard
+  gates and affordable unresolved hypotheses remain. Run `h10`, a fresh Ox
+  source-verifier/reviser candidate, next. Keep exactly one larger-local-model
+  compact-ledger probe contingent on the h10 result and a resource check.
+- Pruning: do not repeat the local 0.5B full verify/revise path, templated smoke
+  LoRA, current synthetic unified recipe, Ox one-step harness, or unapproved
+  profile-adapter sweep without a new causal factor.
+- Next actions: commit the frontier, freeze h10's two-session candidate and
+  exact output gates before generation, execute once, and then refresh the
+  frontier/plateau decision.
+- Unresolved risks: common B1 remains visible and lexical; source-profile
+  coverage is only six cases; public suites, B2, Tier C, rights-approved
+  authentic training, and human confirmation remain outside current evidence.

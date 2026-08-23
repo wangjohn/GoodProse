@@ -502,6 +502,28 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   visible-B1 ceiling diagnostic only. See `OX_B1_CEILING_V2_RESULTS.md` and the
   compact analysis/audit records under `../experiments/`.
 
+## 2026-08-23 — Common B1 architecture frontier
+
+- Scope: thirteen 24-case deterministic-v1.1 candidates spanning minimal and
+  profile prompting, approved-example retrieval, compact and full structured
+  generation, MLX controls, smoke and unified LoRA, and Ox v1/v2.
+- Local frontier: compact ledger/draft remains the directional leader at
+  87.1981 mean, 50% hard gates, 2.850-second mean latency, and $0.
+- External ceiling: Ox v2 reached 93.5438 mean and 54.17% hard gates but is
+  rejected for six source-expansion risks and one introduced placeholder. Ox
+  v1 is dominated by v2 on score, gates, latency, tokens, and artifact quality.
+- Training branch: both smoke strategies regressed; unified LoRA failed its
+  advancement gate and introduced training labels into unseen cases. No current
+  fine-tuned row is competitive.
+- Selection: zero candidates satisfy finalist readiness. Coverage-only six-
+  case profile evidence, invalid mixed-scorer results, unexecuted external
+  suites, training loss, B2, and Tier C are excluded from winner selection.
+- Plateau: not satisfied because the accepted leader fails hard gates and two
+  affordable hypotheses remain. The source-only Ox verifier/reviser is next;
+  one larger local model probe is contingent. See `ARCHITECTURE_FRONTIER.md`,
+  `../experiments/architecture-frontier-v1.json`, and
+  `../experiments/hypothesis-registry-v1.json`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

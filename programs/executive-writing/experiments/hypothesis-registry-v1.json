@@ -1,0 +1,120 @@
+{
+  "hypotheses": [
+    {
+      "category": "prompting",
+      "evidence": "The profile prompt raised mean B1 score from 67.5522 to 84.2839 versus the minimal prompt, but passed only 20.83% of hard gates.",
+      "hypothesis_id": "h01-strong-profile-card",
+      "major_factor": "Replace minimal prompting with the frozen house profile card.",
+      "next_action": "Retain as a baseline component; do not promote alone.",
+      "status": "completed_supported"
+    },
+    {
+      "category": "retrieval",
+      "evidence": "Approved-example retrieval reached 84.8283 mean and 37.50% hard gates, improving hard-gate coverage over the profile-only baseline.",
+      "hypothesis_id": "h02-approved-example-retrieval",
+      "major_factor": "Add frozen retrieval of approved examples to the same small local model.",
+      "next_action": "Retain retrieval in the strongest local branch.",
+      "status": "completed_supported"
+    },
+    {
+      "category": "structured_generation",
+      "evidence": "The full ledger/draft/verify/revise path scored 81.3694 with 33.33% hard gates and 7.240-second mean latency, below retrieval and compact-ledger alternatives.",
+      "hypothesis_id": "h03-local-full-verify-revise",
+      "major_factor": "Add a local verification and revision pass after ledger-guided drafting.",
+      "next_action": "Do not repeat on the 0.5B base without a materially different verifier or model.",
+      "status": "completed_rejected"
+    },
+    {
+      "category": "structured_generation",
+      "evidence": "Compact ledger/draft reached 87.1981 mean and 50% hard gates and remains the local directional quality/fidelity leader.",
+      "hypothesis_id": "h04-local-compact-ledger-draft",
+      "major_factor": "Use a compact claims/decision ledger followed by one bounded draft pass.",
+      "next_action": "Retain as the mandatory non-training/local comparison baseline.",
+      "status": "completed_supported"
+    },
+    {
+      "category": "fine_tuning",
+      "evidence": "The templated smoke LoRA regressed both matched strategies, reaching 0% and 4.17% hard gates with repetition, omissions, and retrieval-example leakage.",
+      "hypothesis_id": "h05-templated-smoke-lora",
+      "major_factor": "Apply a small profile-conditioned LoRA update using the initial synthetic smoke corpus.",
+      "next_action": "Retain only as pipeline proof; never repeat the templated data recipe.",
+      "status": "completed_rejected"
+    },
+    {
+      "category": "profile_coverage",
+      "evidence": "All eleven source-text-free profile cards executed on six shared cases; several were directionally positive, but the slice was coverage-only and cannot select a winner.",
+      "hypothesis_id": "h06-all-profile-conditioned-coverage",
+      "major_factor": "Render all eleven descriptive profiles on neutral shared content without source text.",
+      "next_action": "Retain all profile configurations and defer selection to full task evidence.",
+      "status": "completed_partial"
+    },
+    {
+      "category": "unified_fine_tuning",
+      "evidence": "The genuine unified LoRA changed profile by -0.6715 and ledger by +0.6820 points; it leaked training scenario labels in 20 and 15 cases and retained severe repetition.",
+      "hypothesis_id": "h07-unified-profile-conditioned-lora",
+      "major_factor": "Train one unified three-profile LoRA on 90 project-owned task/style/preference records.",
+      "next_action": "Reject the adapter; require authentic diverse approved task pairs before another unified update.",
+      "status": "completed_rejected"
+    },
+    {
+      "category": "external_quality_ceiling",
+      "evidence": "Ox v1 scored 91.0738 but 8 of 24 outputs contained step/tool preambles and six had material source-expansion risk.",
+      "hypothesis_id": "h08-ox-one-step-source-only",
+      "major_factor": "Use Ox Alpha as a one-step source-only candidate generator with tools denied.",
+      "next_action": "Reject the raw candidate; preserve only ceiling diagnostics.",
+      "status": "completed_rejected"
+    },
+    {
+      "category": "harness_repair",
+      "evidence": "Ox v2 raised mean to 93.5438 and eliminated all eight meta preambles, but passed only 13 of 24 hard gates and retained six material source-expansion risks.",
+      "hypothesis_id": "h09-ox-two-step-artifact-only",
+      "major_factor": "Increase the no-tools OpenCode agent from one to two steps and strengthen generic artifact-only instructions.",
+      "next_action": "Accept the harness repair but reject the writing candidate.",
+      "status": "completed_partial"
+    },
+    {
+      "category": "structured_generation",
+      "evidence": "V2's dominant remaining failures are unsupported inferred commitments and paraphrased operative facts; a source-only second pass directly targets both without evaluator access.",
+      "hypothesis_id": "h10-ox-source-verifier-reviser",
+      "major_factor": "Generate a fresh draft, then use a separate no-tools Ox session to revise it against the same source and task fields with exact operative-phrase preservation.",
+      "next_action": "Preregister and run once; require all 24 hard gates and a clean output audit.",
+      "status": "planned_high_value"
+    },
+    {
+      "category": "base_model_scale",
+      "evidence": "The 0.5B local family appears capacity-limited while external Ox demonstrates a large quality gap; 18 GiB unified memory may support one bounded larger local inference probe.",
+      "hypothesis_id": "h11-larger-local-open-model",
+      "major_factor": "Hold compact-ledger architecture fixed and replace the 0.5B base with one resource-feasible larger local instruct model.",
+      "next_action": "Probe inventory, disk, and memory after h10; freeze one candidate only if the download and runtime remain zero-cost and bounded.",
+      "status": "planned_contingent"
+    },
+    {
+      "category": "training_data",
+      "evidence": "Project-owned synthetic data was insufficient and named-source material has no training-approved rows; neither Codex nor Ox may promote rights status.",
+      "hypothesis_id": "h12-authentic-task-unified-training",
+      "major_factor": "Train on diverse authentic rough-material-to-final task pairs with explicit negative fidelity controls.",
+      "next_action": "Remain blocked until qualified rights approval and authentic pairs exist; continue non-training work.",
+      "status": "blocked_external"
+    },
+    {
+      "category": "external_evaluation",
+      "evidence": "Seven pinned adapters and real-source schemas validate, but benchmark source artifacts have not been acquired or executed.",
+      "hypothesis_id": "h13-public-evaluation-compatibility",
+      "major_factor": "Run the pinned WritingBench, IteraTeR, EditEval, Revision for Concision, and YapBench adapters on acquired source files.",
+      "next_action": "Acquire only from documented canonical sources under the frozen rights and hash workflow.",
+      "status": "blocked_external"
+    },
+    {
+      "category": "source_specific_adapters",
+      "evidence": "No named source satisfies both the minimum training-data sufficiency threshold and training-approved rights status.",
+      "hypothesis_id": "h14-profile-specific-lora-sweep",
+      "major_factor": "Train separate LoRA adapters for individual named profiles.",
+      "next_action": "Do not execute weak or unapproved adapters; retain conditioned coverage instead.",
+      "status": "not_justified"
+    }
+  ],
+  "registry_id": "executive-writing-hypotheses-v1",
+  "source_frontier_sha256": "7f26785c66307f0349132b6b3b1d69e8f333eee53de3765bf05f19b5a270cb55",
+  "updated_at": "2026-08-23T21:23:20Z",
+  "version": 1
+}
