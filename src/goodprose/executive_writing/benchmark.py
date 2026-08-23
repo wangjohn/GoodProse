@@ -6,6 +6,7 @@ import json
 import math
 import re
 from collections import Counter
+from collections.abc import Callable
 from datetime import datetime
 from enum import StrEnum
 from hashlib import sha256
@@ -18,6 +19,7 @@ from goodprose.jsonl import atomic_write, serialize_jsonl, sha256_bytes, sha256_
 
 NonEmpty = Annotated[str, StringConstraints(min_length=1)]
 Sha256 = Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
+ScorerVersion = Literal["goodprose-deterministic-v1", "goodprose-deterministic-v1.1"]
 
 SCORECARD_WEIGHTS = {
     "fidelity": 0.35,
@@ -202,7 +204,7 @@ class CheckResult(StrictModel):
 
 
 class CaseScore(StrictModel):
-    scorer_version: Literal["goodprose-deterministic-v1"]
+    scorer_version: ScorerVersion
     case_id: NonEmpty
     candidate_id: NonEmpty
     output_sha256: Sha256
@@ -231,6 +233,53 @@ def content_sha256(value: str) -> str:
 def _matches_any(output: str, aliases: tuple[str, ...]) -> bool:
     normalized = _normalized(output)
     return any(_normalized(alias) in normalized for alias in aliases)
+
+
+_NEGATION_MARKERS = {
+    "no",
+    "not",
+    "never",
+    "cannot",
+    "can't",
+    "won't",
+    "isn't",
+    "aren't",
+    "doesn't",
+    "don't",
+    "didn't",
+    "shouldn't",
+    "wouldn't",
+    "couldn't",
+}
+
+
+def _explicitly_negated_occurrence(normalized_clause: str, start: int) -> bool:
+    """Apply the frozen v1.1 local negation rule to one alias occurrence."""
+
+    tokens = re.findall(r"\b[a-z]+(?:'[a-z]+)?\b", normalized_clause[:start])
+    for index in range(len(tokens) - 1, max(-1, len(tokens) - 8), -1):
+        token = tokens[index]
+        if token not in _NEGATION_MARKERS:
+            continue
+        if token == "not" and index + 1 < len(tokens) and tokens[index + 1] == "only":
+            continue
+        return True
+    return False
+
+
+def _matches_forbidden_v1_1(output: str, aliases: tuple[str, ...]) -> bool:
+    """Return true when any exact alias occurrence is not locally negated."""
+
+    clauses = [_normalized(clause) for clause in re.split(r"[.!?;:\n]+", output.casefold())]
+    for clause in clauses:
+        for alias in aliases:
+            needle = _normalized(alias)
+            start = clause.find(needle)
+            while start >= 0:
+                if not _explicitly_negated_occurrence(clause, start):
+                    return True
+                start = clause.find(needle, start + len(needle))
+    return False
 
 
 def _word_count(value: str) -> int:
@@ -273,6 +322,37 @@ def _headings_present(output: str) -> bool:
 
 
 def score_output(case: BenchmarkCase, output: str, *, candidate_id: str) -> CaseScore:
+    """Score with the frozen v1 behavior for historical reproducibility."""
+
+    return _score_output(
+        case,
+        output,
+        candidate_id=candidate_id,
+        scorer_version="goodprose-deterministic-v1",
+        forbidden_matcher=_matches_any,
+    )
+
+
+def score_output_v1_1(case: BenchmarkCase, output: str, *, candidate_id: str) -> CaseScore:
+    """Score with the preregistered v1.1 forbidden-claim correction."""
+
+    return _score_output(
+        case,
+        output,
+        candidate_id=candidate_id,
+        scorer_version="goodprose-deterministic-v1.1",
+        forbidden_matcher=_matches_forbidden_v1_1,
+    )
+
+
+def _score_output(
+    case: BenchmarkCase,
+    output: str,
+    *,
+    candidate_id: str,
+    scorer_version: ScorerVersion,
+    forbidden_matcher: Callable[[str, tuple[str, ...]], bool],
+) -> CaseScore:
     """Score inspectable properties without claiming complete semantic quality."""
 
     checks: list[CheckResult] = []
@@ -292,7 +372,7 @@ def score_output(case: BenchmarkCase, output: str, *, candidate_id: str) -> Case
             errors.append("omission")
 
     for claim in case.expected.forbidden_claims:
-        passed = not _matches_any(output, claim.any_of)
+        passed = not forbidden_matcher(output, claim.any_of)
         checks.append(
             CheckResult(
                 id=claim.id,
@@ -432,7 +512,7 @@ def score_output(case: BenchmarkCase, output: str, *, candidate_id: str) -> Case
         errors.append("unnecessary_expansion")
 
     return CaseScore(
-        scorer_version=SCORER_VERSION,
+        scorer_version=scorer_version,
         case_id=case.id,
         candidate_id=candidate_id,
         output_sha256=sha256(output.encode("utf-8")).hexdigest(),

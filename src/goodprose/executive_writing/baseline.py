@@ -91,10 +91,10 @@ class Generation(StrictModel):
     output: str
     output_sha256: Sha256
     latency_ms: float = Field(ge=0)
-    prompt_tokens: int | None
-    output_tokens: int | None
-    total_duration_ns: int | None
-    load_duration_ns: int | None
+    prompt_tokens: int | None = None
+    output_tokens: int | None = None
+    total_duration_ns: int | None = None
+    load_duration_ns: int | None = None
 
 
 class RunSummary(StrictModel):

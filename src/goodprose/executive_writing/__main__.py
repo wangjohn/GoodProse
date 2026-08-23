@@ -6,6 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from goodprose.executive_writing.analysis import analyze_baselines
 from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
 
@@ -37,6 +38,16 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--benchmark-manifest", required=True)
     run.add_argument("--output-root", required=True)
     run.add_argument("--code-revision", required=True)
+
+    analyze = baseline_commands.add_parser("analyze")
+    analyze.add_argument("--source-run", action="append", required=True)
+    analyze.add_argument("--cases", required=True)
+    analyze.add_argument("--benchmark-manifest", required=True)
+    analyze.add_argument("--correction-record", required=True)
+    analyze.add_argument("--corrected-output-root", required=True)
+    analyze.add_argument("--results", required=True)
+    analyze.add_argument("--case-results", required=True)
+    analyze.add_argument("--timestamp", required=True)
     return parser
 
 
@@ -63,6 +74,22 @@ def _run(args: argparse.Namespace) -> int:
             code_revision=args.code_revision,
         )
         print(f"baseline run complete: {run_dir}")
+        return 0
+    if args.command == "baseline" and args.baseline_command == "analyze":
+        result = analyze_baselines(
+            source_run_dirs=[_path(value) for value in args.source_run],
+            cases_path=_path(args.cases),
+            benchmark_manifest_path=_path(args.benchmark_manifest),
+            correction_record_path=_path(args.correction_record),
+            corrected_output_root=_path(args.corrected_output_root),
+            results_path=_path(args.results),
+            case_results_path=_path(args.case_results),
+            timestamp=args.timestamp,
+        )
+        print(
+            f"baseline analysis complete: {result['analysis_id']} "
+            f"({len(result['candidates'])} candidates)"
+        )
         return 0
     raise AssertionError("unhandled command")
 

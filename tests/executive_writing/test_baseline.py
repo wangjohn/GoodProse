@@ -8,6 +8,7 @@ from pydantic import ValidationError
 
 from goodprose.executive_writing.baseline import (
     BaselineConfig,
+    Generation,
     OllamaClient,
     build_prompt,
     load_config,
@@ -41,6 +42,22 @@ def test_external_baseline_endpoint_is_rejected() -> None:
 
     with pytest.raises(ValidationError, match="local loopback"):
         BaselineConfig.model_validate(payload)
+
+
+def test_generation_accepts_omitted_optional_runtime_metrics() -> None:
+    generation = Generation.model_validate(
+        {
+            "case_id": "case-1",
+            "candidate_id": "candidate-1",
+            "prompt_sha256": "0" * 64,
+            "output": "Finished artifact.",
+            "output_sha256": "1" * 64,
+            "latency_ms": 1.5,
+        }
+    )
+
+    assert generation.prompt_tokens is None
+    assert generation.total_duration_ns is None
 
 
 def test_retrieval_and_prompt_are_deterministic() -> None:

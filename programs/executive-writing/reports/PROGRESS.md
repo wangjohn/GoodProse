@@ -155,3 +155,26 @@ historical entries.
   failure analysis and next-hypothesis critique to Ox Alpha.
 - Unresolved risks: v1.1 remains lexical and can still miss paraphrases or
   unsupported semantic claims; B1 is visible, small, and project-authored.
+
+### 2026-08-22 — Phase 0 checkpoint: corrected baseline analysis
+
+- Hypothesis: the frozen v1.1 negation correction can repair the demonstrated
+  false positive without changing candidate outputs or unrelated scores.
+- Evidence: 18 focused tests pass; exact old/new comparison shows only the
+  shared `b1-011` case changes for all three candidates. Offline rescoring,
+  10,000-resample paired bootstrap intervals, case-level results, task slices,
+  latency, tokens, and artifact hashes are published under
+  `goodprose-b1-v1.1-baseline-analysis`.
+- Exit criteria: registered regression behavior, no model inference, exact
+  output-byte reuse, unrelated-score invariance, matched comparison table,
+  hard gates, costs, and failure analysis.
+- Decision: pass as exploratory evaluator-calibrated evidence. Retrieval v1
+  advances over minimal (+17.2761 points, 95% interval +6.8559 to +27.9577,
+  hard-gate +12.50 pp) and becomes the next-iteration baseline. It does not
+  establish superiority over profile v1 (+0.5444, interval crosses zero).
+- Next actions: obtain a bounded Ox Alpha critique, incorporate only verified
+  findings, then test the fact-ledger plus verification-pass hypothesis on the
+  same cases and model.
+- Unresolved risks: retrieval still fails 15 of 24 hard gates, including 14
+  cases with omissions, one true fabrication, and one placeholder loss;
+  deterministic B1 results cannot substitute for semantic or human judgment.

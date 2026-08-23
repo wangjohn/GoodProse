@@ -95,6 +95,31 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
   confirmatory evidence.
 - Record: `../experiments/b1-v1-initial-baselines.json`.
 
+## 2026-08-22 — Corrected paired baseline analysis
+
+- Hypothesis: v1.1 will repair only the observed negated-claim false positive,
+  permitting an honest exploratory comparison on identical output bytes.
+- Dataset/evaluation: `goodprose-b1-v1` / `goodprose-b1-v1.1`, scorer
+  `goodprose-deterministic-v1.1`; no inference; $0.
+- Validation: 18 focused tests passed. Exactly one case per candidate changed:
+  `b1-011` gained five development points and passed its hard gate. The real
+  retrieval fabrication in `b1-006` remained a failure after a newline-boundary
+  regression test prevented heading negation from leaking across clauses.
+- Result: minimal 67.5522 / 25.00% hard gates; profile 84.2839 / 20.83%;
+  retrieval 84.8283 / 37.50%. Retrieval versus minimal was +17.2761 paired
+  points (95% bootstrap interval +6.8559 to +27.9577), 16/1/7 win/tie/loss,
+  and +12.50 hard-gate percentage points. Profile failed the no-regression
+  gate. Retrieval versus profile was +0.5444 with an interval spanning zero.
+- Failure analysis: retrieval has 14 omission cases, one placeholder loss, one
+  true fabrication, and four actionability failures. It removes the structural
+  failures seen in the other baselines but passes only 9/24 hard gates.
+- Decision: keep retrieval v1 as the baseline for iteration one; do not claim
+  it is meaningfully better than profile on mean quality. Test a structured
+  fact-and-constraint ledger plus verification pass next.
+- Records: `../experiments/goodprose-b1-v1.1-baselines.json`, case-level companion
+  `../experiments/goodprose-b1-v1.1-case-results.jsonl`, and human summary
+  `FIRST_EVIDENCE_BASELINES.md`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

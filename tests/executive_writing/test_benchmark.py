@@ -20,6 +20,7 @@ from goodprose.executive_writing.benchmark import (
     content_sha256,
     load_cases,
     score_output,
+    score_output_v1_1,
 )
 
 
@@ -111,6 +112,49 @@ def test_score_output_reports_critical_failures() -> None:
     assert "fabrication" in score.errors
     assert "omission" in score.errors
     assert "placeholder_loss" in score.errors
+
+
+def _enterprise_check(output: str, *, scorer_v1_1: bool = True) -> bool:
+    case = _case()
+    expected = case.expected.model_copy(
+        update={
+            "forbidden_claims": (
+                TextExpectation(
+                    id="enterprise",
+                    description="do not generalize to enterprise",
+                    any_of=("applies to enterprise",),
+                ),
+            )
+        }
+    )
+    case = case.model_copy(update={"expected": expected})
+    scorer = score_output_v1_1 if scorer_v1_1 else score_output
+    score = scorer(case, output, candidate_id="candidate-calibration")
+    return next(check.passed for check in score.checks if check.id == "enterprise")
+
+
+def test_v1_1_ignores_explicitly_negated_forbidden_alias() -> None:
+    output = "We should not assume the result applies to enterprise accounts."
+
+    assert not _enterprise_check(output, scorer_v1_1=False)
+    assert _enterprise_check(output)
+
+
+@pytest.mark.parametrize(
+    "output",
+    (
+        "The result applies to enterprise accounts.",
+        "We should not generalize. The result applies to enterprise accounts.",
+        "What does not change\n\nThe result applies to enterprise accounts.",
+        "The result not only applies to enterprise accounts but also to consumers.",
+        (
+            "We should not assume it applies to enterprise accounts. "
+            "The published result applies to enterprise accounts."
+        ),
+    ),
+)
+def test_v1_1_retains_affirmative_forbidden_claims(output: str) -> None:
+    assert not _enterprise_check(output)
 
 
 def test_case_rejects_wrong_source_hash() -> None:

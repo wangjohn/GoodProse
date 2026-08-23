@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T03:48:27Z",
+  "updated_at": "2026-08-23T04:02:28Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -63,6 +63,19 @@
       "model_id": "qwen2.5:0.5b-instruct",
       "settled_cost_usd": 0,
       "disposition": "preserve generation artifacts; invalidate v1 scores for comparison and rescore under frozen v1.1 correction"
+    },
+    {
+      "experiment_id": "goodprose-b1-v1.1-baseline-analysis",
+      "kind": "offline_rescore_and_paired_analysis",
+      "status": "completed_exploratory",
+      "record": "programs/executive-writing/experiments/goodprose-b1-v1.1-baselines.json",
+      "code_revision_start": "954cbaf",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_offline",
+      "model_id": "qwen2.5:0.5b-instruct",
+      "settled_cost_usd": 0,
+      "disposition": "keep retrieval v1 as the next-iteration baseline; treat all results as post-generation evaluator calibration and visible search evidence"
     }
   ]
 }
