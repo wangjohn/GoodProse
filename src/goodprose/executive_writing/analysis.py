@@ -277,6 +277,11 @@ def evaluate_iteration_gates(
     comparison: dict[str, Any],
     baseline_summary: dict[str, Any],
     candidate_summary: dict[str, Any],
+    max_omission_cases: int = 13,
+    max_fabrication_cases: int = 1,
+    max_placeholder_loss_cases: int = 1,
+    max_mean_latency_ms: float = ITERATION_MAX_MEAN_LATENCY_MS,
+    max_output_tokens: int = ITERATION_MAX_OUTPUT_TOKENS,
 ) -> dict[str, Any]:
     """Apply the frozen structured-iteration quality and efficiency gates."""
 
@@ -286,16 +291,26 @@ def evaluate_iteration_gates(
         >= MINIMUM_EFFECT_POINTS,
         "hard_gate_no_regression": candidate_summary["hard_gate_pass_rate"]
         >= baseline_summary["hard_gate_pass_rate"],
-        "omission_cases_below_14": candidate_errors.get("omission", 0) < 14,
-        "fabrication_cases_at_most_1": candidate_errors.get("fabrication", 0) <= 1,
-        "placeholder_loss_cases_at_most_1": candidate_errors.get("placeholder_loss", 0) <= 1,
-        "mean_latency_at_most_6812_086_ms": candidate_summary["latency_ms"]["mean"]
-        <= ITERATION_MAX_MEAN_LATENCY_MS,
-        "generated_tokens_at_most_16800": candidate_summary["output_tokens"]
-        <= ITERATION_MAX_OUTPUT_TOKENS,
+        "omission_cases_within_limit": candidate_errors.get("omission", 0) <= max_omission_cases,
+        "fabrication_cases_within_limit": candidate_errors.get("fabrication", 0)
+        <= max_fabrication_cases,
+        "placeholder_loss_cases_within_limit": candidate_errors.get("placeholder_loss", 0)
+        <= max_placeholder_loss_cases,
+        "mean_latency_within_limit": candidate_summary["latency_ms"]["mean"] <= max_mean_latency_ms,
+        "generated_tokens_within_limit": candidate_summary["output_tokens"] <= max_output_tokens,
         "settled_cost_is_zero": candidate_summary["settled_cost_usd"] == 0,
     }
     return {
+        "thresholds": {
+            "minimum_paired_mean_difference": MINIMUM_EFFECT_POINTS,
+            "minimum_hard_gate_pass_rate": baseline_summary["hard_gate_pass_rate"],
+            "max_omission_cases": max_omission_cases,
+            "max_fabrication_cases": max_fabrication_cases,
+            "max_placeholder_loss_cases": max_placeholder_loss_cases,
+            "max_mean_latency_ms": max_mean_latency_ms,
+            "max_output_tokens": max_output_tokens,
+            "settled_cost_usd": 0,
+        },
         "gates": gates,
         "primary_advancement_pass": (
             gates["paired_mean_at_least_plus_2"] and gates["hard_gate_no_regression"]
@@ -430,6 +445,21 @@ def _pipeline_stage_diagnostic(
     }
 
 
+def _pipeline_metrics(candidate: RescoredRun) -> dict[str, Any]:
+    metrics: dict[str, list[Any]] = defaultdict(list)
+    for generation in candidate.generations:
+        for step in generation.pipeline_steps:
+            metrics[step.step_id].append(step)
+    return {
+        step_id: {
+            "mean_latency_ms": round(statistics.fmean(step.latency_ms for step in steps), 4),
+            "prompt_tokens": sum(step.prompt_tokens or 0 for step in steps),
+            "output_tokens": sum(step.output_tokens or 0 for step in steps),
+        }
+        for step_id, steps in sorted(metrics.items())
+    }
+
+
 def analyze_baselines(
     *,
     source_run_dirs: list[Path],
@@ -544,6 +574,12 @@ def analyze_iteration(
     results_path: Path,
     case_results_path: Path,
     timestamp: str,
+    analysis_id: str = "goodprose-structured-retrieval-v1-analysis",
+    max_omission_cases: int = 13,
+    max_fabrication_cases: int = 1,
+    max_placeholder_loss_cases: int = 1,
+    max_mean_latency_ms: float = ITERATION_MAX_MEAN_LATENCY_MS,
+    max_output_tokens: int = ITERATION_MAX_OUTPUT_TOKENS,
 ) -> dict[str, Any]:
     """Rescore and compare one frozen improvement candidate to its baseline."""
 
@@ -563,6 +599,11 @@ def analyze_iteration(
         comparison=comparison,
         baseline_summary=baseline.summary,
         candidate_summary=candidate.summary,
+        max_omission_cases=max_omission_cases,
+        max_fabrication_cases=max_fabrication_cases,
+        max_placeholder_loss_cases=max_placeholder_loss_cases,
+        max_mean_latency_ms=max_mean_latency_ms,
+        max_output_tokens=max_output_tokens,
     )
     case_records = _case_results([candidate], cases)
     case_payload = (
@@ -575,7 +616,7 @@ def analyze_iteration(
     atomic_write(case_results_path, case_payload)
     result = {
         "version": 1,
-        "analysis_id": "goodprose-structured-retrieval-v1-analysis",
+        "analysis_id": analysis_id,
         "generated_at": timestamp,
         "status": ("completed_keep" if gate_result["all_guardrails_pass"] else "completed_reject"),
         "benchmark_id": "goodprose-b1-v1",
@@ -596,9 +637,7 @@ def analyze_iteration(
         },
         "comparison": comparison,
         "preregistered_gate_result": gate_result,
-        "posthoc_stage_diagnostic": _pipeline_stage_diagnostic(
-            baseline=baseline, candidate=candidate, cases=cases
-        ),
+        "pipeline_step_metrics": _pipeline_metrics(candidate),
         "settled_cost_usd": 0,
         "validity_status": "visible_search_development",
         "limitations": [
@@ -607,5 +646,9 @@ def analyze_iteration(
             "Intermediate model outputs are preserved locally but are not independent evidence.",
         ],
     }
+    if all(len(generation.pipeline_steps) == 4 for generation in candidate.generations):
+        result["posthoc_stage_diagnostic"] = _pipeline_stage_diagnostic(
+            baseline=baseline, candidate=candidate, cases=cases
+        )
     atomic_write_json(results_path, result)
     return result

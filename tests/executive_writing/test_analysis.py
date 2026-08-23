@@ -94,6 +94,25 @@ def test_iteration_gates_reject_latency_and_token_overruns() -> None:
     assert not result["all_guardrails_pass"]
 
 
+def test_iteration_gates_accept_iteration_specific_inclusive_limits() -> None:
+    result = evaluate_iteration_gates(
+        comparison={"paired_mean_difference": 2.0},
+        baseline_summary={"hard_gate_pass_rate": 0.375},
+        candidate_summary={
+            "hard_gate_pass_rate": 0.5,
+            "error_counts": {"omission": 14, "fabrication": 1, "placeholder_loss": 1},
+            "latency_ms": {"mean": 4257.554},
+            "output_tokens": 9450,
+            "settled_cost_usd": 0,
+        },
+        max_omission_cases=14,
+        max_mean_latency_ms=4257.554,
+        max_output_tokens=9450,
+    )
+
+    assert result["all_guardrails_pass"]
+
+
 def test_case_score_accepts_omitted_optional_change_ratio() -> None:
     score = _run("candidate", [10], [True]).scores[0]
     payload = score.model_dump(mode="json", exclude_none=True)

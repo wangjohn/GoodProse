@@ -30,6 +30,7 @@ post-generation evaluator calibration and cannot be described as confirmatory.
 | Minimal | 67.5522 | 74.1263 | 25.00% | 1,293.9 ms | 4,523 | 2,937 | $0.00 |
 | Profile card | 84.2839 | 85.0178 | 20.83% | 2,114.1 ms | 6,805 | 5,862 | $0.00 |
 | Retrieval | 84.8283 | 86.0000 | 37.50% | 1,703.0 ms | 11,002 | 4,200 | $0.00 |
+| Compact ledger + draft v2 | 87.1981 | 91.2353 | 50.00% | 2,850.5 ms | 22,812 | 6,362 | $0.00 |
 
 “Mean quality” is the preregistered deterministic 0–100 development proxy.
 It does not establish semantic fidelity, writing preference, or audience
@@ -45,6 +46,12 @@ quality.
 
 Intervals use 10,000 paired bootstrap resamples with seed 20260822. The
 advancement rule requires at least +2 mean points and no hard-gate regression.
+
+After the initial table was frozen, iteration two advanced compact ledger plus
+single-draft inference over retrieval v1 by +2.3698 paired points with a +12.50
+hard-gate percentage-point change. Its 95% interval (-2.0211 to +6.7390)
+crosses zero, so it is the directional B1 leader, not a confirmed winner. See
+`ITERATION_2_LEDGER_DRAFT.md` for the complete preregistered gate result.
 
 ## Failure analysis
 
@@ -96,6 +103,8 @@ does not block the local evidence loop.
   `../experiments/b1-v1-initial-baselines.json`
 - Ox Alpha review runtime record:
   `../experiments/ox-baseline-failure-review-v1.json`
+- Accepted iteration-two analysis:
+  `../experiments/goodprose-compact-ledger-draft-v2-analysis.json`
 - Frozen correction record:
   `../../../evals/executive-writing/goodprose-b1-v1/SCORER_CALIBRATION_v1.1.md`
 

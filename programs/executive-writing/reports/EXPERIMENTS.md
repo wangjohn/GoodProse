@@ -198,6 +198,27 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
 - Decision: execute one real B1 run only after committing the candidate.
 - Record: `../configs/baselines/LEDGER_DRAFT_ITERATION_v2.md`.
 
+## 2026-08-22 — Compact ledger-draft improvement iteration two
+
+- Hypothesis/candidate/baseline: the regenerated
+  `qwen2.5-0.5b-retrieval-ledger-draft-v2` candidate will exceed retrieval v1 by
+  at least two points without hard-gate or fidelity regression.
+- Dataset/scorer/revision: `goodprose-b1-v1` /
+  `goodprose-deterministic-v1.1` / `6920e65`; local Ollama 0.9.6 on Apple M3
+  Pro; temperature 0; seed 20260822; $0.
+- Result: 87.1981 mean and 50.00% hard gates versus 84.8283 and 37.50%.
+  Paired difference +2.3698 (95% interval -2.0211 to +6.7390), median +0.5852,
+  and 13/4/7 win/tie/loss. Omissions fell 14 to 12; registered fabrication and
+  placeholder-loss counts fell to zero.
+- Efficiency: 2,850.460 ms mean latency, 6,362 generated tokens, and $0; all
+  frozen thresholds passed. Ledger/draft stages averaged 1,100.578/1,749.882 ms.
+- Decision: keep as the directional B1 leader, without a confirmation or
+  production claim. Use this inference wrapper in the smoke fine-tune
+  comparison.
+- Records: `../experiments/goodprose-compact-ledger-draft-v2-analysis.json`,
+  case results `../experiments/goodprose-compact-ledger-draft-v2-case-results.jsonl`,
+  and `ITERATION_2_LEDGER_DRAFT.md`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

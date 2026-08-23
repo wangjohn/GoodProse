@@ -59,6 +59,12 @@ def build_parser() -> argparse.ArgumentParser:
     iteration.add_argument("--results", required=True)
     iteration.add_argument("--case-results", required=True)
     iteration.add_argument("--timestamp", required=True)
+    iteration.add_argument("--analysis-id", default="goodprose-structured-retrieval-v1-analysis")
+    iteration.add_argument("--max-omission-cases", type=int, default=13)
+    iteration.add_argument("--max-fabrication-cases", type=int, default=1)
+    iteration.add_argument("--max-placeholder-loss-cases", type=int, default=1)
+    iteration.add_argument("--max-mean-latency-ms", type=float, default=6812.086)
+    iteration.add_argument("--max-output-tokens", type=int, default=16800)
     return parser
 
 
@@ -113,6 +119,12 @@ def _run(args: argparse.Namespace) -> int:
             results_path=_path(args.results),
             case_results_path=_path(args.case_results),
             timestamp=args.timestamp,
+            analysis_id=args.analysis_id,
+            max_omission_cases=args.max_omission_cases,
+            max_fabrication_cases=args.max_fabrication_cases,
+            max_placeholder_loss_cases=args.max_placeholder_loss_cases,
+            max_mean_latency_ms=args.max_mean_latency_ms,
+            max_output_tokens=args.max_output_tokens,
         )
         print(f"iteration analysis complete: {result['analysis_id']} ({result['status']})")
         return 0

@@ -32,6 +32,7 @@ reference. Never record payment credentials.
 | 2026-08-23T04:13:23Z | Local Apple M3 Pro | Implement and validate structured retrieval runner | `structured-retrieval-runner-v1` | completed | $0.00 | frozen config, 96-call mocked pipeline, green repository suite |
 | 2026-08-23T04:21:41Z | Local Apple M3 Pro | Run and analyze structured retrieval iteration one | `goodprose-structured-retrieval-v1-analysis` | completed; rejected | $0.00 | 96 local calls, exact intermediate hashes, corrected paired analysis |
 | 2026-08-23T04:27:11Z | Local Apple M3 Pro | Implement and validate compact ledger-draft runner | `compact-ledger-draft-runner-v2` | completed | $0.00 | frozen two-step config, enforced token limits, green repository suite |
+| 2026-08-23T04:34:10Z | Local Apple M3 Pro | Run and analyze compact ledger-draft iteration two | `goodprose-compact-ledger-draft-v2-analysis` | completed; kept | $0.00 | 48 local calls, corrected paired analysis, every frozen gate passed |
 
 ## Zero-cost feasibility snapshot
 

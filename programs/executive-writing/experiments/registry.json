@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T04:27:11Z",
+  "updated_at": "2026-08-23T04:34:10Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -128,6 +128,19 @@
       "model_id": "qwen2.5:0.5b-instruct",
       "settled_cost_usd": 0,
       "disposition": "run the preregistered compact-ledger and single-draft candidate on B1"
+    },
+    {
+      "experiment_id": "goodprose-compact-ledger-draft-v2-analysis",
+      "kind": "improvement_iteration",
+      "status": "completed_keep",
+      "record": "programs/executive-writing/experiments/goodprose-compact-ledger-draft-v2-analysis.json",
+      "code_revision_start": "6920e65",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_ollama",
+      "model_id": "qwen2.5:0.5b-instruct",
+      "settled_cost_usd": 0,
+      "disposition": "keep as directional B1 leader and carry its two-stage inference wrapper into smoke fine-tune comparison"
     }
   ]
 }

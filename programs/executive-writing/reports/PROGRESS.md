@@ -258,3 +258,25 @@ historical entries.
 - Unresolved risks: even a compact ledger is model-generated and can omit or
   alter facts; the prior draft signal was post hoc and its confidence interval
   included zero.
+
+### 2026-08-22 — Phase 0 checkpoint: compact ledger-draft iteration two
+
+- Hypothesis: a regenerated compact ledger plus single draft will clear the
+  practical-effect gate without hard-gate, fidelity, or efficiency regression.
+- Evidence: one frozen 24-case run at revision `6920e65`; 48 local calls; exact
+  intermediate/final hashes; offline v1.1 scoring; paired bootstrap; all frozen
+  gates; step-level latency/tokens; and a green 42-test repository suite, Ruff,
+  format, and Pyright.
+- Exit criteria: +2 paired points, at least 37.50% hard gates, at most 14
+  omission/one fabrication/one placeholder-loss cases, mean latency at most
+  4,257.554 ms, at most 9,450 generated tokens, and $0 cost.
+- Decision: keep as the directional B1 leader. It gained +2.3698 points,
+  increased hard-gate pass to 50.00%, reduced omissions to 12, eliminated the
+  registered fabrication and placeholder-loss errors, and passed every frozen
+  efficiency/cost guardrail.
+- Next actions: build a separate project-authored smoke-training corpus and run
+  a genuine small-model update; compare the tuned checkpoint under matched
+  single-pass and leading two-stage inference.
+- Unresolved risks: the paired interval (-2.0211 to +6.7390) includes zero;
+  twelve hard-gate failures remain; B1 is visible, lexical, and not authentic
+  human rough-to-final evidence.
