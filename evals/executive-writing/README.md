@@ -26,3 +26,9 @@ error veto, and aggregate boundary, see
 [`human-evaluation-v1/`](human-evaluation-v1/README.md). The protocol is tested,
 but no study or packet exists because the current frontier has no candidate
 that passes the finalist-readiness gate.
+
+For all-eleven descriptive profile-card evaluation, see `source-profiles-v1/`
+for neutral shared-case coverage and `source-profile-topic-controls-v2/` for
+three project-authored paired topic swaps. The prompt-only cards fit or retrieve
+no evaluation topic or source body. Dated leave-time-out evaluation remains a
+future requirement for any corpus-trained profile.

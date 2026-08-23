@@ -35,3 +35,13 @@ separate coherent commit.
 Every committed result must be reproducible from a configuration and immutable
 manifest. Generated weights, private inputs, credentials, and raw provider
 responses do not belong in Git.
+
+## Program documentation
+
+- `ARCHITECTURE.md`: system, data, inference, evaluation, and trust boundaries.
+- `REPRODUCTION.md`: exact build, train, evaluate, and inference entry points.
+- `APPLICATION.md`: local research-preview request schema and review process.
+- `reports/PROVISIONAL_FINAL_REPORT.md`: current evidence and no-deployment
+  recommendation.
+- `reports/RIGHTS_DECISION_PACKET.md`: batched source and authentic-task data
+  decisions that require user or counsel authority.

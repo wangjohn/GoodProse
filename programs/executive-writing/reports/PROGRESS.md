@@ -1002,3 +1002,27 @@ historical entries.
   future dated corpus-trained or corpus-retrieval profile evaluation.
 - Evidence: `SOURCE_PROFILE_TOPIC_CONTROLS_V2_RESULTS.md` and the two compact
   `source-profile-topic-controls-v2` experiment records.
+
+### 2026-08-23 — Contract-completion audit and handoff checkpoint
+
+- Gap closure: added the pinned local application interface, architecture and
+  reproduction runbooks, compact-leader model card, smoke dataset card,
+  rights decision packet, provisional final report, and machine-validated
+  requirement matrix.
+- Audit correction: direct comparison to the contract found 18 stopping
+  conditions, not 17; costs/rights/limitations and paid-resource shutdown/
+  budget reporting are now separate rows. The validator enforces exactly 28
+  deliverables and 18 stopping conditions and verifies all evidence paths and
+  declared hashes.
+- Result: 24/28 deliverables and 13/18 stopping conditions are satisfied. Five
+  stopping conditions remain unmet: candidate hard gates, genuine Tier C,
+  finalist freeze, intended-audience human confirmation, and the final
+  human-informed architecture recommendation.
+- Verification: 219 tests pass; Ruff lint and format checks pass; Pyright
+  reports zero issues; JSON and audit-to-latest hash binding validate.
+- Cost: $0 attempted and settled; no paid resource was started; $100 remains
+  unapproved.
+- Decision: do not deploy. Retain compact ledger/draft only as the local
+  research leader. No safe autonomous repository work remains that can satisfy
+  a missing stopping condition without authentic rights-approved task pairs or
+  later access-separated and human evidence.

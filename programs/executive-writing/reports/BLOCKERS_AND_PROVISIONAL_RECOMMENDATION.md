@@ -78,3 +78,18 @@ Machine-readable blocker evidence is in
 `../experiments/completion-blockers-v1.json`. The current frontier and
 hypotheses are `../experiments/architecture-frontier-v3.json` and
 `../experiments/hypothesis-registry-v1.json`.
+
+## Contract-audit update
+
+After the original blocker record, the remaining safe contract gaps were
+closed: a pinned local application interface, full architecture and
+reproduction documentation, cards, a batched rights packet, and a real
+three-pair topic-swap matrix for all eleven descriptive profiles. The topic
+result was negative and produced no finalist.
+
+The superseding requirement-by-requirement state is
+`../experiments/contract-completion-audit-v1.json`, summarized in
+`CONTRACT_COMPLETION_AUDIT.md` and `PROVISIONAL_FINAL_REPORT.md`. It records 24
+of 28 deliverables and 13 of 18 stopping conditions satisfied, with no safe
+autonomous repository work remaining. Candidate readiness, genuine Tier C,
+finalist freeze, and human confirmation remain unmet; the goal is not complete.

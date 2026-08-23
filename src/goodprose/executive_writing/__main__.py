@@ -14,6 +14,7 @@ from goodprose.executive_writing.application import (
 )
 from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
+from goodprose.executive_writing.contract_audit import load_and_validate_contract_audit
 from goodprose.executive_writing.external_evals import (
     YAP_BOOTSTRAP_SEED,
     cli_adapt,
@@ -247,6 +248,12 @@ def build_parser() -> argparse.ArgumentParser:
     controls_publish.add_argument("--results", required=True)
     controls_publish.add_argument("--case-results", required=True)
     controls_publish.add_argument("--generated-at", required=True)
+
+    contract_audit = commands.add_parser(
+        "contract-audit", help="Validate the requirement-by-requirement completion audit"
+    )
+    contract_audit.add_argument("--audit", required=True)
+    contract_audit.add_argument("--repo-root", required=True)
 
     ox_ceiling = commands.add_parser("ox-ceiling", help="Run or publish the Ox B1 ceiling")
     ox_ceiling_commands = ox_ceiling.add_subparsers(dest="ox_ceiling_command", required=True)
@@ -662,6 +669,14 @@ def _run(args: argparse.Namespace) -> int:
             generated_at=args.generated_at,
         )
         print(f"profile topic controls published: {results['status']}")
+        return 0
+    if args.command == "contract-audit":
+        audit = load_and_validate_contract_audit(_path(args.audit), repo_root=_path(args.repo_root))
+        print(
+            f"contract audit valid: {len(audit.deliverables)} deliverables, "
+            f"{len(audit.stopping_conditions)} stopping conditions, "
+            f"goal_complete={audit.goal_complete}"
+        )
         return 0
     if args.command == "ox-ceiling" and args.ox_ceiling_command == "run":
         run_dir = run_ox_b1_ceiling(

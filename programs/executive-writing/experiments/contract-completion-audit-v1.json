@@ -1,0 +1,359 @@
+{
+  "version": 1,
+  "audit_id": "executive-writing-contract-completion-audit-v1",
+  "generated_at": "2026-08-23T23:16:36Z",
+  "contract_path": "docs/goals/executive-writing-model.md",
+  "goal_complete": false,
+  "status": "safe_repository_work_complete_external_and_candidate_gates_remain",
+  "deliverables": [
+    {
+      "id": "documented_architecture",
+      "requirement": "A documented architecture",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/ARCHITECTURE.md"],
+      "note": "Documents ownership, data, training, inference, evaluation, provenance, trust, and deployment boundaries."
+    },
+    {
+      "id": "first_evidence_vertical_slice",
+      "requirement": "A completed first-evidence vertical slice with 20 to 50 task-aligned cases, three baselines, a smoke fine-tune, a shared results table, and a failure analysis",
+      "status": "satisfied",
+      "evidence": ["evals/executive-writing/goodprose-b1-v1/manifest.json", "programs/executive-writing/reports/FIRST_EVIDENCE_RESULTS.md", "programs/executive-writing/reports/FIRST_EVIDENCE_BASELINES.md"],
+      "note": "Contains 24 cases, three initial prompt baselines, real smoke LoRA, corrected shared comparison, and rejection analysis."
+    },
+    {
+      "id": "source_rights_manifests",
+      "requirement": "Reproducible source and rights manifests",
+      "status": "satisfied",
+      "evidence": ["data/executive-writing/sources/named-sources-v1.json", "programs/executive-writing/reports/SOURCE_AUDIT.md", "programs/executive-writing/reports/RIGHTS_DECISION_PACKET.md"],
+      "note": "All eleven sources have route evidence, conservative rights, availability, profile, evaluation, and run metadata."
+    },
+    {
+      "id": "ingestion_sanitization",
+      "requirement": "Data ingestion and sanitization code",
+      "status": "satisfied",
+      "evidence": ["src/goodprose/executive_writing/external_evals.py", "src/goodprose/executive_writing/smoke_data.py", "src/goodprose/executive_writing/unified_data.py"],
+      "note": "Typed local-file adapters and project-owned dataset compilers preserve provenance and reject unsafe drift."
+    },
+    {
+      "id": "contamination_checks",
+      "requirement": "Train/eval contamination checks",
+      "status": "satisfied",
+      "evidence": ["data/executive-writing/smoke-v1/manifest.json", "data/executive-writing/unified-pilot-v1/manifest.json", "tests/executive_writing/test_unified_data.py"],
+      "note": "Lineage, normalized hash, and exact contiguous 12-word n-gram checks passed against B1."
+    },
+    {
+      "id": "external_eval_adapters",
+      "requirement": "Adapters for the requested external evaluations",
+      "status": "satisfied",
+      "evidence": ["evals/executive-writing/external-v1/README.md", "src/goodprose/executive_writing/external_evals.py", "programs/executive-writing/experiments/external-eval-real-source-adaptation-v1.json"],
+      "note": "Seven adapters are tested; six suite IDs were adapted from exact real source artifacts without claiming scores."
+    },
+    {
+      "id": "custom_benchmark",
+      "requirement": "A versioned GoodProse custom benchmark",
+      "status": "satisfied",
+      "evidence": ["evals/executive-writing/goodprose-b1-v1/manifest.json", "evals/executive-writing/goodprose-b1-v1/PREREGISTRATION.md"],
+      "note": "B1 v1 cases, schema, manifest, preregistration, and v1.1 scorer correction rebuild deterministically."
+    },
+    {
+      "id": "four_tier_handling",
+      "requirement": "Four-tier evaluation handling including B1, B2, Tier C, and intended-audience human evaluation",
+      "status": "satisfied",
+      "evidence": ["evals/executive-writing/goodprose-b1-v1/README.md", "evals/executive-writing/holdout-lifecycle-v1/README.md", "evals/executive-writing/human-evaluation-v1/README.md"],
+      "note": "All handling protocols and typed lifecycle boundaries are implemented; true B2, Tier C, and Tier D execution remain separate stopping conditions."
+    },
+    {
+      "id": "baselines",
+      "requirement": "Baseline configurations and results",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/configs/baselines/qwen2.5-0.5b-minimal-v1.json", "programs/executive-writing/experiments/latest-results-v2.json"],
+      "note": "Prompt, retrieval, structured, local scale, external ceiling, and matched MLX controls are recorded."
+    },
+    {
+      "id": "fine_tuning_configs",
+      "requirement": "Fine-tuning configurations",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/configs/training/qwen2.5-0.5b-mlx-lora-smoke-v1.json", "programs/executive-writing/configs/training/qwen2.5-0.5b-mlx-lora-unified-pilot-v1.json"],
+      "note": "Exact base, data, framework, LoRA, optimization, checkpoint, hardware, and cost pins are committed."
+    },
+    {
+      "id": "real_fine_tuning",
+      "requirement": "At least one completed real fine-tuning run",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/experiments/qwen2.5-0.5b-mlx-lora-smoke-v1.json", "programs/executive-writing/experiments/qwen2.5-0.5b-mlx-lora-unified-pilot-v1.json"],
+      "note": "Two genuine LoRA updates completed and were retained as negative quality evidence."
+    },
+    {
+      "id": "eleven_source_configs",
+      "requirement": "Source-specific run configurations for all eleven named people",
+      "status": "satisfied",
+      "evidence": ["data/executive-writing/sources/named-sources-v1.json", "programs/executive-writing/configs/source-profiles"],
+      "note": "Exactly eleven validated descriptive source-profile configs exist."
+    },
+    {
+      "id": "source_specific_coverage",
+      "requirement": "Standalone runs wherever approved data is sufficient plus lower-cost coverage for every other profile",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/experiments/source-profile-coverage-v1-results.json", "programs/executive-writing/experiments/source-profile-topic-controls-v2-results.json"],
+      "note": "Zero profiles meet both frozen rights and sufficiency gates; every profile received real neutral and paired-topic source-text-free coverage."
+    },
+    {
+      "id": "unified_training",
+      "requirement": "A unified-model training run",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/experiments/qwen2.5-0.5b-mlx-lora-unified-pilot-v1.json", "programs/executive-writing/reports/UNIFIED_PILOT_B1_RESULTS.md"],
+      "note": "A real unified profile-conditioned LoRA ran and was rejected for quality and memorization risk."
+    },
+    {
+      "id": "direct_structured_comparison",
+      "requirement": "A matched direct-generation versus structured plan-write-verify/revise comparison",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/reports/ITERATION_1_STRUCTURED.md", "programs/executive-writing/experiments/architecture-frontier-v3.json"],
+      "note": "Single-pass, four-stage, compact two-stage, and matched base/adapter inference were compared; the four-stage variant regressed."
+    },
+    {
+      "id": "best_of_n_distillation",
+      "requirement": "A provenance-aware best-of-N experiment when rights-safe teacher access is available",
+      "status": "conditional_not_triggered",
+      "evidence": ["programs/executive-writing/reports/RIGHTS_DECISION_PACKET.md", "programs/executive-writing/experiments/completion-blockers-v1.json"],
+      "note": "No authentic training-approved corpus and rights-safe teacher path exists; the user also prohibited Ox Alpha from authoring training examples."
+    },
+    {
+      "id": "statistical_reports",
+      "requirement": "Evaluation reports with paired effects, confidence intervals, judge-bias diagnostics, and confirmatory versus exploratory labels",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/reports/EXPERIMENTS.md", "programs/executive-writing/reports/PROVISIONAL_FINAL_REPORT.md"],
+      "note": "Powered comparisons include paired effects and intervals. No LLM judge was decisive, so judge-bias and judge-human diagnostics are explicitly not applicable yet."
+    },
+    {
+      "id": "three_corpus_model",
+      "requirement": "A three-corpus training data model covering task pairs, style targets, and preference pairs",
+      "status": "satisfied",
+      "evidence": ["data/executive-writing/unified-pilot-v1/DATASET_CARD.md", "src/goodprose/executive_writing/unified_data.py"],
+      "note": "The unified compiler and 90-record project-owned pilot exercise all three corpus types with frozen ratios."
+    },
+    {
+      "id": "style_fidelity_memorization",
+      "requirement": "Content-controlled style evaluation, adversarial fidelity cases, and memorization checks",
+      "status": "satisfied",
+      "evidence": ["evals/executive-writing/source-profile-topic-controls-v2/manifest.json", "evals/executive-writing/goodprose-b1-v1/manifest.json", "programs/executive-writing/experiments/mlx-qwen2.5-0.5b-unified-pilot-b1-v1-failure-audit.json"],
+      "note": "Neutral shared cases, paired topic swaps, adversarial B1 features, exact training-label leakage, repetition, and n-gram contamination checks are implemented. Dated controls remain required only for future corpus-trained profiles."
+    },
+    {
+      "id": "finalists_human_packet",
+      "requirement": "A frozen set of three to five finalists and an automatically selected compact blinded human packet",
+      "status": "failed_gate",
+      "evidence": ["programs/executive-writing/experiments/architecture-frontier-v3.json", "programs/executive-writing/experiments/completion-blockers-v1.json"],
+      "note": "The 15-candidate frontier contains zero finalist-ready candidates; creating a packet would violate readiness rules."
+    },
+    {
+      "id": "human_results",
+      "requirement": "Final human results when ratings are returned, otherwise a provisional report and active continuation plan",
+      "status": "blocked_external",
+      "evidence": ["programs/executive-writing/reports/PROVISIONAL_FINAL_REPORT.md", "evals/executive-writing/human-evaluation-v1/README.md"],
+      "note": "The provisional report and protocol exist; no valid packet or intended-audience ratings can exist before finalist readiness."
+    },
+    {
+      "id": "experiment_history",
+      "requirement": "Experiment history",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/reports/EXPERIMENTS.md", "programs/executive-writing/experiments/registry.json", "programs/executive-writing/experiments/hypothesis-registry-v1.json"],
+      "note": "Preregistrations, executions, corrections, invalidations, failures, hypotheses, and decisions are retained."
+    },
+    {
+      "id": "cost_hardware",
+      "requirement": "Cost and hardware analysis",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/reports/COSTS.md", "programs/executive-writing/reports/QWEN2_5_7B_H11_RESULTS.md"],
+      "note": "Settled spend, remaining budget, local memory/disk/latency, model size, and planning tiers are reported."
+    },
+    {
+      "id": "model_cards",
+      "requirement": "Model cards",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/reports/MODEL_CARD_UNIFIED_PILOT_v1.md", "programs/executive-writing/reports/MODEL_CARD_COMPACT_LEDGER_v2.md"],
+      "note": "Cards cover the genuine tuned unified candidate and the provisional local research leader."
+    },
+    {
+      "id": "dataset_cards",
+      "requirement": "Dataset cards",
+      "status": "satisfied",
+      "evidence": ["data/executive-writing/smoke-v1/DATASET_CARD.md", "data/executive-writing/unified-pilot-v1/DATASET_CARD.md"],
+      "note": "Both training datasets document composition, rights, provenance, isolation, limitations, and rebuild commands."
+    },
+    {
+      "id": "production_architecture",
+      "requirement": "A recommended production architecture",
+      "status": "failed_gate",
+      "evidence": ["programs/executive-writing/reports/PROVISIONAL_FINAL_REPORT.md", "programs/executive-writing/experiments/architecture-frontier-v3.json"],
+      "note": "Evidence supports a no-deployment recommendation only; compact ledger/draft is a research leader, not a production recommendation."
+    },
+    {
+      "id": "application_interface",
+      "requirement": "A simple interface for applying the selected model/profile",
+      "status": "satisfied",
+      "evidence": ["src/goodprose/executive_writing/application.py", "programs/executive-writing/APPLICATION.md", "programs/executive-writing/configs/application/example-request-v1.json"],
+      "note": "The local command validates exact model pins, omits source text from results, refuses overwrite, and requires manual review."
+    },
+    {
+      "id": "reproduction_instructions",
+      "requirement": "Clear instructions for reproducing ingestion, training, evaluation, and inference",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/REPRODUCTION.md"],
+      "note": "The runbook distinguishes committed-byte validation, ignored-artifact prerequisites, genuine execution, and external trust boundaries."
+    }
+  ],
+  "stopping_conditions": [
+    {
+      "id": "external_integrated",
+      "requirement": "External evaluations integrated or documented with tested adapters and acquisition steps",
+      "status": "satisfied",
+      "evidence": ["evals/executive-writing/external-v1/README.md", "programs/executive-writing/experiments/external-eval-real-source-adaptation-v1.json"],
+      "note": "All requested suites have tested adapters; licensing/judge residuals are explicit."
+    },
+    {
+      "id": "four_tier_program",
+      "requirement": "Four-tier evaluation program implemented, versioned, documented, and safely split",
+      "status": "satisfied",
+      "evidence": ["evals/executive-writing/README.md", "evals/executive-writing/holdout-lifecycle-v1/README.md", "evals/executive-writing/human-evaluation-v1/README.md"],
+      "note": "Implementation and synthetic lifecycle tests pass without exposing hidden content."
+    },
+    {
+      "id": "vertical_slice_complete",
+      "requirement": "First-evidence vertical slice and shared failure analysis committed",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/reports/FIRST_EVIDENCE_RESULTS.md"],
+      "note": "Completed."
+    },
+    {
+      "id": "eleven_sources_complete",
+      "requirement": "All eleven sources have audits, rights, profiles, evaluation coverage, and configs",
+      "status": "satisfied",
+      "evidence": ["data/executive-writing/sources/named-sources-v1.json", "programs/executive-writing/experiments/source-profile-topic-controls-v2-results.json"],
+      "note": "Completed with neutral and paired-topic source-text-free coverage."
+    },
+    {
+      "id": "profile_runs_by_eligibility",
+      "requirement": "Every eligible profile has standalone training and every other profile meaningful lower-cost coverage plus blocker",
+      "status": "satisfied",
+      "evidence": ["data/executive-writing/sources/named-sources-v1.json", "programs/executive-writing/experiments/source-profile-coverage-v1-results.json", "programs/executive-writing/experiments/source-profile-topic-controls-v2-results.json"],
+      "note": "No profile is eligible; all eleven received two real lower-cost coverage experiments and explicit blockers."
+    },
+    {
+      "id": "unified_real_run",
+      "requirement": "At least one unified controllable model completed a real training run",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/experiments/qwen2.5-0.5b-mlx-lora-unified-pilot-v1.json"],
+      "note": "Completed and rejected honestly."
+    },
+    {
+      "id": "architecture_ladder_compared",
+      "requirement": "Prompt, retrieval, direct, structured, unified fine-tune, and justified adapter alternatives compared",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/experiments/architecture-frontier-v3.json", "programs/executive-writing/reports/ARCHITECTURE_FRONTIER.md"],
+      "note": "The common frontier contains 15 matched or explicitly bounded candidates across the required branches."
+    },
+    {
+      "id": "selected_candidate_hard_gates",
+      "requirement": "Selected candidate passes every hard gate without unacceptable regression",
+      "status": "failed_gate",
+      "evidence": ["programs/executive-writing/experiments/goodprose-compact-ledger-draft-v2-analysis.json", "programs/executive-writing/experiments/architecture-frontier-v3.json"],
+      "note": "The research leader passes only 12/24 visible B1 hard gates; no production candidate is selected."
+    },
+    {
+      "id": "improvement_iterations",
+      "requirement": "At least two evidence-driven improvement iterations after the first baseline",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/reports/ITERATION_1_STRUCTURED.md", "programs/executive-writing/reports/ITERATION_2_LEDGER_DRAFT.md", "programs/executive-writing/experiments/hypothesis-registry-v1.json"],
+      "note": "More than two preregistered iterations, including negative branches, completed."
+    },
+    {
+      "id": "statistical_analysis",
+      "requirement": "Preregistered effects, intervals, repeated-comparison caveats, and negative results reported",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/reports/EXPERIMENTS.md", "programs/executive-writing/reports/PROVISIONAL_FINAL_REPORT.md"],
+      "note": "Completed for powered comparisons; tiny coverage runs are explicitly descriptive."
+    },
+    {
+      "id": "engineering_quality",
+      "requirement": "Relevant tests, lint, formatting, and type checking pass",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/REPRODUCTION.md"],
+      "note": "Final verification on 2026-08-23: 219 tests, Ruff, format, and Pyright pass."
+    },
+    {
+      "id": "sealed_tier_c",
+      "requirement": "A genuinely access-separated Tier C holdout ran exactly once after finalist freeze",
+      "status": "blocked_external",
+      "evidence": ["evals/executive-writing/holdout-lifecycle-v1/README.md", "programs/executive-writing/experiments/completion-blockers-v1.json"],
+      "note": "No access-separated holdout/operator exists and zero finalists qualify; synthetic fixtures are not evidence."
+    },
+    {
+      "id": "finalist_freeze",
+      "requirement": "Three to five strong candidates frozen and two or three selected for human evaluation",
+      "status": "failed_gate",
+      "evidence": ["programs/executive-writing/experiments/architecture-frontier-v3.json"],
+      "note": "Zero of 15 candidates is finalist-ready."
+    },
+    {
+      "id": "human_confirmation",
+      "requirement": "Final intended-audience human evaluation completed and used for production recommendation",
+      "status": "blocked_external",
+      "evidence": ["evals/executive-writing/human-evaluation-v1/README.md", "programs/executive-writing/reports/PROVISIONAL_FINAL_REPORT.md"],
+      "note": "No valid packet or human rating exists; requesting ratings now would violate finalist readiness."
+    },
+    {
+      "id": "results_reproducible",
+      "requirement": "Results reproducible from committed code and manifests",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/REPRODUCTION.md", "programs/executive-writing/experiments/registry.json"],
+      "note": "Committed bytes rebuild deterministically; ignored raw/model prerequisites and exact hashes are explicit."
+    },
+    {
+      "id": "costs_rights_limitations",
+      "requirement": "Costs, unresolved rights issues, limitations, and blocked profile runs reported honestly",
+      "status": "satisfied",
+      "evidence": ["programs/executive-writing/reports/COSTS.md", "programs/executive-writing/reports/RIGHTS_DECISION_PACKET.md", "programs/executive-writing/reports/PROVISIONAL_FINAL_REPORT.md"],
+      "note": "Settled spend, unresolved rights, limitations, and every blocked profile run are reported honestly."
+    },
+    {
+      "id": "paid_resources_budget",
+      "requirement": "All paid resources shut down, settled spend at or below $100, and remaining budget documented",
+      "status": "satisfied",
+      "evidence": [
+        "programs/executive-writing/reports/COSTS.md",
+        "programs/executive-writing/reports/PROVISIONAL_FINAL_REPORT.md"
+      ],
+      "note": "Settled spend is $0, no paid resource was started or remains, and the full $100 remains unapproved."
+    },
+    {
+      "id": "final_report_commands",
+      "requirement": "Final report recommends the best architecture and gives exact use and reproduction commands",
+      "status": "partial",
+      "evidence": ["programs/executive-writing/reports/PROVISIONAL_FINAL_REPORT.md", "programs/executive-writing/REPRODUCTION.md", "programs/executive-writing/APPLICATION.md"],
+      "note": "A complete provisional report recommends no deployment and documents the research leader; a final production recommendation is impossible without Tier C and human confirmation."
+    }
+  ],
+  "evidence_hashes": {
+    "programs/executive-writing/ARCHITECTURE.md": "76dd67341ce4533908528fe23f2af0067fffe9623a6d888573934e28b4b145a7",
+    "programs/executive-writing/REPRODUCTION.md": "d11271ddec51ede9119cd21611c4259c711cd7ef3b4970e70d7f40f60e51ed09",
+    "programs/executive-writing/APPLICATION.md": "7e7e7028452a7d888bc325ea228f8f095a568caed30c3663d1061c0d8d50ed7c",
+    "programs/executive-writing/reports/PROVISIONAL_FINAL_REPORT.md": "050c6cc33f9cbea7688b97bdb4f9846589c74f8e757a2db69265d0962245048d",
+    "programs/executive-writing/reports/MODEL_CARD_COMPACT_LEDGER_v2.md": "48321e3889298a75445ad368bd33552eec1a235add67540f7dd851c2f6f2298d",
+    "data/executive-writing/smoke-v1/DATASET_CARD.md": "0b2c3a0c9b098b0aa4fc92d5c47d20231ce16c89d0ffb64be32b8f6cce0ea634",
+    "programs/executive-writing/reports/RIGHTS_DECISION_PACKET.md": "21dbc46f4f4d8eb414dd3819f213a3ee44fcb13b5fa58a8f77497e13f1a7ea47",
+    "programs/executive-writing/experiments/architecture-frontier-v3.json": "d05dfe024a622b031a5bf9ac3885d5f0951590b47545f47b4310c20082a8d8fa",
+    "programs/executive-writing/experiments/source-profile-topic-controls-v2-results.json": "bc65bbe527eb5437a2a4dfb2d8a2d52d584aa33f0715114c85d7817a13ed7915"
+  },
+  "unmet_completion_conditions": [
+    "No candidate passes every hard gate; the best accepted local candidate passes 12 of 24.",
+    "No three-to-five-candidate finalist freeze or selected human packet is scientifically valid.",
+    "No genuinely access-separated Tier C holdout has run exactly once.",
+    "No intended-audience human results or judge-human calibration exist.",
+    "No authentic rough-to-final corpus is both available and training_approved for the highest-value next experiment."
+  ],
+  "next_external_trigger": "User or counsel supplies a rights-cleared authentic rough-to-final corpus; after a new candidate passes 24 of 24 B1 gates and a clean output audit, a separately controlled operator supplies B2 and Tier C and intended-audience raters complete Tier D.",
+  "safe_autonomous_work_remaining": [],
+  "settled_cost_usd": 0,
+  "remaining_budget_usd": 100
+}

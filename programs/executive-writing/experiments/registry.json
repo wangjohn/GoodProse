@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T21:23:20Z",
+  "updated_at": "2026-08-23T23:16:36Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -513,14 +513,88 @@
     {
       "experiment_id": "executive-writing-hypotheses-v1",
       "kind": "hypothesis_registry",
-      "status": "active_high_value_hypothesis_remaining",
+      "status": "completed_search_exhausted",
       "record": "programs/executive-writing/experiments/hypothesis-registry-v1.json",
       "code_revision_start": "a32f5a8",
       "dataset_id": "goodprose-b1-v1",
       "provider": "local_offline",
       "model_id": null,
       "settled_cost_usd": 0,
-      "disposition": "run the preregistered Ox source-verifier/reviser next; keep one larger local open-model probe contingent; do not repeat rejected training or one-step branches"
+      "disposition": "all safe affordable high-value hypotheses, including the source-reviser and larger local probe, completed; zero candidates are finalist-ready"
+    },
+    {
+      "experiment_id": "ox-alpha-b1-source-reviser-v1",
+      "kind": "external_two_session_source_reviser_evaluation",
+      "status": "completed_rejected_hard_gate_and_grounding",
+      "record": "programs/executive-writing/experiments/ox-alpha-b1-source-reviser-v1-analysis.json",
+      "code_revision_start": "3bcecc4c",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "rejected despite +6.1626 paired mean because only 13 of 24 hard gates passed and two material source-expansion risks remained"
+    },
+    {
+      "experiment_id": "qwen2.5-7b-retrieval-ledger-draft-h11-v1",
+      "kind": "matched_larger_local_model_probe",
+      "status": "completed_rejected_hard_gate_and_grounding",
+      "record": "programs/executive-writing/experiments/qwen2.5-7b-retrieval-ledger-draft-h11-v1-analysis.json",
+      "code_revision_start": "db79b0832a032acae89ec5c47e6aa241a822edcb",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_ollama",
+      "model_id": "qwen2.5:7b-instruct",
+      "settled_cost_usd": 0,
+      "disposition": "rejected despite +3.4548 paired mean because hard gates regressed to 7 of 24 and full-output audit found 15 material source expansions"
+    },
+    {
+      "experiment_id": "goodprose-b1-common-architecture-frontier-v3",
+      "kind": "cross_architecture_frontier",
+      "status": "completed_no_finalist_ready",
+      "record": "programs/executive-writing/experiments/architecture-frontier-v3.json",
+      "code_revision_start": "db79b0832a032acae89ec5c47e6aa241a822edcb",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_offline",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "fifteen candidates validated; compact ledger remains the local research leader and zero candidates are finalist-ready"
+    },
+    {
+      "experiment_id": "external-eval-real-source-adaptation-v1",
+      "kind": "external_suite_real_source_compatibility",
+      "status": "completed_no_candidate_evaluation",
+      "record": "programs/executive-writing/experiments/external-eval-real-source-adaptation-v1.json",
+      "code_revision_start": "134e349b",
+      "provider": "local_offline",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "six suite IDs adapted at exact public pins; no prediction, score, or leaderboard claim was produced"
+    },
+    {
+      "experiment_id": "source-profile-topic-controls-v2",
+      "kind": "paired_topic_swap_profile_coverage",
+      "status": "completed_no_profile_advanced",
+      "record": "programs/executive-writing/experiments/source-profile-topic-controls-v2-results.json",
+      "code_revision_start": "059c3500f4d283890c90e12b4a3d485e26bb336f",
+      "dataset_id": "source-profile-topic-controls-v2",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_ollama",
+      "model_id": "qwen2.5:0.5b-instruct",
+      "settled_cost_usd": 0,
+      "disposition": "all eleven profiles received three paired topic swaps; hard-gate rates were 0 of 6 to 3 of 6 and no candidate advanced"
+    },
+    {
+      "experiment_id": "executive-writing-contract-completion-audit-v1",
+      "kind": "contract_completion_audit",
+      "status": "completed_goal_not_complete",
+      "record": "programs/executive-writing/experiments/contract-completion-audit-v1.json",
+      "code_revision_start": "64ec4e3b0b748be31d2ee10f17b2979d6c979df7",
+      "provider": "local_offline",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "24 of 28 deliverables and 13 of 18 stopping conditions are satisfied; candidate, Tier C, finalist, and human gates remain unmet"
     }
   ]
 }

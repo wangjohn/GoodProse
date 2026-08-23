@@ -677,3 +677,23 @@ machine-readable manifest under `../experiments/`.
   not select a profile, create a finalist, or infer authentic-task quality.
   See `SOURCE_PROFILE_TOPIC_CONTROLS_V2_RESULTS.md` and the compact result
   records under `../experiments/`.
+
+## 2026-08-23 — Contract-completion audit v1
+
+- Question: after exhausting the safe automated candidate search, which exact
+  contract deliverables and stopping conditions are proven by current
+  repository evidence, and which remain unmet?
+- Method: enumerate every bullet in the contract's deliverables and stopping
+  conditions, bind each row to repository evidence, validate exact row counts,
+  evidence-path existence, and key evidence hashes, then rerun all engineering
+  checks. A review correction split two previously conflated stopping bullets.
+- Result: 24/28 deliverables and 13/18 stopping conditions are satisfied. The
+  remaining five stopping conditions are the failed candidate hard gate,
+  access-separated Tier C, finalist freeze, intended-audience human
+  confirmation, and a final human-informed architecture recommendation.
+- Engineering evidence: 219 tests, Ruff lint, Ruff format, and Pyright pass;
+  the audit CLI validates the 28-by-18 matrix and its declared hashes.
+- Decision: preserve the goal as incomplete and recommend no deployment. The
+  next evidence-bearing trigger is an authentic rights-approved rough-to-final
+  task corpus; no additional prompt/model sweep is justified by the exhausted
+  hypothesis registry.
