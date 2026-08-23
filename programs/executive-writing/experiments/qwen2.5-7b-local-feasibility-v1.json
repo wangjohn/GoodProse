@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "experiment_id": "qwen2.5-7b-local-feasibility-v1",
+  "generated_at": "2026-08-23T21:58:23Z",
+  "status": "pass_for_one_bounded_h11_candidate",
+  "model": {
+    "model_id": "qwen2.5:7b-instruct",
+    "manifest_sha256": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "manifest_size_bytes": 858,
+    "primary_blob_sha256": "2bada8a7450677000f678be90653b85d364de7db25eb5ea54136ada5f3933730",
+    "primary_blob_size_bytes": 4683073952,
+    "installed_size_bytes": 4683087332,
+    "parameter_count": 7615616512,
+    "quantization": "Q4_K_M",
+    "context_length": 32768,
+    "license": "Apache-2.0",
+    "license_text_sha256": "c156170b718ec29139d3653d40ed1986fd92fb7e0959b5c71f3c48f62e6636f4",
+    "official_registry_url": "https://ollama.com/library/qwen2.5:7b-instruct"
+  },
+  "environment": {
+    "hardware": "Apple M3 Pro, 18 GiB unified memory, 12 CPU cores, 18 GPU cores",
+    "ollama_version": "0.9.6",
+    "disk_available_before_pull_display": "42Gi from df -h",
+    "disk_available_after_pull_display": "39Gi from df -h",
+    "disk_available_at_pin_validation_bytes": 37681135616,
+    "disk_available_at_pin_validation_gib": 35.09,
+    "loaded_model_size_display": "6.0 GB",
+    "loaded_processor": "100% GPU",
+    "memory_free_percent_before": 43,
+    "memory_free_percent_loaded": 24,
+    "throttled_pages_before": 0,
+    "throttled_pages_loaded": 0
+  },
+  "preflight": {
+    "classification": "local_project_authored_non_b1_resource_smoke",
+    "b1_used": false,
+    "temperature": 0,
+    "seed": 20260822,
+    "num_ctx": 4096,
+    "num_predict": 512,
+    "prompt_tokens": 86,
+    "output_tokens": 150,
+    "total_duration_ns": 14037475042,
+    "load_duration_ns": 8017100542,
+    "prompt_eval_duration_ns": 332174459,
+    "eval_duration_ns": 5661312458,
+    "finish_reason": "stop",
+    "output_body_retained": false,
+    "qualitative_note": "Single-pass smoke introduced placeholders and unsupported follow-ups; h11 therefore keeps the frozen compact-ledger architecture and requires a full output audit."
+  },
+  "resource_gates": {
+    "minimum_post_pull_disk_available_gib": 30,
+    "minimum_loaded_memory_free_percent": 15,
+    "maximum_loaded_model_size_gb_display": 7.0,
+    "maximum_preflight_total_duration_seconds": 30,
+    "require_zero_throttled_pages": true,
+    "all_pass": true
+  },
+  "settled_cost_usd": 0,
+  "decision": "Freeze exactly one qwen2.5 7B compact-ledger B1 candidate; do not run a local model sweep."
+}

@@ -64,6 +64,7 @@ reference. Never record payment credentials.
 | 2026-08-23T21:34:44Z | Local Apple M3 Pro | Implement, validate, and freeze the Ox Alpha source-verifier/reviser candidate | `ox-alpha-b1-source-reviser-runner-v1` | completed; candidate generation not yet run | $0.00 | two isolated stages per case, source-only boundary, resolved no-tools config, nine focused tests |
 | 2026-08-23T21:36:06Z | OpenRouter | Generate and source-revise 24 fresh Ox Alpha B1 candidates | `ox-alpha-b1-source-reviser-v1` | completed; candidate rejected | $0.00 | 48 unique normal-stop sessions, 83,094 prompt and 12,304 output tokens, 509.579 seconds summed latency, zero file changes |
 | 2026-08-23T21:49:46Z | Local Apple M3 Pro | Score, audit, report, and refresh the common frontier after h10 | `ox-alpha-b1-source-reviser-v1-output-audit` | completed; hard-gate and grounding rejection | $0.00 | +6.1626 versus compact ledger, 13/24 hard gates, two source-expansion risks, 14-candidate frontier |
+| 2026-08-23T22:02:47Z | Local Ollama / Apple M3 Pro | Acquire, pin, resource-test, and freeze one Qwen2.5 7B compact-ledger probe | `qwen2.5-7b-local-feasibility-v1` | completed; B1 not yet run | $0.00 | exact 4.683 GB artifact, 6.0 GB GPU-loaded, 24% memory free, zero throttling, 35.09 GiB disk free |
 
 ## Zero-cost feasibility snapshot
 

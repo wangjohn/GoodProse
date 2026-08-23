@@ -899,3 +899,31 @@ historical entries.
 - Unresolved risks: the accepted local leader still passes only half the hard
   gates; external sources, authentic training approval, B2, Tier C, deployment
   qualification, and intended-audience human evidence remain absent.
+
+### 2026-08-23 — Phase 3 checkpoint: larger-local-model h11 freeze
+
+- Hypothesis: replacing the 0.5B base with a same-family 7B instruct model can
+  close the quality/fidelity gap while compact-ledger prompts, retrieval,
+  decoding, token limits, cases, scorer, and local-only boundary remain fixed.
+- Feasibility: official Ollama `qwen2.5:7b-instruct`, 7.616B parameters,
+  Q4_K_M, Apache-2.0; manifest `845dbda0…`, primary blob `2bada8a7…`,
+  4,683,087,332 installed bytes. The non-B1 cold smoke completed in 14.038
+  seconds, loaded 6.0 GB fully on GPU, retained 24% free memory and zero
+  throttled pages, and left 35.09 GiB disk free. Settled cost $0.
+- Integrity: the local runner now verifies Ollama 0.9.6, loopback endpoint,
+  exact manifest and primary blob, model metadata/license, installed-size cap,
+  and at least 30 GiB free disk before generation. Prompt/config comparison
+  confirms every non-model factor equals the compact-ledger leader.
+- Freeze: candidate `qwen2.5-7b-retrieval-ledger-draft-h11-v1`, config SHA-256
+  `44b5934…`, feasibility record `c35d43d…`, and preregistration `cc67047…`.
+  No B1 call occurred before this freeze.
+- Decision gate: require +2 paired mean points, no hard-gate regression, all
+  24 hard gates, zero fabrication/placeholder loss, mean latency at most 60
+  seconds, bounded output tokens, artifact-only output, zero material source
+  expansion, and clean privacy/rights/leakage/pin/provenance/resource/cost.
+- Next actions: commit the freeze; revalidate the exact local identity/resource
+  gates; run one 48-call ledger/draft candidate; offline-rescore, audit, and
+  refresh the frontier without quality retry or in-place repair.
+- Unresolved risks: the non-B1 single-pass smoke added placeholders and
+  unsupported follow-ups; a larger model may remain lexically incomplete,
+  semantically expansive, or too slow despite fitting memory.

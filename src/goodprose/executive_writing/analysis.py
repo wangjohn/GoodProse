@@ -282,6 +282,7 @@ def evaluate_iteration_gates(
     max_placeholder_loss_cases: int = 1,
     max_mean_latency_ms: float = ITERATION_MAX_MEAN_LATENCY_MS,
     max_output_tokens: int = ITERATION_MAX_OUTPUT_TOKENS,
+    require_all_hard_gates: bool = False,
 ) -> dict[str, Any]:
     """Apply the frozen structured-iteration quality and efficiency gates."""
 
@@ -300,17 +301,22 @@ def evaluate_iteration_gates(
         "generated_tokens_within_limit": candidate_summary["output_tokens"] <= max_output_tokens,
         "settled_cost_is_zero": candidate_summary["settled_cost_usd"] == 0,
     }
+    if require_all_hard_gates:
+        gates["all_hard_gates_pass"] = candidate_summary["hard_gate_pass_rate"] == 1
+    thresholds = {
+        "minimum_paired_mean_difference": MINIMUM_EFFECT_POINTS,
+        "minimum_hard_gate_pass_rate": baseline_summary["hard_gate_pass_rate"],
+        "max_omission_cases": max_omission_cases,
+        "max_fabrication_cases": max_fabrication_cases,
+        "max_placeholder_loss_cases": max_placeholder_loss_cases,
+        "max_mean_latency_ms": max_mean_latency_ms,
+        "max_output_tokens": max_output_tokens,
+        "settled_cost_usd": 0,
+    }
+    if require_all_hard_gates:
+        thresholds["required_hard_gate_pass_rate"] = 1
     return {
-        "thresholds": {
-            "minimum_paired_mean_difference": MINIMUM_EFFECT_POINTS,
-            "minimum_hard_gate_pass_rate": baseline_summary["hard_gate_pass_rate"],
-            "max_omission_cases": max_omission_cases,
-            "max_fabrication_cases": max_fabrication_cases,
-            "max_placeholder_loss_cases": max_placeholder_loss_cases,
-            "max_mean_latency_ms": max_mean_latency_ms,
-            "max_output_tokens": max_output_tokens,
-            "settled_cost_usd": 0,
-        },
+        "thresholds": thresholds,
         "gates": gates,
         "primary_advancement_pass": (
             gates["paired_mean_at_least_plus_2"] and gates["hard_gate_no_regression"]
@@ -580,6 +586,7 @@ def analyze_iteration(
     max_placeholder_loss_cases: int = 1,
     max_mean_latency_ms: float = ITERATION_MAX_MEAN_LATENCY_MS,
     max_output_tokens: int = ITERATION_MAX_OUTPUT_TOKENS,
+    require_all_hard_gates: bool = False,
 ) -> dict[str, Any]:
     """Rescore and compare one frozen improvement candidate to its baseline."""
 
@@ -604,6 +611,7 @@ def analyze_iteration(
         max_placeholder_loss_cases=max_placeholder_loss_cases,
         max_mean_latency_ms=max_mean_latency_ms,
         max_output_tokens=max_output_tokens,
+        require_all_hard_gates=require_all_hard_gates,
     )
     case_records = _case_results([candidate], cases)
     case_payload = (

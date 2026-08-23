@@ -82,10 +82,10 @@
     },
     {
       "category": "base_model_scale",
-      "evidence": "The 0.5B local family remains capacity-limited, and h10 failed the hard-gate and clean-audit requirements despite stronger external-model quality. Eighteen GiB unified memory may support one bounded larger local inference probe without crossing a provider boundary.",
+      "evidence": "The exact same-family Qwen2.5 7B Q4_K_M artifact is now hash-pinned and frozen for one compact-ledger probe. A non-B1 smoke loaded 6.0 GB fully on GPU, retained 24% free memory with zero throttled pages, completed cold in 14.038 seconds, and left 35.09 GiB disk available.",
       "hypothesis_id": "h11-larger-local-open-model",
       "major_factor": "Hold compact-ledger architecture fixed and replace the 0.5B base with one resource-feasible larger local instruct model.",
-      "next_action": "Probe installed inventory, disk, memory, exact model pins, and download size now; freeze one compact-ledger candidate only if zero-cost resource bounds pass.",
+      "next_action": "Run the committed frozen 24-case candidate once, rescore offline with deterministic v1.1, and require 24/24 hard gates plus a clean full-output audit.",
       "status": "planned_high_value"
     },
     {
@@ -115,6 +115,6 @@
   ],
   "registry_id": "executive-writing-hypotheses-v1",
   "source_frontier_sha256": "05efd63ea0cf27e37882e85a01245c158226611bd8dc912a052be8f545b18844",
-  "updated_at": "2026-08-23T21:49:46Z",
+  "updated_at": "2026-08-23T22:02:47Z",
   "version": 1
 }

@@ -113,6 +113,26 @@ def test_iteration_gates_accept_iteration_specific_inclusive_limits() -> None:
     assert result["all_guardrails_pass"]
 
 
+def test_iteration_gates_can_require_every_hard_gate() -> None:
+    result = evaluate_iteration_gates(
+        comparison={"paired_mean_difference": 3.0},
+        baseline_summary={"hard_gate_pass_rate": 0.5},
+        candidate_summary={
+            "hard_gate_pass_rate": 0.9583,
+            "error_counts": {},
+            "latency_ms": {"mean": 10_000.0},
+            "output_tokens": 10_000,
+            "settled_cost_usd": 0,
+        },
+        max_mean_latency_ms=60_000,
+        require_all_hard_gates=True,
+    )
+
+    assert not result["gates"]["all_hard_gates_pass"]
+    assert result["thresholds"]["required_hard_gate_pass_rate"] == 1
+    assert not result["all_guardrails_pass"]
+
+
 def test_case_score_accepts_omitted_optional_change_ratio() -> None:
     score = _run("candidate", [10], [True]).scores[0]
     payload = score.model_dump(mode="json", exclude_none=True)

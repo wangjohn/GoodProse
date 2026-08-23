@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import re
+import shutil
 import statistics
 import time
 import urllib.error
@@ -46,6 +48,11 @@ class PipelineTokenLimits(StrictModel):
     draft: int = Field(ge=1)
 
 
+class LocalResourceLimits(StrictModel):
+    minimum_available_disk_bytes: int = Field(ge=1)
+    maximum_installed_model_bytes: int = Field(ge=1)
+
+
 class BaselineConfig(StrictModel):
     version: Literal[1]
     candidate_id: NonEmpty
@@ -60,6 +67,7 @@ class BaselineConfig(StrictModel):
     prompt_version: NonEmpty
     retrieval_examples_path: str | None = None
     pipeline_token_limits: PipelineTokenLimits | None = None
+    resource_limits: LocalResourceLimits | None = None
     decoding: DecodingConfig
     request_timeout_seconds: int = Field(default=180, ge=1)
 
@@ -78,6 +86,20 @@ class BaselineConfig(StrictModel):
         if self.strategy != "ledger_draft" and self.pipeline_token_limits is not None:
             raise ValueError("only ledger_draft strategy may set pipeline token limits")
         return self
+
+
+class LocalModelIdentity(StrictModel):
+    model_id: NonEmpty
+    ollama_version: NonEmpty
+    manifest_sha256: Sha256
+    blob_sha256: Sha256
+    installed_size_bytes: int = Field(ge=1)
+    format: NonEmpty
+    architecture: NonEmpty
+    parameter_count: int = Field(ge=1)
+    quantization: NonEmpty
+    context_length: int = Field(ge=1)
+    license: Literal["Apache-2.0"]
 
 
 class RetrievalExample(StrictModel):
@@ -195,6 +217,126 @@ def _optional_int(value: Any) -> int | None:
 
 def load_config(path: Path) -> BaselineConfig:
     return BaselineConfig.model_validate_json(path.read_text(encoding="utf-8"))
+
+
+def validate_local_model_identity(
+    config: BaselineConfig,
+    *,
+    version_payload: dict[str, Any],
+    tags_payload: dict[str, Any],
+    show_payload: dict[str, Any],
+) -> LocalModelIdentity:
+    """Validate the exact installed manifest, primary blob, and model metadata."""
+
+    if version_payload.get("version") != config.ollama_version:
+        raise ValueError("Ollama runtime version drifted")
+    models = tags_payload.get("models")
+    if not isinstance(models, list):
+        raise ValueError("Ollama tags response is missing models")
+    matches = [item for item in models if item.get("name") == config.model_id]
+    if len(matches) != 1:
+        raise ValueError("configured Ollama model is missing or ambiguous")
+    tag = matches[0]
+    if tag.get("digest") != config.model_manifest_sha256:
+        raise ValueError("Ollama model manifest digest drifted")
+    installed_size = tag.get("size")
+    if not isinstance(installed_size, int) or installed_size < 1:
+        raise ValueError("Ollama model installed size is invalid")
+
+    modelfile = show_payload.get("modelfile")
+    if not isinstance(modelfile, str):
+        raise ValueError("Ollama show response is missing the Modelfile")
+    blob_match = re.search(r"(?m)^FROM .*/sha256-([0-9a-f]{64})$", modelfile)
+    if blob_match is None or blob_match.group(1) != config.model_blob_sha256:
+        raise ValueError("Ollama model primary blob digest drifted")
+
+    details = show_payload.get("details")
+    model_info = show_payload.get("model_info")
+    if not isinstance(details, dict) or not isinstance(model_info, dict):
+        raise ValueError("Ollama show response is missing model metadata")
+    if str(model_info.get("general.license", "")).casefold() != "apache-2.0":
+        raise ValueError("Ollama model license drifted")
+    parameter_count = model_info.get("general.parameter_count")
+    context_length = model_info.get("qwen2.context_length")
+    if not isinstance(parameter_count, int) or not isinstance(context_length, int):
+        raise ValueError("Ollama model parameter or context metadata is invalid")
+
+    return LocalModelIdentity(
+        model_id=config.model_id,
+        ollama_version=config.ollama_version,
+        manifest_sha256=config.model_manifest_sha256,
+        blob_sha256=config.model_blob_sha256,
+        installed_size_bytes=installed_size,
+        format=str(details.get("format", "")),
+        architecture=str(model_info.get("general.architecture", "")),
+        parameter_count=parameter_count,
+        quantization=str(details.get("quantization_level", "")),
+        context_length=context_length,
+        license="Apache-2.0",
+    )
+
+
+def fetch_local_model_identity(config: BaselineConfig) -> LocalModelIdentity:
+    """Read and validate exact model identity from the loopback Ollama API."""
+
+    endpoint = config.endpoint.rstrip("/")
+    try:
+        with urllib.request.urlopen(f"{endpoint}/api/version", timeout=10) as response:
+            version_payload: Any = json.load(response)
+        with urllib.request.urlopen(f"{endpoint}/api/tags", timeout=10) as response:
+            tags_payload: Any = json.load(response)
+        show_request = urllib.request.Request(
+            f"{endpoint}/api/show",
+            data=json.dumps({"model": config.model_id}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(show_request, timeout=30) as response:
+            show_payload: Any = json.load(response)
+    except (urllib.error.URLError, TimeoutError) as error:
+        raise RuntimeError(f"local Ollama identity check failed: {error}") from error
+    if (
+        not isinstance(version_payload, dict)
+        or not isinstance(tags_payload, dict)
+        or not isinstance(show_payload, dict)
+    ):
+        raise ValueError("Ollama identity responses must be JSON objects")
+    return validate_local_model_identity(
+        config,
+        version_payload=version_payload,
+        tags_payload=tags_payload,
+        show_payload=show_payload,
+    )
+
+
+def validate_local_resources(
+    config: BaselineConfig,
+    identity: LocalModelIdentity,
+    *,
+    available_disk_bytes: int,
+) -> dict[str, int | bool]:
+    """Enforce optional pre-generation disk and installed-size bounds."""
+
+    if available_disk_bytes < 0:
+        raise ValueError("available disk bytes cannot be negative")
+    limits = config.resource_limits
+    if limits is None:
+        return {
+            "limits_required": False,
+            "available_disk_bytes": available_disk_bytes,
+            "installed_model_bytes": identity.installed_size_bytes,
+        }
+    if available_disk_bytes < limits.minimum_available_disk_bytes:
+        raise RuntimeError("available disk is below the frozen local-model minimum")
+    if identity.installed_size_bytes > limits.maximum_installed_model_bytes:
+        raise RuntimeError("installed model size exceeds the frozen local-model maximum")
+    return {
+        "limits_required": True,
+        "available_disk_bytes": available_disk_bytes,
+        "installed_model_bytes": identity.installed_size_bytes,
+        "minimum_available_disk_bytes": limits.minimum_available_disk_bytes,
+        "maximum_installed_model_bytes": limits.maximum_installed_model_bytes,
+    }
 
 
 def load_retrieval_examples(path: Path) -> list[RetrievalExample]:
@@ -577,10 +719,31 @@ def run_baseline(
     benchmark_manifest_path: Path,
     output_root: Path,
     code_revision: str,
+    model_identity: LocalModelIdentity | None = None,
+    available_disk_bytes: int | None = None,
 ) -> Path:
     """Run one matched local candidate and persist raw ignored artifacts."""
 
     config = load_config(config_path)
+    resolved_model_identity = model_identity or fetch_local_model_identity(config)
+    if resolved_model_identity.model_id != config.model_id:
+        raise ValueError("injected local model identity does not match the config")
+    if resolved_model_identity.ollama_version != config.ollama_version:
+        raise ValueError("injected Ollama version does not match the config")
+    if resolved_model_identity.manifest_sha256 != config.model_manifest_sha256:
+        raise ValueError("injected local model manifest does not match the config")
+    if resolved_model_identity.blob_sha256 != config.model_blob_sha256:
+        raise ValueError("injected local model blob does not match the config")
+    resolved_available_disk = (
+        available_disk_bytes
+        if available_disk_bytes is not None
+        else shutil.disk_usage(config_path.resolve()).free
+    )
+    resource_validation = validate_local_resources(
+        config,
+        resolved_model_identity,
+        available_disk_bytes=resolved_available_disk,
+    )
     cases = load_cases(cases_path)
     retrieval_examples: list[RetrievalExample] = []
     retrieval_sha256: str | None = None
@@ -660,6 +823,8 @@ def run_baseline(
         "model_manifest_sha256": config.model_manifest_sha256,
         "model_blob_sha256": config.model_blob_sha256,
         "model_license": config.model_license,
+        "model_identity": resolved_model_identity.model_dump(mode="json"),
+        "resource_validation": resource_validation,
         "provider": config.provider,
         "ollama_version": config.ollama_version,
         "code_revision": code_revision,

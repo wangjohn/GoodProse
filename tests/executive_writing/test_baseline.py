@@ -9,6 +9,7 @@ from pydantic import ValidationError
 from goodprose.executive_writing.baseline import (
     BaselineConfig,
     Generation,
+    LocalModelIdentity,
     OllamaClient,
     build_compact_ledger_prompt,
     build_ledger_draft_prompt,
@@ -23,12 +24,31 @@ from goodprose.executive_writing.baseline import (
     run_baseline,
     run_ledger_draft_pipeline,
     run_structured_pipeline,
+    validate_local_model_identity,
+    validate_local_resources,
 )
 from goodprose.executive_writing.benchmark import load_cases
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_ROOT = REPO_ROOT / "programs" / "executive-writing" / "configs" / "baselines"
 BENCHMARK_ROOT = REPO_ROOT / "evals" / "executive-writing" / "goodprose-b1-v1"
+
+
+def _identity(config_path: Path) -> LocalModelIdentity:
+    config = load_config(config_path)
+    return LocalModelIdentity(
+        model_id=config.model_id,
+        ollama_version=config.ollama_version,
+        manifest_sha256=config.model_manifest_sha256,
+        blob_sha256=config.model_blob_sha256,
+        installed_size_bytes=397_000_000,
+        format="gguf",
+        architecture="qwen2",
+        parameter_count=494_000_000,
+        quantization="Q4_K_M",
+        context_length=32_768,
+        license="Apache-2.0",
+    )
 
 
 def test_all_baseline_configs_are_pinned_and_local() -> None:
@@ -64,11 +84,18 @@ def test_structured_config_is_pinned_and_uses_approved_retrieval() -> None:
 
 def test_ledger_draft_config_has_frozen_step_limits() -> None:
     config = load_config(CONFIG_ROOT / "qwen2.5-0.5b-retrieval-ledger-draft-v2.json")
+    h11 = load_config(CONFIG_ROOT / "qwen2.5-7b-retrieval-ledger-draft-h11-v1.json")
 
     assert config.strategy == "ledger_draft"
     assert config.pipeline_token_limits is not None
     assert config.pipeline_token_limits.ledger == 192
     assert config.pipeline_token_limits.draft == 512
+    assert h11.model_id == "qwen2.5:7b-instruct"
+    assert h11.prompt_version == config.prompt_version
+    assert h11.retrieval_examples_path == config.retrieval_examples_path
+    assert h11.pipeline_token_limits == config.pipeline_token_limits
+    assert h11.decoding == config.decoding
+    assert h11.resource_limits is not None
 
 
 def test_generation_accepts_omitted_optional_runtime_metrics() -> None:
@@ -85,6 +112,80 @@ def test_generation_accepts_omitted_optional_runtime_metrics() -> None:
 
     assert generation.prompt_tokens is None
     assert generation.total_duration_ns is None
+
+
+def test_local_model_identity_rejects_manifest_and_blob_drift() -> None:
+    config = load_config(CONFIG_ROOT / "qwen2.5-0.5b-minimal-v1.json")
+    tags = {
+        "models": [
+            {
+                "name": config.model_id,
+                "digest": config.model_manifest_sha256,
+                "size": 397_000_000,
+            }
+        ]
+    }
+    show = {
+        "modelfile": f"FROM /models/blobs/sha256-{config.model_blob_sha256}",
+        "details": {"format": "gguf", "quantization_level": "Q4_K_M"},
+        "model_info": {
+            "general.license": "apache-2.0",
+            "general.parameter_count": 494_000_000,
+            "general.architecture": "qwen2",
+            "qwen2.context_length": 32_768,
+        },
+    }
+
+    identity = validate_local_model_identity(
+        config,
+        version_payload={"version": config.ollama_version},
+        tags_payload=tags,
+        show_payload=show,
+    )
+    assert identity.manifest_sha256 == config.model_manifest_sha256
+    assert identity.blob_sha256 == config.model_blob_sha256
+
+    tags["models"][0]["digest"] = "f" * 64
+    with pytest.raises(ValueError, match="manifest digest drifted"):
+        validate_local_model_identity(
+            config,
+            version_payload={"version": config.ollama_version},
+            tags_payload=tags,
+            show_payload=show,
+        )
+
+    tags["models"][0]["digest"] = config.model_manifest_sha256
+    show["modelfile"] = f"FROM /models/blobs/sha256-{'f' * 64}"
+    with pytest.raises(ValueError, match="primary blob digest drifted"):
+        validate_local_model_identity(
+            config,
+            version_payload={"version": config.ollama_version},
+            tags_payload=tags,
+            show_payload=show,
+        )
+
+
+def test_local_resource_limits_are_enforced() -> None:
+    config = load_config(CONFIG_ROOT / "qwen2.5-7b-retrieval-ledger-draft-h11-v1.json")
+    identity = LocalModelIdentity(
+        model_id=config.model_id,
+        ollama_version=config.ollama_version,
+        manifest_sha256=config.model_manifest_sha256,
+        blob_sha256=config.model_blob_sha256,
+        installed_size_bytes=4_683_087_332,
+        format="gguf",
+        architecture="qwen2",
+        parameter_count=7_615_616_512,
+        quantization="Q4_K_M",
+        context_length=32_768,
+        license="Apache-2.0",
+    )
+
+    result = validate_local_resources(config, identity, available_disk_bytes=40 * 1024**3)
+    assert result["limits_required"] is True
+
+    with pytest.raises(RuntimeError, match="below the frozen"):
+        validate_local_resources(config, identity, available_disk_bytes=29 * 1024**3)
 
 
 def test_retrieval_and_prompt_are_deterministic() -> None:
@@ -229,6 +330,7 @@ def test_run_baseline_writes_provenance_complete_artifacts(
         benchmark_manifest_path=BENCHMARK_ROOT / "manifest.json",
         output_root=tmp_path,
         code_revision="test-revision",
+        model_identity=_identity(CONFIG_ROOT / "qwen2.5-0.5b-minimal-v1.json"),
     )
 
     manifest = json.loads((run_dir / "run-manifest.json").read_text(encoding="utf-8"))
@@ -272,6 +374,7 @@ def test_run_structured_baseline_writes_four_step_provenance(
         benchmark_manifest_path=BENCHMARK_ROOT / "manifest.json",
         output_root=tmp_path,
         code_revision="test-structured-revision",
+        model_identity=_identity(CONFIG_ROOT / "qwen2.5-0.5b-retrieval-ledger-verify-v1.json"),
     )
 
     outputs = [

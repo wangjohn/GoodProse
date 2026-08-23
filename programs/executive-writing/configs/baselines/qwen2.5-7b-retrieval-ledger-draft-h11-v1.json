@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "candidate_id": "qwen2.5-7b-retrieval-ledger-draft-h11-v1",
+  "provider": "local_ollama",
+  "endpoint": "http://127.0.0.1:11434",
+  "ollama_version": "0.9.6",
+  "model_id": "qwen2.5:7b-instruct",
+  "model_manifest_sha256": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "model_blob_sha256": "2bada8a7450677000f678be90653b85d364de7db25eb5ea54136ada5f3933730",
+  "model_license": "Apache-2.0",
+  "strategy": "ledger_draft",
+  "prompt_version": "retrieval-ledger-draft-v2",
+  "retrieval_examples_path": "programs/executive-writing/configs/baselines/retrieval-examples-v1.json",
+  "pipeline_token_limits": {
+    "ledger": 192,
+    "draft": 512
+  },
+  "resource_limits": {
+    "minimum_available_disk_bytes": 32212254720,
+    "maximum_installed_model_bytes": 5000000000
+  },
+  "decoding": {
+    "temperature": 0,
+    "seed": 20260822,
+    "num_predict": 512,
+    "num_ctx": 4096
+  },
+  "request_timeout_seconds": 180
+}

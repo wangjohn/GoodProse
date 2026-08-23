@@ -112,6 +112,7 @@ def build_parser() -> argparse.ArgumentParser:
     iteration.add_argument("--max-placeholder-loss-cases", type=int, default=1)
     iteration.add_argument("--max-mean-latency-ms", type=float, default=6812.086)
     iteration.add_argument("--max-output-tokens", type=int, default=16800)
+    iteration.add_argument("--require-all-hard-gates", action="store_true")
 
     smoke_data = commands.add_parser("smoke-data", help="Build smoke-training data")
     smoke_data_commands = smoke_data.add_subparsers(dest="smoke_data_command", required=True)
@@ -445,6 +446,7 @@ def _run(args: argparse.Namespace) -> int:
             max_placeholder_loss_cases=args.max_placeholder_loss_cases,
             max_mean_latency_ms=args.max_mean_latency_ms,
             max_output_tokens=args.max_output_tokens,
+            require_all_hard_gates=args.require_all_hard_gates,
         )
         print(f"iteration analysis complete: {result['analysis_id']} ({result['status']})")
         return 0

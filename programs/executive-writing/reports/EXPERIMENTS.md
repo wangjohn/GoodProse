@@ -572,6 +572,29 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
 - Next hypothesis: h11, exactly one resource-bounded larger-local-model probe
   with compact-ledger architecture held fixed.
 
+## 2026-08-23 — Qwen2.5 7B compact-ledger h11 preregistration
+
+- Causal change: same Qwen2.5 instruct family, 0.5B to 7B only. Candidate,
+  model hashes, and resource limits change; prompt v2, project-owned retrieval,
+  two pipeline stages, 192/512 token caps, temperature 0, seed 20260822,
+  context 4096, B1 order, and deterministic v1.1 comparison remain fixed.
+- Model pin: Ollama 0.9.6 / `qwen2.5:7b-instruct`; manifest `845dbda0…`;
+  primary blob `2bada8a7…`; 7,615,616,512 parameters; Q4_K_M; Apache-2.0;
+  4,683,087,332 installed bytes.
+- Resource gate: one project-authored non-B1 smoke completed in 14.038 seconds
+  including 8.017 seconds cold load; Ollama reported 6.0 GB, 100% GPU; free
+  memory 43% before and 24% loaded; zero throttled pages; 35.09 GiB disk free.
+- Runner gate: exact runtime/manifest/blob/metadata/license checks and frozen
+  minimum 30 GiB disk plus maximum 5.0 GB installed artifact execute before
+  any candidate call. Focused identity, drift, resource, and all-hard-gate
+  tests pass.
+- Candidate gate: +2 paired points, no gate regression, 24/24 hard gates, zero
+  fabrication/placeholder loss, <=60-second mean latency, <=16,800 final
+  tokens, artifact-only, clean semantic source audit, and every privacy,
+  rights, leakage, identity, provenance, resource, and cost check.
+- Decision: freeze exactly one B1 run after commit. No alternative size,
+  quantization, prompt, or retry is authorized under h11.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,
