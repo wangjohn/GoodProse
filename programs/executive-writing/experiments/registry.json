@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T15:31:13Z",
+  "updated_at": "2026-08-23T17:16:41Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -268,6 +268,17 @@
       "model_id": "stealth/ox-alpha",
       "settled_cost_usd": 0,
       "disposition": "accept after Codex lifecycle, authentication, semantic-verification, confidentiality, and regression-test corrections; infrastructure only"
+    },
+    {
+      "experiment_id": "ox-external-eval-adapters-v1",
+      "kind": "external_evaluation_adapter_implementation",
+      "status": "completed_reviewed",
+      "record": "programs/executive-writing/experiments/ox-external-eval-adapters-v1.json",
+      "code_revision_start": "dda7a0c",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "accept after Codex real-source schema, pin, rights, suite-isolation, provenance, and regression-test corrections; adapters tested, benchmarks unexecuted"
     }
   ]
 }

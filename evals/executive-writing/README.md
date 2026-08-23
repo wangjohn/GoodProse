@@ -13,3 +13,9 @@ For aggregate-only hidden-evaluation boundaries (Tier B2 shadow development
 and the Tier C one-shot holdout), use the frozen protocol at
 [`holdout-lifecycle-v1/`](holdout-lifecycle-v1/README.md). Everything in that
 directory is explicitly synthetic; no true hidden content exists here.
+
+For external benchmark adapters and acquisition metadata (WritingBench,
+IteraTeR/EditEval, Revision for Concision, YapBench), see
+[`external-v1/`](external-v1/README.md). Adapters are tested but unexecuted;
+no external benchmark rows, references, criteria, predictions, or results are
+committed.

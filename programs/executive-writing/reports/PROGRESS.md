@@ -492,3 +492,42 @@ historical entries.
   location per registration, and attest real access separation. A genuinely
   sealed run and final intended-audience human evaluation remain mandatory
   stopping conditions.
+
+### 2026-08-23 — Phase 1 checkpoint: external evaluation adapters v1
+
+- Hypothesis: exact source pins plus strict local adapters can make every
+  contracted public compatibility suite reproducible without redistributing
+  benchmark content, exposing evaluator-only material to candidates, or
+  overstating an adapter test as model evidence.
+- Evidence: Ox Alpha drafted the bounded implementation from sanitized public
+  metadata only at zero cost. Codex then tested the actual pinned local files
+  and corrected four incompatible source-shape assumptions, removed test-only
+  verification bypasses, froze the real WritingBench subsets, and separated
+  candidate generation by explicit development/full suite. Fresh adaptation
+  passes produced 115/107 English-eligible WritingBench cases with 32 frozen
+  development cases each; 308 IteraTeR cases; 185/35 EditEval clarity/
+  coherence cases; 536 concision cases; and 300 nonempty-prompt YapBench
+  compatibility cases. No source rows, criteria, references, predictions, or
+  results entered Git.
+- Exit criteria: all seven IDs have exact repository/dataset revisions, byte
+  hashes, component-level rights/status distinctions, strict frozen models,
+  hash-before-parse acquisition, expected source and usable counts, duplicate
+  and schema rejection, local evaluator artifacts, candidate-only payloads,
+  exact prediction-set validation, deterministic 1,000-resample YapBench
+  intervals, safe non-overwriting CLI commands, and public acquisition
+  instructions. The 27 focused tests and complete 149-test repository suite
+  pass; Ruff lint/format, Pyright, JSON validation, and `git diff --check` are
+  clean.
+- Decision: accept `external-v1` as tested acquisition and adapter
+  infrastructure only. WritingBench remains unexecuted until an exact judge
+  configuration is separately frozen. YapBench execution remains blocked by
+  missing dataset-license metadata. No leaderboard, quality, finalist, or
+  production claim follows from these compatibility checks.
+- Next actions: build the reproducible rights-safe unified pilot and the
+  common candidate-comparison/finalist-freeze workflow, then use external
+  suites only at their registered diagnostic cadence.
+- Unresolved risks: public benchmarks may have appeared in model pretraining;
+  WritingBench's upstream repository does not pin its judge model version;
+  four YapBench prompts and two IteraTeR references are empty after whitespace
+  normalization; and public compatibility measures cannot replace authentic
+  task-aligned, sealed, or intended-audience human evidence.

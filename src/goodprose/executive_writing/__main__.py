@@ -9,6 +9,14 @@ from pathlib import Path
 from goodprose.executive_writing.analysis import analyze_baselines, analyze_iteration
 from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
+from goodprose.executive_writing.external_evals import (
+    YAP_BOOTSTRAP_SEED,
+    cli_adapt,
+    cli_emit_candidates,
+    cli_score_yapbench,
+    cli_validate_predictions_file,
+    cli_validate_registry,
+)
 from goodprose.executive_writing.holdout import (
     PROTOCOL_ID,
     AggregateUsage,
@@ -146,6 +154,42 @@ def build_parser() -> argparse.ArgumentParser:
     coverage_publish.add_argument("--results", required=True)
     coverage_publish.add_argument("--case-results", required=True)
     coverage_publish.add_argument("--generated-at", required=True)
+
+    external = commands.add_parser(
+        "external-evals",
+        help="External evaluation adapters (local files only; no downloads or model calls)",
+    )
+    external_commands = external.add_subparsers(dest="external_command", required=True)
+    external_commands.add_parser(
+        "validate-registry", help="Validate the frozen public source registry"
+    )
+    adapt = external_commands.add_parser(
+        "adapt", help="Adapt a locally acquired source into an ignored output directory"
+    )
+    adapt.add_argument("--benchmark-id", required=True)
+    adapt.add_argument("--source", required=True)
+    adapt.add_argument("--output-dir", required=True)
+    adapt.add_argument(
+        "--upstream-source",
+        help="Pinned upstream artifact required when --source is a normalized derivative",
+    )
+    candidates = external_commands.add_parser(
+        "emit-candidates", help="Emit a candidate-only payload from adapted cases"
+    )
+    candidates.add_argument("--cases", required=True)
+    candidates.add_argument("--output", required=True)
+    candidates.add_argument("--suite", choices=("development", "full"), required=True)
+    predictions_validate = external_commands.add_parser(
+        "validate-predictions", help="Validate one nonempty prediction per adapted case"
+    )
+    predictions_validate.add_argument("--cases", required=True)
+    predictions_validate.add_argument("--predictions", required=True)
+    predictions_validate.add_argument("--suite", choices=("development", "full"), required=True)
+    yap_score = external_commands.add_parser("score-yapbench", help="Score YapBench predictions")
+    yap_score.add_argument("--cases", required=True)
+    yap_score.add_argument("--predictions", required=True)
+    yap_score.add_argument("--result", required=True)
+    yap_score.add_argument("--seed", type=int, default=None)
 
     holdout = commands.add_parser(
         "holdout",
@@ -385,9 +429,59 @@ def _run(args: argparse.Namespace) -> int:
         )
         print(f"profile-coverage published: {results['status']}")
         return 0
+    if args.command == "external-evals":
+        return _run_external(args)
     if args.command == "holdout":
         return _run_holdout(args)
     raise AssertionError("unhandled command")
+
+
+def _run_external(args: argparse.Namespace) -> int:
+    if args.external_command == "validate-registry":
+        registry = cli_validate_registry()
+        for entry in registry.entries:
+            print(
+                f"{entry.benchmark_id.value}: {entry.execution_status.value} "
+                f"(rights={entry.rights_status.value})"
+            )
+        print(f"registry valid: {len(registry.entries)} benchmarks")
+        return 0
+    if args.external_command == "adapt":
+        manifest = cli_adapt(
+            args.benchmark_id,
+            _path(args.source),
+            _path(args.output_dir),
+            upstream_source=_path(args.upstream_source) if args.upstream_source else None,
+        )
+        print(
+            f"adapted {manifest.benchmark_id.value}: {manifest.case_count} cases "
+            f"({manifest.execution_status.value}; not a benchmark result)"
+        )
+        return 0
+    if args.external_command == "emit-candidates":
+        count = cli_emit_candidates(_path(args.cases), _path(args.output), suite=args.suite)
+        print(f"candidate payload written: {count} cases (references and criteria excluded)")
+        return 0
+    if args.external_command == "validate-predictions":
+        validated = cli_validate_predictions_file(
+            _path(args.cases), _path(args.predictions), suite=args.suite
+        )
+        print(f"valid predictions: {validated.prediction_count}/{validated.case_count} cases")
+        return 0
+    if args.external_command == "score-yapbench":
+        result = cli_score_yapbench(
+            _path(args.cases),
+            _path(args.predictions),
+            _path(args.result),
+            seed=args.seed if args.seed is not None else YAP_BOOTSTRAP_SEED,
+        )
+        print(
+            f"yapbench scored: index={result.yap_index} "
+            f"interval=[{result.yap_index_interval_low}, {result.yap_index_interval_high}] "
+            f"({result.metric_version}; compatibility metric, not a quality score)"
+        )
+        return 0
+    raise AssertionError("unhandled external-evals command")
 
 
 def _optional_key(args: argparse.Namespace) -> bytes | None:
@@ -553,9 +647,9 @@ def _run_holdout(args: argparse.Namespace) -> int:
     raise AssertionError("unhandled holdout command")
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     try:
-        return _run(build_parser().parse_args())
+        return _run(build_parser().parse_args(argv))
     except (OSError, ValueError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1

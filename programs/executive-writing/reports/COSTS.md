@@ -44,6 +44,8 @@ reference. Never record payment credentials.
 | 2026-08-23T07:40:01Z | Local Apple M3 Pro | Run and independently publish all-eleven source-text-free profile coverage | `source-profile-coverage-v1` | completed; exploratory coverage only | $0.00 | 72 local calls, exact prompt/output/artifact hashes, v1.1 offline rescore, no raw text published |
 | 2026-08-23T08:16:33Z | OpenRouter | Draft aggregate-only B2 and one-shot Tier C lifecycle infrastructure | `ox-holdout-lifecycle-v1` | completed and reviewed with substantial corrections | $0.00 | exact Ox session, prompt/response hashes, synthetic-only fixtures, and Codex trust-boundary audit |
 | 2026-08-23T15:31:13Z | Local Apple M3 Pro | Audit and validate holdout lifecycle protocol | `holdout-lifecycle-v1-validation` | completed; infrastructure only | $0.00 | 38 focused and 122 full tests, schema checks, Ruff, format, Pyright, and no true holdout execution |
+| 2026-08-23T16:39:54Z | OpenRouter | Draft pinned external-evaluation adapters and acquisition documentation | `ox-external-eval-adapters-v1` | completed and reviewed with substantial corrections | $0.00 | exact sanitized Ox session; no benchmark rows, hidden content, or evaluator material sent |
+| 2026-08-23T17:16:41Z | Local Apple M3 Pro | Audit all seven adapters against pinned local source artifacts | `external-eval-adapters-v1-validation` | completed; adapters only, benchmarks unexecuted | $0.00 | 27 focused and 149 full tests, seven real-source adaptations, Ruff, format, Pyright, and exact source/usable counts |
 
 ## Zero-cost feasibility snapshot
 
