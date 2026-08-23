@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from goodprose.executive_writing.baseline import load_config, load_retrieval_examples
 from goodprose.executive_writing.benchmark import load_cases, score_output_v1_1
 from goodprose.executive_writing.mlx_evaluation import (
@@ -9,6 +11,7 @@ from goodprose.executive_writing.mlx_evaluation import (
     StepMetrics,
     generate_case,
     load_eval_config,
+    publish_mlx_b1_results,
     summarize_candidate,
 )
 
@@ -113,3 +116,19 @@ def test_candidate_summary_keeps_quality_gate_latency_and_memory() -> None:
     assert summary["latency_ms"]["mean"] == 10.0
     assert summary["peak_memory_gb"] == 0.5
     assert summary["settled_cost_usd"] == 0
+
+
+def test_publish_refuses_incomplete_run(tmp_path: Path) -> None:
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    (run_dir / "run-manifest.json").write_text('{"status":"failed"}\n', encoding="utf-8")
+
+    with pytest.raises(ValueError, match="incomplete"):
+        publish_mlx_b1_results(
+            run_dir=run_dir,
+            cases_path=B1_ROOT / "cases.jsonl",
+            training_record_path=tmp_path / "training.json",
+            results_path=tmp_path / "results.json",
+            case_results_path=tmp_path / "cases.jsonl",
+            generated_at="2026-08-23T05:35:00Z",
+        )

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T05:19:47Z",
+  "updated_at": "2026-08-23T05:34:11Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -194,6 +194,20 @@
       "model_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
       "settled_cost_usd": 0,
       "disposition": "run the four frozen exact-base versus adapter B1 candidates once"
+    },
+    {
+      "experiment_id": "mlx-qwen2.5-0.5b-smoke-b1-v1-analysis",
+      "kind": "matched_smoke_fine_tune_evaluation",
+      "status": "completed_reject_smoke_adapter",
+      "record": "programs/executive-writing/experiments/mlx-qwen2.5-0.5b-smoke-b1-v1-analysis.json",
+      "code_revision_start": "b6da535",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_mlx",
+      "model_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+      "adapter_sha256": "becaefb39f4f064ffc52bb8a02629b0d8c49406d83bc51087f04754359031f85",
+      "settled_cost_usd": 0,
+      "disposition": "reject adapter for quality use; retain as genuine training plumbing evidence and stop templated smoke optimization"
     }
   ]
 }

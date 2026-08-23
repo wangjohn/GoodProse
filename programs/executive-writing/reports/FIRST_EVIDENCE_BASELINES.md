@@ -1,5 +1,9 @@
 # First-evidence baseline comparison
 
+The complete closed-loop table, including the genuine smoke fine-tune and
+matched MLX evaluation, is now in `FIRST_EVIDENCE_RESULTS.md`. This report
+retains the initial baseline and inference-iteration evidence in detail.
+
 ## Decision
 
 Keep `qwen2.5-0.5b-retrieval-v1` as the baseline for the first improvement

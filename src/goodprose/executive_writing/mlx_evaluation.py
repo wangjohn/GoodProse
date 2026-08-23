@@ -34,7 +34,14 @@ from goodprose.executive_writing.benchmark import (
     load_cases,
     score_output_v1_1,
 )
-from goodprose.jsonl import atomic_write, serialize_jsonl, sha256_bytes, sha256_file
+from goodprose.jsonl import (
+    atomic_write,
+    canonical_json,
+    load_jsonl,
+    serialize_jsonl,
+    sha256_bytes,
+    sha256_file,
+)
 
 NonEmpty = Annotated[str, StringConstraints(min_length=1)]
 Sha256 = Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
@@ -452,3 +459,164 @@ def run_mlx_b1_evaluation(
         (json.dumps(manifest, indent=2, sort_keys=True) + "\n").encode(),
     )
     return run_dir
+
+
+def publish_mlx_b1_results(
+    *,
+    run_dir: Path,
+    cases_path: Path,
+    training_record_path: Path,
+    results_path: Path,
+    case_results_path: Path,
+    generated_at: str,
+) -> dict[str, Any]:
+    """Verify ignored artifacts and publish compact result evidence without raw text."""
+
+    parsed_time = datetime.fromisoformat(generated_at.replace("Z", "+00:00"))
+    if parsed_time.tzinfo is None:
+        raise ValueError("generated_at must include a timezone")
+    manifest_path = run_dir / "run-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("status") != "completed":
+        raise ValueError("cannot publish an incomplete MLX evaluation")
+    if manifest.get("cases_sha256") != sha256_file(cases_path):
+        raise ValueError("MLX evaluation cases hash does not match publish input")
+    cases = load_cases(cases_path)
+
+    ordered_ids = [
+        _candidate_id(tuned=False, strategy="profile"),
+        _candidate_id(tuned=False, strategy="ledger_draft"),
+        _candidate_id(tuned=True, strategy="profile"),
+        _candidate_id(tuned=True, strategy="ledger_draft"),
+    ]
+    summaries: list[dict[str, Any]] = []
+    scores_by_candidate: dict[str, list[CaseScore]] = {}
+    output_hashes_by_candidate: dict[str, dict[str, str]] = {}
+    for candidate_id in ordered_ids:
+        expected = manifest["candidate_artifacts"].get(candidate_id)
+        if expected is None:
+            raise ValueError(f"run manifest is missing candidate {candidate_id}")
+        candidate_dir = run_dir / candidate_id
+        actual_hashes = {
+            "outputs_sha256": sha256_file(candidate_dir / "outputs.jsonl"),
+            "scores_sha256": sha256_file(candidate_dir / "scores.jsonl"),
+            "summary_sha256": sha256_file(candidate_dir / "summary.json"),
+        }
+        if any(expected.get(name) != value for name, value in actual_hashes.items()):
+            raise ValueError(f"candidate artifact hash mismatch for {candidate_id}")
+        generations = load_jsonl(candidate_dir / "outputs.jsonl", Generation)
+        scores = load_jsonl(candidate_dir / "scores.jsonl", CaseScore)
+        summary = json.loads((candidate_dir / "summary.json").read_text(encoding="utf-8"))
+        if [item.case_id for item in generations] != [case.id for case in cases]:
+            raise ValueError(f"generation case order mismatch for {candidate_id}")
+        if [item.case_id for item in scores] != [case.id for case in cases]:
+            raise ValueError(f"score case order mismatch for {candidate_id}")
+        for generation in generations:
+            if generation.output_sha256 != sha256(generation.output.encode()).hexdigest():
+                raise ValueError(f"output hash mismatch for {generation.case_id}")
+        summaries.append(summary)
+        scores_by_candidate[candidate_id] = scores
+        output_hashes_by_candidate[candidate_id] = {
+            generation.case_id: generation.output_sha256 for generation in generations
+        }
+
+    comparison_path = run_dir / "paired-comparisons.json"
+    if sha256_file(comparison_path) != manifest["paired_comparisons_sha256"]:
+        raise ValueError("paired comparison hash does not match run manifest")
+    comparisons = json.loads(comparison_path.read_text(encoding="utf-8"))
+
+    case_rows: list[dict[str, Any]] = []
+    for index, case in enumerate(cases):
+        candidates: dict[str, Any] = {}
+        for candidate_id in ordered_ids:
+            score = scores_by_candidate[candidate_id][index]
+            candidates[candidate_id] = {
+                "development_score": score.development_score,
+                "passes_hard_gates": score.passes_hard_gates,
+                "errors": list(score.errors),
+                "output_sha256": output_hashes_by_candidate[candidate_id][case.id],
+            }
+        case_rows.append(
+            {
+                "case_id": case.id,
+                "task_family": case.input.task_family.value,
+                "output_format": case.input.output_format.value,
+                "candidates": candidates,
+            }
+        )
+    case_payload = ("\n".join(canonical_json(row) for row in case_rows) + "\n").encode("utf-8")
+    atomic_write(case_results_path, case_payload)
+
+    profile_base = summaries[0]
+    ledger_base = summaries[1]
+    profile_tuned = summaries[2]
+    ledger_tuned = summaries[3]
+    analysis = {
+        "version": 1,
+        "analysis_id": "mlx-qwen2.5-0.5b-smoke-b1-v1-analysis",
+        "status": "completed_reject_smoke_adapter",
+        "validity_status": "visible_b1_exploratory_smoke_comparison",
+        "generated_at": generated_at,
+        "benchmark_id": "goodprose-b1-v1",
+        "evaluation_id": "goodprose-b1-v1.1",
+        "scorer_version": "goodprose-deterministic-v1.1",
+        "cases_sha256": sha256_file(cases_path),
+        "source_run_manifest_sha256": sha256_file(manifest_path),
+        "training_record_sha256": sha256_file(training_record_path),
+        "case_results_sha256": sha256_bytes(case_payload),
+        "candidates": summaries,
+        "comparisons": comparisons,
+        "failure_analysis": {
+            "profile": {
+                "omission_case_change": profile_tuned["error_counts"].get("omission", 0)
+                - profile_base["error_counts"].get("omission", 0),
+                "placeholder_loss_case_change": profile_tuned["error_counts"].get(
+                    "placeholder_loss", 0
+                )
+                - profile_base["error_counts"].get("placeholder_loss", 0),
+                "poor_actionability_case_change": profile_tuned["error_counts"].get(
+                    "poor_actionability", 0
+                )
+                - profile_base["error_counts"].get("poor_actionability", 0),
+            },
+            "ledger_draft": {
+                "omission_case_change": ledger_tuned["error_counts"].get("omission", 0)
+                - ledger_base["error_counts"].get("omission", 0),
+                "placeholder_loss_case_change": ledger_tuned["error_counts"].get(
+                    "placeholder_loss", 0
+                )
+                - ledger_base["error_counts"].get("placeholder_loss", 0),
+                "poor_actionability_case_change": ledger_tuned["error_counts"].get(
+                    "poor_actionability", 0
+                )
+                - ledger_base["error_counts"].get("poor_actionability", 0),
+            },
+            "reviewed_patterns": [
+                "template and heading repetition",
+                "source-fact and requested-action omission",
+                "retrieval-example fact leakage in an unrelated memo",
+                "overlearned generic caveat language",
+            ],
+        },
+        "decision": {
+            "adapter_disposition": "reject_for_quality_use_retain_as_pipeline_evidence",
+            "leader": "qwen2.5-0.5b-retrieval-ledger-draft-v2",
+            "next_hypothesis": (
+                "Training requires diverse task-aligned targets and explicit negative fidelity "
+                "controls before another unified update; prioritize evaluation validity and "
+                "rights-safe authentic pairs rather than more synthetic template fitting."
+            ),
+        },
+        "settled_cost_usd": 0,
+        "limitations": [
+            "B1 is visible and project-authored, so the result is exploratory.",
+            "The lexical scorer misses some unsupported retrieval-example facts.",
+            "The smoke corpus is intentionally small and templated and cannot test quality.",
+            "Earlier Ollama runs use different packaging and are not exact weight controls.",
+        ],
+    }
+    atomic_write(
+        results_path,
+        (json.dumps(analysis, indent=2, sort_keys=True) + "\n").encode(),
+    )
+    return analysis

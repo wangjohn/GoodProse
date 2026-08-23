@@ -9,7 +9,10 @@ from pathlib import Path
 from goodprose.executive_writing.analysis import analyze_baselines, analyze_iteration
 from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
-from goodprose.executive_writing.mlx_evaluation import run_mlx_b1_evaluation
+from goodprose.executive_writing.mlx_evaluation import (
+    publish_mlx_b1_results,
+    run_mlx_b1_evaluation,
+)
 from goodprose.executive_writing.smoke_data import compile_smoke_dataset
 from goodprose.executive_writing.training import run_smoke_training
 
@@ -97,6 +100,13 @@ def build_parser() -> argparse.ArgumentParser:
     mlx_eval_run.add_argument("--repo-root", required=True)
     mlx_eval_run.add_argument("--code-revision", required=True)
     mlx_eval_run.add_argument("--started-at", required=True)
+    mlx_eval_publish = mlx_eval_commands.add_parser("publish")
+    mlx_eval_publish.add_argument("--run-dir", required=True)
+    mlx_eval_publish.add_argument("--cases", required=True)
+    mlx_eval_publish.add_argument("--training-record", required=True)
+    mlx_eval_publish.add_argument("--results", required=True)
+    mlx_eval_publish.add_argument("--case-results", required=True)
+    mlx_eval_publish.add_argument("--generated-at", required=True)
     return parser
 
 
@@ -191,6 +201,17 @@ def _run(args: argparse.Namespace) -> int:
             started_at=args.started_at,
         )
         print(f"MLX B1 evaluation complete: {run_dir}")
+        return 0
+    if args.command == "mlx-eval" and args.mlx_eval_command == "publish":
+        analysis = publish_mlx_b1_results(
+            run_dir=_path(args.run_dir),
+            cases_path=_path(args.cases),
+            training_record_path=_path(args.training_record),
+            results_path=_path(args.results),
+            case_results_path=_path(args.case_results),
+            generated_at=args.generated_at,
+        )
+        print(f"MLX B1 analysis complete: {analysis['status']}")
         return 0
     raise AssertionError("unhandled command")
 

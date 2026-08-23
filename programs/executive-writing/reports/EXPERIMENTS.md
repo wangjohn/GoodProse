@@ -295,6 +295,28 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
 - Records: `../configs/training/MLX_B1_SMOKE_EVAL_PREREGISTRATION_v1.md` and
   its JSON companion.
 
+## 2026-08-22 — Matched MLX smoke-adapter B1 evaluation
+
+- Candidate/control: exact smoke LoRA adapter versus its exact 4-bit MLX base
+  under matched profile and compact ledger/draft inference.
+- Revision/evaluation: `b6da535` / `goodprose-b1-v1` / deterministic scorer
+  v1.1; 144 local generations; temperature 0; seed 20260822; $0.
+- Profile result: 67.9030 and 0% hard gates versus base 71.3900 and 16.67%.
+  Paired difference -3.4870, 95% interval -11.5720 to +4.8613, and 10/1/13
+  win/tie/loss.
+- Ledger/draft result: 60.2537 and 4.17% hard gates versus base 73.8629 and
+  29.17%. Paired difference -13.6092, 95% interval -21.1011 to -6.3146,
+  and 7/0/17 win/tie/loss.
+- Failure analysis: template/heading repetition, source-fact and action
+  omission, overlearned generic caveats, placeholder loss, and observed
+  retrieval-example fact leakage. The tuned ledger/draft path added 13 omission
+  cases and 12 poor-actionability cases relative to its exact control.
+- Decision: reject adapter for quality use; retain the exact run as genuine
+  training-pipeline evidence. Do not run another small templated update.
+- Records: `../experiments/mlx-qwen2.5-0.5b-smoke-b1-v1-analysis.json`, its
+  case-level companion, shared `../experiments/latest-results.json`, and
+  `FIRST_EVIDENCE_RESULTS.md`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

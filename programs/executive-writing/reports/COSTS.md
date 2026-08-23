@@ -37,6 +37,7 @@ reference. Never record payment credentials.
 | 2026-08-23T05:07:55Z | Local Apple M3 Pro | Implement and validate bounded MLX training runner | `mlx-smoke-training-runner-v1` | completed | $0.00 | frozen config, mocked genuine-update proof, failure preservation, green suite |
 | 2026-08-23T05:14:54Z | Local Apple M3 Pro | Run genuine 40-iteration LoRA smoke fine-tune | `qwen2.5-0.5b-mlx-lora-smoke-v1` | completed; smoke pass | $0.00 | 4,198 trained tokens, 56 nonzero tensors, synthetic test loss 0.190, no remaining process |
 | 2026-08-23T05:19:47Z | Local Apple M3 Pro | Implement and freeze matched MLX B1 evaluation | `mlx-qwen2.5-0.5b-smoke-b1-runner-v1` | completed | $0.00 | exact base/adapter hashes, four matched candidates, green 54-test suite |
+| 2026-08-23T05:31:13Z | Local Apple M3 Pro | Run four matched MLX base/adapter B1 candidates | `mlx-qwen2.5-0.5b-smoke-b1-v1` | completed; adapter rejected for quality | $0.00 | 144 local generations, paired analysis, 158.463 seconds, no remaining process |
 
 ## Zero-cost feasibility snapshot
 

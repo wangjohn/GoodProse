@@ -367,3 +367,29 @@ historical entries.
 - Unresolved risks: MLX and Ollama packaging differ, so the matched MLX base is
   the causal fine-tune baseline while earlier Ollama candidates remain useful
   architecture references rather than exact weight-controlled comparators.
+
+### 2026-08-22 — First-evidence checkpoint: smoke adapter evaluation
+
+- Hypothesis: the small genuine adapter may change B1 behavior, but only an
+  exact base-versus-adapter comparison can determine the direction without
+  confounding the inference wrapper.
+- Evidence: four frozen 24-case candidates at revision `b6da535`; 144 local MLX
+  generations; exact output, score, prompt, adapter, model, config, and run
+  hashes; v1.1 case scoring; 10,000-resample paired intervals; latency, token,
+  and memory metrics; qualitative permitted-output review; and no remaining
+  inference process. Total runtime was 158.463 seconds and cost was $0.
+- Exit criteria: all four candidates complete, exact artifact verification,
+  matched comparisons for both strategies, negative results retained, shared
+  machine/human table, failure analysis, and no quality claim from smoke data.
+- Decision: reject the smoke adapter for quality use and retain it only as
+  proof of genuine fine-tuning plumbing. Profile regressed -3.4870 points and
+  hard gates fell 16.67 percentage points. Ledger/draft regressed -13.6092
+  points (95% interval -21.1011 to -6.3146) and hard gates fell 25 points.
+  The untuned compact-ledger/draft v2 candidate remains the directional B1
+  leader at 87.1981 and 50.00% hard gates.
+- Next actions: stop synthetic template fitting; prioritize B2/Tier C
+  infrastructure, evaluator validity, rights-safe authentic task pairs, and
+  the contracted source/evaluation coverage before another unified update.
+- Unresolved risks: lexical scoring misses semantic example-fact leakage; the
+  current leader still fails 12 of 24 hard gates; no authentic human endpoint,
+  sealed evidence, or production recommendation exists yet.
