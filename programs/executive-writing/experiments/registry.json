@@ -37,6 +37,19 @@
       "model_id": null,
       "settled_cost_usd": 0,
       "disposition": "keep as visible search-development plumbing and screening evidence"
+    },
+    {
+      "experiment_id": "local-baseline-runner-v1",
+      "kind": "inference_pipeline_validation",
+      "status": "completed_pass",
+      "record": "programs/executive-writing/configs/baselines",
+      "code_revision_start": "019999e",
+      "dataset_id": "goodprose-b1-v1",
+      "provider": "local_ollama",
+      "model_id": "qwen2.5:0.5b-instruct",
+      "model_manifest_sha256": "a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+      "settled_cost_usd": 0,
+      "disposition": "run three matched B1 baseline candidates"
     }
   ]
 }

@@ -56,6 +56,21 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
 - Decision: keep as B1 search-development evidence only. It cannot establish
   semantic writing quality, authenticity, or publish readiness.
 
+## 2026-08-22 — Local baseline runner validation
+
+- Hypothesis: the cached Qwen 0.5B model can support a matched, zero-cost
+  three-prompt baseline comparison with complete provenance and no rubric
+  leakage.
+- Candidate IDs: `qwen2.5-0.5b-minimal-v1`,
+  `qwen2.5-0.5b-profile-v1`, and `qwen2.5-0.5b-retrieval-v1`.
+- Dataset/scorer: `goodprose-b1-v1` / `goodprose-deterministic-v1`.
+- Configuration: local Ollama 0.9.6, temperature 0, seed 20260822, 512 maximum
+  generated tokens, 4,096-token context; Apple M3 Pro; $0.
+- Result: mocked end-to-end 24-case artifact run, local-endpoint enforcement,
+  prompt isolation, deterministic retrieval, tests, lint, and type checking
+  passed.
+- Decision: keep and execute real matched runs after committing the runner.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,

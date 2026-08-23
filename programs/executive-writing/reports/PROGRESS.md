@@ -113,3 +113,25 @@ historical entries.
 - Unresolved risks: exact lexical checks can miss valid paraphrases and cannot
   detect every semantic fabrication; all 24 inputs are project-authored rather
   than authentic permissioned rough-to-final pairs.
+
+### 2026-08-22 — Phase 0 checkpoint: matched local baseline runner
+
+- Hypothesis: one cached local model can provide a controlled comparison of
+  minimal instruction, strong profile prompting, and retrieval conditioning
+  without provider cost or model-family confounding.
+- Evidence: three pinned configs use `qwen2.5:0.5b-instruct` with manifest hash
+  `a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67`,
+  blob hash `c5396e06af294bd101b30dce59131a76d2b773e76950acc870eda801d3ab0515`,
+  Apache-2.0 license, temperature 0, seed 20260822, and local loopback only.
+  Nine focused tests plus Ruff and Pyright passed, including a 24-case mocked
+  run with provenance-complete artifact hashes.
+- Exit criteria: matched configurations, no rubric leakage, deterministic
+  retrieval, local endpoint enforcement, complete run manifests, raw artifact
+  isolation, and green tests/lint/type checks.
+- Decision: pass. The runner is eligible for the real $0 B1 baseline runs.
+- Next actions: execute all three candidates at revision captured by this
+  milestone, shut down the local service, compare paired scores, and publish a
+  shared table and failure analysis.
+- Unresolved risks: the 494M-parameter quantized instruction model is a plumbing
+  baseline, not a quality ceiling; temperature zero does not guarantee perfect
+  reproducibility across Ollama/runtime versions.

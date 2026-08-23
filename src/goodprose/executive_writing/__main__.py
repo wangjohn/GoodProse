@@ -6,6 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
 
 
@@ -27,6 +28,15 @@ def build_parser() -> argparse.ArgumentParser:
 
     validate = benchmark_commands.add_parser("validate")
     validate.add_argument("--cases", required=True)
+
+    baseline = commands.add_parser("baseline", help="Run a local baseline candidate")
+    baseline_commands = baseline.add_subparsers(dest="baseline_command", required=True)
+    run = baseline_commands.add_parser("run")
+    run.add_argument("--config", required=True)
+    run.add_argument("--cases", required=True)
+    run.add_argument("--benchmark-manifest", required=True)
+    run.add_argument("--output-root", required=True)
+    run.add_argument("--code-revision", required=True)
     return parser
 
 
@@ -43,6 +53,16 @@ def _run(args: argparse.Namespace) -> int:
     if args.command == "benchmark" and args.benchmark_command == "validate":
         cases = load_cases(_path(args.cases))
         print(f"valid benchmark cases: {len(cases)}")
+        return 0
+    if args.command == "baseline" and args.baseline_command == "run":
+        run_dir = run_baseline(
+            config_path=_path(args.config),
+            cases_path=_path(args.cases),
+            benchmark_manifest_path=_path(args.benchmark_manifest),
+            output_root=_path(args.output_root),
+            code_revision=args.code_revision,
+        )
+        print(f"baseline run complete: {run_dir}")
         return 0
     raise AssertionError("unhandled command")
 
