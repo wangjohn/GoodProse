@@ -46,6 +46,8 @@ reference. Never record payment credentials.
 | 2026-08-23T15:31:13Z | Local Apple M3 Pro | Audit and validate holdout lifecycle protocol | `holdout-lifecycle-v1-validation` | completed; infrastructure only | $0.00 | 38 focused and 122 full tests, schema checks, Ruff, format, Pyright, and no true holdout execution |
 | 2026-08-23T16:39:54Z | OpenRouter | Draft pinned external-evaluation adapters and acquisition documentation | `ox-external-eval-adapters-v1` | completed and reviewed with substantial corrections | $0.00 | exact sanitized Ox session; no benchmark rows, hidden content, or evaluator material sent |
 | 2026-08-23T17:16:41Z | Local Apple M3 Pro | Audit all seven adapters against pinned local source artifacts | `external-eval-adapters-v1-validation` | completed; adapters only, benchmarks unexecuted | $0.00 | 27 focused and 149 full tests, seven real-source adaptations, Ruff, format, Pyright, and exact source/usable counts |
+| 2026-08-23T18:05:11Z | OpenRouter | Draft unified three-corpus compiler and generic MLX pilot runner | `ox-unified-pilot-pipeline-v1` | completed and reviewed with substantial corrections | $0.00 | exact sanitized Ox session; no real pilot examples, benchmark rows, hidden content, or model calls sent |
+| 2026-08-23T18:57:33Z | Local Apple M3 Pro | Audit unified compiler and MLX runner integrity | `unified-pilot-pipeline-v1-validation` | completed; infrastructure only | $0.00 | 34 focused and 179 full tests, exact schema/ratio/hash/provenance checks, Ruff, format, Pyright, and no training run |
 
 ## Zero-cost feasibility snapshot
 

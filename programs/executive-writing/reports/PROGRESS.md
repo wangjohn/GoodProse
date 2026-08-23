@@ -531,3 +531,38 @@ historical entries.
   four YapBench prompts and two IteraTeR references are empty after whitespace
   normalization; and public compatibility measures cannot replace authentic
   task-aligned, sealed, or intended-audience human evidence.
+
+### 2026-08-23 — Phase 2 checkpoint: unified pilot compiler and MLX runner
+
+- Hypothesis: a strict compiler and generic local runner can make one
+  project-authored, profile-conditioned three-corpus LoRA pilot reproducible
+  without weakening smoke validation or allowing a synthetic architecture
+  exercise to masquerade as authentic model-quality evidence.
+- Evidence: Ox Alpha drafted infrastructure only from the frozen sanitized
+  assignment at zero cost and authored no real examples. Codex removed one
+  out-of-scope fixture file and strengthened the review boundary with complete
+  source-provenance preservation, canonical public-schema commitment, exact
+  numerator/denominator ratio evidence, recomputed dataset digests, manifest
+  versus config versus disk hash checks, full preference-row equality, and
+  independent ID, lineage, split, corpus, profile, rights, and intended-use
+  validation.
+- Exit criteria: strict 90-record/30-lineage/60-15-15/54-22-14 compilation;
+  all-three-corpus materialization; B1 lineage, exact-hash, and 12-word n-gram
+  separation; atomic non-overwrite; frozen smoke/unified config pairing;
+  preserved failure artifacts and genuine-update proof; backward-compatible
+  CLI; no downloads or model calls in tests. The 34 focused tests and complete
+  179-test repository suite pass; Ruff lint/format, Pyright, JSON validation,
+  and `git diff --check` are clean.
+- Decision: accept `ox-unified-pilot-pipeline-v1` after substantial Codex
+  corrections as infrastructure only. No pilot source rows exist yet, no
+  training ran, and no quality, source-fidelity, production, or redistribution
+  claim follows from this checkpoint.
+- Next actions: independently author and audit exactly 90 project-owned pilot
+  records, compile and freeze the manifest/config at a committed revision, run
+  one fixed local MLX LoRA pilot, and compare the exact base and adapter under
+  the common candidate workflow before any finalist freeze.
+- Unresolved risks: the future source rows remain deliberately synthetic and
+  small; float ratios remain present for MLX config compatibility but are now
+  backed by exact rational evidence; authentic task pairs, named-source
+  training rights, sealed evidence, and intended-audience human review remain
+  mandatory for the research contract.

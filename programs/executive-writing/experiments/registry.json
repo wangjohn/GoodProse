@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T17:16:41Z",
+  "updated_at": "2026-08-23T18:57:33Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -279,6 +279,18 @@
       "model_id": "stealth/ox-alpha",
       "settled_cost_usd": 0,
       "disposition": "accept after Codex real-source schema, pin, rights, suite-isolation, provenance, and regression-test corrections; adapters tested, benchmarks unexecuted"
+    },
+    {
+      "experiment_id": "ox-unified-pilot-pipeline-v1",
+      "kind": "unified_training_pipeline_implementation",
+      "status": "completed_reviewed",
+      "record": "programs/executive-writing/experiments/ox-unified-pilot-pipeline-v1.json",
+      "code_revision_start": "c92be1f",
+      "dataset_id": "goodprose-project-authored-unified-pilot-v1",
+      "provider": "openrouter",
+      "model_id": "stealth/ox-alpha",
+      "settled_cost_usd": 0,
+      "disposition": "accept after Codex schema, exact-ratio, provenance, preference-equality, runner-integrity, file-scope, and regression-test corrections; infrastructure only"
     }
   ]
 }

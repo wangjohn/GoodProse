@@ -1,0 +1,82 @@
+{
+  "assignment_id": "ox-unified-pilot-pipeline-v1",
+  "session_id": "ses_fd04a3982ffeF4JoJVRyxltoRE",
+  "model_id": "stealth/ox-alpha",
+  "provider": "openrouter",
+  "reasoning_variant": "high",
+  "opencode_version": "1.18.21",
+  "ori_version": "0.8.0+3511459",
+  "prompt_path": "programs/executive-writing/configs/ox/unified-pilot-pipeline-v1.md",
+  "prompt_sha256": "24219e82935a462df7c2ab9756a36d6caad438476005a08e52a1860757913b51",
+  "response_sha256": "fd9497b150b73585ff93c723d0e8ce6de578949fbbc951350c7718acdf5b6794",
+  "local_session_export_sha256": "355deb5776e8029da960cb90b141b653f76467a91a7306771b836f17294110a1",
+  "started_at": "2026-08-23T17:40:37Z",
+  "completed_at": "2026-08-23T18:05:11Z",
+  "code_revision_start": "c92be1f",
+  "assignment_revision": "c92be1f98e7b2c1579db2c54ecb7f84ffdc7a955",
+  "intended_use": "implementation draft for deterministic three-corpus project-authored pilot compilation and a generic integrity-preserving local MLX LoRA runner",
+  "input_classification": "sanitized schemas, count and rights boundaries, B1 visible path, implementation requirements, and existing repository code only; no real training examples, benchmark rows, evaluator criteria, private data, hidden content, model outputs, reference answers, or grader rubrics were sent to Ox Alpha",
+  "settled_cost_usd": 0,
+  "tokens": {
+    "input": 119473,
+    "output": 63194,
+    "reasoning": 0,
+    "cache_read": 6766272,
+    "cache_write": 0
+  },
+  "repository_state_changed": true,
+  "generated_file_count": 5,
+  "modified_file_count": 4,
+  "real_pilot_examples_authored": false,
+  "training_run_executed": false,
+  "ox_validation": {
+    "compiler_tests_passed": 17,
+    "full_repository_tests_passed": 175,
+    "full_repository_warnings": 1,
+    "ruff_check": "passed",
+    "ruff_format_check": "passed",
+    "pyright_errors": 0,
+    "live_model_calls": 0
+  },
+  "codex_validation": {
+    "focused_tests_passed": 34,
+    "full_repository_tests_passed": 179,
+    "full_repository_warnings": 1,
+    "ruff_check": "passed",
+    "ruff_format_check": "passed",
+    "pyright_errors": 0,
+    "git_diff_check": "passed",
+    "live_model_calls": 0
+  },
+  "codex_review": {
+    "status": "accepted_with_substantial_corrections",
+    "accepted": [
+      "strict frozen source, provenance, preference, and materialized-chat Pydantic boundaries",
+      "deterministic lineage-isolated train, valid, test, and preference compilation with atomic non-overwrite behavior",
+      "B1 lineage, normalized exact-hash, and contiguous 12-word n-gram separation",
+      "backward-compatible generic MLX runner with discriminated smoke and unified dataset kinds",
+      "pre-run, failure, model inventory, token, loss, nonzero-adapter, runtime, and zero-cost evidence",
+      "synthetic-only compiler and mocked training tests with no downloads or model calls"
+    ],
+    "corrections": [
+      "removed an out-of-scope shared fixture module and inlined unmistakably synthetic fixtures into the two permitted test files",
+      "preserved the complete source-provenance object in every materialized row and cross-checked its transformation history",
+      "bound the manifest schema commitment to the canonical committed public schema and added an identity regression test",
+      "added numerator-and-denominator ratio evidence overall and per split so integrity checks do not rely only on rounded decimal representations",
+      "recomputed the dataset digest from materialized split and preference hashes and cross-checked every manifest hash against both config and disk",
+      "required exact full-row agreement between the preference file and preference rows in the split files, not only matching IDs",
+      "revalidated unique IDs, lineage isolation, intended use, exact counts, exact ratios, and per-split corpus evidence in the runner without trusting the compact manifest",
+      "added regressions for manifest split/source hash disagreement and hash-consistent preference-content tampering"
+    ],
+    "excluded_use": "This checkpoint is compiler and training-runner infrastructure only. Ox Alpha authored no real pilot examples and executed no training. The later project-authored synthetic pilot cannot establish authentic executive-writing quality, named-source fidelity, production readiness, or external redistribution rights."
+  },
+  "final_artifact_hashes": {
+    "unified_compiler_sha256": "25d4d4c403675cf404475f3ba9bec2a1c3c6fafc505b5edd4ad60c7549347af9",
+    "training_runner_sha256": "cead780044fa153fde78a973a9a45874d6e06ba184f0e7af953e0a244c7c6e7b",
+    "cli_sha256": "2e73c176cce6b07384c0f3bd7fa619a5793a0a3a7c0d8f43eb89c757af4b96ab",
+    "compiler_tests_sha256": "62eedebbcf0f3ea5924ed8813e83fbd4a60dd66da22a9aebcff20f50283186b4",
+    "training_tests_sha256": "da2de6a65be45b054468a98e68e572eeab5499759973b12bf1dc14a5c3f8244a",
+    "public_readme_sha256": "b7d7d4012b361230e827665cf0c67f2ba5f79f165740547d5da8151619407ad5",
+    "record_schema_sha256": "286eb0549afe7debf0c56fde8a0f059072e7117a2a756fc7bad4582e78a5cbb0"
+  }
+}

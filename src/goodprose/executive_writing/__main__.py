@@ -46,7 +46,8 @@ from goodprose.executive_writing.profile_coverage import (
     run_coverage,
 )
 from goodprose.executive_writing.smoke_data import compile_smoke_dataset
-from goodprose.executive_writing.training import run_smoke_training
+from goodprose.executive_writing.training import run_mlx_training, run_smoke_training
+from goodprose.executive_writing.unified_data import compile_unified_dataset
 
 
 def _path(value: str) -> Path:
@@ -120,6 +121,28 @@ def build_parser() -> argparse.ArgumentParser:
     smoke_train_run.add_argument("--repo-root", required=True)
     smoke_train_run.add_argument("--code-revision", required=True)
     smoke_train_run.add_argument("--started-at", required=True)
+
+    mlx_train = commands.add_parser(
+        "mlx-train", help="Run a validated MLX LoRA training config (smoke or unified pilot)"
+    )
+    mlx_train_commands = mlx_train.add_subparsers(dest="mlx_train_command", required=True)
+    mlx_train_run = mlx_train_commands.add_parser("run")
+    mlx_train_run.add_argument("--config", required=True)
+    mlx_train_run.add_argument("--data-dir", required=True)
+    mlx_train_run.add_argument("--output-root", required=True)
+    mlx_train_run.add_argument("--repo-root", required=True)
+    mlx_train_run.add_argument("--code-revision", required=True)
+    mlx_train_run.add_argument("--started-at", required=True)
+
+    unified_data = commands.add_parser(
+        "unified-data", help="Build the unified three-corpus pilot dataset"
+    )
+    unified_data_commands = unified_data.add_subparsers(dest="unified_data_command", required=True)
+    unified_build = unified_data_commands.add_parser("build")
+    unified_build.add_argument("--source", required=True)
+    unified_build.add_argument("--output-dir", required=True)
+    unified_build.add_argument("--manifest", required=True)
+    unified_build.add_argument("--b1-cases", required=True)
 
     mlx_eval = commands.add_parser("mlx-eval", help="Run matched MLX B1 evaluation")
     mlx_eval_commands = mlx_eval.add_subparsers(dest="mlx_eval_command", required=True)
@@ -385,6 +408,26 @@ def _run(args: argparse.Namespace) -> int:
             started_at=args.started_at,
         )
         print(f"smoke training complete: {run_dir}")
+        return 0
+    if args.command == "mlx-train" and args.mlx_train_command == "run":
+        run_dir = run_mlx_training(
+            config_path=_path(args.config),
+            data_dir=_path(args.data_dir),
+            output_root=_path(args.output_root),
+            repo_root=_path(args.repo_root),
+            code_revision=args.code_revision,
+            started_at=args.started_at,
+        )
+        print(f"MLX training complete: {run_dir}")
+        return 0
+    if args.command == "unified-data" and args.unified_data_command == "build":
+        manifest = compile_unified_dataset(
+            source_path=_path(args.source),
+            output_dir=_path(args.output_dir),
+            manifest_path=_path(args.manifest),
+            b1_cases_path=_path(args.b1_cases),
+        )
+        print(f"built {manifest['dataset_id']}: {manifest['record_count']} records")
         return 0
     if args.command == "mlx-eval" and args.mlx_eval_command == "run":
         run_dir = run_mlx_b1_evaluation(
