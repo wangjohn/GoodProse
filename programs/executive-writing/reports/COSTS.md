@@ -49,6 +49,7 @@ reference. Never record payment credentials.
 | 2026-08-23T18:05:11Z | OpenRouter | Draft unified three-corpus compiler and generic MLX pilot runner | `ox-unified-pilot-pipeline-v1` | completed and reviewed with substantial corrections | $0.00 | exact sanitized Ox session; no real pilot examples, benchmark rows, hidden content, or model calls sent |
 | 2026-08-23T18:57:33Z | Local Apple M3 Pro | Audit unified compiler and MLX runner integrity | `unified-pilot-pipeline-v1-validation` | completed; infrastructure only | $0.00 | 34 focused and 179 full tests, exact schema/ratio/hash/provenance checks, Ruff, format, Pyright, and no training run |
 | 2026-08-23T19:07:59Z | Local Apple M3 Pro | Author, scan, compile, audit, and freeze the project-owned unified pilot | `goodprose-project-authored-unified-pilot-v1-build` | completed; synthetic architecture data only | $0.00 | 90 records, 30 lineages, zero privacy or B1 contamination findings, exact frozen config, no model loaded |
+| 2026-08-23T19:10:11Z | Local Apple M3 Pro | Run fixed 80-iteration unified profile-conditioned LoRA pilot | `qwen2.5-0.5b-mlx-lora-unified-pilot-v1` | completed; genuine architecture-pilot update | $0.00 | 10,917 trained tokens, 112 nonzero tensors, 1.471 GiB peak memory, 27.593 seconds, no remaining process |
 
 ## Zero-cost feasibility snapshot
 

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T19:07:59Z",
+  "updated_at": "2026-08-23T19:12:22Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -317,6 +317,20 @@
       "model_revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
       "settled_cost_usd": 0,
       "disposition": "commit frozen dataset, config, and selection policy before one fixed-final-iteration local run"
+    },
+    {
+      "experiment_id": "qwen2.5-0.5b-mlx-lora-unified-pilot-v1",
+      "kind": "unified_profile_conditioned_lora_pilot",
+      "status": "completed_pass",
+      "record": "programs/executive-writing/experiments/qwen2.5-0.5b-mlx-lora-unified-pilot-v1.json",
+      "code_revision_start": "370739d",
+      "dataset_id": "goodprose-project-authored-unified-pilot-v1",
+      "provider": "local_mlx",
+      "model_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+      "model_revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+      "adapter_sha256": "3f2826e671c316dca9731179a66299a119ca98c31fefbfad33b747b4c03b2ee6",
+      "settled_cost_usd": 0,
+      "disposition": "genuine fixed-final unified update complete; evaluate against the exact base under matched B1 and profile-control prompts before any quality decision"
     }
   ]
 }

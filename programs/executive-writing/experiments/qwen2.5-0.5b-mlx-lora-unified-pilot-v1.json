@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "experiment_id": "qwen2.5-0.5b-mlx-lora-unified-pilot-v1",
+  "candidate_id": "qwen2.5-0.5b-unified-pilot-lora-v1",
+  "classification": "unified_profile_conditioning_architecture_pilot_not_authentic_quality_evidence",
+  "status": "completed_pass",
+  "run_id": "qwen2.5-0.5b-mlx-lora-unified-pilot-v1-20260823T190936Z",
+  "started_at": "2026-08-23T19:09:36Z",
+  "completed_at": "2026-08-23T19:10:11.828317Z",
+  "code_revision": "370739dcae219480a75fc3571ee47e2f31a962bb",
+  "config_sha256": "959cc67d23491817f0abc148a2b3778b3c75065f4209f697b9dd062d781b7ebc",
+  "base_model": {
+    "repo_id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+    "revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+    "weight_sha256": "ddffab9cbc7bf6dde941c6724841eeca8981fcfa81ca20ff8efff1396326d153",
+    "weight_size_bytes": 278064920,
+    "license": "Apache-2.0"
+  },
+  "dataset": {
+    "dataset_id": "goodprose-project-authored-unified-pilot-v1",
+    "dataset_sha256": "31847b91212cc279f83241cb39f536f185bbb143a7f3a903e7eff8083f4bc375",
+    "manifest_sha256": "21eda3e4a0d2475a316c665176ea50236d0c5b11900763e5daef81a51e13fdae",
+    "source_records_sha256": "e8dc22f8bfddcb2c1dc8b6a25c4a6a414f7fbb52037c71a75033e478dcc3be62",
+    "rights_status": "training_permitted_project_owned_architecture_pilot",
+    "intended_use": "unified_profile_conditioning_architecture_pilot_only",
+    "record_count": 90,
+    "split_counts": {
+      "train": 60,
+      "valid": 15,
+      "test": 15
+    },
+    "corpus_counts": {
+      "task_pair": 54,
+      "style_target": 22,
+      "preference_pair": 14
+    }
+  },
+  "framework_versions": {
+    "mlx-lm": "0.31.3",
+    "mlx": "0.32.1",
+    "transformers": "5.15.0",
+    "huggingface-hub": "1.27.0",
+    "safetensors": "0.8.0"
+  },
+  "hardware": "Apple M3 Pro, 18 GiB unified memory",
+  "metrics": {
+    "elapsed_seconds_excluding_cached_snapshot_resolution": 27.592694,
+    "initial_validation_loss": 1.417,
+    "minimum_validation_loss": 0.226,
+    "minimum_validation_loss_iteration": 60,
+    "final_validation_loss": 0.253,
+    "final_train_loss": 0.041,
+    "synthetic_test_loss": 0.274,
+    "synthetic_test_perplexity": 1.315,
+    "final_trained_tokens": 10917,
+    "peak_memory_gb": 1.471,
+    "post_minimum_validation_loss_increase": 0.027
+  },
+  "checkpoint_selection": {
+    "policy": "fixed_final_iteration",
+    "selected_iteration": 80,
+    "post_hoc_search_performed": false,
+    "note": "Iteration 60 had the minimum observed validation loss, but the preregistered final iteration remains selected."
+  },
+  "adapter": {
+    "relative_local_path": "programs/executive-writing/artifacts/training-runs/qwen2.5-0.5b-mlx-lora-unified-pilot-v1-20260823T190936Z/adapters",
+    "safetensors_sha256": "3f2826e671c316dca9731179a66299a119ca98c31fefbfad33b747b4c03b2ee6",
+    "size_bytes": 5877295,
+    "tensor_count": 112,
+    "nonzero_tensor_count": 112,
+    "storage": "local_ignored_reproducible_by_rerun"
+  },
+  "artifacts": {
+    "ignored_run_manifest_sha256": "6e0a2abecfebae75d09be739ccf93bc3b8ecd5daf9c7ded95dbfe74a5fbdb23c",
+    "resolved_mlx_config_sha256": "ad9eb805fce5df87fb2b1620e0091c375da32479b85838cb2a8296a71d954c00",
+    "training_log_sha256": "989caf7efe68ed7a1e48268a0b9a0009ef30c0428eeb4c597cc2b6dc58aba247",
+    "adapter_config_sha256": "ad70978379d2ba566715b183a74340a66cba47d1874bc846f67837e2820b57f8"
+  },
+  "reproduction": {
+    "command": "uv run python -m goodprose.executive_writing mlx-train run --config programs/executive-writing/configs/training/qwen2.5-0.5b-mlx-lora-unified-pilot-v1.json --data-dir data/derived/executive-writing/unified-pilot-v1 --output-root programs/executive-writing/artifacts/training-runs --repo-root . --code-revision 370739dcae219480a75fc3571ee47e2f31a962bb --started-at <new-rfc3339-utc>",
+    "prerequisite": "restore the ignored source snapshot matching the committed source hash and rebuild derived rows with the manifest command"
+  },
+  "remaining_processes": 0,
+  "settled_cost_usd": 0,
+  "disposition": "genuine unified LoRA update complete; bind the fixed final adapter hash into the matched B1 and profile-control evaluations without making an authentic-quality claim"
+}

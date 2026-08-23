@@ -598,3 +598,33 @@ historical entries.
   all scenarios and preferences are synthetic, the exact Codex serving-model
   build was not exposed, and the small dataset cannot establish authentic-task
   quality, human preference, source fidelity, or production readiness.
+
+### 2026-08-23 — Phase 2 checkpoint: genuine unified LoRA update
+
+- Hypothesis: the frozen 90-record mixture can produce a genuine unified LoRA
+  update on the same small local base without violating the preregistered
+  integrity, resource, or checkpoint-selection boundary.
+- Evidence: the exact committed config at revision `370739d` validated the
+  manifest, source, four materialized files, every row, counts, ratios, rights,
+  intended use, preference equality, IDs, and lineage isolation before model
+  loading. The 80-iteration run completed in 27.593 seconds with 10,917 trained
+  tokens, 1.471 GiB peak memory, 112 of 112 nonzero adapter tensors, synthetic
+  test loss 0.274, and settled cost $0. No training process remains.
+- Exit criteria: fixed final iteration 80 selected; no checkpoint search;
+  exact 4-bit base revision and weight hash; MLX-LM 0.31.3 / MLX 0.32.1;
+  nonempty 5,877,295-byte adapter with SHA-256 `3f2826e…`; complete ignored run
+  manifest/log/resolved-config hashes; and a committed experiment record and
+  model card that prohibit authentic-quality or production claims.
+- Decision: accept the run as the contract's genuine unified controllable-model
+  training milestone, pending inference confirmation of profile control. Do
+  not advance it from loss: validation reached 0.226 at iteration 60 and rose
+  to 0.253 at the frozen final iteration, a possible overfitting signal that is
+  preserved rather than selecting iteration 60 after the fact.
+- Next actions: generalize the matched MLX evaluator without changing its
+  prompts or scoring, bind the exact final adapter hash, commit the evaluation
+  config before inference, and run the four preregistered base/adapter ×
+  profile/ledger candidates plus a fixed profile-control diagnostic.
+- Unresolved risks: low synthetic loss can reflect renderer memorization; B1
+  uses an unseen house profile and lexical scoring; the adapter may regress
+  factual gates or fail to generalize; authentic, sealed, and human evidence
+  remain absent.
