@@ -9,6 +9,7 @@ from pathlib import Path
 from goodprose.executive_writing.analysis import analyze_baselines, analyze_iteration
 from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
+from goodprose.executive_writing.smoke_data import compile_smoke_dataset
 
 
 def _path(value: str) -> Path:
@@ -65,6 +66,13 @@ def build_parser() -> argparse.ArgumentParser:
     iteration.add_argument("--max-placeholder-loss-cases", type=int, default=1)
     iteration.add_argument("--max-mean-latency-ms", type=float, default=6812.086)
     iteration.add_argument("--max-output-tokens", type=int, default=16800)
+
+    smoke_data = commands.add_parser("smoke-data", help="Build smoke-training data")
+    smoke_data_commands = smoke_data.add_subparsers(dest="smoke_data_command", required=True)
+    smoke_build = smoke_data_commands.add_parser("build")
+    smoke_build.add_argument("--output-dir", required=True)
+    smoke_build.add_argument("--manifest", required=True)
+    smoke_build.add_argument("--b1-cases", required=True)
     return parser
 
 
@@ -127,6 +135,14 @@ def _run(args: argparse.Namespace) -> int:
             max_output_tokens=args.max_output_tokens,
         )
         print(f"iteration analysis complete: {result['analysis_id']} ({result['status']})")
+        return 0
+    if args.command == "smoke-data" and args.smoke_data_command == "build":
+        manifest = compile_smoke_dataset(
+            output_dir=_path(args.output_dir),
+            manifest_path=_path(args.manifest),
+            b1_cases_path=_path(args.b1_cases),
+        )
+        print(f"built {manifest['dataset_id']}: {manifest['record_count']} records")
         return 0
     raise AssertionError("unhandled command")
 

@@ -280,3 +280,26 @@ historical entries.
 - Unresolved risks: the paired interval (-2.0211 to +6.7390) includes zero;
   twelve hard-gate failures remain; B1 is visible, lexical, and not authentic
   human rough-to-final evidence.
+
+### 2026-08-22 — Phase 0 checkpoint: smoke-training corpus
+
+- Hypothesis: a deterministic project-owned corpus can prove the real MLX
+  fine-tuning path without using B1, private material, or unresolved
+  named-source rights.
+- Evidence: 48 MLX-compatible chat records across 12 fictional scenario
+  lineages and four output formats; lineage-isolated 32/8/8 train/valid/test
+  splits; exact file and dataset hashes; and a normalized exact plus 12-word
+  n-gram contamination scan against all 24 B1 inputs with zero matches.
+  The complete repository suite passed: 46 tests, Ruff lint and format, and
+  Pyright.
+- Exit criteria: reproducible ignored JSONL, committed provenance manifest,
+  explicit smoke-only rights scope, B1 isolation, no imported or named-source
+  material, and a training dependency pinned to `mlx-lm[train]==0.31.3`.
+- Decision: pass for pipeline validation only. The corpus may be used for one
+  genuine local smoke update and cannot support a quality or production claim.
+- Next actions: freeze the MLX LoRA configuration and run manifest, execute one
+  bounded Apple-Metal training run, then compare untuned and tuned inference
+  under matched prompts on the disjoint smoke test and B1.
+- Unresolved risks: only twelve independent synthetic lineages and four
+  deterministic templates are represented; model download availability and
+  actual Metal memory/throughput remain unmeasured until the real run.

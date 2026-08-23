@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T04:34:10Z",
+  "updated_at": "2026-08-23T05:02:02Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -141,6 +141,19 @@
       "model_id": "qwen2.5:0.5b-instruct",
       "settled_cost_usd": 0,
       "disposition": "keep as directional B1 leader and carry its two-stage inference wrapper into smoke fine-tune comparison"
+    },
+    {
+      "experiment_id": "goodprose-project-authored-smoke-v1-build",
+      "kind": "training_dataset_build",
+      "status": "completed_pass",
+      "record": "data/executive-writing/smoke-v1/manifest.json",
+      "code_revision_start": "df15f92",
+      "dataset_id": "goodprose-project-authored-smoke-v1",
+      "dataset_sha256": "0fd45daddbd67dbb616866fea099f421ca2e8c3470f6e268f0a70431e6a05f15",
+      "provider": "local",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "permit one local pipeline smoke fine-tune only; do not use as model-quality evidence"
     }
   ]
 }
