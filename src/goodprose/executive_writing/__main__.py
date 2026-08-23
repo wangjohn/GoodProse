@@ -6,7 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from goodprose.executive_writing.analysis import analyze_baselines
+from goodprose.executive_writing.analysis import analyze_baselines, analyze_iteration
 from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
 
@@ -48,6 +48,17 @@ def build_parser() -> argparse.ArgumentParser:
     analyze.add_argument("--results", required=True)
     analyze.add_argument("--case-results", required=True)
     analyze.add_argument("--timestamp", required=True)
+
+    iteration = baseline_commands.add_parser("analyze-iteration")
+    iteration.add_argument("--source-run", required=True)
+    iteration.add_argument("--baseline-corrected", required=True)
+    iteration.add_argument("--cases", required=True)
+    iteration.add_argument("--benchmark-manifest", required=True)
+    iteration.add_argument("--correction-record", required=True)
+    iteration.add_argument("--corrected-output-root", required=True)
+    iteration.add_argument("--results", required=True)
+    iteration.add_argument("--case-results", required=True)
+    iteration.add_argument("--timestamp", required=True)
     return parser
 
 
@@ -90,6 +101,20 @@ def _run(args: argparse.Namespace) -> int:
             f"baseline analysis complete: {result['analysis_id']} "
             f"({len(result['candidates'])} candidates)"
         )
+        return 0
+    if args.command == "baseline" and args.baseline_command == "analyze-iteration":
+        result = analyze_iteration(
+            source_run_dir=_path(args.source_run),
+            baseline_corrected_dir=_path(args.baseline_corrected),
+            cases_path=_path(args.cases),
+            benchmark_manifest_path=_path(args.benchmark_manifest),
+            correction_record_path=_path(args.correction_record),
+            corrected_output_root=_path(args.corrected_output_root),
+            results_path=_path(args.results),
+            case_results_path=_path(args.case_results),
+            timestamp=args.timestamp,
+        )
+        print(f"iteration analysis complete: {result['analysis_id']} ({result['status']})")
         return 0
     raise AssertionError("unhandled command")
 

@@ -209,7 +209,7 @@ class CaseScore(StrictModel):
     candidate_id: NonEmpty
     output_sha256: Sha256
     word_count: int = Field(ge=0)
-    source_change_ratio: float | None
+    source_change_ratio: float | None = None
     dimensions: dict[str, float]
     development_score: float
     passes_hard_gates: bool

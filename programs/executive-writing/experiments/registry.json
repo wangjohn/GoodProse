@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T04:13:23Z",
+  "updated_at": "2026-08-23T04:21:41Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -102,6 +102,19 @@
       "model_id": "qwen2.5:0.5b-instruct",
       "settled_cost_usd": 0,
       "disposition": "run the preregistered ledger-draft-verify-revise candidate on B1"
+    },
+    {
+      "experiment_id": "goodprose-structured-retrieval-v1-analysis",
+      "kind": "improvement_iteration",
+      "status": "completed_reject",
+      "record": "programs/executive-writing/experiments/goodprose-structured-retrieval-v1-analysis.json",
+      "code_revision_start": "b7b98f9",
+      "dataset_id": "goodprose-b1-v1",
+      "scorer_version": "goodprose-deterministic-v1.1",
+      "provider": "local_ollama",
+      "model_id": "qwen2.5:0.5b-instruct",
+      "settled_cost_usd": 0,
+      "disposition": "reject four-stage candidate; retain retrieval v1 and test a bounded two-stage ledger-draft candidate next"
     }
   ]
 }

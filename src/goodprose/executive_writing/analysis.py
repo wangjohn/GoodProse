@@ -31,6 +31,8 @@ SCORER_VERSION = "goodprose-deterministic-v1.1"
 MINIMUM_EFFECT_POINTS = 2.0
 BOOTSTRAP_ITERATIONS = 10_000
 BOOTSTRAP_SEED = 20_260_822
+ITERATION_MAX_MEAN_LATENCY_MS = 6_812.086
+ITERATION_MAX_OUTPUT_TOKENS = 16_800
 
 
 @dataclass(frozen=True)
@@ -41,6 +43,34 @@ class RescoredRun:
     summary: dict[str, Any]
     artifact_hashes: dict[str, str]
     source_artifact_hashes: dict[str, str]
+
+
+def load_rescored_run(run_dir: Path) -> RescoredRun:
+    """Load a previously verified offline-rescore artifact."""
+
+    scores = load_jsonl(run_dir / "scores.jsonl", CaseScore)
+    summary: dict[str, Any] = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
+    manifest: dict[str, Any] = json.loads(
+        (run_dir / "rescore-manifest.json").read_text(encoding="utf-8")
+    )
+    if summary.get("candidate_id") != manifest.get("candidate_id"):
+        raise ValueError(f"rescored candidate ID mismatch in {run_dir}")
+    expected = manifest.get("artifact_hashes", {})
+    actual = {
+        "scores_jsonl": sha256_file(run_dir / "scores.jsonl"),
+        "summary_json": sha256_file(run_dir / "summary.json"),
+    }
+    if any(expected.get(name) != value for name, value in actual.items()):
+        raise ValueError(f"rescored artifact hash mismatch in {run_dir}")
+    actual["rescore_manifest_json"] = sha256_file(run_dir / "rescore-manifest.json")
+    return RescoredRun(
+        candidate_id=summary["candidate_id"],
+        scores=scores,
+        generations=[],
+        summary=summary,
+        artifact_hashes=actual,
+        source_artifact_hashes=manifest["source_artifact_hashes"],
+    )
 
 
 def _percentile(values: list[float], percentile: float) -> float:
@@ -242,6 +272,38 @@ def paired_comparison(
     }
 
 
+def evaluate_iteration_gates(
+    *,
+    comparison: dict[str, Any],
+    baseline_summary: dict[str, Any],
+    candidate_summary: dict[str, Any],
+) -> dict[str, Any]:
+    """Apply the frozen structured-iteration quality and efficiency gates."""
+
+    candidate_errors = candidate_summary["error_counts"]
+    gates = {
+        "paired_mean_at_least_plus_2": comparison["paired_mean_difference"]
+        >= MINIMUM_EFFECT_POINTS,
+        "hard_gate_no_regression": candidate_summary["hard_gate_pass_rate"]
+        >= baseline_summary["hard_gate_pass_rate"],
+        "omission_cases_below_14": candidate_errors.get("omission", 0) < 14,
+        "fabrication_cases_at_most_1": candidate_errors.get("fabrication", 0) <= 1,
+        "placeholder_loss_cases_at_most_1": candidate_errors.get("placeholder_loss", 0) <= 1,
+        "mean_latency_at_most_6812_086_ms": candidate_summary["latency_ms"]["mean"]
+        <= ITERATION_MAX_MEAN_LATENCY_MS,
+        "generated_tokens_at_most_16800": candidate_summary["output_tokens"]
+        <= ITERATION_MAX_OUTPUT_TOKENS,
+        "settled_cost_is_zero": candidate_summary["settled_cost_usd"] == 0,
+    }
+    return {
+        "gates": gates,
+        "primary_advancement_pass": (
+            gates["paired_mean_at_least_plus_2"] and gates["hard_gate_no_regression"]
+        ),
+        "all_guardrails_pass": all(gates.values()),
+    }
+
+
 def _case_results(runs: list[RescoredRun], cases: list[BenchmarkCase]) -> list[dict[str, Any]]:
     case_by_id = {case.id: case for case in cases}
     records: list[dict[str, Any]] = []
@@ -298,6 +360,73 @@ def _failure_analysis(run: RescoredRun) -> dict[str, Any]:
         "error_counts": run.summary["error_counts"],
         "failed_critical_check_counts": dict(sorted(failed_checks.items())),
         "hard_gate_failures": sum(not score.passes_hard_gates for score in run.scores),
+    }
+
+
+def _pipeline_stage_diagnostic(
+    *, baseline: RescoredRun, candidate: RescoredRun, cases: list[BenchmarkCase]
+) -> dict[str, Any]:
+    """Attribute a structured candidate's result to draft and revision stages."""
+
+    case_by_id = {case.id: case for case in cases}
+    draft_scores: list[CaseScore] = []
+    step_metrics: dict[str, list[Any]] = defaultdict(list)
+    changed_revisions = 0
+    collapsed_revisions = 0
+    for generation in candidate.generations:
+        steps = {step.step_id: step for step in generation.pipeline_steps}
+        if set(steps) != {"ledger", "draft", "verify", "revise"}:
+            raise ValueError(f"incomplete structured pipeline for {generation.case_id}")
+        draft = steps["draft"].output
+        draft_scores.append(
+            score_output_v1_1(
+                case_by_id[generation.case_id],
+                draft,
+                candidate_id=f"{candidate.candidate_id}-draft-diagnostic",
+            )
+        )
+        if draft != generation.output:
+            changed_revisions += 1
+        draft_words = max(1, len(draft.split()))
+        if len(generation.output.split()) < draft_words / 2:
+            collapsed_revisions += 1
+        for step in generation.pipeline_steps:
+            step_metrics[step.step_id].append(step)
+
+    draft_run = RescoredRun(
+        candidate_id=f"{candidate.candidate_id}-draft-diagnostic",
+        scores=draft_scores,
+        generations=[],
+        summary={},
+        artifact_hashes={},
+        source_artifact_hashes={},
+    )
+    draft_errors = Counter(error for score in draft_scores for error in score.errors)
+    return {
+        "status": "posthoc_diagnostic_not_preregistered_candidate",
+        "draft": {
+            "mean_development_score": round(
+                statistics.fmean(score.development_score for score in draft_scores), 4
+            ),
+            "hard_gate_pass_rate": round(
+                statistics.fmean(float(score.passes_hard_gates) for score in draft_scores),
+                4,
+            ),
+            "error_counts": dict(sorted(draft_errors.items())),
+        },
+        "draft_vs_baseline": paired_comparison(baseline, draft_run),
+        "final_vs_draft": paired_comparison(draft_run, candidate),
+        "changed_revision_count": changed_revisions,
+        "collapsed_revision_count": collapsed_revisions,
+        "step_metrics": {
+            step_id: {
+                "mean_latency_ms": round(statistics.fmean(step.latency_ms for step in steps), 4),
+                "prompt_tokens": sum(step.prompt_tokens or 0 for step in steps),
+                "output_tokens": sum(step.output_tokens or 0 for step in steps),
+                "output_cap_hits": sum(step.output_tokens == 512 for step in steps),
+            }
+            for step_id, steps in sorted(step_metrics.items())
+        },
     }
 
 
@@ -399,6 +528,84 @@ def analyze_baselines(
             "Task-family slices contain only one to three cases and are descriptive.",
         ],
         "settled_cost_usd": 0,
+    }
+    atomic_write_json(results_path, result)
+    return result
+
+
+def analyze_iteration(
+    *,
+    source_run_dir: Path,
+    baseline_corrected_dir: Path,
+    cases_path: Path,
+    benchmark_manifest_path: Path,
+    correction_record_path: Path,
+    corrected_output_root: Path,
+    results_path: Path,
+    case_results_path: Path,
+    timestamp: str,
+) -> dict[str, Any]:
+    """Rescore and compare one frozen improvement candidate to its baseline."""
+
+    _validate_timestamp(timestamp)
+    cases = load_cases(cases_path)
+    baseline = load_rescored_run(baseline_corrected_dir)
+    candidate = rescore_run(
+        run_dir=source_run_dir,
+        cases=cases,
+        output_root=corrected_output_root,
+        benchmark_manifest_path=benchmark_manifest_path,
+        correction_record_path=correction_record_path,
+        timestamp=timestamp,
+    )
+    comparison = paired_comparison(baseline, candidate)
+    gate_result = evaluate_iteration_gates(
+        comparison=comparison,
+        baseline_summary=baseline.summary,
+        candidate_summary=candidate.summary,
+    )
+    case_records = _case_results([candidate], cases)
+    case_payload = (
+        "\n".join(
+            json.dumps(record, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+            for record in case_records
+        )
+        + "\n"
+    ).encode()
+    atomic_write(case_results_path, case_payload)
+    result = {
+        "version": 1,
+        "analysis_id": "goodprose-structured-retrieval-v1-analysis",
+        "generated_at": timestamp,
+        "status": ("completed_keep" if gate_result["all_guardrails_pass"] else "completed_reject"),
+        "benchmark_id": "goodprose-b1-v1",
+        "evaluation_id": EVALUATION_ID,
+        "scorer_version": SCORER_VERSION,
+        "cases_sha256": sha256_file(cases_path),
+        "benchmark_manifest_sha256": sha256_file(benchmark_manifest_path),
+        "correction_record_sha256": sha256_file(correction_record_path),
+        "case_results_sha256": sha256(case_payload).hexdigest(),
+        "baseline": {
+            **baseline.summary,
+            "corrected_artifact_hashes": baseline.artifact_hashes,
+        },
+        "candidate": {
+            **candidate.summary,
+            "source_artifact_hashes": candidate.source_artifact_hashes,
+            "corrected_artifact_hashes": candidate.artifact_hashes,
+        },
+        "comparison": comparison,
+        "preregistered_gate_result": gate_result,
+        "posthoc_stage_diagnostic": _pipeline_stage_diagnostic(
+            baseline=baseline, candidate=candidate, cases=cases
+        ),
+        "settled_cost_usd": 0,
+        "validity_status": "visible_search_development",
+        "limitations": [
+            "The candidate was selected from visible B1 failure analysis.",
+            "The scorer is lexical and cannot establish semantic or human writing quality.",
+            "Intermediate model outputs are preserved locally but are not independent evidence.",
+        ],
     }
     atomic_write_json(results_path, result)
     return result

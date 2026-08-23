@@ -218,3 +218,24 @@ historical entries.
 - Unresolved risks: the 0.5B model may corrupt facts in its own ledger or
   verifier, and four sequential calls can increase latency without improving
   final fidelity.
+
+### 2026-08-22 — Phase 0 checkpoint: structured retrieval iteration one
+
+- Hypothesis: four-stage ledger, draft, verify, and revise inference will reduce
+  retrieval-v1 omissions without regressing hard gates.
+- Evidence: one frozen 24-case run at revision `b7b98f9`; 96 local calls; exact
+  intermediate and final hashes; v1.1 offline scores; 10,000-resample paired
+  analysis; preregistered gate results; post hoc stage attribution; and a green
+  39-test repository suite, Ruff, format, and Pyright.
+- Exit criteria: at least +2 paired points, no hard-gate regression, fewer than
+  14 omission cases, bounded error counts, mean latency at most 6,812.086 ms,
+  at most 16,800 generated tokens, and $0 cost.
+- Decision: reject. The candidate was -3.4589 points (95% interval -10.4503 to
+  +3.6694), regressed hard gates by 4.17 percentage points, produced 16 omission
+  cases, and narrowly exceeded both efficiency caps.
+- Next actions: preregister a two-stage compact-ledger plus single-draft
+  candidate. Remove the verifier/reviser that post hoc attribution shows caused
+  a -5.9482-point mean loss from draft to final.
+- Unresolved risks: the ledger-conditioned draft diagnostic was selected after
+  observing results and cannot itself advance; its 15 omission cases still
+  regress the baseline despite a higher mean.

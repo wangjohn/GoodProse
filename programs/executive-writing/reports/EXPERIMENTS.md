@@ -156,6 +156,30 @@ manifest. Disposition: enable bounded Ox Alpha assignments with Codex review.
 - Decision: execute one real B1 run after committing the pipeline.
 - Record: `../configs/baselines/STRUCTURED_ITERATION_v1.md`.
 
+## 2026-08-22 — Structured retrieval improvement iteration one
+
+- Hypothesis/candidate/baseline: the four-stage
+  `qwen2.5-0.5b-retrieval-ledger-verify-v1` candidate will reduce omissions
+  versus `qwen2.5-0.5b-retrieval-v1` without a hard-gate regression.
+- Dataset/scorer/revision: `goodprose-b1-v1` /
+  `goodprose-deterministic-v1.1` / `b7b98f9`; local Ollama 0.9.6 on Apple M3
+  Pro; temperature 0; seed 20260822; $0.
+- Result: 81.3694 mean and 33.33% hard gates versus 84.8283 and 37.50%.
+  Paired difference -3.4589 (95% interval -10.4503 to +3.6694), median -6.7561,
+  and 8/1/15 win/tie/loss. Omissions rose 14 to 16. Mean latency was 7,239.643
+  ms and generated tokens were 16,861, narrowly failing both frozen caps.
+- Post hoc diagnostic: the draft stage alone scored 87.3175 and 37.50% hard
+  gates, but its +2.4892 paired estimate was uncertain and it had 15 omission
+  cases. Verification/revision lowered final score 5.9482 points from the draft
+  with a strictly negative bootstrap interval; ten changed cases worsened and
+  only one improved.
+- Decision: reject the candidate and retain retrieval v1. Test a newly frozen,
+  regenerated two-stage compact-ledger/draft pipeline; do not promote the post
+  hoc draft artifact.
+- Records: `../experiments/goodprose-structured-retrieval-v1-analysis.json`,
+  case results `../experiments/goodprose-structured-retrieval-v1-case-results.jsonl`,
+  and `ITERATION_1_STRUCTURED.md`.
+
 For each run, record the hypothesis, candidate and baseline identifiers,
 dataset and evaluation versions, prompt and decoding configuration, code
 revision, hardware or provider, cost, paired results, confidence intervals,
