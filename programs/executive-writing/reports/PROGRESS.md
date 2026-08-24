@@ -1042,3 +1042,20 @@ historical entries.
 - Next decision: identify the source location, approximate volume and formats,
   then bind exact corpus ownership, provenance, exclusions, and approved items
   before any `training_approved` promotion.
+
+### 2026-08-24 — Paul Graham public-source rights checkpoint
+
+- User request: source a corpus from public internet sites, beginning with Paul
+  Graham's official essay archive.
+- Current evidence: the official index is publicly reachable and robots.txt
+  permits the relevant paths, but the official FAQ provides no model-training
+  license and says the author prefers links instead of mirrored essays.
+- Acquisition: stored only the official index, FAQ, and robots.txt in the
+  user-only quarantine area with exact hashes and a private manifest; downloaded
+  zero essay bodies.
+- Rights decision: retain `permission_required`; public accessibility and
+  robots permission do not authorize model training. Do not ingest, transform,
+  train on, or expose this source to Ox Alpha without permission from the rights
+  holder or a documented qualified-counsel decision.
+- Cost: $0 attempted and settled; 128,630 bytes stored locally; no external
+  storage or paid resource started.
