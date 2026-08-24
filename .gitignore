@@ -173,6 +173,8 @@ evals/executive-writing/results/*
 programs/executive-writing/artifacts/
 programs/executive-writing/checkpoints/
 data/executive-writing/private/
+# Explicit defense-in-depth boundary for user-only authentic task-pair intake.
+data/executive-writing/private/authentic-task-pairs-v1/
 data/executive-writing/cache/
 
 # Spyder project settings

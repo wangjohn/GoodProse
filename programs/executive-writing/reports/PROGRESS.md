@@ -1026,3 +1026,19 @@ historical entries.
   research leader. No safe autonomous repository work remains that can satisfy
   a missing stopping condition without authentic rights-approved task pairs or
   later access-separated and human evidence.
+
+### 2026-08-24 — User-only authentic-corpus intake boundary
+
+- User decision: authorize authentic task-pair use for internal research only,
+  with access initially limited to the user; external deployment, public
+  redistribution, and Ox Alpha access remain unauthorized.
+- Storage: created the local FileVault-backed intake root at
+  `data/executive-writing/private/authentic-task-pairs-v1/` with user-only
+  permissions and separate inbox, raw, quarantine, and private-manifest
+  directories.
+- Git boundary: the existing private-data exclusion already covered the path;
+  an explicit corpus-specific ignore rule now provides defense in depth.
+- Cost: $0 attempted and settled; no external storage or paid resource started.
+- Next decision: identify the source location, approximate volume and formats,
+  then bind exact corpus ownership, provenance, exclusions, and approved items
+  before any `training_approved` promotion.

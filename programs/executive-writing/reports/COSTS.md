@@ -70,6 +70,7 @@ reference. Never record payment credentials.
 | 2026-08-23T22:22:04Z | Local deterministic tooling | Implement Tier D protocol and audit completion blockers | `executive-writing-completion-blockers-v1` | completed; genuine external blockers remain | $0.00 | no human packet, rating, hidden case, paid resource, or fabricated result |
 | 2026-08-23T22:59:05Z | Local Ollama / Apple M3 Pro | Paired topic-swap coverage for house plus eleven descriptive profiles | `source-profile-topic-controls-v2` | completed; no profile advanced | $0.00 | one provenance-invalid precursor archived, then 72 fresh accepted calls; 31,020 prompt and 14,208 output tokens |
 | 2026-08-23T23:16:36Z | Local deterministic tooling | Contract-completion audit, documentation consolidation, and full verification | `executive-writing-contract-completion-audit-v1` | completed; goal remains incomplete | $0.00 | 28 deliverables and 18 stopping conditions audited; 219 tests, Ruff, format, and Pyright pass; no paid resource |
+| 2026-08-24T01:50:38Z | Local encrypted filesystem | Create user-only authentic task-pair intake boundary | `authentic-task-pairs-v1-intake` | completed; corpus not yet ingested | $0.00 | FileVault on, user-only permissions, Git-ignored path, no external storage |
 
 ## Zero-cost feasibility snapshot
 
