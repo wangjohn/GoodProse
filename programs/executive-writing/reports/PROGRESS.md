@@ -1059,3 +1059,25 @@ historical entries.
   holder or a documented qualified-counsel decision.
 - Cost: $0 attempted and settled; 128,630 bytes stored locally; no external
   storage or paid resource started.
+
+### 2026-08-24 — Business-prose source feasibility checkpoint
+
+- Direction correction: reject Kubernetes KEP history as the next corpus
+  because its dominant signal is technical proposal lifecycle, not business or
+  executive writing.
+- Acquisition: pinned PostHog, Sourcegraph, and Clef handbook histories in the
+  ignored user-only quarantine. Their relevant current scopes total 1,293
+  Markdown/MDX documents and approximately 1.258 million words.
+- Rights evidence: PostHog `/contents/` is MIT; Sourcegraph's documentation
+  source is Apache-2.0; Clef is CC0-1.0. Exact repository revisions and license
+  hashes are in `../experiments/business-prose-source-feasibility-v1.json`.
+- Pair audit: 89 single-document commits have editorial-sounding messages, but
+  only 11 are nominal major rewrites; manual inspection already found one
+  explicitly automated rewrite and several factual strategy or policy changes.
+  No revision pair is yet accepted as a genuine same-intent training example.
+- Decision: recommend a privacy-cleaned business-section `style_targets` pilot
+  plus manual curation of authentic editorial pairs. Keep every derived record
+  `training_approved: false` until the user reviews the cleaned manifest and
+  sample. GitLab, Avocado/EmailSum, 37signals, and GSA remain outside this gate.
+- Cost: $0 attempted and settled; approximately 455 MiB of ignored local source
+  history acquired; no external storage or paid resource started.

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "experiment_id": "business-prose-source-feasibility-v1",
+  "generated_at": "2026-08-24T04:26:49Z",
+  "code_revision_start": "6e67b86b18fc8276fa07470823438411977d51c5",
+  "hypothesis": "Permissively licensed public company handbooks can supply authentic business and executive style targets, with a smaller manually curated lane of genuine editorial revision pairs.",
+  "sources": [
+    {
+      "source_id": "posthog-handbook-history-v1",
+      "repository_url": "https://github.com/PostHog/posthog.com.git",
+      "revision": "e6ad086fe14b9023be56ba2558dfdee317ae2654",
+      "repository_commit_count": 15215,
+      "allowed_content_scope": "contents/",
+      "audited_business_scope": "contents/handbook/",
+      "license_id": "MIT",
+      "license_url": "https://github.com/PostHog/posthog.com/blob/master/LICENSE",
+      "license_sha256": "5391d207b47157cc27002385e33373240d5a9824bfc194832f41b0a7c24b7715",
+      "current_document_count": 371,
+      "current_word_count": 491556,
+      "historical_document_paths_with_two_or_more_revisions": 650,
+      "training_approved": false
+    },
+    {
+      "source_id": "sourcegraph-handbook-history-v1",
+      "repository_url": "https://github.com/sourcegraph/handbook.git",
+      "revision": "5752928b213a3ddbc7cee4459524f404a5b96fb4",
+      "repository_commit_count": 11717,
+      "allowed_content_scope": "repository documentation source under Apache-2.0",
+      "audited_business_scope": "content/",
+      "license_id": "Apache-2.0",
+      "license_url": "https://github.com/sourcegraph/handbook/blob/main/LICENSE",
+      "license_sha256": "4bb0e589492456413ce07a567a0df60547179377f86025f2658e97f151fe8ec2",
+      "current_document_count": 883,
+      "current_word_count": 745919,
+      "historical_document_paths_with_two_or_more_revisions": 2598,
+      "training_approved": false
+    },
+    {
+      "source_id": "clef-handbook-history-v1",
+      "repository_url": "https://github.com/clef/handbook.git",
+      "revision": "a9a576eb7362d76a5435de69b83bdb650bd86e90",
+      "repository_commit_count": 180,
+      "allowed_content_scope": "repository content under CC0-1.0",
+      "audited_business_scope": "selected values, onboarding, and operations Markdown documents",
+      "license_id": "CC0-1.0",
+      "license_url": "https://github.com/clef/handbook/blob/master/LICENSE",
+      "license_sha256": "36ffd9dc085d529a7e60e1276d73ae5a030b020313e6c5408593a6ae2af39673",
+      "current_document_count": 39,
+      "current_word_count": 20973,
+      "historical_document_paths_with_two_or_more_revisions": 40,
+      "training_approved": false
+    }
+  ],
+  "totals": {
+    "current_document_count": 1293,
+    "current_word_count": 1258448,
+    "historical_document_paths_with_two_or_more_revisions": 3288
+  },
+  "editorial_history_audit": {
+    "single_document_editorial_signal_commits": 89,
+    "nominal_major_rewrite_commits": 11,
+    "explicitly_automated_nominal_major_rewrites": 1,
+    "training_approved_task_pairs": 0,
+    "limitations": [
+      "Commit messages are search signals, not quality labels.",
+      "Many revisions change facts, strategy, policy, or process rather than improve prose under fixed intent.",
+      "Mechanical corrections are too weak to stand in for rough-to-polished executive writing.",
+      "Contributor identity metadata must be excluded from derived records."
+    ]
+  },
+  "alternatives": [
+    {
+      "source_id": "gitlab-handbook",
+      "status": "not_acquired_share_alike_decision_required",
+      "rights": "CC-BY-SA-4.0"
+    },
+    {
+      "source_id": "emailsum-avocado",
+      "status": "not_acquired_restricted_upstream_and_privacy_review_required",
+      "rights": "LDC organizational and end-user agreements"
+    },
+    {
+      "source_id": "basecamp-37signals-handbook",
+      "status": "not_acquired_permission_required",
+      "rights": "no verified content license"
+    },
+    {
+      "source_id": "gsa-tts-handbook",
+      "status": "not_acquired_lower_domain_fit",
+      "rights": "CC0-1.0/public domain"
+    }
+  ],
+  "training_approved": false,
+  "settled_cost_usd": 0,
+  "disposition": "recommend_user_approval_for_private_cleaning_and_manual_pair_curation_only"
+}

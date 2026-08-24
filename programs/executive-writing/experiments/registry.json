@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T23:16:36Z",
+  "updated_at": "2026-08-24T04:26:49Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -595,6 +595,17 @@
       "model_id": null,
       "settled_cost_usd": 0,
       "disposition": "24 of 28 deliverables and 13 of 18 stopping conditions are satisfied; candidate, Tier C, finalist, and human gates remain unmet"
+    },
+    {
+      "experiment_id": "business-prose-source-feasibility-v1",
+      "kind": "public_business_prose_source_feasibility",
+      "status": "completed_user_training_decision_pending",
+      "record": "programs/executive-writing/experiments/business-prose-source-feasibility-v1.json",
+      "code_revision_start": "6e67b86b18fc8276fa07470823438411977d51c5",
+      "provider": "local_offline",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "recommend private business-section style-target cleaning and manual same-intent editorial-pair curation; training approval remains false"
     }
   ]
 }

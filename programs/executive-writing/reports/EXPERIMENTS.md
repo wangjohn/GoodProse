@@ -697,3 +697,21 @@ machine-readable manifest under `../experiments/`.
   next evidence-bearing trigger is an authentic rights-approved rough-to-final
   task corpus; no additional prompt/model sweep is justified by the exhausted
   hypothesis registry.
+
+## 2026-08-24 — Business-prose source feasibility v1
+
+- Hypothesis: permissively licensed company handbooks can provide authentic
+  business/executive `style_targets` and a smaller manually curated lane of
+  genuine editorial task pairs.
+- Sources: exact local histories for PostHog `/contents/` (MIT), Sourcegraph
+  handbook documentation (Apache-2.0), and Clef handbook (CC0-1.0), all pinned
+  by revision and license hash in ignored user-only quarantine.
+- Volume: 1,293 current Markdown/MDX documents, approximately 1.258 million
+  words, and 3,288 historical document paths with at least two revisions.
+- Pair screen: 89 explicit single-document editorial-signal commits and 11
+  nominal major rewrites. Manual review found automation and frequent
+  factual/policy changes, so zero pairs are currently treated as training gold.
+- Decision: advance only to user-approved private cleaning and manual pair
+  curation. No source or pair is `training_approved`, and no model run occurred.
+  See `BUSINESS_PROSE_DATA_FEASIBILITY.md` and
+  `../experiments/business-prose-source-feasibility-v1.json`.

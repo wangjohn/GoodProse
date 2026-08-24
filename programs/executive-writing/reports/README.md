@@ -15,3 +15,5 @@ are [`CONTRACT_COMPLETION_AUDIT.md`](CONTRACT_COMPLETION_AUDIT.md) and
 The current machine-readable summary is
 `../experiments/latest-results-v3.json`; older versioned and unversioned files
 are retained as immutable evidence sources bound by historical frontiers.
+The current licensed business-prose source audit is
+[`BUSINESS_PROSE_DATA_FEASIBILITY.md`](BUSINESS_PROSE_DATA_FEASIBILITY.md).
