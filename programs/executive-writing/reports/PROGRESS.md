@@ -1081,3 +1081,25 @@ historical entries.
   sample. GitLab, Avocado/EmailSum, 37signals, and GSA remain outside this gate.
 - Cost: $0 attempted and settled; approximately 455 MiB of ignored local source
   history acquired; no external storage or paid resource started.
+
+### 2026-08-24 — Private business-prose human-review batch v1
+
+- User decision: approve option A, private preprocessing of the permissively
+  licensed handbook sources, and request a small set of the highest-quality
+  pieces and revision pairs for direct personal evaluation.
+- Batch: eight finished pieces and six before/after candidates spanning company
+  strategy, values, management, marketing, planning, pricing, communication,
+  executive business reviews, and status updates.
+- Integrity: the deterministic builder validates exact repository origins,
+  revisions, clean worktrees, license hashes, allowlisted paths, and revision
+  ancestry. It removes transport markup, links, URLs, email addresses, and
+  contributor metadata before writing the private packet.
+- Storage/privacy: packet directories are mode `0700`, files are mode `0600`,
+  all bodies and ratings remain Git-ignored, and the post-build prohibited-
+  pattern scan passed.
+- Decision: wait for the user's ratings. `pair-02` is explicitly a risky hard
+  case because compression may have changed scope. No item is accepted as a
+  same-intent gold pair, compiled, trained on, or `training_approved` yet.
+- Evidence: `BUSINESS_PROSE_HUMAN_REVIEW_V1.md` and
+  `../experiments/business-prose-human-review-v1-build.json`.
+- Cost: $0 attempted and settled; no model or paid resource used.

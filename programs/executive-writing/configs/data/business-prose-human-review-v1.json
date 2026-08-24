@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "review_packet_id": "business-prose-human-review-v1",
+  "intended_use": "internal_user_only_human_corpus_review",
+  "training_approved": false,
+  "sources": [
+    {
+      "source_id": "posthog-handbook-history-v1",
+      "repository_dir": "posthog-handbook-history-v1",
+      "repository_url": "https://github.com/PostHog/posthog.com.git",
+      "revision": "e6ad086fe14b9023be56ba2558dfdee317ae2654",
+      "license_id": "MIT",
+      "license_file": "LICENSE",
+      "license_sha256": "5391d207b47157cc27002385e33373240d5a9824bfc194832f41b0a7c24b7715",
+      "allowed_prefixes": [
+        "contents/"
+      ]
+    },
+    {
+      "source_id": "sourcegraph-handbook-history-v1",
+      "repository_dir": "sourcegraph-handbook-history-v1",
+      "repository_url": "https://github.com/sourcegraph/handbook.git",
+      "revision": "5752928b213a3ddbc7cee4459524f404a5b96fb4",
+      "license_id": "Apache-2.0",
+      "license_file": "LICENSE",
+      "license_sha256": "4bb0e589492456413ce07a567a0df60547179377f86025f2658e97f151fe8ec2",
+      "allowed_prefixes": [
+        "content/"
+      ]
+    },
+    {
+      "source_id": "clef-handbook-history-v1",
+      "repository_dir": "clef-handbook-history-v1",
+      "repository_url": "https://github.com/clef/handbook.git",
+      "revision": "a9a576eb7362d76a5435de69b83bdb650bd86e90",
+      "license_id": "CC0-1.0",
+      "license_file": "LICENSE",
+      "license_sha256": "36ffd9dc085d529a7e60e1276d73ae5a030b020313e6c5408593a6ae2af39673",
+      "allowed_prefixes": [
+        "README.md",
+        "Onboarding Documents/"
+      ]
+    }
+  ],
+  "style_selections": [
+    {
+      "review_id": "style-01",
+      "source_id": "posthog-handbook-history-v1",
+      "relative_path": "contents/handbook/why-does-posthog-exist.md",
+      "title": "Why does PostHog exist? Mission and strategy",
+      "genre": "company_strategy"
+    },
+    {
+      "review_id": "style-02",
+      "source_id": "posthog-handbook-history-v1",
+      "relative_path": "contents/handbook/marketing/index.md",
+      "title": "PostHog marketing values",
+      "genre": "marketing_principles",
+      "start_marker": "## Marketing values",
+      "end_marker": "## Marketing vision"
+    },
+    {
+      "review_id": "style-03",
+      "source_id": "posthog-handbook-history-v1",
+      "relative_path": "contents/handbook/company/management.md",
+      "title": "Part-time managers and setting context",
+      "genre": "management_guidance",
+      "start_marker": "### Part-time managers",
+      "end_marker": "## How do I make sure my direct reports are happy and productive?"
+    },
+    {
+      "review_id": "style-04",
+      "source_id": "posthog-handbook-history-v1",
+      "relative_path": "contents/handbook/exec/annual-planning.md",
+      "title": "A lightweight annual planning system",
+      "genre": "operating_process",
+      "end_marker": "### What each meeting does"
+    },
+    {
+      "review_id": "style-05",
+      "source_id": "sourcegraph-handbook-history-v1",
+      "relative_path": "content/company-info-and-process/values/index.md",
+      "title": "Sourcegraph values",
+      "genre": "company_values"
+    },
+    {
+      "review_id": "style-06",
+      "source_id": "sourcegraph-handbook-history-v1",
+      "relative_path": "content/strategy-goals/strategy/index.md",
+      "title": "Sourcegraph company strategy",
+      "genre": "company_strategy"
+    },
+    {
+      "review_id": "style-07",
+      "source_id": "clef-handbook-history-v1",
+      "relative_path": "Onboarding Documents/Product Manifesto.md",
+      "title": "Clef product manifesto",
+      "genre": "product_strategy"
+    },
+    {
+      "review_id": "style-08",
+      "source_id": "clef-handbook-history-v1",
+      "relative_path": "Onboarding Documents/One on Ones.md",
+      "title": "Clef one-on-one guidance",
+      "genre": "management_guidance"
+    }
+  ],
+  "pair_selections": [
+    {
+      "review_id": "pair-01",
+      "source_id": "posthog-handbook-history-v1",
+      "relative_path": "contents/handbook/engineering/feature-pricing.md",
+      "target_revision": "80fbabb54b4a4909817c798077f901d02afb607e",
+      "title": "Make pricing principles more readable",
+      "genre": "pricing_strategy",
+      "selection_note": "Substantial restructuring and tightening of an existing pricing-principles argument; verify that no principle changes materially.",
+      "context_lines": 5
+    },
+    {
+      "review_id": "pair-02",
+      "source_id": "posthog-handbook-history-v1",
+      "relative_path": "contents/handbook/company/communication.md",
+      "target_revision": "74f502b31aff676d11aa2f7582246f6d8c47f57e",
+      "title": "Edit down a communication policy",
+      "genre": "communication_policy",
+      "selection_note": "Ambitious compression candidate with a known risk that removed meeting and external-communication guidance changes the document's scope.",
+      "context_lines": 4
+    },
+    {
+      "review_id": "pair-03",
+      "source_id": "sourcegraph-handbook-history-v1",
+      "relative_path": "content/ce/qbr_guide.md",
+      "target_revision": "a01a0e7a556d937263acb385d0373e2f003642c2",
+      "title": "Clarify an executive business review guide",
+      "genre": "executive_business_review",
+      "selection_note": "Mostly local wording and terminology edits in a customer-facing executive review process.",
+      "context_lines": 5
+    },
+    {
+      "review_id": "pair-04",
+      "source_id": "sourcegraph-handbook-history-v1",
+      "relative_path": "content/engineering/leadership/index.md",
+      "target_revision": "0f9444c8878c1aba7cccee56410b64a46a59ffee",
+      "title": "Tighten status-update instructions",
+      "genre": "status_update",
+      "selection_note": "Grammar and concision edits to instructions for prose-style management status updates.",
+      "context_lines": 5
+    },
+    {
+      "review_id": "pair-05",
+      "source_id": "sourcegraph-handbook-history-v1",
+      "relative_path": "content/strategy-goals/strategy/code-graph/search/core.md",
+      "target_revision": "ed0cbe69d61ee9f9f3bba3de164e6389fe5c0b84",
+      "title": "Make a strategy rationale more direct",
+      "genre": "strategy_document",
+      "selection_note": "Small copy edit that converts a discursive list into direct parallel statements without intentionally changing the decision.",
+      "context_lines": 5
+    },
+    {
+      "review_id": "pair-06",
+      "source_id": "clef-handbook-history-v1",
+      "relative_path": "README.md",
+      "target_revision": "b9092ba8db9e61db4735ace92b4f8a63aedc085d",
+      "title": "Clarify the purpose of an open company handbook",
+      "genre": "company_introduction",
+      "selection_note": "Compact wording revision that replaces vague claims with a concrete motivation and action.",
+      "context_lines": 5
+    }
+  ]
+}

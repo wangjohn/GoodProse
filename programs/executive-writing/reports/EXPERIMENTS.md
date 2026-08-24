@@ -715,3 +715,25 @@ machine-readable manifest under `../experiments/`.
   curation. No source or pair is `training_approved`, and no model run occurred.
   See `BUSINESS_PROSE_DATA_FEASIBILITY.md` and
   `../experiments/business-prose-source-feasibility-v1.json`.
+
+## 2026-08-24 — Business-prose human review v1 build
+
+- Hypothesis: a small provenance-complete packet can surface high-quality
+  business prose and same-intent editorial revisions for direct user judgment
+  without prematurely treating repository history as training gold.
+- Inputs: three exact licensed source histories from the feasibility audit;
+  eight manually shortlisted finished pieces and six manually shortlisted
+  revision candidates in a committed body-free selection config.
+- Build: deterministic local extraction and sanitization produced a private
+  14-item Markdown packet, a blank CSV rating sheet, and a private manifest.
+  Source revisions, origins, clean worktrees, license hashes, paths, and
+  revision ancestry were validated before extraction.
+- Privacy/storage: all packet bodies and ratings are Git-ignored; directories
+  use mode `0700`, files use mode `0600`, and a post-build scan found no email
+  address, raw URL, private-link component, team-member component, or Git
+  contributor metadata.
+- Decision: pause at human review. The user will rate each item; no automatic
+  keep decision, corpus compilation, model run, or training approval follows
+  from packet creation. See `BUSINESS_PROSE_HUMAN_REVIEW_V1.md` and
+  `../experiments/business-prose-human-review-v1-build.json`.
+- Cost: $0; local deterministic processing only.

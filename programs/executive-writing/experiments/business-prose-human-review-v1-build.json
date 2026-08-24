@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "experiment_id": "business-prose-human-review-v1-build",
+  "status": "completed_pending_user_ratings",
+  "generated_at": "2026-08-24T04:45:54Z",
+  "code_revision_start": "6e748f1e87b68570d962567d1535a01fda169364",
+  "hypothesis": "A small, provenance-complete review packet can surface genuinely high-quality business prose and same-intent editorial revisions for direct user judgment without promoting any source to training-approved status.",
+  "config": {
+    "path": "programs/executive-writing/configs/data/business-prose-human-review-v1.json",
+    "sha256": "b86d8060a7d5855a43b8487303bb831eb50c27c7d9bb43a021da5543961a1700"
+  },
+  "build_command": "uv run python -m goodprose.executive_writing business-prose-review --config programs/executive-writing/configs/data/business-prose-human-review-v1.json --source-root data/executive-writing/private/authentic-task-pairs-v1/quarantine/business-prose-sources-v1 --output data/executive-writing/private/authentic-task-pairs-v1/derived/business-prose-human-review-v1 --generated-at 2026-08-24T04:45:54Z",
+  "inputs": {
+    "source_feasibility_record": "programs/executive-writing/experiments/business-prose-source-feasibility-v1.json",
+    "source_count": 3,
+    "source_revisions_and_license_hashes_validated": true,
+    "source_worktrees_clean": true
+  },
+  "private_output": {
+    "path": "data/executive-writing/private/authentic-task-pairs-v1/derived/business-prose-human-review-v1",
+    "manifest_sha256": "bbde151b72fa86dac902b45e5ecf4a40d04d1ead0a80ffcfbefe04b4b1889328",
+    "readme_sha256": "52f4b8110a8fd0723a5d21494f96796523e91d4d3d4ea0c28cf20ed762032195",
+    "ratings_template_sha256": "322b9fa94be21f592920adbf6a4e097393ce4462e02322197a8b614b740b2332",
+    "style_item_count": 8,
+    "pair_item_count": 6,
+    "review_body_word_count": 13853,
+    "approximate_disk_kib": 120,
+    "git_ignored": true,
+    "directory_mode": "0700",
+    "file_mode": "0600"
+  },
+  "validation": {
+    "privacy_scan": "passed",
+    "privacy_scan_scope": "all generated Markdown, CSV, and JSON packet files",
+    "prohibited_patterns_absent": [
+      "email addresses",
+      "raw HTTP(S) URLs",
+      "mailto links",
+      "private-link components",
+      "team-member components",
+      "Git author metadata"
+    ],
+    "ratings_status": "pending_user_review",
+    "training_approved": false
+  },
+  "provider": "local_offline",
+  "model_id": null,
+  "settled_cost_usd": 0,
+  "disposition": "wait for the user's item-level ratings; do not compile, train on, or promote any item automatically"
+}

@@ -73,6 +73,7 @@ reference. Never record payment credentials.
 | 2026-08-24T01:50:38Z | Local encrypted filesystem | Create user-only authentic task-pair intake boundary | `authentic-task-pairs-v1-intake` | completed; corpus not yet ingested | $0.00 | FileVault on, user-only permissions, Git-ignored path, no external storage |
 | 2026-08-24T01:54:25Z | Paul Graham official website / local encrypted filesystem | Refresh public-source access and rights evidence | `paul-graham-rights-audit-v1` | completed; permission still required | $0.00 | index, FAQ, and robots evidence only; zero essay bodies; 128,630 bytes; no paid resource |
 | 2026-08-24T04:26:49Z | GitHub / local encrypted filesystem | Acquire and audit permissively licensed business-prose histories | `business-prose-source-feasibility-v1` | completed; user decision pending | $0.00 | PostHog, Sourcegraph, and Clef histories pinned in ignored user-only quarantine; approximately 455 MiB; no paid resource |
+| 2026-08-24T04:45:54Z | Local encrypted filesystem | Build private first-batch business-prose review packet | `business-prose-human-review-v1-build` | completed; user ratings pending | $0.00 | 8 finished pieces and 6 revision candidates; user-only permissions, privacy scan passed, no model or paid resource |
 
 ## Zero-cost feasibility snapshot
 

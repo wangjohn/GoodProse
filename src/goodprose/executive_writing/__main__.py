@@ -14,6 +14,9 @@ from goodprose.executive_writing.application import (
 )
 from goodprose.executive_writing.baseline import run_baseline
 from goodprose.executive_writing.benchmark import build_benchmark, load_cases
+from goodprose.executive_writing.business_prose_review import (
+    build_business_prose_review_packet,
+)
 from goodprose.executive_writing.contract_audit import load_and_validate_contract_audit
 from goodprose.executive_writing.external_evals import (
     YAP_BOOTSTRAP_SEED,
@@ -254,6 +257,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     contract_audit.add_argument("--audit", required=True)
     contract_audit.add_argument("--repo-root", required=True)
+
+    business_review = commands.add_parser(
+        "business-prose-review", help="Build a private licensed business-prose review packet"
+    )
+    business_review.add_argument("--config", required=True)
+    business_review.add_argument("--source-root", required=True)
+    business_review.add_argument("--output", required=True)
+    business_review.add_argument("--generated-at", required=True)
 
     ox_ceiling = commands.add_parser("ox-ceiling", help="Run or publish the Ox B1 ceiling")
     ox_ceiling_commands = ox_ceiling.add_subparsers(dest="ox_ceiling_command", required=True)
@@ -676,6 +687,19 @@ def _run(args: argparse.Namespace) -> int:
             f"contract audit valid: {len(audit.deliverables)} deliverables, "
             f"{len(audit.stopping_conditions)} stopping conditions, "
             f"goal_complete={audit.goal_complete}"
+        )
+        return 0
+    if args.command == "business-prose-review":
+        manifest = build_business_prose_review_packet(
+            config_path=_path(args.config),
+            source_root=_path(args.source_root),
+            output_dir=_path(args.output),
+            generated_at=args.generated_at,
+        )
+        print(
+            "business-prose review packet complete: "
+            f"{manifest['style_item_count']} style pieces, "
+            f"{manifest['pair_item_count']} revision pairs"
         )
         return 0
     if args.command == "ox-ceiling" and args.ox_ceiling_command == "run":

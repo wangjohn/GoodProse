@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-24T04:26:49Z",
+  "updated_at": "2026-08-24T04:45:54Z",
   "experiments": [
     {
       "experiment_id": "harness-preflight-2026-08-22",
@@ -606,6 +606,18 @@
       "model_id": null,
       "settled_cost_usd": 0,
       "disposition": "recommend private business-section style-target cleaning and manual same-intent editorial-pair curation; training approval remains false"
+    },
+    {
+      "experiment_id": "business-prose-human-review-v1-build",
+      "kind": "private_corpus_human_review_packet_build",
+      "status": "completed_pending_user_ratings",
+      "record": "programs/executive-writing/experiments/business-prose-human-review-v1-build.json",
+      "code_revision_start": "6e748f1e87b68570d962567d1535a01fda169364",
+      "dataset_id": "business-prose-human-review-v1",
+      "provider": "local_offline",
+      "model_id": null,
+      "settled_cost_usd": 0,
+      "disposition": "wait for direct user ratings; do not compile, train on, or promote any item automatically"
     }
   ]
 }

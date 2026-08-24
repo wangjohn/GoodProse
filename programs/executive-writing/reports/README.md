@@ -17,3 +17,5 @@ The current machine-readable summary is
 are retained as immutable evidence sources bound by historical frontiers.
 The current licensed business-prose source audit is
 [`BUSINESS_PROSE_DATA_FEASIBILITY.md`](BUSINESS_PROSE_DATA_FEASIBILITY.md).
+The resulting private first-batch review protocol and public metadata are in
+[`BUSINESS_PROSE_HUMAN_REVIEW_V1.md`](BUSINESS_PROSE_HUMAN_REVIEW_V1.md).
