@@ -1,7 +1,7 @@
 {
   "version": 1,
   "model_id": "Qwen/Qwen3-8B",
-  "model_revision": "main",
+  "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
   "train_file": "../data/sft/train.jsonl",
   "eval_file": "../data/sft/dev.jsonl",
   "dataset_manifest_file": "../data/sft/manifest.json",

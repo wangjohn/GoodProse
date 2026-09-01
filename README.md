@@ -123,10 +123,11 @@ method. See `evals/README.md` for run manifests, the anchored rubric, and the de
 
 ## LoRA+ training
 
-The checked-in starter config uses Qwen3-8B with rank-32 LoRA adapters. PEFT's LoRA+ optimizer
-trains the LoRA A weights at `5e-5` and the B weights at `8e-4` (a 16x ratio). The runner validates
-the exact system prompt, dataset counts, and file hashes before loading the model. It converts each
-conversation into prompt/completion form so TRL computes loss only on the author's completion.
+The checked-in starter config uses a pinned Qwen3-8B revision with rank-32 LoRA adapters. PEFT's
+LoRA+ optimizer trains the LoRA A weights at `5e-5` and the B weights at `8e-4` (a 16x ratio). The
+runner validates the exact system prompt, dataset counts, and file hashes before loading the model.
+It converts each conversation into prompt/completion form so TRL computes loss only on the
+author's completion.
 
 Validate the run without installing or loading the model:
 
