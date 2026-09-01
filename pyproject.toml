@@ -4,24 +4,12 @@ build-backend = "hatchling.build"
 
 [project]
 name = "goodprose"
-version = "0.1.0"
-description = "Build provenance-aware datasets and evaluations for GoodProse."
+version = "0.2.0"
+description = "Build and evaluate an SFT dataset from one author's blog writing."
 readme = "README.md"
 requires-python = ">=3.12"
 license = {file = "LICENSE"}
-dependencies = [
-  "argilla==2.8.0",
-  "jsonschema>=4.23,<5",
-  "pydantic>=2.11,<3",
-]
-
-[project.optional-dependencies]
-privacy = [
-  "presidio-analyzer>=2.2.358,<3",
-  "presidio-anonymizer>=2.2.358,<3",
-]
-tokenizers = ["transformers>=4.51,<6"]
-training = ["mlx-lm[train]==0.31.3"]
+dependencies = ["pydantic>=2.11,<3"]
 
 [dependency-groups]
 dev = [

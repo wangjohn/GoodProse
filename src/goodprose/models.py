@@ -1,214 +1,113 @@
-"""Typed models at GoodProse's data and evaluation boundaries."""
+"""Typed boundaries for the GoodProse blog-writing dataset."""
 
 from __future__ import annotations
 
+from datetime import date, datetime
 from enum import StrEnum
-from typing import Annotated, Literal, Self
+from typing import Annotated, Literal
 
-from pydantic import AnyUrl, BaseModel, ConfigDict, StringConstraints, model_validator
+from pydantic import AnyUrl, BaseModel, ConfigDict, Field, StringConstraints
 
 NonEmptyString = Annotated[str, StringConstraints(min_length=1)]
+EditBurden = Annotated[int, Field(ge=1, le=5)]
 
 
 class StrictModel(BaseModel):
-    """Base model that rejects undeclared fields at system boundaries."""
-
     model_config = ConfigDict(extra="forbid", frozen=True)
 
 
 class Split(StrEnum):
     TRAIN = "train"
-    VALIDATION = "validation"
-
-
-class EvalSplit(StrEnum):
     DEV = "dev"
     TEST = "test"
-    PRIVATE_TEST = "private_test"
 
 
-class Channel(StrEnum):
-    EMAIL = "email"
-    BLOG_POST = "blog_post"
-    INTERNAL_MEMO = "internal_memo"
+class InputMethod(StrEnum):
+    ORIGINAL_OUTLINE = "original_outline"
+    ORIGINAL_DRAFT = "original_draft"
+    DERIVED_BRIEF = "derived_brief"
 
 
-class ContextKind(StrEnum):
-    NOTES = "notes"
-    REFERENCE = "reference"
-    POLICY = "policy"
-    CONSTRAINT = "constraint"
-    OTHER = "other"
-
-
-class CreationMethod(StrEnum):
-    HUMAN_REVISION = "human_revision"
-    PAIRED_HISTORY = "paired_history"
-    SYNTHETIC_DEGRADATION = "synthetic_degradation"
-
-
-class ReviewStatus(StrEnum):
-    PENDING = "pending"
-    PASSED = "passed"
-    FAILED = "failed"
-
-
-class InputOrigin(StrEnum):
-    REAL_SOURCE_MATERIAL = "real_source_material"
-    PAIRED_HISTORY = "paired_history"
-    SYNTHETIC_DEGRADATION = "synthetic_degradation"
-
-
-class InputContext(StrictModel):
-    kind: ContextKind
-    label: str | None = None
-    content: str
-
-
-class ExampleInput(StrictModel):
-    source_material: NonEmptyString
-    channel: Channel
-    audience: NonEmptyString
-    objective: NonEmptyString
-    voice_profile_id: NonEmptyString
-    constraints: tuple[str, ...] = ()
-    context: tuple[InputContext, ...] = ()
-
-    @model_validator(mode="after")
-    def validate_unique_constraints(self) -> Self:
-        _require_unique("constraints", self.constraints)
-        return self
-
-
-def _require_unique(name: str, values: tuple[str, ...]) -> None:
-    if len(values) != len(set(values)):
-        raise ValueError(f"{name} must contain unique values")
-
-
-class Provenance(StrictModel):
-    creation_method: CreationMethod
-    lineage_group: NonEmptyString
-    source_document_ids: tuple[str, ...]
-    style_reference_ids: tuple[str, ...]
-    license_ids: tuple[str, ...]
-    source_url: AnyUrl | None = None
-    source_revision: str | None = None
-
-    @model_validator(mode="after")
-    def validate_unique_identifiers(self) -> Self:
-        for field_name in (
-            "source_document_ids",
-            "style_reference_ids",
-            "license_ids",
-        ):
-            _require_unique(field_name, getattr(self, field_name))
-        return self
-
-
-class ExampleOutput(StrictModel):
-    title: str | None = None
+class BlogPost(StrictModel):
+    version: Literal[1] = 1
+    id: NonEmptyString
+    lineage_id: NonEmptyString
+    title: NonEmptyString
     body_markdown: NonEmptyString
+    source_path: NonEmptyString
+    source_url: AnyUrl | None = None
+    published_at: datetime | date | None = None
 
 
-class Review(StrictModel):
-    privacy: ReviewStatus
-    factuality: ReviewStatus
-    objective_fulfillment: ReviewStatus
-    audience_fit: ReviewStatus
-    channel_fit: ReviewStatus
-    house_style: ReviewStatus
-    overall_quality: ReviewStatus
-    reviewer: str | None = None
-    notes: str | None = None
-
-    def is_fully_approved(self) -> bool:
-        statuses = (
-            self.privacy,
-            self.factuality,
-            self.objective_fulfillment,
-            self.audience_fit,
-            self.channel_fit,
-            self.house_style,
-            self.overall_quality,
-        )
-        return all(status == ReviewStatus.PASSED for status in statuses)
-
-
-class AnnotationSeed(StrictModel):
-    """A pre-gold record that can be sent to an annotation workflow."""
-
-    version: Literal[1]
+class Brief(StrictModel):
+    version: Literal[1] = 1
     id: NonEmptyString
+    post_id: NonEmptyString
     split: Split
-    input: ExampleInput
-    provenance: Provenance
-
-    @model_validator(mode="after")
-    def validate_version(self) -> Self:
-        if self.version != 1:
-            raise ValueError("version must be 1")
-        return self
+    input: NonEmptyString
+    input_method: InputMethod
 
 
-class TrainingExample(StrictModel):
-    version: Literal[1]
+class WritingPair(StrictModel):
+    version: Literal[1] = 1
     id: NonEmptyString
+    post_id: NonEmptyString
+    lineage_id: NonEmptyString
     split: Split
-    input: ExampleInput
-    output: ExampleOutput
-    provenance: Provenance
-    review: Review
-
-    @model_validator(mode="after")
-    def validate_version(self) -> Self:
-        if self.version != 1:
-            raise ValueError("version must be 1")
-        return self
-
-
-class EvalExpected(StrictModel):
-    gold_output_path: str | None = None
-    required_facts: tuple[str, ...]
-    optional_facts: tuple[str, ...] = ()
-    forbidden_claims: tuple[str, ...]
-    required_call_to_action: str | None = None
-    acceptable_variations: tuple[str, ...] = ()
-
-    @model_validator(mode="after")
-    def validate_unique_facts(self) -> Self:
-        for field_name in (
-            "required_facts",
-            "optional_facts",
-            "forbidden_claims",
-            "acceptable_variations",
-        ):
-            _require_unique(field_name, getattr(self, field_name))
-        return self
-
-
-class EvalProvenance(StrictModel):
-    lineage_group: NonEmptyString
-    target_document_ids: tuple[str, ...]
-    input_origin: InputOrigin
-    reviewers: tuple[str, ...] = ()
-
-    @model_validator(mode="after")
-    def validate_unique_identifiers(self) -> Self:
-        _require_unique("target_document_ids", self.target_document_ids)
-        _require_unique("reviewers", self.reviewers)
-        return self
+    input: NonEmptyString
+    input_method: InputMethod
+    title: NonEmptyString
+    output: NonEmptyString
+    source_url: AnyUrl | None = None
+    published_at: datetime | date | None = None
 
 
 class EvalCase(StrictModel):
-    version: Literal[1]
+    version: Literal[1] = 1
     id: NonEmptyString
-    split: EvalSplit
-    input: ExampleInput
-    expected: EvalExpected
-    provenance: EvalProvenance
+    input: NonEmptyString
+    reference_output: NonEmptyString
+    source_url: AnyUrl | None = None
 
-    @model_validator(mode="after")
-    def validate_version(self) -> Self:
-        if self.version != 1:
-            raise ValueError("version must be 1")
-        return self
+
+class ModelOutput(StrictModel):
+    id: NonEmptyString
+    output: NonEmptyString
+
+
+class ReviewChoice(StrEnum):
+    A = "a"
+    B = "b"
+    TIE = "tie"
+
+
+class SystemLabel(StrEnum):
+    BASELINE = "baseline"
+    CANDIDATE = "candidate"
+
+
+class ReviewRow(StrictModel):
+    version: Literal[1] = 1
+    id: NonEmptyString
+    input: NonEmptyString
+    reference_output: NonEmptyString
+    response_a: NonEmptyString
+    response_b: NonEmptyString
+    factuality_a_pass: bool | None = None
+    factuality_b_pass: bool | None = None
+    preference: ReviewChoice | None = None
+    edit_burden_a: EditBurden | None = None
+    edit_burden_b: EditBurden | None = None
+    notes: str | None = None
+
+
+class ReviewAssignment(StrictModel):
+    id: NonEmptyString
+    a: SystemLabel
+    b: SystemLabel
+
+
+class ReviewKey(StrictModel):
+    version: Literal[1] = 1
+    seed: int
+    assignments: tuple[ReviewAssignment, ...]

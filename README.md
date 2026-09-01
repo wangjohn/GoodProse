@@ -1,83 +1,96 @@
 # GoodProse
 
-GoodProse builds provenance-aware datasets and evaluations for models that turn rough source material into clear executive emails, internal memos, and blog posts.
+GoodProse is a deliberately small pipeline for fine-tuning a model on one author's blog
+writing. It turns reviewed outlines, notes, or rough drafts into the author's exact published
+prose and measures whether a fine-tune beats the prompted base model.
 
-The project focuses on transformation rather than named-person imitation. Each example specifies an audience, channel, objective, constraints, and an original versioned voice profile. Factual fidelity, privacy, and uncertainty preservation are independent gates from writing quality.
+```text
+rough draft, outline, or factual brief -> finished blog post
+```
 
-## Quick start
+The repository contains no third-party writing corpus and no synthetic training targets.
+
+## Workflow
+
+1. Export the blog as Markdown and import the posts.
+2. Write or review one input brief for each post and assign its split.
+3. Join briefs to the exact published posts to create canonical pairs.
+4. Export `train` and `dev` pairs in chat-style SFT JSONL.
+5. Compare base and fine-tuned outputs on the frozen `test` cases in a blind review.
 
 ```bash
 uv sync
-make corpus
-make validate
-make test
+
+uv run goodprose import-posts path/to/markdown \
+  --output data/posts/posts.jsonl \
+  --url-base https://example.com/blog/
+
+uv run goodprose build-pairs \
+  --posts data/posts/posts.jsonl \
+  --briefs data/briefs.jsonl \
+  --output data/pairs.jsonl
+
+uv run goodprose build-sft \
+  --pairs data/pairs.jsonl \
+  --output-dir data/sft \
+  --eval-output evals/cases.jsonl
 ```
 
-The current raw corpus is the technical-source collection created before the GoodProse pivot. It remains useful for testing factual compression and audience adaptation, but it is not a representative executive-writing dataset. Add permissioned rough-to-final executive revisions before training a production model.
+The Markdown importer understands simple front matter keys: `id`, `title`, `url`, `date`, and
+`series`. A first-level heading supplies the title when front matter does not.
 
-## Training task
+## Canonical pair
 
-```text
-source material + audience + channel + objective + constraints + voice profile
-    -> factual, channel-appropriate executive communication
+`data/briefs.jsonl` is the small hand-reviewed file that defines the transformation and split:
+
+```json
+{"version":1,"id":"why-tools-matter","post_id":"why-tools-matter","split":"train","input":"An outline or rough draft written or reviewed by the author.","input_method":"original_outline"}
 ```
 
-Supported channels are `email`, `internal_memo`, and `blog_post`. A canonical record uses the schemas under [`data/schemas/`](data/schemas/) and records source lineage, licensing, review status, and the exact voice profile.
+`build-pairs` copies the matching published post into the output. Supported input methods are
+`original_outline`, `original_draft`, and `derived_brief`. Derived briefs are allowed, but they
+must be reviewed and should not copy distinctive phrases from the target.
 
-## Annotation and dataset compilation
+## Evaluation
 
-GoodProse includes a pinned local Argilla workflow with separate authoring and review queues, deterministic secret and personally identifiable information scans, typed JSONL boundaries, lineage-leakage checks, token reports, and immutable content-addressed snapshots.
+Model outputs use one record per held-out case:
+
+```json
+{"id":"held-out-post","output":"The model's proposed post."}
+```
+
+Prepare and score a blind comparison:
 
 ```bash
-make argilla-up
-set -a
-source infra/argilla/.env
-set +a
-uv run goodprose annotation setup
+uv run goodprose eval prepare \
+  --cases evals/cases.jsonl \
+  --baseline evals/results/base.jsonl \
+  --candidate evals/results/sft.jsonl \
+  --packet evals/results/review.jsonl \
+  --key evals/results/review-key.json
+
+# Fill in the five empty review fields in review.jsonl, then:
+uv run goodprose eval summarize \
+  --packet evals/results/review.jsonl \
+  --key evals/results/review-key.json \
+  --output evals/results/summary.json
 ```
 
-Open `http://127.0.0.1:6900`, then follow [`docs/ANNOTATION_WORKFLOW.md`](docs/ANNOTATION_WORKFLOW.md). Legacy pre-pivot Argilla datasets are intentionally not reused because their questions describe a different task.
+The primary decision is simple: prefer the system that wins more blind comparisons and requires
+less editing, provided it does not introduce more unsupported facts.
 
 ## Repository map
 
 ```text
-data/
-  executive-writing/      program-specific data manifests and collection boundaries
-  raw/                    exact, pinned upstream source documents and licenses
-  content-foundation/     source documents with useful reasoning and decision content
-  style-references/       approved examples, candidate references, and house-style rules
-  voice-profiles/         versioned original voice definitions
-  derived/                generated supervised examples and immutable snapshots
-  schemas/                canonical provider-neutral record formats
-  sources.json            provenance, checksums, splits, and selection rationale
-docs/
-  DATASET_STRATEGY.md      collection, pairing, splitting, and evaluation plan
-  ANNOTATION_WORKFLOW.md   privacy, authoring, review, and snapshot runbook
-  goals/                   durable autonomous research goal
-evals/
-  executive-writing/      program-specific public, private, and human eval definitions
-infra/argilla/             pinned local annotation stack
-programs/executive-writing/ configs, manifests, experiment registry, and reports
-src/goodprose/             shared typed data, privacy, annotation, and snapshot tooling
-src/goodprose/executive_writing/ program-specific training, evaluation, and inference code
-tests/                     deterministic unit and schema tests
+data/posts/             imported canonical blog posts
+data/briefs.jsonl       reviewed inputs and split assignments
+data/pairs.jsonl        canonical source-to-target pairs
+data/sft/               generated training files
+evals/cases.jsonl       generated frozen test cases
+evals/results/           local model outputs and reviews
+src/goodprose/           importer, pair builder, exporter, and evaluator
+tests/                   deterministic unit tests
 ```
 
-To start the autonomous research program, paste the command from
-[`docs/goals/launch-executive-writing-model.md`](docs/goals/launch-executive-writing-model.md)
-into Codex. The short launcher points to the versioned scientific, safety,
-budget, autonomy, and completion contract in
-[`docs/goals/executive-writing-model.md`](docs/goals/executive-writing-model.md).
-Review and commit contract changes before starting or resuming a run.
-Program-specific work should stay inside the namespaces above unless a shared
-contract genuinely needs to change.
-
-## Evaluation philosophy
-
-Start with a strong prompted frontier-model baseline. Fine-tune only when a fixed, human-calibrated eval shows a meaningful improvement in consistency, editing effort, cost, latency, or local-model quality. See [`evals/RUBRIC.md`](evals/RUBRIC.md).
-
-## Licensing and privacy
-
-GoodProse's code is MIT-licensed. Files under `data/raw/` retain their upstream licenses; the root license does not relicense them. Public availability alone does not establish permission to redistribute text, derived datasets, or trained weights. Review [`data/NOTICE.md`](data/NOTICE.md), preserve source metadata, and prefer permissioned or organization-owned rough-to-final writing pairs.
-
-Internal notes, emails, and memos can contain credentials, personal data, financial information, and confidential strategy. Scan both annotation seeds and reviewed exports, and never commit private derived data.
+The previous executive-writing research program remains available in Git history and at the tag
+`archive/executive-writing-program-2026-08-31`.

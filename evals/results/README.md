@@ -1,3 +1,4 @@
-# Evaluation results
+# Local evaluation results
 
-Generated runs belong here and are ignored by Git. A durable run should record the model identifier, prompt/template revision, dataset revision, judge revision, per-case scores, failure gates, latency, and generation parameters.
+Model outputs, blind review packets, keys, and summaries live here and are ignored by default.
+Promote a result into Git only when it is useful and contains no sensitive text.

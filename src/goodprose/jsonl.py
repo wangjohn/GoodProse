@@ -1,4 +1,4 @@
-"""Deterministic JSON and JSONL helpers for GoodProse data."""
+"""Deterministic JSON and JSONL helpers."""
 
 from __future__ import annotations
 
@@ -6,19 +6,17 @@ import hashlib
 import json
 import os
 import tempfile
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ValidationError
 
+JsonRecord = BaseModel | Mapping[str, Any]
+
 
 class JsonlError(ValueError):
-    """A JSONL parsing or validation error with source location."""
-
-
-def sha256_bytes(value: bytes) -> str:
-    return hashlib.sha256(value).hexdigest()
+    """A JSONL record could not be parsed or validated."""
 
 
 def sha256_file(path: Path) -> str:
@@ -31,10 +29,6 @@ def sha256_file(path: Path) -> str:
 
 def canonical_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-
-
-def model_to_dict(model: BaseModel) -> dict[str, Any]:
-    return model.model_dump(mode="json", exclude_none=True)
 
 
 def load_jsonl[ModelT: BaseModel](path: Path, model_type: type[ModelT]) -> list[ModelT]:
@@ -54,16 +48,22 @@ def load_jsonl[ModelT: BaseModel](path: Path, model_type: type[ModelT]) -> list[
     return records
 
 
-def serialize_jsonl(records: Sequence[BaseModel]) -> bytes:
-    lines = [canonical_json(model_to_dict(record)) for record in records]
-    return (("\n".join(lines) + "\n") if lines else "").encode("utf-8")
+def _json_value(record: JsonRecord) -> Mapping[str, Any]:
+    if isinstance(record, BaseModel):
+        return record.model_dump(mode="json", exclude_none=True)
+    return record
+
+
+def serialize_jsonl(records: Sequence[JsonRecord]) -> bytes:
+    lines = [canonical_json(_json_value(record)) for record in records]
+    return ("\n".join(lines) + ("\n" if lines else "")).encode()
 
 
 def atomic_write(path: Path, data: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    file_descriptor, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    descriptor, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
     try:
-        with os.fdopen(file_descriptor, "wb") as temporary_file:
+        with os.fdopen(descriptor, "wb") as temporary_file:
             temporary_file.write(data)
             temporary_file.flush()
             os.fsync(temporary_file.fileno())
@@ -74,4 +74,4 @@ def atomic_write(path: Path, data: bytes) -> None:
 
 
 def atomic_write_json(path: Path, value: Any) -> None:
-    atomic_write(path, (json.dumps(value, indent=2, sort_keys=True) + "\n").encode("utf-8"))
+    atomic_write(path, (json.dumps(value, indent=2, sort_keys=True) + "\n").encode())
