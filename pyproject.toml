@@ -11,6 +11,17 @@ requires-python = ">=3.12"
 license = {file = "LICENSE"}
 dependencies = ["pydantic>=2.11,<3"]
 
+[project.optional-dependencies]
+train = [
+  "accelerate>=1.10,<2",
+  "datasets>=4,<5",
+  "peft>=0.17,<1",
+  "torch>=2.7,<3",
+  "transformers>=4.55,<6",
+  "trl>=0.21,<1",
+]
+train-4bit = ["bitsandbytes>=0.47,<1"]
+
 [dependency-groups]
 dev = [
   "pyright>=1.1.400,<2",

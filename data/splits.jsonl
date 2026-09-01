@@ -1,0 +1,22 @@
+{"version":1,"lineage_id":"cheap-software-wont-make-engineering-cheap","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: medium-length engineering opinion post."}
+{"version":1,"lineage_id":"external-ai-coding-interviews","split":"dev","frozen_at":"2026-09-01","rationale":"Development lineage with a recovered authentic draft: concise engineering-process argument with concrete interview observations."}
+{"version":1,"lineage_id":"external-better-rag","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: technical architecture explainer covering retrieval and infrastructure choices."}
+{"version":1,"lineage_id":"external-blocking-llms","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: very short opinion post with a direct argumentative style."}
+{"version":1,"lineage_id":"external-code-review-bottlenecks","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: recent engineering case study with operational metrics, architecture, rollout, costs, and caveats."}
+{"version":1,"lineage_id":"external-database-abstractions-golang","split":"test","frozen_at":"2026-09-01","rationale":"Held-out technical tutorial with a recovered authentic rough draft covering code, performance, and reusable abstractions."}
+{"version":1,"lineage_id":"external-llm-provider-fallbacks","split":"dev","frozen_at":"2026-09-01","rationale":"Development lineage with recovered author notes: production reliability architecture, tradeoffs, and evaluation strategy."}
+{"version":1,"lineage_id":"external-new-products-team","split":"test","frozen_at":"2026-09-01","rationale":"Held-out product-team narrative with a recovered authentic draft and unfinished outline."}
+{"version":1,"lineage_id":"external-product-lessons-dan-robinson","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: structured synthesis of product lessons and practical frameworks."}
+{"version":1,"lineage_id":"external-scaling-llms-golang","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: technical production explainer spanning types, concurrency, interfaces, and Python interop."}
+{"version":1,"lineage_id":"external-startup-journey","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: long personal narrative spanning career history, failure, company building, and reflective lessons."}
+{"version":1,"lineage_id":"external-stripe-customer-support","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: market thesis built through analogy, evidence, and founder experience."}
+{"version":1,"lineage_id":"external-tests-with-llms","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: practical engineering guide with prompts, examples, and operational cautions."}
+{"version":1,"lineage_id":"external-why-i-code-as-a-cto","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: personal leadership argument mixing concrete work examples with role philosophy."}
+{"version":1,"lineage_id":"five-opinions-on-building-things-well","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: multi-section evergreen engineering opinion post."}
+{"version":1,"lineage_id":"how-claude-watermarking-probably-works","split":"dev","frozen_at":"2026-09-01","rationale":"Development lineage: longest technical investigation with recovered authentic research and editing history."}
+{"version":1,"lineage_id":"learnings-from-the-codex-repo","split":"test","frozen_at":"2026-09-01","rationale":"Held-out technical investigation with a recovered target-blind research request and authoring trail."}
+{"version":1,"lineage_id":"mamba-3","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: concise technical explainer."}
+{"version":1,"lineage_id":"time","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: short personal essay with a different tone from the technical posts."}
+{"version":1,"lineage_id":"tokens-shouldnt-be-the-only-metric","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: short AI measurement argument."}
+{"version":1,"lineage_id":"why-are-executives-enamored-with-ai-but-ics-arent","split":"train","frozen_at":"2026-09-01","rationale":"Training lineage: organizational argument about AI adoption."}
+{"version":1,"lineage_id":"why-we-built-143","split":"test","frozen_at":"2026-09-01","rationale":"Held-out short product narrative with a recovered authentic rough draft and authoring request."}

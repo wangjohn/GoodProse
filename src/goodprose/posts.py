@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import re
+from datetime import date
 from pathlib import Path
+from string import Formatter
 from urllib.parse import urljoin
 
 from pydantic import ValidationError
@@ -58,7 +60,44 @@ def _markdown_paths(root: Path) -> list[Path]:
     return sorted(path for path in paths if not any(part.startswith(".") for part in path.parts))
 
 
-def import_posts(root: Path, output_path: Path, *, url_base: str | None = None) -> int:
+def _templated_url(template: str, post_id: str, metadata: dict[str, str]) -> str:
+    supported_fields = {"id", "slug", "year", "month", "day"}
+    fields = {field_name for _, field_name, _, _ in Formatter().parse(template) if field_name}
+    unsupported = fields - supported_fields
+    if unsupported:
+        raise PostImportError(
+            f"unsupported URL template field(s): {', '.join(sorted(unsupported))}"
+        )
+
+    published_date: date | None = None
+    raw_date = metadata.get("date") or metadata.get("published_at")
+    if fields & {"year", "month", "day"}:
+        if raw_date is None:
+            raise PostImportError(f"post {post_id!r} needs a date for the URL template")
+        try:
+            published_date = date.fromisoformat(raw_date[:10])
+        except ValueError as error:
+            raise PostImportError(
+                f"post {post_id!r} has an invalid date for the URL template: {raw_date!r}"
+            ) from error
+
+    slug = metadata.get("slug") or post_id
+    return template.format(
+        id=post_id,
+        slug=slug,
+        year=f"{published_date.year:04d}" if published_date else "",
+        month=f"{published_date.month:02d}" if published_date else "",
+        day=f"{published_date.day:02d}" if published_date else "",
+    )
+
+
+def import_posts(
+    root: Path,
+    output_path: Path,
+    *,
+    url_base: str | None = None,
+    url_template: str | None = None,
+) -> int:
     if not root.is_dir():
         raise PostImportError(f"Markdown input directory does not exist: {root}")
     paths = _markdown_paths(root)
@@ -82,8 +121,11 @@ def import_posts(root: Path, output_path: Path, *, url_base: str | None = None) 
         if not title:
             title = Path(relative_path).stem.replace("-", " ").replace("_", " ").strip().title()
         source_url = metadata.get("url") or metadata.get("source_url")
-        if source_url is None and url_base:
-            source_url = urljoin(url_base.rstrip("/") + "/", post_id + "/")
+        if source_url is None:
+            if url_template:
+                source_url = _templated_url(url_template, post_id, metadata)
+            elif url_base:
+                source_url = urljoin(url_base.rstrip("/") + "/", post_id + "/")
         lineage_id = metadata.get("series") or metadata.get("lineage_id") or post_id
 
         try:

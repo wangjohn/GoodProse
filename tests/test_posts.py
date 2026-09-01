@@ -48,3 +48,40 @@ def test_rejects_duplicate_post_ids(tmp_path: Path) -> None:
 
     with pytest.raises(PostImportError, match="duplicate post ID"):
         import_posts(source, tmp_path / "posts.jsonl")
+
+
+def test_builds_dated_url_from_front_matter_template(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    (source / "source-name.md").write_text(
+        "---\n"
+        "title: Templated post\n"
+        "slug: published-slug\n"
+        "date: 2026-03-07\n"
+        "---\n"
+        "Exact published body.\n",
+        encoding="utf-8",
+    )
+    output = tmp_path / "posts.jsonl"
+
+    import_posts(
+        source,
+        output,
+        url_template="https://example.com/post/{year}/{month}/{day}/{slug}/",
+    )
+
+    post = load_jsonl(output, BlogPost)[0]
+    assert str(post.source_url) == "https://example.com/post/2026/03/07/published-slug/"
+
+
+def test_rejects_unknown_url_template_field(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    (source / "post.md").write_text("# Post\n\nBody.\n", encoding="utf-8")
+
+    with pytest.raises(PostImportError, match="unsupported URL template field"):
+        import_posts(
+            source,
+            tmp_path / "posts.jsonl",
+            url_template="https://example.com/{unknown}/",
+        )
