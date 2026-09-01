@@ -147,7 +147,8 @@ uv run goodprose train-lora-plus --config configs/qwen3-8b-lora-plus.json
 For a lower-memory 4-bit run, also install `train-4bit`, then set `load_in_4bit` to `true` and
 `optimizer` to `adam8bit` in a copy of the config. Each completed run saves the adapter, tokenizer,
 trainer state, metrics, resolved model revisions, dependency versions, and input hashes under
-`runs/`. Keep the frozen test cases out of training and use the blind evaluator for the actual
+`runs/`. The starter run retains each of its three epoch checkpoints so they can be compared for
+overfitting. Keep the frozen test cases out of training and use the blind evaluator for the actual
 go/no-go decision.
 
 ## Repository map
