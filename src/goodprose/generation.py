@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+from collections.abc import Sequence
 from importlib import import_module
 from pathlib import Path
 from typing import Any
@@ -129,6 +130,13 @@ def generate_kwargs(decoding: DecodingSettings, tokenizer: Any) -> dict[str, Any
     if decoding.do_sample:
         kwargs["temperature"] = decoding.temperature
         kwargs["top_p"] = decoding.top_p
+    if decoding.banned_strings:
+        # Deployment preference (for example no em dashes). Off by default in evaluation so the
+        # review measures what the adapter learned rather than what decoding forbids.
+        kwargs["bad_words_ids"] = [
+            tokenizer(text, add_special_tokens=False)["input_ids"]
+            for text in decoding.banned_strings
+        ]
     return kwargs
 
 
@@ -146,6 +154,7 @@ def generate_eval_outputs(
     temperature: float = 0.7,
     top_p: float = 0.9,
     repetition_penalty: float = 1.05,
+    banned_strings: Sequence[str] = (),
 ) -> int:
     """Generate one response per frozen case with matched decoding and full provenance.
 
@@ -168,6 +177,7 @@ def generate_eval_outputs(
         repetition_penalty=repetition_penalty,
         max_new_tokens=max_new_tokens,
         seed=seed,
+        banned_strings=tuple(banned_strings),
     )
 
     config, plan = prepare_lora_plus_run(config_path)

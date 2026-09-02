@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "straight_quotes": true,
+  "asterisk_italics": true,
+  "heading_base_level": 1,
+  "substitutions": [
+    {
+      "version": 1,
+      "post_id": "cheap-software-wont-make-engineering-cheap",
+      "text": "<span class=\"no-math\">handmade suits, \\$200+ merino wool t-shirts, \\$5k+ jackets, etc.</span>",
+      "replacement": "handmade suits, $200+ merino wool t-shirts, $5k+ jackets, etc.",
+      "reason": "Hugo/KaTeX escape in the site source, not prose."
+    },
+    {
+      "version": 1,
+      "post_id": "external-stripe-customer-support",
+      "text": "\n\nGraph from From [https://www.digitalcommerce360.com/article/us-ecommerce-sales/](https://www.digitalcommerce360.com/article/us-ecommerce-sales/)",
+      "replacement": "",
+      "reason": "Image caption remnant left by the page snapshot, with a typo."
+    }
+  ]
+}

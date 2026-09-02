@@ -133,7 +133,15 @@ def test_build_external_posts_requires_approval_and_merges_base_posts(tmp_path: 
     output_path = tmp_path / "posts.jsonl"
     counts = build_external_posts(catalog_path, snapshot_root, output_path)
 
-    assert counts == {"base": 0, "external": 1, "total": 1}
+    assert counts == {
+        "base": 0,
+        "external": 1,
+        "manuscript_targets": 0,
+        "repaired_code_blocks": 0,
+        "unmatched_code_blocks": 0,
+        "heuristic_code_runs": 0,
+        "total": 1,
+    }
     posts = load_jsonl(output_path, BlogPost)
     assert posts[0].body_markdown == "Published external prose."
 
@@ -183,3 +191,76 @@ def test_build_authentic_eval_briefs_extracts_exact_line_range(tmp_path: Path) -
     brief = load_jsonl(output_path, Brief)[0]
     assert brief.input == "first draft line\nsecond draft line"
     assert brief.input_method is InputMethod.ORIGINAL_DRAFT
+
+
+def test_build_external_posts_repairs_code_and_uses_manuscript_targets(tmp_path: Path) -> None:
+    from goodprose.models import (
+        ExternalPlatform,
+        ExternalPostCatalog,
+        ExternalSourceMapping,
+        ExternalSourceStatus,
+    )
+
+    catalog_path = tmp_path / "catalog.jsonl"
+    snapshot_root = tmp_path / "snapshots"
+    source_root = tmp_path / "manuscripts"
+    source_map = tmp_path / "source-map.jsonl"
+    snapshot_root.mkdir()
+    source_root.mkdir()
+    entries = []
+    for post_id in ("external-repair", "external-manuscript"):
+        entries.append(
+            ExternalPostCatalog(
+                id=post_id,
+                lineage_id=post_id,
+                title=post_id,
+                platform=ExternalPlatform.MEDIUM,
+                source_url=AnyUrl(f"https://johnjianwang.medium.com/{post_id}"),
+                published_at=date(2023, 6, 30),
+                source_status=ExternalSourceStatus.PRIVATE_MARKDOWN_RECOVERED,
+                review_status=ReviewStatus.APPROVED,
+                notes="test",
+            )
+        )
+    atomic_write(catalog_path, serialize_jsonl(entries))
+    (snapshot_root / "external-repair.md").write_text(
+        "Title\n\nMarkdown Content:\nIntro prose.\n\ntype T struct {\n\n A int\n\n}\n\nOutro.\n"
+    )
+    (snapshot_root / "external-manuscript.md").write_text(
+        "Title\n\nMarkdown Content:\nEdited by someone else.\n"
+    )
+    (source_root / "repair.md").write_text(
+        "Intro prose.\n\n```go\ntype T struct {\n    A int\n}\n```\n\nOutro.\n"
+    )
+    (source_root / "manuscript.md").write_text("---\ntitle: M\n---\n\nThe author's own words.\n")
+    atomic_write(
+        source_map,
+        serialize_jsonl(
+            [
+                ExternalSourceMapping(post_id="external-repair", source_path="repair.md"),
+                ExternalSourceMapping(post_id="external-manuscript", source_path="manuscript.md"),
+            ]
+        ),
+    )
+    output = tmp_path / "posts.jsonl"
+
+    counts = build_external_posts(
+        catalog_path,
+        snapshot_root,
+        output,
+        source_map_path=source_map,
+        source_root=source_root,
+        repair_code=True,
+        manuscript_target_ids=["external-manuscript"],
+    )
+
+    assert counts["repaired_code_blocks"] == 1
+    assert counts["unmatched_code_blocks"] == 0
+    assert counts["heuristic_code_runs"] == 0
+    assert counts["manuscript_targets"] == 1
+    posts = {post.id: post for post in load_jsonl(output, BlogPost)}
+    assert posts["external-repair"].body_markdown == (
+        "Intro prose.\n\n```go\ntype T struct {\n    A int\n}\n```\n\nOutro."
+    )
+    assert posts["external-manuscript"].body_markdown == "The author's own words."
+    assert posts["external-manuscript"].source_path.startswith("external/blogposts-source/")

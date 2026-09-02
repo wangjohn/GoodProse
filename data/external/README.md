@@ -35,6 +35,14 @@ uv run goodprose build-external-samples \
 ```
 
 `build-external-posts` removes known Assembled/Medium page chrome and image-only lines without
-rewriting article prose. Catalog approval, snapshot presence, duplicate IDs, and base/external ID
+rewriting article prose. The page snapshots flattened fenced code into prose lines (and the
+Assembled ones dropped whitespace inside the code), so `--repair-code` with `--source-map` and
+`--source-root` splices the author manuscript's fenced blocks over any run of snapshot lines
+whose whitespace-stripped tokens match exactly, reporting blocks it could not place.
+`--fence-heuristic go` then fences any remaining run of code-looking lines (blank lines between
+them removed) as a fallback for blocks the manuscript did not match exactly; it cannot restore
+whitespace the snapshot dropped, so exact repair runs first. `--target-from-manuscript POST_ID`
+uses the manuscript body itself as the canonical target for posts where the published text
+carries an editor's pass. Catalog approval, snapshot presence, duplicate IDs, and base/external ID
 collisions are checked before output. The published snapshot is the exact completion source; the
 private manuscript is used only as an authentic input where a frozen held-out mapping selects it.

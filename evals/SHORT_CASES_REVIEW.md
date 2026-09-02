@@ -25,12 +25,14 @@ Candidates: 18
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.39 - precision 0.66 - window 246 words -> section 420 words - draft paragraphs 1..9
+`candidate` - recall 0.40 - precision 0.67 - window 246 words -> section 422 words - draft paragraphs 2..10
 
 ### Input
 
 ````text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: medium.com (2023)
 
 Blog post: Database abstractions for Golang
 
@@ -58,113 +60,85 @@ GetOrders() ([]Order, error) {
 
 ### Reference section
 
-```markdown
-At [Assembled](http://assembled.com/), we’ve been using Golang as our exclusive backend language since our founding in 2018. We run a pretty standard web application, but we found that accessing the database comes with its own particular set of challenges that haven’t been fully addressed by the Go standard library or community packages.
+````markdown
+At [Assembled](http://assembled.com/), we've been using Golang as our exclusive backend language since our founding in 2018. We run a pretty standard web application, but we found that accessing the database comes with its own particular set of challenges that haven't been fully addressed by the Go standard library or community packages.
 
-In this article, we’ll talk about 3 abstractions we’ve built at Assembled that make database access in Golang easier:
+In this article, we'll talk about 3 abstractions we've built at Assembled that make database access in Golang easier:
 
 *   An interface to share code between single- and multi-row getters
-*   A helper method to ensure you’re always handling errors and closing rows when scanning from the database
+*   A helper method to ensure you're always handling errors and closing rows when scanning from the database
 *   An interface to share code between transactions and non-transactions
 
-## Challenge 1: Writing performant, reusable SQL queries
+# Challenge 1: Writing performant, reusable SQL queries
 
-### The problem: Sharing code between single and multi-row getters
+## The problem: Sharing code between single and multi-row getters
 
-When we first started writing SQL queries, we dutifully wrote raw SQL like many Golang tutorials told us. But we soon ran into problems with this approach. Let’s say you’re writing an e-commerce application, then you might have the following method to get the information for a particular order:
+When we first started writing SQL queries, we dutifully wrote raw SQL like many Golang tutorials told us. But we soon ran into problems with this approach. Let's say you're writing an e-commerce application, then you might have the following method to get the information for a particular order:
 
+```go
 type Order struct {
-
  ID string
-
  ItemID string
-
  Price int
-
 }
 func GetOrder(id string) (*Order, error) {
-
  var order Order
-
 row := db.QueryRow("SELECT id, item_id, price FROM orders WHERE id = $1;", id)
-
  err := row.Scan(&order.ID, &order.ItemID, &order.Price)
-
  if err != nil {
-
  return nil, err
-
  }
-
  return &order, nil
-
 }
+```
 
 This is great if you only need to get one order, but what if you want to implement a page where a customer can see all their orders and now you need to add a method to fetch multiple orders? The easiest way to reuse your old code is by getting all the order ids that match and then reusing that original method that you wrote for `GetOrder()`.
 
+```go
 func GetAllOrders() ([]Order, error) {
-
  rows, err := db.QueryRows("SELECT id FROM orders;")
-
  if err != nil {
-
  return nil, err
-
  }
-
  defer rows.Close()
 var ids []string
-
  for rows.Next() {
-
  var id string
-
  if err := rows.Scan(&id); err != nil {
-
  return nil, err
-
  }
-
  ids = append(ids, id)
-
  }
-
 var orders []Order
-
  for _, id := range ids {
-
  order, err := GetOrder(id)
-
  if err != nil {
-
  return nil, err
-
  }
-
  orders = append(orders, order)
-
  }
-
  return orders, nil
-
 }
+```
 
-The problem with the above is that you’re now making `O(# of orders)`queries. This is expensive and non-performant because:
+The problem with the above is that you're now making `O(# of orders)`queries. This is expensive and non-performant because:
 
 *   Postgres has to parse and generate a query plan for every query
-*   You’ll add the packet roundtrip time from your webserver to the database to every request, which can blow up very quickly if you have lots of requests [0].
-```
+*   You'll add the packet roundtrip time from your webserver to the database to every request, which can blow up very quickly if you have lots of requests [0].
+````
 
 ## external-database-abstractions-golang--002--short
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.61 - precision 0.90 - window 230 words -> section 341 words - draft paragraphs 13..21
+`candidate` - recall 0.63 - precision 0.93 - window 230 words -> section 342 words - draft paragraphs 14..22
 
 ### Input
 
 ````text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: medium.com (2023)
 
 Blog post: Database abstractions for Golang
 
@@ -198,104 +172,73 @@ Now the total time to run `GetOrders` is just the roundtrip time to your databas
 
 ### Reference section
 
-```markdown
-### The solution: Create an abstraction for scanning a database row
+````markdown
+## The solution: Create an abstraction for scanning a database row
 
-To solve this problem at Assembled, we introduced an abstraction for scans. The important insight here is to realize that whether you’re scanning a single database row or multiple database rows, you should be performing the same operations. You always want to populate the same fields on an `Order` every time you pull one out of the database (whether you’re fetching one order or multiple). So we created a `Scannable` interface that hides the way in which you’re fetching a database row.
+To solve this problem at Assembled, we introduced an abstraction for scans. The important insight here is to realize that whether you're scanning a single database row or multiple database rows, you should be performing the same operations. You always want to populate the same fields on an `Order` every time you pull one out of the database (whether you're fetching one order or multiple). So we created a `Scannable` interface that hides the way in which you're fetching a database row.
 
+```
 type Scannable interface {
-
- Scan(dest ...interface{}) error
-
+  Scan(dest ...interface{}) error
 }
-Now, you can pass in either `sql.Row` or `sql.Rows` into a single method and perform the same operation. Here’s an example of how you might use the `Scannable` interface to reuse code:
+```
+Now, you can pass in either `sql.Row` or `sql.Rows` into a single method and perform the same operation. Here's an example of how you might use the `Scannable` interface to reuse code:
 
+```go
 var orderAttributes = []string{
-
  "id",
-
  "item_id",
-
  "price",
-
 }
 func ScanOrder(row Scannable) (*Order, error) {
-
  var order Order
-
 err := row.Scan(&order.ID, &order.ItemID, &order.Price)
-
  if err != nil {
-
  return nil, err
-
  }
-
  return &order, nil
-
 }
-
 func GetOrder(id string) (*Order, error) {
-
  query := fmt.Sprintf("SELECT %s FROM orders WHERE id = $1;",
-
  strings.Join(orderAttributes, ","))
-
 row := db.QueryRow(query, id)
-
  return ScanOrder(row)
-
 }
-
 func GetOrders(ids []string) ([]Order, error) {
-
  query := fmt.Sprintf("SELECT %s FROM orders WHERE id = ANY($1);",
-
  strings.Join(orderAttributes, ","))
-
 rows, err := db.Query(query, pq.Array(ids))
-
  if err != nil {
-
  return nil, err
-
  }
-
  defer rows.Close()
-
 var orders []Order
-
  for rows.Next() {
-
  order, err := ScanOrder(rows)
-
  if err != nil {
-
  return nil, err
-
  }
-
  orders = append(orders, *order)
-
  }
-
  return orders, nil
-
 }
-
-Now the total time to run `GetOrders` is just a single roundtrip time to your database plus the time it takes to select your matching orders and return them from Postgres. In addition to the query speed improvements, you’ve reduced the number of database queries to a constant number for each `GetOrders` call and significantly decreased database load. Finally, you’ve also made the code easier to reason about and refactor because there is only a single point of entry when you update an attribute on the `Order` struct.
 ```
+
+Now the total time to run `GetOrders` is just a single roundtrip time to your database plus the time it takes to select your matching orders and return them from Postgres. In addition to the query speed improvements, you've reduced the number of database queries to a constant number for each `GetOrders` call and significantly decreased database load. Finally, you've also made the code easier to reason about and refactor because there is only a single point of entry when you update an attribute on the `Order` struct.
+````
 
 ## external-database-abstractions-golang--003--short
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.38 - precision 0.70 - window 200 words -> section 371 words - draft paragraphs 27..35
+`candidate` - recall 0.38 - precision 0.71 - window 200 words -> section 373 words - draft paragraphs 28..36
 
 ### Input
 
 ````text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: medium.com (2023)
 
 Blog post: Database abstractions for Golang
 
@@ -335,139 +278,99 @@ This function actually had a couple of extra convenience pieces too -- previousl
 
 ### Reference section
 
-```markdown
-## Challenge 2: Remembering to close a set of rows
+````markdown
+# Challenge 2: Remembering to close a set of rows
 
-### The problem: At some point, you’re going to forget to close your rows
+## The problem: At some point, you're going to forget to close your rows
 
 > Nothing is certain, except death, taxes, and forgetting to close your rows.
 >
 >  — Benjamin Franklin (probably)
 
-One of the nasty things about Golang’s SQL driver is the mandatory call to`rows.Close()` after completion which releases your connection back into your pool. Failure to call this method results in increased latency, escalating connection pool sizes, and in the worst-case scenario, outages during holidays when no one is deploying.
+One of the nasty things about Golang's SQL driver is the mandatory call to`rows.Close()` after completion which releases your connection back into your pool. Failure to call this method results in increased latency, escalating connection pool sizes, and in the worst-case scenario, outages during holidays when no one is deploying.
 
-Unfortunately, this is one of the hardest problems to debug if you don’t know what you’re looking for. You have to step through a giant codebase, looking for those places where someone forgot to call `rows.Close()`. Let me tell you — it’s not easy to find these instances.
+Unfortunately, this is one of the hardest problems to debug if you don't know what you're looking for. You have to step through a giant codebase, looking for those places where someone forgot to call `rows.Close()`. Let me tell you — it's not easy to find these instances.
 
-### The solution: A helper method where you can’t forget
+## The solution: A helper method where you can't forget
 
 How did we fix this problem at Assembled? We had weekly trainings to remind everyone to never ever ever forget to call `defer rows.Close()` and publicly shamed engineers who still forgot.
 
 Just kidding — we created a better abstraction via the `ScanRows` helper method:
 
+```go
 type Rows interface {
-
  Close() error
-
  Err() error
-
  Next() bool
-
  Scan(dest ...interface{}) error
-
 }
 func ScanRows(r Rows, scanFunc func(row Scannable) error) error {
-
  var closeErr error
-
  defer func() {
-
  if err := r.Close(); err != nil {
-
  closeErr = err
-
  }
-
  }()
-
 var scanErr error
-
  for r.Next() {
-
  err := scanFunc(r)
-
  if err != nil {
-
  scanErr = err
-
  break
-
  }
-
  }
-
  if r.Err() != nil {
-
  return r.Err()
-
  }
-
  if scanErr != nil {
-
  return scanErr
-
  }
-
 return closeErr
-
-}
-
-Notice that `ScanRows` will always close the rows after it’s finished with them. The function has an added convenience benefit too: it contains error handling that previously was copy pasted over and over again by every engineer.
-
-Here’s how it would work in our `GetOrders` function:
-
-func GetOrders(ids []string) ([]Order, error) {
-
- query := fmt.Sprintf("SELECT %s FROM orders WHERE id = ANY($1);",
-
- strings.Join(orderAttributes, ","))
-rows, err := db.Query(query, pq.Array(ids))
-
- if err != nil {
-
- return nil, err
-
- }
-
-var orders []Order
-
- err := models.ScanRows(rows, func(row Scannable) error) error {
-
- order, err := ScanOrder(rows)
-
- if err != nil {
-
- return err
-
- }
-
- orders = append(orders, *order)
-
- return nil
-
- })
-
- if err != nil {
-
- return nil, err
-
- }
-
-return orders, nil
-
 }
 ```
+
+Notice that `ScanRows` will always close the rows after it's finished with them. The function has an added convenience benefit too: it contains error handling that previously was copy pasted over and over again by every engineer.
+
+Here's how it would work in our `GetOrders` function:
+
+```go
+func GetOrders(ids []string) ([]Order, error) {
+ query := fmt.Sprintf("SELECT %s FROM orders WHERE id = ANY($1);",
+ strings.Join(orderAttributes, ","))
+rows, err := db.Query(query, pq.Array(ids))
+ if err != nil {
+ return nil, err
+ }
+var orders []Order
+ err := models.ScanRows(rows, func(row Scannable) error) error {
+ order, err := ScanOrder(rows)
+ if err != nil {
+ return err
+ }
+ orders = append(orders, *order)
+ return nil
+ })
+ if err != nil {
+ return nil, err
+ }
+return orders, nil
+}
+```
+````
 
 ## external-database-abstractions-golang--004--short
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.33 - precision 0.60 - window 229 words -> section 418 words - draft paragraphs 38..46  
+`candidate` - recall 0.33 - precision 0.61 - window 229 words -> section 420 words - draft paragraphs 39..47  
 Note: weak alignment (recall 0.33); rewrite the input by hand from the draft or reject
 
 ### Input
 
 ````text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: medium.com (2023)
 
 Blog post: Database abstractions for Golang
 
@@ -505,148 +408,101 @@ It's really hard to reuse your `StoreOrder` method and you actually end up copy/
 
 ### Reference section
 
-```markdown
-## Challenge 3: Reusing queries inside of transactions
+````markdown
+# Challenge 3: Reusing queries inside of transactions
 
-### The problem: Sharing SQL between transactions and non-transactions
+## The problem: Sharing SQL between transactions and non-transactions
 
-Let’s say you just wrote a method to store an `Order` into your database:
+Let's say you just wrote a method to store an `Order` into your database:
 
+```go
 func StoreOrder(db *sql.DB, order Order) error {
-
  _, err := db.Exec("INSERT INTO orders (item_id, price) VALUES ($1, $2)",
-
  order.ItemID,
-
  order.Price,
-
  )
-
  if err != nil {
-
  return err
-
  }
 return nil
-
 }
+```
 
 There are a couple of ways you might want to call this method:
 
-1.   Use `StoreOrder` directly. For example, if you’re syncing orders from Stripe
+1.   Use `StoreOrder` directly. For example, if you're syncing orders from Stripe
 2.   Use `StoreOrder` in conjunction with other database methods. For example, if someone makes a purchase on your site, you want to store both payment information and order information at the same time
 
-In case 1, you don’t want to store orders in a transaction — long running transactions can be bad for database performance, so you can simply use your `StoreOrder` method that you’ve already written. But in case 2, you do want to store your order in a transaction, so you have to add some additional code. Here’s what it ends up looking like:
+In case 1, you don't want to store orders in a transaction — long running transactions can be bad for database performance, so you can simply use your `StoreOrder` method that you've already written. But in case 2, you do want to store your order in a transaction, so you have to add some additional code. Here's what it ends up looking like:
 
+```go
 func StoreOrder(db *sql.DB, order Order) error {
-
  _, err := db.Exec("INSERT INTO orders (item_id, price) VALUES ($1, $2)",
-
  order.ItemID,
-
  order.Price,
-
  )
-
  if err != nil {
-
  return err
-
  }
 return nil
-
 }
-
 func StoreOrderTx(tx sql.Tx, order Order) (*Order, error) {
-
  _, err := tx.Exec("INSERT INTO orders (item_id, price) VALUES ($1, $2)",
-
  order.ItemID,
-
  order.Price,
-
  )
-
  if err != nil {
-
  return err
-
  }
-
 return nil
-
 }
-
 func SyncOrderFromStripe(db *sql.DB, stripeID string) (*Order, error) {
-
  stripeOrder, err := stripeClient.Get(stripeID)
-
  if err != nil {
-
  return err
-
  }
-
  order := Order{ItemID: stripeOrder.Items[0].ID, Price: stripeOrder.Amount}
-
  return StoreOrder(db, order)
-
 }
-
 func StoreOrderAndPayment(db *sql.DB, order Order, payment Payment) (*Order, *Payment, error) {
-
  tx, err := db.Begin()
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
 storedOrder, err := StoreOrderTx(tx, order)
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
  storedPayment, err := StorePaymentTx(tx, payment)
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
 err = tx.Commit()
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
  return storedOrder, storedPayment, nil
-
 }
+```
 
 Notice that you have to basically copy everything inside of `StoreOrder` into `StoreOrderTx` with the only difference being that in the former you run the method on `sql.DB` whereas in the latter you run it on `sql.Tx`.
 
-This is a lot of unfortunate code copying, and if you change any attribute in `Order`, you have to remember to update both `StoreOrder` and `StoreOrderTx`. And let’s face it, at some point someone is going to forget and cause a bug.
-```
+This is a lot of unfortunate code copying, and if you change any attribute in `Order`, you have to remember to update both `StoreOrder` and `StoreOrderTx`. And let's face it, at some point someone is going to forget and cause a bug.
+````
 
 ## external-database-abstractions-golang--005--short
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.12 - precision 0.20 - window 152 words -> section 258 words - draft paragraphs 28..35  
+`candidate` - recall 0.12 - precision 0.20 - window 152 words -> section 260 words - draft paragraphs 29..36  
 Note: weak alignment (recall 0.12); rewrite the input by hand from the draft or reject
 
 ### Input
 
 ````text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: medium.com (2023)
 
 Blog post: Database abstractions for Golang
 
@@ -684,108 +540,75 @@ This function actually had a couple of extra convenience pieces too -- previousl
 
 ### Reference section
 
-```markdown
-### The solution: Interface for database-like objects and a helper for transactions
+````markdown
+## The solution: Interface for database-like objects and a helper for transactions
 
-Instead of copying code, notice that the `StoreOrder` method doesn’t really care whether it’s operating on `sql.DB` or `sql.Tx`, it just cares that it can write to the database. This is a perfect time to bring in the `Database` abstraction to hide this away:
+Instead of copying code, notice that the `StoreOrder` method doesn't really care whether it's operating on `sql.DB` or `sql.Tx`, it just cares that it can write to the database. This is a perfect time to bring in the `Database` abstraction to hide this away:
 
+```go
 type Database interface {
-
  Query(query string, args ...interface{}) (*sql.Rows, error)
-
  QueryRow(query string, args ...interface{}) *sql.Row
-
  Exec(query string, args ...interface{}) (sql.Result, error)
-
 }
+```
 Now you can delete your `StoreOrderTx` method because both `sql.DB` and `sql.Tx` will implement the `Database` interface, which can greatly simplify your code:
 
+```go
 func StoreOrder(db Database, order Order) error {
-
  _, err := db.Exec("INSERT INTO orders (item_id, price) VALUES ($1, $2)",
-
  order.ItemID,
-
  order.Price,
-
  )
-
  if err != nil {
-
  return err
-
  }
 return nil
-
 }
-
 func SyncOrderFromStripe(db *sql.DB, stripeID string) (*Order, error) {
-
  stripeOrder, err := stripeClient.Get(stripeID)
-
  if err != nil {
-
  return err
-
  }
-
  order := Order{ItemID: stripeOrder.Items[0].ID, Price: stripeOrder.Amount}
-
  return StoreOrder(db, order)
-
 }
-
 func StoreOrderAndPayment(db *sql.DB, order Order, payment Payment) (*Order, *Payment, error) {
-
  tx, err := db.Begin()
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
 storedOrder, err := StoreOrder(tx, order)
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
  storedPayment, err := StorePayment(tx, payment)
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
 err = tx.Commit()
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
  return storedOrder, storedPayment, nil
-
 }
-
-The `Database` abstraction allows you to create methods for storing and getting from the database that don’t care whether they’re used in a transaction or not.
 ```
+
+The `Database` abstraction allows you to create methods for storing and getting from the database that don't care whether they're used in a transaction or not.
+````
 
 ## external-new-products-team--001--short
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.85 - precision 0.82 - window 432 words -> section 436 words - draft paragraphs 1..8
+`candidate` - recall 0.83 - precision 0.80 - window 432 words -> section 436 words - draft paragraphs 2..9
 
 ### Input
 
 ```text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: medium.com (2023)
 
 Blog post: How we Built Assembled's New Products Team
 
@@ -808,35 +631,37 @@ That’s why we also do support takeovers: our team of 4 takes full responsibili
 ### Reference section
 
 ```markdown
-Four months ago, we embarked on a journey to create a new AI-powered product at [Assembled](https://www.assembled.com/). While there are many ways to launch a new product at a Series-B company, we decided to create a “startup within a startup” and put the team through a modified version of [YCombinator](https://www.ycombinator.com/) (YC). We had 3 months of intense building and a demo day at the end. Though we knew these initiatives don’t always pan out, I wanted to recreate the early startup atmosphere that I had experienced when founding Assembled in 2018 and when I was a [YC founder](https://www.linkedin.com/in/johnjianwang/) back in 2014.
+Four months ago, we embarked on a journey to create a new AI-powered product at [Assembled](https://www.assembled.com/). While there are many ways to launch a new product at a Series-B company, we decided to create a "startup within a startup" and put the team through a modified version of [YCombinator](https://www.ycombinator.com/) (YC). We had 3 months of intense building and a demo day at the end. Though we knew these initiatives don't always pan out, I wanted to recreate the early startup atmosphere that I had experienced when founding Assembled in 2018 and when I was a [YC founder](https://www.linkedin.com/in/johnjianwang/) back in 2014.
 
-So we formed the New Products Team to build something that enhanced the efficiency of customer support agents. Here’s how we approached our mission:
+So we formed the New Products Team to build something that enhanced the efficiency of customer support agents. Here's how we approached our mission:
 
-The New Products Team at work in “the dungeon”. Kaytlin made sure we hung up the “Live, laugh, love” sign.
+The New Products Team at work in "the dungeon". Kaytlin made sure we hung up the "Live, laugh, love" sign.
 
-## Talk to users
+# Talk to users
 
-A classic YC mantra says that the two most important tasks at a small startup are to [**write code and talk to users**](https://www.ycombinator.com/library/4D-yc-s-essential-startup-advice)**.** We took that to heart, especially the “talk to users” part.
+A classic YC mantra says that the two most important tasks at a small startup are to [**write code and talk to users**](https://www.ycombinator.com/library/4D-yc-s-essential-startup-advice)**.** We took that to heart, especially the "talk to users" part.
 
-Since we’re building for support teams, we focused really heavily on listening and interacting with support agents and managers. We’ve done many dozens of shadowing sessions where we watch a support agent work. These shadow sessions really enhanced our knowledge of agent workflows, but there’s still a barrier of observability where you’re not actually on the hook to finish out a support ticket and you don’t have to deal with the consequences of your replies.
+Since we're building for support teams, we focused really heavily on listening and interacting with support agents and managers. We've done many dozens of shadowing sessions where we watch a support agent work. These shadow sessions really enhanced our knowledge of agent workflows, but there's still a barrier of observability where you're not actually on the hook to finish out a support ticket and you don't have to deal with the consequences of your replies.
 
-That’s why we also do support takeovers: our team of 4 takes full responsibility of support for a few days and relieves the Assembled customer support team so they can work on other projects. These sessions really helped hone our thinking of what it’s like to literally be a support agent.
+That's why we also do support takeovers: our team of 4 takes full responsibility of support for a few days and relieves the Assembled customer support team so they can work on other projects. These sessions really helped hone our thinking of what it's like to literally be a support agent.
 
-By being the backstop for Assembled customers, we started to understand small intricacies about a support agent’s day to day that would be difficult observe passively. It’s hard to fathom how much context switching support agents do until you actually run into a ticket that requires the internal admin dashboard, the metrics dashboard, a help center article, and 3 other tabs open to solve. It’s also hard to understand the cognitive load it takes to write an empathetic reply until you spend 5 minutes rewriting the last paragraph over and over again.
+By being the backstop for Assembled customers, we started to understand small intricacies about a support agent's day to day that would be difficult observe passively. It's hard to fathom how much context switching support agents do until you actually run into a ticket that requires the internal admin dashboard, the metrics dashboard, a help center article, and 3 other tabs open to solve. It's also hard to understand the cognitive load it takes to write an empathetic reply until you spend 5 minutes rewriting the last paragraph over and over again.
 
-The team talking to users: we’re very heavy on our usage of hand gestures and phone booths.
+The team talking to users: we're very heavy on our usage of hand gestures and phone booths.
 ```
 
 ## external-new-products-team--002--short
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.96 - precision 0.90 - window 357 words -> section 337 words - draft paragraphs 8..12
+`candidate` - recall 0.93 - precision 0.88 - window 357 words -> section 337 words - draft paragraphs 9..13
 
 ### Input
 
 ```text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: medium.com (2023)
 
 Blog post: How we Built Assembled's New Products Team
 
@@ -854,15 +679,15 @@ The dungeon did a few things for us:
 ### Reference section
 
 ```markdown
-## One room, one team
+# One room, one team
 
-A core belief we held throughout our time was that everyone on the team would be in person, 5 days a week. We ended up commandeering a conference room for the team and we set up a little pod of desks. We even bought a professional sound system with an amplifier to blast electronic music as we were working [0]. We nicknamed it “the dungeon.”
+A core belief we held throughout our time was that everyone on the team would be in person, 5 days a week. We ended up commandeering a conference room for the team and we set up a little pod of desks. We even bought a professional sound system with an amplifier to blast electronic music as we were working [0]. We nicknamed it "the dungeon."
 
 The dungeon did a few things for us:
 
-*   **It made changes in direction easier and faster.** Early in our journey, we were making micro-pivots to our strategy every few hours. One hour, we’d be working on a settings page, and the next hour, we’d realize we didn’t really need that setting to be customer visible, so we’d only make it a backend configuration. We were also making larger pivots to strategy every few days. For example, should we investigate that sales use case that came up in our call? Being in person let us brainstorm and adapt quickly to new information and ideas, especially since our strategy was constantly shifting.
-*   **It helped separate us from the rest of the company.** Everyone on the team had expertise in Assembled’s core product of workforce management. However, we needed space to think deeply about our new product, and our separate room helped make clear that we were focusing on a new problem and allowed us to set more specific times on when we’d work on Assembled’s core product.
-*   **Most importantly, it was way more fun.** There’s something magical about working and goofing off late into the night in a small room. It makes you feel really connected to the people you’re working with. Disagreements were addressed more candidly, ideas were shared more freely, and the team grew closer. This connection translated into a more cohesive vision and execution of our goals, making “the dungeon” not just a place, but a symbol of our team’s identity and mission.
+*   **It made changes in direction easier and faster.** Early in our journey, we were making micro-pivots to our strategy every few hours. One hour, we'd be working on a settings page, and the next hour, we'd realize we didn't really need that setting to be customer visible, so we'd only make it a backend configuration. We were also making larger pivots to strategy every few days. For example, should we investigate that sales use case that came up in our call? Being in person let us brainstorm and adapt quickly to new information and ideas, especially since our strategy was constantly shifting.
+*   **It helped separate us from the rest of the company.** Everyone on the team had expertise in Assembled's core product of workforce management. However, we needed space to think deeply about our new product, and our separate room helped make clear that we were focusing on a new problem and allowed us to set more specific times on when we'd work on Assembled's core product.
+*   **Most importantly, it was way more fun.** There's something magical about working and goofing off late into the night in a small room. It makes you feel really connected to the people you're working with. Disagreements were addressed more candidly, ideas were shared more freely, and the team grew closer. This connection translated into a more cohesive vision and execution of our goals, making "the dungeon" not just a place, but a symbol of our team's identity and mission.
 
 Jason and Nelson discussing data science techniques. More keyboards mean we can ship faster.
 ```
@@ -871,13 +696,15 @@ Jason and Nelson discussing data science techniques. More keyboards mean we can 
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`rejected` - recall 1.00 - precision 1.00 - window 343 words -> section 342 words - draft paragraphs 12..17  
-Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
+`candidate` - recall 0.98 - precision 0.98 - window 343 words -> section 342 words - draft paragraphs 13..18  
+Note: near-verbatim draft; this is a polish case that tests leaving good prose alone, not voice
 
 ### Input
 
 ```text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: medium.com (2023)
 
 Blog post: How we Built Assembled's New Products Team
 
@@ -895,28 +722,30 @@ We continued to have many more existential crises. In fact, if we went a week or
 ### Reference section
 
 ```markdown
-## Existential crisis? That’s a feature, not a bug
+# Existential crisis? That's a feature, not a bug
 
-On our fourth day working together, I made an announcement to the team: what we were doing wasn’t working. We had started out writing code 12 hours a day based on a cool prototype. This prototype wowed our executives, so we jumped into building a real version. But I realized that we had already broken the first rule of startups: you have to build something people want.
+On our fourth day working together, I made an announcement to the team: what we were doing wasn't working. We had started out writing code 12 hours a day based on a cool prototype. This prototype wowed our executives, so we jumped into building a real version. But I realized that we had already broken the first rule of startups: you have to build something people want.
 
-We hadn’t yet validated the problem and we hadn’t spoken to users about what their problems were. So we went back to the drawing board and focused exclusively on booking user interviews. We ended up doing ten user interviews the next week. Happily, three of these turned into sales calls and would eventually be our first three users.
+We hadn't yet validated the problem and we hadn't spoken to users about what their problems were. So we went back to the drawing board and focused exclusively on booking user interviews. We ended up doing ten user interviews the next week. Happily, three of these turned into sales calls and would eventually be our first three users.
 
-Another existential crisis occurred the week after we had launched to two large teams. During launch week, we saw all of our metrics skyrocket — we were hitting all time highs for number of power users, messages sent, and daily actives. But the week after, usage dropped like a ton of bricks. We sat down as a team and tried to introspect what had gone wrong. We realized that this skyrocketing usage was merely people testing our product, and we still weren’t sticky enough to keep users. We needed to keep adding functionality and value before we could keep these users, so we threw out our plans to make it easier to onboard onto the product, and instead focused exclusively on making the product itself more valuable for existing users.
+Another existential crisis occurred the week after we had launched to two large teams. During launch week, we saw all of our metrics skyrocket — we were hitting all time highs for number of power users, messages sent, and daily actives. But the week after, usage dropped like a ton of bricks. We sat down as a team and tried to introspect what had gone wrong. We realized that this skyrocketing usage was merely people testing our product, and we still weren't sticky enough to keep users. We needed to keep adding functionality and value before we could keep these users, so we threw out our plans to make it easier to onboard onto the product, and instead focused exclusively on making the product itself more valuable for existing users.
 
-We continued to have many more existential crises. In fact, if we went a week or two without one, we’d start to get worried and introspect if we were being honest enough with ourselves. These existential crises are a feature of startups though — you only lose your existential angst once you find product market fit and a repeatable business model. By design, we were always questioning whether our product provided sufficient value and always introspecting how to add more value.
+We continued to have many more existential crises. In fact, if we went a week or two without one, we'd start to get worried and introspect if we were being honest enough with ourselves. These existential crises are a feature of startups though — you only lose your existential angst once you find product market fit and a repeatable business model. By design, we were always questioning whether our product provided sufficient value and always introspecting how to add more value.
 ```
 
 ## learnings-from-the-codex-repo--001--short
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`rejected` - recall 1.00 - precision 1.00 - window 336 words -> section 341 words - draft paragraphs 0..5  
+`rejected` - recall 1.00 - precision 1.00 - window 336 words -> section 341 words - draft paragraphs 1..6  
 Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
 
 ### Input
 
 ```text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: johnjwang.com (2026)
 
 Blog post: Learnings from the Codex repo
 
@@ -953,12 +782,14 @@ My immediate observation is that Codex has seen a step change increase in PRs pe
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.91 - precision 0.92 - window 274 words -> section 289 words - draft paragraphs 27..33
+`candidate` - recall 0.91 - precision 0.92 - window 274 words -> section 289 words - draft paragraphs 28..34
 
 ### Input
 
 ```text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: johnjwang.com (2026)
 
 Blog post: Learnings from the Codex repo
 
@@ -1010,13 +841,15 @@ With that many more people and agents changing the code at the same time, the ru
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 1.00 - precision 1.00 - window 339 words -> section 391 words - draft paragraphs 5..12  
-Note: near-verbatim draft; this is a polish case that tests leaving good prose alone, not voice
+`rejected` - recall 1.00 - precision 1.00 - window 339 words -> section 391 words - draft paragraphs 6..13  
+Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
 
 ### Input
 
 ```text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: johnjwang.com (2026)
 
 Blog post: Learnings from the Codex repo
 
@@ -1057,13 +890,15 @@ There are five rules in particular that I found interesting:
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.99 - precision 1.00 - window 311 words -> section 320 words - draft paragraphs 13..21  
+`candidate` - recall 0.99 - precision 1.00 - window 311 words -> section 320 words - draft paragraphs 14..22  
 Note: near-verbatim draft; this is a polish case that tests leaving good prose alone, not voice
 
 ### Input
 
 ````text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: johnjwang.com (2026)
 
 Blog post: Learnings from the Codex repo
 
@@ -1126,13 +961,15 @@ Codex has 38 lint rules, and I think it's part of what makes the repo easier to 
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`rejected` - recall 1.00 - precision 1.00 - window 391 words -> section 391 words - draft paragraphs 21..27  
+`rejected` - recall 1.00 - precision 1.00 - window 391 words -> section 391 words - draft paragraphs 22..28  
 Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
 
 ### Input
 
 ```text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: johnjwang.com (2026)
 
 Blog post: Learnings from the Codex repo
 
@@ -1169,13 +1006,15 @@ Basically, Codex has set up their environment so only relevant tests are run whi
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`rejected` - recall 1.00 - precision 1.00 - window 207 words -> section 235 words - draft paragraphs 33..37  
+`rejected` - recall 1.00 - precision 1.00 - window 207 words -> section 235 words - draft paragraphs 34..38  
 Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
 
 ### Input
 
 ```text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: johnjwang.com (2026)
 
 Blog post: Learnings from the Codex repo
 
@@ -1204,12 +1043,14 @@ Two weeks later, they added a [CI rule preventing the TUI from importing `codex-
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.91 - precision 0.64 - window 247 words -> section 175 words - draft paragraphs 37..41
+`candidate` - recall 0.91 - precision 0.64 - window 247 words -> section 175 words - draft paragraphs 38..42
 
 ### Input
 
 ```text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: johnjwang.com (2026)
 
 Blog post: Learnings from the Codex repo
 
@@ -1236,7 +1077,7 @@ The interesting thing is that at least for the Codex team, as implementation got
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.06 - precision 0.17 - window 65 words -> section 205 words - draft paragraphs 4..5  
+`candidate` - recall 0.06 - precision 0.17 - window 65 words -> section 205 words - draft paragraphs 5..6  
 Note: author-edited input (aligned window had recall 0.06, precision 0.17)
 
 ### Input
@@ -1273,7 +1114,7 @@ At Assembled, we saw this firsthand: our support and product teams kept surfacin
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.16 - precision 0.39 - window 96 words -> section 227 words - draft paragraphs 2..3  
+`candidate` - recall 0.16 - precision 0.39 - window 96 words -> section 227 words - draft paragraphs 3..4  
 Note: author-edited input (aligned window had recall 0.16, precision 0.39)
 
 ### Input
@@ -1316,7 +1157,7 @@ We built 143 so the person who spots the bug doesn't need to become an engineer 
 
 System prompt: `1795d08ccae9` (the one quoted above)
 
-`candidate` - recall 0.42 - precision 0.37 - window 203 words -> section 184 words - draft paragraphs 3..4  
+`candidate` - recall 0.42 - precision 0.37 - window 203 words -> section 184 words - draft paragraphs 4..5  
 Note: author-edited input (aligned window had recall 0.42, precision 0.37)
 
 ### Input

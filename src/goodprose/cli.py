@@ -20,6 +20,7 @@ from goodprose.generation import GenerationError, generate_eval_outputs
 from goodprose.jsonl import JsonlError
 from goodprose.judge import build_judge_packet, summarize_judge_verdicts
 from goodprose.models import SystemLabel
+from goodprose.normalize import NormalizeError, normalize_posts
 from goodprose.pairs import PairBuildError, build_pairs
 from goodprose.posts import PostImportError, import_posts
 from goodprose.preference import PreferenceBuildError, build_preference_pairs
@@ -31,6 +32,7 @@ from goodprose.prompts import (
     build_prompt_review,
 )
 from goodprose.proxy import ProxyError, proxy_report
+from goodprose.roles import RolesError
 from goodprose.scoring import ScoringError, score_completions
 from goodprose.sft import build_sft
 from goodprose.shortcases import (
@@ -94,12 +96,26 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Do not carry existing approvals forward from the current output file",
     )
+    chunks_command.add_argument(
+        "--normalization",
+        help="Normalization config; approvals carry forward when only normalization changed",
+    )
+
+    normalize_command = commands.add_parser(
+        "normalize-posts",
+        help="Apply the configured surface conventions to raw posts and record what fired",
+    )
+    normalize_command.add_argument("--raw", required=True, help="Raw imported posts JSONL")
+    normalize_command.add_argument("--config", required=True)
+    normalize_command.add_argument("--output", required=True)
 
     prompts_command = commands.add_parser(
         "review-prompts", help="Validate and render synthetic prompt candidates"
     )
     prompts_command.add_argument("--prompts", required=True)
     prompts_command.add_argument("--chunks", required=True)
+    prompts_command.add_argument("--posts", help="Show the venue line each record trains with")
+    prompts_command.add_argument("--roles", help="Training roles for venue notes")
     prompts_command.add_argument("--output", required=True)
 
     approve_prompts_command = commands.add_parser(
@@ -141,6 +157,9 @@ def build_parser() -> argparse.ArgumentParser:
         "--text-exclusions",
         help="Reviewed exact input/target spans to remove from the assembled pairs",
     )
+    prompt_pairs_command.add_argument(
+        "--roles", help="Training roles; posts not marked 'pairs' cannot supply pairs"
+    )
     prompt_pairs_command.add_argument("--output", required=True)
 
     external_command = commands.add_parser(
@@ -157,6 +176,24 @@ def build_parser() -> argparse.ArgumentParser:
     external_posts_command.add_argument("--catalog", required=True)
     external_posts_command.add_argument("--snapshot-root", required=True)
     external_posts_command.add_argument("--base-posts")
+    external_posts_command.add_argument("--source-map", help="Manuscript mapping JSONL")
+    external_posts_command.add_argument("--source-root", help="Private manuscript checkout")
+    external_posts_command.add_argument(
+        "--repair-code",
+        action="store_true",
+        help="Restore fenced code the page snapshot flattened, from the author manuscript",
+    )
+    external_posts_command.add_argument(
+        "--target-from-manuscript",
+        action="append",
+        default=[],
+        help="Use the author manuscript as the canonical target for this post id; repeatable",
+    )
+    external_posts_command.add_argument(
+        "--fence-heuristic",
+        metavar="LANG",
+        help="Fence remaining runs of code-looking lines with this language tag (fallback)",
+    )
     external_posts_command.add_argument("--output", required=True)
 
     authentic_briefs_command = commands.add_parser(
@@ -185,6 +222,14 @@ def build_parser() -> argparse.ArgumentParser:
         "--dev-cases-output",
         help="Also write the development pairs as cases for proxy calibration",
     )
+    sft_command.add_argument("--roles", help="Training roles JSONL")
+    sft_command.add_argument("--chunks", help="Chunk inventory, for raw_only completions")
+    sft_command.add_argument("--posts", help="Canonical posts, for raw_only completions")
+    sft_command.add_argument(
+        "--no-venue-lines",
+        action="store_true",
+        help="Do not prepend 'Venue: host (year)' to user turns",
+    )
 
     short_cases_command = commands.add_parser(
         "build-short-cases",
@@ -206,6 +251,8 @@ def build_parser() -> argparse.ArgumentParser:
         help="Keep at most this many near-verbatim polish cases; auto-reject the rest",
     )
     short_cases_command.add_argument("--scope-line", default=DEFAULT_SCOPE_LINE)
+    short_cases_command.add_argument("--roles", help="Training roles for venue notes")
+    short_cases_command.add_argument("--no-venue-lines", action="store_true")
 
     approve_short_command = commands.add_parser(
         "approve-short-cases",
@@ -265,6 +312,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     generate.add_argument("--top-p", type=float, default=0.9)
     generate.add_argument("--repetition-penalty", type=float, default=1.05)
+    generate.add_argument(
+        "--ban-string",
+        action="append",
+        default=[],
+        help="Forbid this string at decode time (deployment preference); repeatable",
+    )
 
     nll = eval_commands.add_parser(
         "nll", help="Score held-out completions' negative log-likelihood under a checkpoint"
@@ -291,6 +344,10 @@ def build_parser() -> argparse.ArgumentParser:
     proxy.add_argument("--splits", required=True)
     proxy.add_argument("--output", required=True)
     proxy.add_argument("--memorization-run-threshold", type=int, default=30)
+    proxy.add_argument(
+        "--reference-url-substring",
+        help="Only training posts whose URL contains this define the voice, e.g. johnjwang.com",
+    )
 
     judge_packet = eval_commands.add_parser(
         "judge-packet", help="Render blinded pairwise voice prompts for a frontier judge"
@@ -305,6 +362,7 @@ def build_parser() -> argparse.ArgumentParser:
     judge_packet.add_argument("--seed", type=int, default=20260902)
     judge_packet.add_argument("--sample-count", type=int, default=3)
     judge_packet.add_argument("--sample-words", type=int, default=400)
+    judge_packet.add_argument("--reference-url-substring")
 
     judge_summary = eval_commands.add_parser(
         "judge-summarize", help="Unblind judge verdicts against the packet key"
@@ -364,11 +422,22 @@ def _run(args: argparse.Namespace) -> int:
             exclusions_path=_path(args.exclusions) if args.exclusions else None,
             full_posts=args.full_posts,
             preserve_status=not args.no_preserve_status,
+            normalization_path=_path(args.normalization) if args.normalization else None,
         )
         print(f"built semantic chunks: {_format_counts(counts)}")
         return 0
+    if args.command == "normalize-posts":
+        counts = normalize_posts(_path(args.raw), _path(args.config), _path(args.output))
+        print(f"normalized posts: {_format_counts(counts)}")
+        return 0
     if args.command == "review-prompts":
-        count = build_prompt_review(_path(args.prompts), _path(args.chunks), _path(args.output))
+        count = build_prompt_review(
+            _path(args.prompts),
+            _path(args.chunks),
+            _path(args.output),
+            posts_path=_path(args.posts) if args.posts else None,
+            roles_path=_path(args.roles) if args.roles else None,
+        )
         print(f"rendered {count} synthetic prompt candidate(s) at {_path(args.output)}")
         return 0
     if args.command == "approve-prompts":
@@ -397,6 +466,7 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.output),
             heldout_pairs_paths=[_path(path) for path in args.heldout_pairs],
             text_exclusions_path=(_path(args.text_exclusions) if args.text_exclusions else None),
+            roles_path=_path(args.roles) if args.roles else None,
         )
         print(f"built canonical prompt pairs: {_format_counts(counts)}")
         return 0
@@ -415,6 +485,11 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.snapshot_root),
             _path(args.output),
             base_posts_path=_path(args.base_posts) if args.base_posts else None,
+            source_map_path=_path(args.source_map) if args.source_map else None,
+            source_root=_path(args.source_root) if args.source_root else None,
+            repair_code=args.repair_code,
+            manuscript_target_ids=args.target_from_manuscript,
+            fence_heuristic=args.fence_heuristic,
         )
         print(f"built canonical post file: {_format_counts(counts)}")
         return 0
@@ -437,6 +512,10 @@ def _run(args: argparse.Namespace) -> int:
                 _path(args.train_cases_output) if args.train_cases_output else None
             ),
             dev_cases_output=_path(args.dev_cases_output) if args.dev_cases_output else None,
+            roles_path=_path(args.roles) if args.roles else None,
+            chunks_path=_path(args.chunks) if args.chunks else None,
+            posts_path=_path(args.posts) if args.posts else None,
+            venue_lines=not args.no_venue_lines,
         )
         print(f"built SFT data: {_format_counts(counts)}")
         return 0
@@ -453,6 +532,8 @@ def _run(args: argparse.Namespace) -> int:
             min_recall=args.min_recall,
             max_near_verbatim=args.max_near_verbatim,
             scope_line=args.scope_line,
+            roles_path=_path(args.roles) if args.roles else None,
+            venue_lines=not args.no_venue_lines,
         )
         print(f"built short case candidates: {_format_counts(counts)}")
         return 0
@@ -519,6 +600,7 @@ def _run(args: argparse.Namespace) -> int:
             temperature=args.temperature,
             top_p=args.top_p,
             repetition_penalty=args.repetition_penalty,
+            banned_strings=args.ban_string,
         )
         print(f"generated {count} output(s) at {_path(args.output)}")
         return 0
@@ -540,6 +622,7 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.splits),
             _path(args.output),
             memorization_run_threshold=args.memorization_run_threshold,
+            reference_url_substring=args.reference_url_substring,
         )
         print("proxy ranking (closest to author first): " + ", ".join(report["ranking"]))
         return 0
@@ -555,6 +638,7 @@ def _run(args: argparse.Namespace) -> int:
             seed=args.seed,
             sample_count=args.sample_count,
             sample_words=args.sample_words,
+            reference_url_substring=args.reference_url_substring,
         )
         print(f"rendered {count} blinded judge prompt(s) at {_path(args.packet)}")
         return 0
@@ -611,11 +695,13 @@ def main() -> int:
         ExternalSourceError,
         GenerationError,
         JsonlError,
+        NormalizeError,
         PairBuildError,
         PostImportError,
         PreferenceBuildError,
         PromptReviewError,
         ProxyError,
+        RolesError,
         ScoringError,
         ShortCaseError,
         TrainingError,

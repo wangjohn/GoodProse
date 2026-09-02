@@ -1,0 +1,11 @@
+{"post_id":"external-code-review-bottlenecks","reason":"Assembled post reshaped by an editor; no author manuscript recovered. Register only.","role":"raw_only","venue_note":"editor-revised","version":1}
+{"post_id":"external-why-i-code-as-a-cto","reason":"Assembled post reshaped by an editor; no author manuscript recovered. Register only.","role":"raw_only","venue_note":"editor-revised","version":1}
+{"post_id":"external-tests-with-llms","reason":"Assembled post reshaped by an editor; no author manuscript recovered; largely code.","role":"raw_only","venue_note":"editor-revised","version":1}
+{"post_id":"external-better-rag","reason":"Assembled post reshaped by an editor; no author manuscript recovered.","role":"raw_only","venue_note":"editor-revised","version":1}
+{"post_id":"external-scaling-llms-golang","reason":"Author manuscript recovered; use it as the target via build-external-posts --target-from-manuscript so the editor's pass and the flattened code are both avoided.","role":"pairs","venue_note":"author manuscript","version":1}
+{"post_id":"external-llm-provider-fallbacks","reason":"Development pair maps the author manuscript to the editor-revised text, so it measures imitation of the editor. Excluded from dev pairs until the target is switched to the manuscript.","role":"excluded","venue_note":"editor-revised","version":1}
+{"post_id":"external-ai-coding-interviews","reason":"Same as llm-provider-fallbacks: manuscript-to-edited dev pair.","role":"excluded","venue_note":"editor-revised","version":1}
+{"post_id":"external-startup-journey","reason":"Self-published 2021 essay in the author's own words; the venue line carries the era.","role":"pairs","version":1}
+{"post_id":"external-stripe-customer-support","reason":"Self-published 2021 essay in the author's own words.","role":"pairs","version":1}
+{"post_id":"external-product-lessons-dan-robinson","reason":"Self-published 2023 essay in the author's own words.","role":"pairs","version":1}
+{"post_id":"external-blocking-llms","reason":"Self-published 2025 essay in the author's own words.","role":"pairs","version":1}

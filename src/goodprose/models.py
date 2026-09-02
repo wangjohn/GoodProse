@@ -81,6 +81,18 @@ class BlogPost(StrictModel):
     source_path: NonEmptyString
     source_url: AnyUrl | None = None
     published_at: datetime | date | None = None
+    normalizations: tuple[NonEmptyString, ...] = ()
+    """Names of the configured normalizations applied to the raw import, if any."""
+
+
+class TextSubstitution(StrictModel):
+    """A reviewed exact span replaced once in one post's raw body during normalization."""
+
+    version: Literal[1] = 1
+    post_id: NonEmptyString
+    text: NonEmptyString
+    replacement: str
+    reason: NonEmptyString
 
 
 class SplitAssignment(StrictModel):
@@ -343,6 +355,7 @@ class DecodingSettings(StrictModel):
     repetition_penalty: Annotated[float, Field(ge=1)] = 1.05
     max_new_tokens: Annotated[int, Field(ge=1)]
     seed: int
+    banned_strings: tuple[NonEmptyString, ...] = ()
 
     @property
     def do_sample(self) -> bool:

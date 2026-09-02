@@ -3,8 +3,10 @@
 The canonical data flow is:
 
 ```text
-Markdown blog export -> posts/posts.jsonl
-external snapshots   -> posts/posts.jsonl (approved published targets)
+Markdown blog export -> private/posts/johnjwang-posts.jsonl (raw)
+external snapshots   -> private/posts/raw-posts.jsonl (merged raw; code repaired from manuscripts)
+normalization        -> posts/posts.jsonl (configured conventions, recorded per post)
+training roles       -> training-roles.jsonl (pairs / raw_only / excluded, venue notes)
 frozen lineage split -> splits.jsonl
 semantic candidates  -> chunks/candidates.jsonl
 synthetic candidates -> private/prompts/candidates.jsonl (review only)
@@ -35,6 +37,22 @@ rough-sentences brief, a phrases brief, and for whole posts a `post_brief`, `rou
 local review packet pairs each input with its exact completion, requires target citation URLs to
 be present in the input, and reports the longest verbatim word run as a leakage-review aid
 (expected to be long for the draft forms).
+
+`posts/normalization.json` is the only place canonical text differs from the raw import, and
+every post records the normalizations that fired. The conventions follow the author's personal
+site: straight quotes, `*italics*`, section headings at `#`, plus two reviewed substitutions (a
+Hugo math span and a caption remnant). `normalize-posts` must run from the raw file so a stale
+substitution fails loudly. `build-chunks --normalization` carries approvals forward when only the
+normalization changed a target.
+
+`training-roles.jsonl` records how each post may train. The Assembled posts had an editor's pass,
+so the four without a recovered manuscript are `raw_only` (title-conditioned raw completions
+under `Venue: assembled.com (year), editor-revised`, never supervised pairs), the one with a
+manuscript targets the manuscript text instead, and the two Assembled development pairs are
+`excluded` because manuscript-to-edited pairs would measure imitation of the editor. Test posts
+cannot be demoted. Every exported user turn opens with a venue line derived from the post's URL
+and year, so the 2021 Medium register and the 2026 personal-site register are conditions the
+model can tell apart; at inference, ask for `Venue: johnjwang.com (2026)`.
 
 `external/posts.jsonl` catalogs thirteen approved Assembled and Medium posts. Their normalized
 published snapshots are canonical targets in `posts/posts.jsonl`. Recovered author Markdown,

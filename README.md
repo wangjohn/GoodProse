@@ -12,20 +12,27 @@ The repository contains no third-party writing corpus and no synthetic training 
 
 ## Workflow
 
-1. Export the blog as Markdown and import the posts.
-2. Freeze each blog lineage into `train`, `dev`, or `test`.
-3. Generate and review verbatim semantic chunk candidates, including one post-scale target per
+1. Export the blog as Markdown, import the posts, and merge the external snapshots (repairing
+   flattened code from the author manuscripts where they exist) into a raw post file.
+2. Normalize the raw posts with the configured conventions (straight quotes, `*italics*`,
+   section headings at `#`, reviewed substitutions); each post records what fired.
+3. Freeze each blog lineage into `train`, `dev`, or `test`, and give each post a training role:
+   `pairs` for the author's own text, `raw_only` for editor-revised text that may only teach
+   register under its venue line, `excluded` for pairs that would teach the wrong thing.
+4. Generate and review verbatim semantic chunk candidates, including one post-scale target per
    training post (`--full-posts`), so training covers the same scope the test cases ask for.
-4. Recover an authentic prompt/draft or review derived briefs for each approved target. Several
-   prompt forms may target one chunk; write them in the rough register of your real drafts.
-5. Join reviewed inputs to the exact published targets to create canonical pairs.
-6. Export `train` and `dev` pairs in chat-style SFT JSONL, optionally with title-conditioned raw
-   completions of every training target (`--raw-completions`) as a continued-pretraining mix.
-7. Rank checkpoints with the cheap proxies (dev NLL, stylometry, a blinded frontier judge) and a
+5. Recover an authentic prompt/draft or review derived briefs for each approved target. Several
+   prompt forms may target one chunk; write them in the rough register of your real drafts, and
+   carry any code block in the target verbatim so the model copies code rather than composing it.
+6. Join reviewed inputs to the exact published targets to create canonical pairs.
+7. Export `train` and `dev` pairs in chat-style SFT JSONL. Every user turn opens with a venue
+   line such as `Venue: johnjwang.com (2026)`; raw completions of every training target and of
+   every `raw_only` chunk join the mix with `--raw-completions`.
+8. Rank checkpoints with the cheap proxies (dev NLL, stylometry, a blinded frontier judge) and a
    quick blind pass over section-scale cases cut from the held-out drafts (`build-short-cases`),
    then compare base and fine-tuned outputs on the frozen whole-post `test` cases in the final
    blind human review.
-8. Optionally run one DPO pass with your published text as chosen and the SFT model's own
+9. Optionally run one DPO pass with your published text as chosen and the SFT model's own
    output as rejected.
 
 ```bash
@@ -39,6 +46,16 @@ uv run goodprose build-external-posts \
   --catalog data/external/posts.jsonl \
   --snapshot-root data/private/external/published-raw \
   --base-posts data/private/posts/johnjwang-posts.jsonl \
+  --source-map data/private/external/source-map.jsonl \
+  --source-root data/private/external/blogposts-source \
+  --repair-code \
+  --fence-heuristic go \
+  --target-from-manuscript external-scaling-llms-golang \
+  --output data/private/posts/raw-posts.jsonl
+
+uv run goodprose normalize-posts \
+  --raw data/private/posts/raw-posts.jsonl \
+  --config data/posts/normalization.json \
   --output data/posts/posts.jsonl
 
 uv run goodprose build-chunks \
@@ -47,6 +64,7 @@ uv run goodprose build-chunks \
   --exclusions data/chunks/exclusions.jsonl \
   --supplemental-targets data/chunks/supplemental-targets.jsonl \
   --full-posts \
+  --normalization data/posts/normalization.json \
   --output data/chunks/candidates.jsonl \
   --review-output data/chunks/REVIEW.md
 
@@ -74,6 +92,8 @@ uv run goodprose build-prompt-candidates \
 uv run goodprose review-prompts \
   --prompts data/private/prompts/candidates.jsonl \
   --chunks data/chunks/candidates.jsonl \
+  --posts data/posts/posts.jsonl \
+  --roles data/training-roles.jsonl \
   --output data/private/prompts/REVIEW.md
 
 uv run goodprose approve-prompts \
@@ -88,6 +108,7 @@ uv run goodprose build-prompt-pairs \
   --heldout-pairs data/private/eval/pairs.jsonl \
   --heldout-pairs data/private/external/eval-pairs.jsonl \
   --text-exclusions data/pair-text-exclusions.jsonl \
+  --roles data/training-roles.jsonl \
   --output data/private/pairs.jsonl
 
 uv run goodprose build-sft \
@@ -95,6 +116,9 @@ uv run goodprose build-sft \
   --output-dir data/sft \
   --eval-output evals/cases.jsonl \
   --raw-completions \
+  --roles data/training-roles.jsonl \
+  --chunks data/chunks/candidates.jsonl \
+  --posts data/posts/posts.jsonl \
   --train-cases-output data/private/train-cases.jsonl
 
 uv run goodprose build-external-samples \
@@ -210,8 +234,15 @@ uv run goodprose eval proxy \
   --outputs base=evals/results/base.jsonl \
   --outputs checkpoint-N=evals/results/checkpoint-N.jsonl \
   --posts data/posts/posts.jsonl --splits data/splits.jsonl \
+  --reference-url-substring johnjwang.com \
   --output evals/results/proxy.json
 ```
+
+`--reference-url-substring johnjwang.com` measures distance to the personal-site prose alone,
+which is the target voice; the same flag on `eval judge-packet` draws the judge's author samples
+from those posts only. For deployment you can forbid strings at decode time, for example
+`eval generate --ban-string "—"`; leave that off in evaluation so the review measures what the
+adapter learned rather than what decoding forbids.
 
 The proxy reports style and function-word distance to your published prose, repeated 4-gram
 share, how much of the input was copied through, and the longest verbatim run against any
@@ -253,6 +284,8 @@ formatting drift, the usual way DPO cheats.
 data/posts/             imported canonical blog posts
 data/external/          approved Assembled and Medium source catalog
 data/splits.jsonl       frozen lineage-level train/dev/test assignments
+data/training-roles.jsonl per-post role (pairs, raw_only, excluded) and venue note
+data/posts/normalization.json configured surface conventions and reviewed substitutions
 data/provenance/        authoring-history coverage without raw private prompts
 data/chunks/            verbatim semantic and reviewed supplemental targets
 data/private/prompts/   synthetic training inputs and local review packet

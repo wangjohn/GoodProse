@@ -240,13 +240,25 @@ def style_distance(sample: dict[str, float], reference: dict[str, float]) -> flo
     return sum(deltas) / len(deltas)
 
 
-def _reference_posts(posts_path: Path, splits_path: Path) -> list[BlogPost]:
+def _reference_posts(
+    posts_path: Path, splits_path: Path, url_substring: str | None = None
+) -> list[BlogPost]:
+    """Training posts that define the author's voice, optionally one venue only.
+
+    Pass ``url_substring="johnjwang.com"`` to measure against the personal site alone rather
+    than a blend that includes company-blog and older Medium registers.
+    """
     posts = load_jsonl(posts_path, BlogPost)
     splits = {
         assignment.lineage_id: assignment.split
         for assignment in load_jsonl(splits_path, SplitAssignment)
     }
-    reference = [post for post in posts if splits.get(post.lineage_id) is Split.TRAIN]
+    reference = [
+        post
+        for post in posts
+        if splits.get(post.lineage_id) is Split.TRAIN
+        and (url_substring is None or url_substring in str(post.source_url or ""))
+    ]
     if not reference:
         raise ProxyError("no training-split posts found to build the author reference profile")
     return reference
@@ -268,6 +280,7 @@ def proxy_report(
     output_path: Path,
     *,
     memorization_run_threshold: int = 30,
+    reference_url_substring: str | None = None,
 ) -> dict[str, Any]:
     """Score one or more output files against the author's published training prose."""
     if not system_outputs:
@@ -275,7 +288,7 @@ def proxy_report(
     cases = {case.id: case for case in load_jsonl(cases_path, EvalCase)}
     if not cases:
         raise ProxyError("evaluation case file is empty")
-    reference_posts = _reference_posts(posts_path, splits_path)
+    reference_posts = _reference_posts(posts_path, splits_path, reference_url_substring)
     reference_text = "\n\n".join(post.body_markdown for post in reference_posts)
     reference_profile = style_features(reference_text)
     reference_words = {post.id: words(post.body_markdown) for post in reference_posts}
@@ -336,6 +349,7 @@ def proxy_report(
         "version": 1,
         "cases": len(cases),
         "reference_posts": [post.id for post in reference_posts],
+        "reference_url_substring": reference_url_substring,
         "reference_profile": {name: reference_profile[name] for name in ("words", *RATE_FEATURES)},
         "memorization_run_threshold": memorization_run_threshold,
         "ranking": [system["label"] for system in systems],

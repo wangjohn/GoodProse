@@ -7,9 +7,16 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from goodprose.jsonl import atomic_write, atomic_write_json, serialize_jsonl, sha256_file
-from goodprose.models import EvalCase, Split, WritingPair
+from goodprose.jsonl import (
+    atomic_write,
+    atomic_write_json,
+    load_jsonl,
+    serialize_jsonl,
+    sha256_file,
+)
+from goodprose.models import BlogPost, EvalCase, SemanticChunk, Split, WritingPair
 from goodprose.pairs import PairBuildError, load_pairs
+from goodprose.roles import TrainingRole, load_training_roles, role_for, venue_line
 
 SYSTEM_PROMPT = (
     "Turn the supplied notes, outline, or rough draft into polished blog prose at the scope "
@@ -23,31 +30,44 @@ SYSTEM_PROMPT = (
 RAW_COMPLETION_PROMPT = "Write a passage from the blog post titled “{title}”."
 
 
-def _sft_record(pair: WritingPair) -> dict[str, Any]:
+def _venue(pair: WritingPair, roles: dict[str, TrainingRole]) -> str:
+    role = roles.get(pair.post_id)
+    return venue_line(pair.source_url, pair.published_at, role.venue_note if role else None)
+
+
+def user_content(pair: WritingPair, roles: dict[str, TrainingRole], *, venue_lines: bool) -> str:
+    """The user turn: an optional venue line, then the reviewed input."""
+    venue = _venue(pair, roles) if venue_lines else ""
+    return f"{venue}\n\n{pair.input}" if venue else pair.input
+
+
+def _record(user: str, completion: str) -> dict[str, Any]:
     return {
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": pair.input},
-            {"role": "assistant", "content": pair.output},
+            {"role": "user", "content": user},
+            {"role": "assistant", "content": completion},
         ]
     }
 
 
-def _raw_completion_record(pair: WritingPair) -> dict[str, Any]:
-    return {
-        "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": RAW_COMPLETION_PROMPT.format(title=pair.title)},
-            {"role": "assistant", "content": pair.output},
-        ]
-    }
+def _raw_user(title: str, venue: str | None) -> str:
+    prompt = RAW_COMPLETION_PROMPT.format(title=title)
+    return f"{venue}\n\n{prompt}" if venue else prompt
 
 
-def raw_completion_records(train_pairs: list[WritingPair]) -> list[dict[str, Any]]:
+def raw_completion_records(
+    train_pairs: list[WritingPair],
+    roles: dict[str, TrainingRole],
+    *,
+    venue_lines: bool,
+    raw_only_chunks: list[tuple[SemanticChunk, BlogPost]] = (),  # type: ignore[assignment]
+) -> list[dict[str, Any]]:
     """One title-conditioned completion per distinct training target.
 
-    Several prompts may share a target once multiple prompt forms exist per chunk; the raw
-    view is emitted once per distinct target text so it does not multiply with them.
+    Covers the targets of the supervised pairs plus every training chunk of a ``raw_only``
+    post, each distinct text once, so registers the author does not want imitated directly
+    still teach sentence-level habits under their own venue line.
     """
     seen: set[str] = set()
     records: list[dict[str, Any]] = []
@@ -56,15 +76,28 @@ def raw_completion_records(train_pairs: list[WritingPair]) -> list[dict[str, Any
         if digest in seen:
             continue
         seen.add(digest)
-        records.append(_raw_completion_record(pair))
+        venue = _venue(pair, roles) if venue_lines else None
+        records.append(_record(_raw_user(pair.title, venue), pair.output))
+    for chunk, post in raw_only_chunks:
+        digest = hashlib.sha256(chunk.target.encode()).hexdigest()
+        if digest in seen:
+            continue
+        seen.add(digest)
+        role = roles.get(post.id)
+        venue = (
+            venue_line(post.source_url, post.published_at, role.venue_note if role else None)
+            if venue_lines
+            else None
+        )
+        records.append(_record(_raw_user(post.title, venue), chunk.target))
     return records
 
 
-def _eval_case(pair: WritingPair) -> EvalCase:
+def _eval_case(pair: WritingPair, roles: dict[str, TrainingRole], *, venue_lines: bool) -> EvalCase:
     return EvalCase(
         id=pair.id,
         lineage_id=pair.lineage_id,
-        input=pair.input,
+        input=user_content(pair, roles, venue_lines=venue_lines),
         input_method=pair.input_method,
         reference_output=pair.output,
         target_sha256=hashlib.sha256(pair.output.encode()).hexdigest(),
@@ -80,27 +113,63 @@ def build_sft(
     raw_completions: bool = False,
     train_cases_output: Path | None = None,
     dev_cases_output: Path | None = None,
+    roles_path: Path | None = None,
+    chunks_path: Path | None = None,
+    posts_path: Path | None = None,
+    venue_lines: bool = True,
 ) -> dict[str, int]:
     """Write train/dev JSONL, the frozen test cases, and a hash-pinned manifest.
 
     ``raw_completions`` appends promptless-style completions of every distinct training
-    target. ``train_cases_output`` writes the training inputs in the evaluation case format so
-    the current model can be sampled on them to produce on-policy rejected responses for
-    preference optimisation.
+    target, and with ``chunks_path``/``posts_path``/``roles_path`` also of every training chunk
+    of a ``raw_only`` post. ``venue_lines`` prepends ``Venue: host (year)`` to every user turn
+    so register is a condition the model learns, not an average. ``train_cases_output`` writes
+    the training inputs in the evaluation case format for on-policy rejected sampling.
     """
     pairs = load_pairs(pair_path)
+    roles = load_training_roles(roles_path)
+    dropped = sorted(
+        pair.id
+        for pair in pairs
+        if pair.split is not Split.TEST and role_for(pair.post_id, roles) != "pairs"
+    )
+    pairs = [pair for pair in pairs if pair.id not in set(dropped)]
     counts = Counter(pair.split for pair in pairs)
     if not counts[Split.TRAIN]:
         raise PairBuildError("at least one train pair is required")
     if not counts[Split.TEST]:
         raise PairBuildError("at least one test pair is required")
 
+    raw_only_chunks: list[tuple[SemanticChunk, BlogPost]] = []
+    if raw_completions and chunks_path is not None and posts_path is not None:
+        posts_by_id = {post.id: post for post in load_jsonl(posts_path, BlogPost)}
+        for chunk in load_jsonl(chunks_path, SemanticChunk):
+            if chunk.split is Split.TRAIN and role_for(chunk.post_id, roles) == "raw_only":
+                raw_only_chunks.append((chunk, posts_by_id[chunk.post_id]))
+
     train_pairs = [pair for pair in pairs if pair.split == Split.TRAIN]
-    train = [_sft_record(pair) for pair in train_pairs]
-    raw = raw_completion_records(train_pairs) if raw_completions else []
+    train = [
+        _record(user_content(pair, roles, venue_lines=venue_lines), pair.output)
+        for pair in train_pairs
+    ]
+    raw = (
+        raw_completion_records(
+            train_pairs, roles, venue_lines=venue_lines, raw_only_chunks=raw_only_chunks
+        )
+        if raw_completions
+        else []
+    )
     train.extend(raw)
-    dev = [_sft_record(pair) for pair in pairs if pair.split == Split.DEV]
-    cases = [_eval_case(pair) for pair in pairs if pair.split == Split.TEST]
+    dev = [
+        _record(user_content(pair, roles, venue_lines=venue_lines), pair.output)
+        for pair in pairs
+        if pair.split == Split.DEV
+    ]
+    cases = [
+        _eval_case(pair, roles, venue_lines=venue_lines)
+        for pair in pairs
+        if pair.split == Split.TEST
+    ]
 
     atomic_write(output_dir / "train.jsonl", serialize_jsonl(train))
     atomic_write(output_dir / "dev.jsonl", serialize_jsonl(dev))
@@ -108,12 +177,20 @@ def build_sft(
     if train_cases_output is not None:
         atomic_write(
             train_cases_output,
-            serialize_jsonl([_eval_case(pair) for pair in train_pairs]),
+            serialize_jsonl(
+                [_eval_case(pair, roles, venue_lines=venue_lines) for pair in train_pairs]
+            ),
         )
     if dev_cases_output is not None:
         atomic_write(
             dev_cases_output,
-            serialize_jsonl([_eval_case(pair) for pair in pairs if pair.split == Split.DEV]),
+            serialize_jsonl(
+                [
+                    _eval_case(pair, roles, venue_lines=venue_lines)
+                    for pair in pairs
+                    if pair.split == Split.DEV
+                ]
+            ),
         )
     train_path = output_dir / "train.jsonl"
     dev_path = output_dir / "dev.jsonl"
@@ -121,16 +198,21 @@ def build_sft(
         "train": len(train),
         "train_pairs": counts[Split.TRAIN],
         "raw_completions": len(raw),
+        "raw_only_chunks": len(raw_only_chunks),
+        "dropped_by_role": len(dropped),
         "dev": counts[Split.DEV],
         "test": counts[Split.TEST],
     }
     manifest: dict[str, Any] = {
-        "version": 2,
+        "version": 3,
         "pair_file": pair_path.name,
         "pair_file_sha256": sha256_file(pair_path),
         "system_prompt": SYSTEM_PROMPT,
         "system_prompt_sha256": hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest(),
         "raw_completion_prompt": RAW_COMPLETION_PROMPT,
+        "venue_lines": venue_lines,
+        "training_roles_sha256": sha256_file(roles_path) if roles_path is not None else None,
+        "dropped_by_role": dropped,
         "counts": summary,
         "test_cases": eval_output.name,
         "train_file_sha256": sha256_file(train_path),

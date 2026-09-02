@@ -6,6 +6,7 @@ import hashlib
 import math
 import re
 from collections import Counter
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -90,7 +91,30 @@ def _blocks(body: str) -> list[_Block]:
             block_end -= 1
         text = body[block_start:block_end]
         blocks.append(_Block(block_start, block_end, _heading(text)))
-    return blocks
+    return _glue_list_introductions(body, blocks)
+
+
+_LIST_START = re.compile(r"^[ \t]*(?:(?:[-*+]|\d+[.)])[ \t]+|\|)")
+
+
+def _glue_list_introductions(body: str, blocks: list[_Block]) -> list[_Block]:
+    """Keep a paragraph that ends with a colon together with the list or table it introduces.
+
+    A target that ends "...the following:" with its list cut into the next chunk is a bad
+    completion, so the intro and its list (or table) become one unsplittable block. A colon
+    before a heading is left alone; the author is introducing the sections that follow.
+    """
+    glued: list[_Block] = []
+    for block in blocks:
+        if glued:
+            previous = glued[-1]
+            if body[previous.start : previous.end].rstrip().endswith(":") and _LIST_START.match(
+                body[block.start : block.end]
+            ):
+                glued[-1] = _Block(previous.start, block.end, previous.heading)
+                continue
+        glued.append(block)
+    return glued
 
 
 def _section_groups(blocks: list[_Block]) -> list[list[_Block]]:
@@ -244,19 +268,37 @@ def full_post_chunks(
     return full
 
 
+_HEADING_RUN = re.compile(r"^#{1,6}(?=[ \t])", re.MULTILINE)
+
+
+def _flatten_headings(text: str) -> str:
+    return _HEADING_RUN.sub("#", text)
+
+
 def preserve_review_status(
-    chunks: list[SemanticChunk], previous: list[SemanticChunk]
+    chunks: list[SemanticChunk],
+    previous: list[SemanticChunk],
+    *,
+    equivalent: Callable[[str, str], bool] | None = None,
 ) -> list[SemanticChunk]:
-    """Carry an existing approval forward when the exact target text is unchanged."""
+    """Carry an existing approval forward when the target is unchanged.
+
+    ``equivalent(earlier_target, new_target)`` may widen "unchanged" to targets that differ
+    only by a configured normalization (quotes, italics, heading level), so a formatting pass
+    does not throw away every approval.
+    """
     previous_by_id = {chunk.id: chunk for chunk in previous}
     preserved: list[SemanticChunk] = []
     for chunk in chunks:
         earlier = previous_by_id.get(chunk.id)
         if (
             earlier is not None
-            and earlier.target_sha256 == chunk.target_sha256
             and earlier.review_status is not chunk.review_status
             and chunk.review_status is ReviewStatus.CANDIDATE
+            and (
+                earlier.target_sha256 == chunk.target_sha256
+                or (equivalent is not None and equivalent(earlier.target, chunk.target))
+            )
         ):
             chunk = chunk.model_copy(update={"review_status": earlier.review_status})
         preserved.append(chunk)
@@ -270,7 +312,12 @@ def _supplemental_chunks(
     base_chunks: list[SemanticChunk],
     *,
     max_tokens: int,
+    normalize: Callable[[str], str] | None = None,
 ) -> list[SemanticChunk]:
+    """Reviewed exact spans; ``normalize`` maps spans authored against the raw import onto the
+    normalized post text so a formatting pass does not orphan them."""
+    if normalize is not None:
+        specs = [spec.model_copy(update={"target": normalize(spec.target)}) for spec in specs]
     spec_counts = Counter(spec.id for spec in specs)
     duplicate_specs = sorted(spec_id for spec_id, count in spec_counts.items() if count > 1)
     if duplicate_specs:
@@ -443,6 +490,7 @@ def build_chunks(
     exclusions_path: Path | None = None,
     full_posts: bool = False,
     preserve_status: bool = True,
+    normalization_path: Path | None = None,
 ) -> dict[str, int]:
     posts = load_jsonl(posts_path, BlogPost)
     assignments = load_jsonl(splits_path, SplitAssignment)
@@ -450,6 +498,24 @@ def build_chunks(
     previous = (
         load_jsonl(output_path, SemanticChunk) if preserve_status and output_path.is_file() else []
     )
+    equivalent: Callable[[str, str], bool] | None = None
+    normalize_span: Callable[[str], str] | None = None
+    if normalization_path is not None:
+        from goodprose.normalize import load_normalization_config, normalize_markdown
+
+        config = load_normalization_config(normalization_path)
+
+        def _normalize_span(text: str) -> str:
+            return normalize_markdown(text, config, strict_substitutions=False)[0]
+
+        def _normalized_equivalent(earlier: str, current: str) -> bool:
+            # Heading levels are compared loosely: the post-level shift that produced the new
+            # target is not recoverable from a single chunk, and a changed level is exactly the
+            # kind of difference a formatting pass is allowed to introduce.
+            return _flatten_headings(_normalize_span(earlier)) == _flatten_headings(current)
+
+        equivalent = _normalized_equivalent
+        normalize_span = _normalize_span
 
     chunks = [
         chunk
@@ -477,9 +543,10 @@ def build_chunks(
                 splits,
                 chunks,
                 max_tokens=max_tokens,
+                normalize=normalize_span,
             )
         )
-    chunks = preserve_review_status(chunks, previous)
+    chunks = preserve_review_status(chunks, previous, equivalent=equivalent)
     atomic_write(output_path, serialize_jsonl(chunks))
     atomic_write(review_output_path, render_review(posts, chunks))
     return dict(sorted(Counter(chunk.split.value for chunk in chunks).items()))

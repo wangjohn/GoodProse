@@ -45,7 +45,13 @@ class JudgeVerdict(StrictModel):
 
 
 def _author_samples(
-    posts_path: Path, splits_path: Path, *, count: int, sample_words: int, seed: int
+    posts_path: Path,
+    splits_path: Path,
+    *,
+    count: int,
+    sample_words: int,
+    seed: int,
+    url_substring: str | None = None,
 ) -> list[tuple[str, str]]:
     splits = {
         assignment.lineage_id: assignment.split
@@ -55,6 +61,7 @@ def _author_samples(
         post
         for post in load_jsonl(posts_path, BlogPost)
         if splits.get(post.lineage_id) is Split.TRAIN
+        and (url_substring is None or url_substring in str(post.source_url or ""))
     ]
     if len(train_posts) < count:
         raise EvaluationError(f"need at least {count} training posts for author samples")
@@ -109,6 +116,7 @@ def build_judge_packet(
     seed: int = 20260902,
     sample_count: int = 3,
     sample_words: int = 400,
+    reference_url_substring: str | None = None,
 ) -> int:
     cases = {case.id: case for case in load_jsonl(cases_path, EvalCase)}
     if not cases:
@@ -120,7 +128,12 @@ def build_judge_packet(
         if missing:
             raise EvaluationError(f"{label} outputs are missing cases {missing}")
     samples = _author_samples(
-        posts_path, splits_path, count=sample_count, sample_words=sample_words, seed=seed
+        posts_path,
+        splits_path,
+        count=sample_count,
+        sample_words=sample_words,
+        seed=seed,
+        url_substring=reference_url_substring,
     )
     randomizer = random.Random(seed)
     rows: list[dict[str, Any]] = []

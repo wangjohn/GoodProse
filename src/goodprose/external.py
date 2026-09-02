@@ -163,34 +163,83 @@ def build_external_posts(
     output_path: Path,
     *,
     base_posts_path: Path | None = None,
+    source_map_path: Path | None = None,
+    source_root: Path | None = None,
+    repair_code: bool = False,
+    manuscript_target_ids: Sequence[str] = (),
+    fence_heuristic: str | None = None,
 ) -> dict[str, int]:
-    """Build canonical posts from reviewed public snapshots and optionally merge base posts."""
+    """Build canonical posts from reviewed public snapshots and optionally merge base posts.
+
+    With ``repair_code`` and a source map, fenced code the page snapshot flattened into prose
+    is restored from the author's manuscript wherever the tokens match exactly. Posts named in
+    ``manuscript_target_ids`` use the manuscript body itself as the canonical target, which is
+    the author's own text before any editor's pass. ``fence_heuristic="go"`` then fences any
+    remaining run of code-looking lines with that language tag; it is a fallback for blocks the
+    manuscript did not match exactly and cannot restore dropped whitespace.
+    """
+    from goodprose.normalize import fence_code_runs, manuscript_body, repair_code_blocks
+
     catalog = _unique(load_jsonl(catalog_path, ExternalPostCatalog), key="id", kind="post ID")
     unapproved = sorted(
         post.id for post in catalog.values() if post.review_status is not ReviewStatus.APPROVED
     )
     if unapproved:
         raise ExternalSourceError(f"external post(s) are not approved: {unapproved}")
+    manuscripts: dict[str, str] = {}
+    if (repair_code or manuscript_target_ids) and (source_map_path is None or source_root is None):
+        raise ExternalSourceError(
+            "code repair and manuscript targets need --source-map and --source-root"
+        )
+    if source_map_path is not None and source_root is not None:
+        mappings = _unique(
+            load_jsonl(source_map_path, ExternalSourceMapping), key="post_id", kind="mapping"
+        )
+        missing = sorted(set(manuscript_target_ids) - set(mappings))
+        if missing:
+            raise ExternalSourceError(f"no manuscript mapping for target post(s): {missing}")
+        for post_id, mapping in mappings.items():
+            path = _safe_source_path(source_root, mapping.source_path)
+            manuscripts[post_id] = path.read_text(encoding="utf-8")
 
     external_posts: list[BlogPost] = []
+    repaired_blocks = 0
+    heuristic_runs = 0
+    unmatched_blocks: list[str] = []
     for post_id in sorted(catalog):
         catalog_post = catalog[post_id]
         snapshot_filename = f"{post_id}.md"
-        snapshot_path = _safe_source_path(snapshot_root, snapshot_filename)
-        body = normalize_published_snapshot(
-            snapshot_path.read_text(encoding="utf-8"), catalog_post.platform
-        )
+        if post_id in manuscript_target_ids:
+            body = manuscript_body(manuscripts[post_id])
+            if not body:
+                raise ExternalSourceError(f"manuscript for {post_id!r} has no body")
+            source_path = f"external/blogposts-source/{post_id}.md"
+        else:
+            snapshot_path = _safe_source_path(snapshot_root, snapshot_filename)
+            body = normalize_published_snapshot(
+                snapshot_path.read_text(encoding="utf-8"), catalog_post.platform
+            )
+            source_path = f"external/published-raw/{snapshot_filename}"
+            if repair_code and post_id in manuscripts:
+                body, repaired, unmatched = repair_code_blocks(body, manuscripts[post_id])
+                repaired_blocks += repaired
+                unmatched_blocks.extend(f"{post_id}: {line}" for line in unmatched)
+            if fence_heuristic:
+                body, runs = fence_code_runs(body, fence_heuristic)
+                heuristic_runs += runs
         external_posts.append(
             BlogPost(
                 id=catalog_post.id,
                 lineage_id=catalog_post.lineage_id,
                 title=catalog_post.title,
                 body_markdown=body,
-                source_path=f"external/published-raw/{snapshot_filename}",
+                source_path=source_path,
                 source_url=catalog_post.source_url,
                 published_at=catalog_post.published_at,
             )
         )
+    for line in unmatched_blocks:
+        print(f"unmatched manuscript code block: {line}", flush=True)
 
     base_posts = load_jsonl(base_posts_path, BlogPost) if base_posts_path is not None else []
     external_ids = set(catalog)
@@ -205,6 +254,10 @@ def build_external_posts(
     return {
         "base": len(merged) - len(external_posts),
         "external": len(external_posts),
+        "manuscript_targets": len(manuscript_target_ids),
+        "repaired_code_blocks": repaired_blocks,
+        "unmatched_code_blocks": len(unmatched_blocks),
+        "heuristic_code_runs": heuristic_runs,
         "total": len(merged),
     }
 

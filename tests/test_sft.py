@@ -38,7 +38,15 @@ def test_builds_train_dev_and_frozen_test_cases(tmp_path: Path) -> None:
 
     counts = build_sft(pair_path, output_dir, eval_output)
 
-    assert counts == {"train": 1, "train_pairs": 1, "raw_completions": 0, "dev": 1, "test": 1}
+    assert counts == {
+        "train": 1,
+        "train_pairs": 1,
+        "raw_completions": 0,
+        "raw_only_chunks": 0,
+        "dropped_by_role": 0,
+        "dev": 1,
+        "test": 1,
+    }
     train_record = json.loads((output_dir / "train.jsonl").read_text().strip())
     assert train_record["messages"][0]["content"] == SYSTEM_PROMPT
     assert "sentence, paragraph, section, or complete post" in SYSTEM_PROMPT

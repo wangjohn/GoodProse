@@ -33,6 +33,7 @@ from goodprose.models import (
     StrictModel,
 )
 from goodprose.prompts import _PROMOTIONAL_CTA, _system_prompt_section, system_prompt_sha256
+from goodprose.roles import load_training_roles, venue_line_for_post
 from goodprose.text import words
 
 DEFAULT_SCOPE_LINE = "Turn these notes into one section of a blog post; return only that section."
@@ -61,6 +62,7 @@ class ShortCaseCandidate(StrictModel):
     window_words: int = Field(ge=0)
     review_status: ReviewStatus = ReviewStatus.CANDIDATE
     notes: str | None = None
+    generated_input_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     reviewer_notes: tuple[NonEmptyString, ...] = ()
     approved_system_prompt_sha256: str | None = Field(
         default=None,
@@ -138,6 +140,8 @@ def build_short_case_candidates(
     min_recall: float = 0.35,
     max_near_verbatim: int = 2,
     scope_line: str = DEFAULT_SCOPE_LINE,
+    roles_path: Path | None = None,
+    venue_lines: bool = True,
 ) -> dict[str, int]:
     """Propose one section-scale case per held-out section, with alignment scores.
 
@@ -158,6 +162,7 @@ def build_short_case_candidates(
         raise ShortCaseError("case file is empty")
     chunks = load_jsonl(chunks_path, SemanticChunk)
     posts = {post.id: post for post in load_jsonl(posts_path, BlogPost)}
+    roles = load_training_roles(roles_path)
     previous = (
         {candidate.id: candidate for candidate in load_jsonl(output_path, ShortCaseCandidate)}
         if output_path.is_file()
@@ -193,11 +198,15 @@ def build_short_case_candidates(
                     "near-verbatim draft; this is a polish case that tests leaving good prose "
                     "alone, not voice"
                 )
-            title = posts[chunk.post_id].title if chunk.post_id in posts else case.lineage_id
+            post = posts.get(chunk.post_id)
+            title = post.title if post is not None else case.lineage_id
             draft_window = window or "(no aligned draft text)"
-            generated_input = (
-                f"{scope_line}\n\nBlog post: {title}\n\n{window}" if window else scope_line
-            )
+            header = [scope_line]
+            venue = venue_line_for_post(post, roles) if venue_lines and post is not None else ""
+            if venue:
+                header.append(venue)
+            header.append(f"Blog post: {title}")
+            generated_input = "\n\n".join([*header, window]) if window else "\n\n".join(header)
             candidate = ShortCaseCandidate(
                 id=f"{chunk.id}--short",
                 lineage_id=case.lineage_id,
@@ -207,6 +216,7 @@ def build_short_case_candidates(
                 draft_window=draft_window,
                 reference_output=chunk.target,
                 target_sha256=chunk.target_sha256,
+                generated_input_sha256=hashlib.sha256(generated_input.encode()).hexdigest(),
                 alignment_recall=recall,
                 alignment_precision=precision,
                 window_paragraphs=(start, end),
@@ -222,8 +232,18 @@ def build_short_case_candidates(
                     "reviewer_notes": earlier.reviewer_notes,
                     "approved_system_prompt_sha256": earlier.approved_system_prompt_sha256,
                 }
-                if earlier.input != generated_input and earlier.draft_window == draft_window:
-                    # The alignment is unchanged, so a differing input is the author's edit.
+                if earlier.generated_input_sha256 is not None:
+                    author_edited = (
+                        hashlib.sha256(earlier.input.encode()).hexdigest()
+                        != earlier.generated_input_sha256
+                    )
+                else:
+                    # Legacy record without a generation hash: an unchanged alignment with a
+                    # differing input is the author's edit.
+                    author_edited = (
+                        earlier.input != generated_input and earlier.draft_window == draft_window
+                    )
+                if author_edited:
                     updates["input"] = earlier.input
                     updates["notes"] = (
                         f"author-edited input (aligned window had recall {recall:.2f}, "

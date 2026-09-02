@@ -23,6 +23,7 @@ from goodprose.models import (
     WritingPair,
 )
 from goodprose.pairs import load_pairs, validate_pairs
+from goodprose.roles import load_training_roles, role_for, venue_line_for_post
 from goodprose.sft import SYSTEM_PROMPT
 from goodprose.text import URL, longest_shared_word_run
 
@@ -128,14 +129,36 @@ def _candidate_chunk_map(
                 f"prompt candidate {candidate.id!r} is missing target source URL(s): "
                 + ", ".join(missing_urls)
             )
+        missing_code = [
+            block for block in _fenced_code(chunk.target) if block not in candidate.input
+        ]
+        if missing_code:
+            raise PromptReviewError(
+                f"prompt candidate {candidate.id!r} must carry the target's code block(s) "
+                f"verbatim so the model copies code rather than composing it; missing "
+                f"{len(missing_code)} block(s) starting {missing_code[0].splitlines()[0][:60]!r}"
+            )
     return chunks_by_id
 
 
+_FENCED = re.compile(r"^(`{3,}|~{3,})[^\n]*\n(.*?)\n\1[ \t]*$", re.MULTILINE | re.DOTALL)
+
+
+def _fenced_code(target: str) -> list[str]:
+    """The inner text of every fenced block in a target."""
+    return [match.group(2).strip() for match in _FENCED.finditer(target) if match.group(2).strip()]
+
+
 def render_prompt_review(
-    candidates: list[SyntheticPromptCandidate], chunks: list[SemanticChunk]
+    candidates: list[SyntheticPromptCandidate],
+    chunks: list[SemanticChunk],
+    posts: list[BlogPost] | None = None,
+    roles_path: Path | None = None,
 ) -> bytes:
     """Render prompts beside exact completions after validating lineage and hashes."""
     chunks_by_id = _candidate_chunk_map(candidates, chunks)
+    posts_by_id = {post.id: post for post in posts} if posts else {}
+    roles = load_training_roles(roles_path)
     form_counts = Counter(candidate.prompt_form.value for candidate in candidates)
     lines = [
         "# Synthetic prompt candidate review",
@@ -179,6 +202,14 @@ def render_prompt_review(
                 f"Form: `{candidate.prompt_form.value}`  ",
                 f"Chunk: `{candidate.chunk_id}`  ",
                 f"System prompt: `{system_prompt_sha256()[:12]}` (the one quoted above)  ",
+                *(
+                    [
+                        "Venue line prepended at export: "
+                        f"`{venue_line_for_post(posts_by_id[candidate.post_id], roles)}`  "
+                    ]
+                    if candidate.post_id in posts_by_id
+                    else []
+                ),
                 f"Longest exact shared word run (URLs excluded): {shared_run}{leakage_note}",
                 "",
                 "### Synthetic input",
@@ -198,10 +229,20 @@ def render_prompt_review(
     return ("\n".join(lines).rstrip() + "\n").encode()
 
 
-def build_prompt_review(prompts_path: Path, chunks_path: Path, output_path: Path) -> int:
+def build_prompt_review(
+    prompts_path: Path,
+    chunks_path: Path,
+    output_path: Path,
+    *,
+    posts_path: Path | None = None,
+    roles_path: Path | None = None,
+) -> int:
     candidates = load_jsonl(prompts_path, SyntheticPromptCandidate)
     chunks = load_jsonl(chunks_path, SemanticChunk)
-    atomic_write(output_path, render_prompt_review(candidates, chunks))
+    posts = load_jsonl(posts_path, BlogPost) if posts_path is not None else None
+    atomic_write(
+        output_path, render_prompt_review(candidates, chunks, posts, roles_path=roles_path)
+    )
     return len(candidates)
 
 
@@ -428,11 +469,28 @@ def build_prompt_pairs(
     *,
     heldout_pairs_paths: Sequence[Path] = (),
     text_exclusions_path: Path | None = None,
+    roles_path: Path | None = None,
 ) -> dict[str, int]:
-    """Promote approved training prompts and exact chunks into canonical pairs."""
+    """Promote approved training prompts and exact chunks into canonical pairs.
+
+    Training roles gate which posts may supply supervised pairs: ``raw_only`` and ``excluded``
+    posts are rejected here (they may still enter the raw-completion mix at export), and
+    ``excluded`` development pairs are dropped. Test pairs are never affected.
+    """
     candidates = load_jsonl(prompts_path, SyntheticPromptCandidate)
     if not candidates:
         raise PromptReviewError("prompt candidate dataset is empty")
+    roles = load_training_roles(roles_path)
+    demoted = sorted(
+        f"{candidate.id} ({role_for(candidate.post_id, roles)})"
+        for candidate in candidates
+        if role_for(candidate.post_id, roles) != "pairs"
+    )
+    if demoted:
+        raise PromptReviewError(
+            f"{len(demoted)} prompt candidate(s) target posts whose training role is not "
+            "'pairs'; drop them from the candidate file: " + ", ".join(demoted[:3])
+        )
     chunks = load_jsonl(chunks_path, SemanticChunk)
     chunks_by_id = _candidate_chunk_map(candidates, chunks)
     _reject_promotional_training_material(candidates, chunks_by_id)
@@ -477,7 +535,10 @@ def build_prompt_pairs(
             raise PromptReviewError(
                 "held-out pair file contains training records: " + ", ".join(training_heldout[:3])
             )
-        pairs.extend(heldout)
+        for pair in heldout:
+            if pair.split is Split.DEV and role_for(pair.post_id, roles) == "excluded":
+                continue
+            pairs.extend([pair])
 
     pairs = _apply_pair_text_exclusions(pairs, text_exclusions_path)
     _reject_promotional_pairs(pairs)

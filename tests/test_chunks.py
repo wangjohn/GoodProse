@@ -312,3 +312,57 @@ def test_rebuild_preserves_approval_when_target_is_unchanged(tmp_path: Path) -> 
         chunk.review_status is ReviewStatus.CANDIDATE
         for chunk in load_jsonl(output_path, SemanticChunk)
     )
+
+
+def test_intro_ending_with_colon_stays_with_its_list() -> None:
+    body = (
+        "Opening paragraph that runs long enough to be its own group. " * 6
+        + "\n\nWe learned three things:\n\n- first\n- second\n- third\n\n"
+        + "# Next\n\n"
+        + "Another section. " * 30
+    )
+
+    chunks = semantic_chunks(_post("post", body), Split.TRAIN, min_tokens=20, max_tokens=60)
+
+    for chunk in chunks:
+        assert not chunk.target.rstrip().endswith(":"), chunk.target
+    intro = next(chunk for chunk in chunks if "three things:" in chunk.target)
+    assert "- third" in intro.target
+
+
+def test_rebuild_keeps_approval_when_only_normalization_changed(tmp_path: Path) -> None:
+    curly = "It\u2019s a \u201cquoted\u201d training post with _italics_."
+    straight = 'It\'s a "quoted" training post with *italics*.'
+    posts_path, splits_path = _three_posts(tmp_path, curly)
+    output_path = tmp_path / "chunks.jsonl"
+    build_chunks(posts_path, splits_path, output_path, tmp_path / "review.md")
+    approved = [
+        chunk.model_copy(update={"review_status": ReviewStatus.APPROVED})
+        if chunk.post_id == "train"
+        else chunk
+        for chunk in load_jsonl(output_path, SemanticChunk)
+    ]
+    output_path.write_bytes(serialize_jsonl(approved))
+    # The posts file is normalized (as normalize-posts would do) and chunks are rebuilt.
+    posts_path, splits_path = _three_posts(tmp_path, straight)
+    config_path = tmp_path / "normalization.json"
+    config_path.write_text('{"version": 1}')
+
+    build_chunks(
+        posts_path,
+        splits_path,
+        output_path,
+        tmp_path / "review.md",
+        normalization_path=config_path,
+    )
+
+    rebuilt = {chunk.id: chunk for chunk in load_jsonl(output_path, SemanticChunk)}
+    assert rebuilt["train--001"].target == straight
+    assert rebuilt["train--001"].review_status is ReviewStatus.APPROVED
+
+    # Without the normalization config the changed hash drops the approval.
+    output_path.write_bytes(serialize_jsonl(approved))
+    build_chunks(posts_path, splits_path, output_path, tmp_path / "review.md")
+    assert {chunk.id: chunk for chunk in load_jsonl(output_path, SemanticChunk)}[
+        "train--001"
+    ].review_status is ReviewStatus.CANDIDATE

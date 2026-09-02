@@ -28,7 +28,7 @@ Two things seem likely to me, and both are already visible if you look at how ot
 
 ### cheap-software-wont-make-engineering-cheap--002
 
-`train` - `approved` - 690 approximate tokens - 466 words
+`train` - `approved` - 682 approximate tokens - 462 words
 
 Headings: Software will follow Jevons paradox
 
@@ -41,7 +41,7 @@ It's very likely that coding is going to get a lot cheaper. That means we'll lik
 
 The other thing that I've noticed is that as things gets more efficient, the distribution of the thing tends to get broader and luxury goods tend to appear. More efficiency means more choice, and people sort themselves across the premium and the economy ends of the market.
 
-- **Fashion.** Most people can now afford a closet full of shirts and shoes. In the 1800s you used to only own a few pieces of clothing, but now manufacturing scale has made pretty much all clothes incredibly cheap. That has allowed the development of ultra-high end clothing: <span class="no-math">handmade suits, \$200+ merino wool t-shirts, \$5k+ jackets, etc.</span>
+- **Fashion.** Most people can now afford a closet full of shirts and shoes. In the 1800s you used to only own a few pieces of clothing, but now manufacturing scale has made pretty much all clothes incredibly cheap. That has allowed the development of ultra-high end clothing: handmade suits, $200+ merino wool t-shirts, $5k+ jackets, etc.
 - **Air travel.** Similarly, as planes got more efficient over the decades, the cost of a ticket dropped precipitously and more people fly than ever before. But at the same time, the distribution of what it looks like to fly is wider than ever before. We now have basic economy seats where you can't bring a carry on. But you also have first class suites and private jets. There's much more dispersion than ever before.
 
 I think software engineering will play out the same way. You'll have a lot more software than there used to be, and you'll also have a high end that is far higher end than it ever was. The handful of people who still know how to build hardened production software, systems that scale to massive levels of compute, stay reliable, and get the tradeoffs right, will be even more in demand than they are today. The middle falls away and you get a bimodal distribution, much like air travel: either you're paying tens of thousands of dollars for the first-class or private experience, or you're in economy.
@@ -89,7 +89,7 @@ So, the future will see a lot of change. I think the base layer of life will kee
 
 ### cheap-software-wont-make-engineering-cheap--full
 
-`train` - `candidate` - 1835 approximate tokens - 1228 words - exceeds target size
+`train` - `candidate` - 1827 approximate tokens - 1224 words - exceeds target size
 
 Headings: Software will follow Jevons paradox / Engineers will orchestrate more / So will the future be good?
 
@@ -108,7 +108,7 @@ It's very likely that coding is going to get a lot cheaper. That means we'll lik
 
 The other thing that I've noticed is that as things gets more efficient, the distribution of the thing tends to get broader and luxury goods tend to appear. More efficiency means more choice, and people sort themselves across the premium and the economy ends of the market.
 
-- **Fashion.** Most people can now afford a closet full of shirts and shoes. In the 1800s you used to only own a few pieces of clothing, but now manufacturing scale has made pretty much all clothes incredibly cheap. That has allowed the development of ultra-high end clothing: <span class="no-math">handmade suits, \$200+ merino wool t-shirts, \$5k+ jackets, etc.</span>
+- **Fashion.** Most people can now afford a closet full of shirts and shoes. In the 1800s you used to only own a few pieces of clothing, but now manufacturing scale has made pretty much all clothes incredibly cheap. That has allowed the development of ultra-high end clothing: handmade suits, $200+ merino wool t-shirts, $5k+ jackets, etc.
 - **Air travel.** Similarly, as planes got more efficient over the decades, the cost of a ticket dropped precipitously and more people fly than ever before. But at the same time, the distribution of what it looks like to fly is wider than ever before. We now have basic economy seats where you can't bring a carry on. But you also have first class suites and private jets. There's much more dispersion than ever before.
 
 I think software engineering will play out the same way. You'll have a lot more software than there used to be, and you'll also have a high end that is far higher end than it ever was. The handful of people who still know how to build hardened production software, systems that scale to massive levels of compute, stay reliable, and get the tradeoffs right, will be even more in demand than they are today. The middle falls away and you get a bimodal distribution, much like air travel: either you're paying tens of thousands of dollars for the first-class or private experience, or you're in economy.
@@ -157,35 +157,35 @@ But if you're an engineer (or whatever the future version of the job ends up bei
 Headings: (intro or continuation)
 
 ```markdown
-I remember my 5th grade math teacher told me I needed to memorize square roots because “you won't always have a calculator with you".
+I remember my 5th grade math teacher told me I needed to memorize square roots because "you won't always have a calculator with you".
 
 Technology changes quickly, and banning AI from technical interviews in 2025 feels eerily similar to banning calculators from math tests in the 90s. Ironically, many well known AI companies are still preventing candidates from using AI in technical assessments (see [Anthropic](https://www.ft.com/content/9b1e6af4-94f2-41c6-bb91-96a74b9b2da1) for example).
 
-At Assembled, we actively encourage AI tools in certain technical interviews. Candidates have really enjoyed these interviews as they offer an authentic preview of our work environment. It also provides us with much clearer signals about a candidate’s day-to-day engineering work.
+At Assembled, we actively encourage AI tools in certain technical interviews. Candidates have really enjoyed these interviews as they offer an authentic preview of our work environment. It also provides us with much clearer signals about a candidate's day-to-day engineering work.
 
-To be clear, we haven't abandoned traditional interviews entirely — we still have dedicated sessions focusing on core CS fundamentals without AI assistance. But we believe a balanced engineer needs both skills: the ability to understand concepts deeply _and_ the ability to leverage modern tools effectively.
+To be clear, we haven't abandoned traditional interviews entirely — we still have dedicated sessions focusing on core CS fundamentals without AI assistance. But we believe a balanced engineer needs both skills: the ability to understand concepts deeply *and* the ability to leverage modern tools effectively.
 ```
 
 ### external-ai-coding-interviews--002
 
-`dev` - `candidate` - 356 approximate tokens - 224 words
+`dev` - `candidate` - 355 approximate tokens - 224 words
 
 Headings: The reality of modern engineering / New types of interviews
 
 ```markdown
-## The reality of modern engineering
+# The reality of modern engineering
 
 Our engineers don't write most of their code from scratch anymore. We use Cursor, Claude Code, GitHub Copilot, and other AI tools for a significant portion of our day-to-day coding. This isn't a dirty secret, it's just how modern engineering works.
 
-I’ve personally seen my productivity skyrocket since incorporating these tools. They’ve sped up everything from mundane tasks like writing tests to more complex but boilerplate-y work, like distributing WebSocket connections across servers.
+I've personally seen my productivity skyrocket since incorporating these tools. They've sped up everything from mundane tasks like writing tests to more complex but boilerplate-y work, like distributing WebSocket connections across servers.
 
-A few years ago, we evaluated candidates on their ability to search Google or use an IDE effectively. We’ve now done the same with today’s generation of tools, which just so happen to be largely powered by AI.
+A few years ago, we evaluated candidates on their ability to search Google or use an IDE effectively. We've now done the same with today's generation of tools, which just so happen to be largely powered by AI.
 
-## New types of interviews
+# New types of interviews
 
 Many of our past questions that prioritized coding fundamentals can be one-shotted with AI (which makes for a pretty boring interview experience). When we first introduced AI into our interviews, a candidate used ChatGPT to solve our standard algorithm challenge in under three minutes, leaving us with 40 minutes of awkward small talk.
 
-We’ve redesigned our interviews to better reflect the qualities we care about. Instead of FizzBuzz-type challenges, we now ask candidates to solve a scoped problem end to end, by building the backend and frontend. These problems have open ended design requirements—there's no right or wrong answer to most of them.
+We've redesigned our interviews to better reflect the qualities we care about. Instead of FizzBuzz-type challenges, we now ask candidates to solve a scoped problem end to end, by building the backend and frontend. These problems have open ended design requirements—there's no right or wrong answer to most of them.
 ```
 
 ### external-ai-coding-interviews--003
@@ -195,28 +195,28 @@ We’ve redesigned our interviews to better reflect the qualities we care about.
 Headings: Finding great engineers
 
 ```markdown
-## Finding great engineers
+# Finding great engineers
 
-When you join Assembled’s engineering team, we don’t really care if you can implement Quicksort from memory or if you can balance a red-black tree without documentation: we care about whether you can write maintainable, well-tested code that solves real user problems.
+When you join Assembled's engineering team, we don't really care if you can implement Quicksort from memory or if you can balance a red-black tree without documentation: we care about whether you can write maintainable, well-tested code that solves real user problems.
 
 After running dozens of AI-assisted interviews, we've identified a few patterns that distinguish exceptional engineers. The strongest candidates:
 
 *   **Have used AI tools extensively to write better, faster code**. One candidate impressed us by using AI to set up a complex data structure, but then customized the critical sections with their own optimizations. Another used AI to summarize unfamiliar API documentation, allowing them to focus on the architecture decisions in the interview.
 *   **Actually understand the problem before building**. This sounds obvious, but you'd be shocked how many people jump to implementation without understanding what needs to be done. A recent standout candidate asked a handful of piercingly thoughtful questions about use cases and then quickly incorporated that nuanced understanding into the end product.
 *   **Apply critical judgment to code, regardless of source.** Strong engineers don't blindly trust AI output but rather methodically evaluate, debug, and verify the generated solutions. One impressive candidate identified subtle bugs in an AI-generated algorithm that even our interviewers initially missed.
-*   **Make good product decisions.** The best candidates aren’t satisfied with code that merely meets the criteria, they’re generally thinking about what elevates the experience: from engineering specific things like performance, fault tolerance, and scalability to more general usability concerns like how a user will interact with their design. As AI handles more of the implementation details, engineers will make more product decisions than ever before. Having good "taste", i.e. knowing where to invest your effort for maximum impact and which details matter for user experience, is a crucial skill we're evaluating.
+*   **Make good product decisions.** The best candidates aren't satisfied with code that merely meets the criteria, they're generally thinking about what elevates the experience: from engineering specific things like performance, fault tolerance, and scalability to more general usability concerns like how a user will interact with their design. As AI handles more of the implementation details, engineers will make more product decisions than ever before. Having good "taste", i.e. knowing where to invest your effort for maximum impact and which details matter for user experience, is a crucial skill we're evaluating.
 
-On the other end of the spectrum, weaker candidates reveal consistent patterns that limit their effectiveness with AI tools. They often treat AI as a magic solution generator by feeding in prompts and accepting whatever comes back without much scrutiny. We’ve also seen candidates lack the technical judgment to evaluate AI-generated solutions or get stuck on bugs that AI couldn’t solve out of the box.
+On the other end of the spectrum, weaker candidates reveal consistent patterns that limit their effectiveness with AI tools. They often treat AI as a magic solution generator by feeding in prompts and accepting whatever comes back without much scrutiny. We've also seen candidates lack the technical judgment to evaluate AI-generated solutions or get stuck on bugs that AI couldn't solve out of the box.
 ```
 
 ### external-ai-coding-interviews--004
 
-`dev` - `candidate` - 299 approximate tokens - 177 words
+`dev` - `candidate` - 299 approximate tokens - 175 words
 
 Headings: Raising the bar
 
 ```markdown
-## Raising the bar
+# Raising the bar
 
 We've significantly increased our expectations for what candidates should accomplish during the interviews that allow AI. Where we once might have been satisfied with a basic backend implementation, we now expect candidates to build a relatively complete frontend, backend, and make significant progress on edge cases and optimizations within the same time frame.
 
@@ -224,7 +224,7 @@ Understanding computer science fundamentals remains important, but the emphasis 
 
 At Assembled, we believe technical interviews should evaluate how candidates will perform in the actual job — not in an artificial environment with arbitrary constraints. Our engineers use AI tools in their daily work, and our interview process reflects that reality.
 
-_If you're interested in a technical role at Assembled where we're building AI systems to transform customer support, check out our_[_open positions_](https://www.assembled.com/careers)_._
+*If you're interested in a technical role at Assembled where we're building AI systems to transform customer support, check out our*[*open positions*](https://www.assembled.com/careers)*.*
 ```
 
 ## Better RAG results with Reciprocal Rank Fusion and Hybrid Search
@@ -236,15 +236,15 @@ _If you're interested in a technical role at Assembled where we're building AI s
 Headings: The problem with vector-only search
 
 ```markdown
-## The problem with vector-only search
+# The problem with vector-only search
 
-At Assembled, [our issue resolution engine](https://www.assembled.com/features/assembled-assist) is designed to assist customer support by suggesting potential answers to support queries. We use Retrieval Augmented Generation (RAG) for much of this pipeline because it's quicker to iterate on than fine-tuning, doesn’t require training on customer data (which many companies prefer), and generally provides high-quality results.
+At Assembled, [our issue resolution engine](https://www.assembled.com/features/assembled-assist) is designed to assist customer support by suggesting potential answers to support queries. We use Retrieval Augmented Generation (RAG) for much of this pipeline because it's quicker to iterate on than fine-tuning, doesn't require training on customer data (which many companies prefer), and generally provides high-quality results.
 
-However, we encountered a significant challenge with RAG: relying solely on vector search (even using both dense and sparse vectors) doesn’t always deliver satisfactory results for certain queries. This issue was particularly evident when users entered specific keywords that didn’t accurately match stored knowledge articles.
+However, we encountered a significant challenge with RAG: relying solely on vector search (even using both dense and sparse vectors) doesn't always deliver satisfactory results for certain queries. This issue was particularly evident when users entered specific keywords that didn't accurately match stored knowledge articles.
 
 Customer support teams often have multiple articles on similar topics and lack a tightly curated knowledge base, leading vector search to sometimes return irrelevant results to our RAG engine and reduce response accuracy. Users familiar with traditional keyword searches were puzzled when our system couldn't find the right documents, especially for short queries with prominent but ambiguous keywords.
 
-For example, if a user asked “what features are included in a premium plan?”, vector search would excel at pulling documents about different plans, customer testimonials, or marketing materials. However, vector search would often fail at finding articles specifically targeting premium plans.
+For example, if a user asked "what features are included in a premium plan?", vector search would excel at pulling documents about different plans, customer testimonials, or marketing materials. However, vector search would often fail at finding articles specifically targeting premium plans.
 ```
 
 ### external-better-rag--002
@@ -254,13 +254,13 @@ For example, if a user asked “what features are included in a premium plan?”
 Headings: The solution: Hybrid Search with Reciprocal Rank Fusion / Document store abstraction
 
 ```markdown
-## The solution: Hybrid Search with Reciprocal Rank Fusion
+# The solution: Hybrid Search with Reciprocal Rank Fusion
 
-To address this issue, we integrated a new keyword search infrastructure that combines its results with vector search for optimal performance. In the above example, keyword search would hone in on “features”, “premium”, and “plan”, and narrow search results to documents specifically matching these keywords. A hybrid approach with both vector and keyword search allows us to effectively return articles with semantic matches while also providing users with the familiar feel of traditional keyword search. Our intuition was based on our experience with other machine learning systems where ensemble models generally outperform single models.
+To address this issue, we integrated a new keyword search infrastructure that combines its results with vector search for optimal performance. In the above example, keyword search would hone in on "features", "premium", and "plan", and narrow search results to documents specifically matching these keywords. A hybrid approach with both vector and keyword search allows us to effectively return articles with semantic matches while also providing users with the familiar feel of traditional keyword search. Our intuition was based on our experience with other machine learning systems where ensemble models generally outperform single models.
 
-### Document store abstraction
+## Document store abstraction
 
-To enable a hybrid store solution, we developed a document store abstraction in our code, allowing us to integrate multiple search algorithms. The abstraction is simple but captures all the essential functionalities of a document store and search system. It handles document management and querying and is agnostic to the actual implementation (vector search, keyword search, etc.). Here’s what it looks like:
+To enable a hybrid store solution, we developed a document store abstraction in our code, allowing us to integrate multiple search algorithms. The abstraction is simple but captures all the essential functionalities of a document store and search system. It handles document management and querying and is agnostic to the actual implementation (vector search, keyword search, etc.). Here's what it looks like:
 
 With this abstraction, we had the primitives we needed to swap different search systems in and out easily. Uploading a document could be done once and then sync across multiple document stores. Similarly, searching for a document could be done in parallel across multiple document stores using a standardized query.
 
@@ -274,7 +274,7 @@ The interesting part is that our hybrid search store itself implements the **`Do
 Headings: Syncing documents across stores
 
 ```markdown
-### Syncing documents across stores
+## Syncing documents across stores
 
 Enabling multiple document stores introduced technical challenges, especially around ensuring synchronization. Out-of-sync document stores could lead to subtle bugs, such as a document being present in one store but not another. To address this, we implemented the following:
 
@@ -290,19 +290,19 @@ Enabling multiple document stores introduced technical challenges, especially ar
 Headings: Combining results across multiple search engines / Weighting-based fusion / Rank fusion
 
 ```markdown
-## Combining results across multiple search engines
+# Combining results across multiple search engines
 
 To optimize search performance, we explored several algorithms for merging the results from our different document stores.
 
-### Weighting-based fusion
+## Weighting-based fusion
 
 Our initial approach involved experimenting with various weighting mechanisms for sparse/dense vectors and keyword search. The goal was to find optimal weightings that leverage the strengths of each search method. However, identifying the correct weightings proved challenging due to the unknown distribution of vector search scores. This variability made it difficult to determine the relative importance of different weightings.
 
-What’s more, empirical data showed that similarity scores (dot product and Euclidean distance) varied widely across our customer base. The differential performance across these metrics made it impractical to develop a universal weighting scheme for combining vector and keyword searches. Tuning these weights on a per-customer basis was not scalable.
+What's more, empirical data showed that similarity scores (dot product and Euclidean distance) varied widely across our customer base. The differential performance across these metrics made it impractical to develop a universal weighting scheme for combining vector and keyword searches. Tuning these weights on a per-customer basis was not scalable.
 
-### Rank fusion
+## Rank fusion
 
-Next, we turned to rank fusion algorithms, inspired by literature reviews and their demonstrated effectiveness in search optimization (see [[0]](https://rodgerbenham.github.io/bc17-adcs.pdf) and [[1]](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf)). Rank fusion algorithms, particularly Reciprocal Rank Fusion (RRF), provided a promising alternative. Here’s how most rank fusion algorithms work:
+Next, we turned to rank fusion algorithms, inspired by literature reviews and their demonstrated effectiveness in search optimization (see [[0]](https://rodgerbenham.github.io/bc17-adcs.pdf) and [[1]](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf)). Rank fusion algorithms, particularly Reciprocal Rank Fusion (RRF), provided a promising alternative. Here's how most rank fusion algorithms work:
 
 1.   **Rank assignment:** Each document from the individual ranked lists is assigned a score based on its rank position. Typically, the score is the reciprocal of its rank (i.e., 1/rank). For example, a document ranked first gets a score of 1, the second gets 0.5, the third gets 0.33, and so on.
 2.   **Score summation:** The scores from all ranked lists are summed for each document. Documents appearing in multiple lists accumulate higher combined scores.
@@ -311,61 +311,61 @@ Next, we turned to rank fusion algorithms, inspired by literature reviews and th
 
 ### external-better-rag--005
 
-`train` - `approved` - 602 approximate tokens - 326 words
+`train` - `approved` - 601 approximate tokens - 326 words
 
 Headings: Why we chose RRF / Optimizing our search infrastructure
 
 ```markdown
-### Why we chose RRF
+## Why we chose RRF
 
 After extensive testing, Reciprocal Rank Fusion (RRF) consistently outperformed many of the more complex methods we evaluated. Several factors contributed to this:
 
-*   **Simplicity and robustness:** RRF's simplicity makes it less prone to overfitting specific scenarios, aligning with the principle of [Occam’s razor](https://en.wikipedia.org/wiki/Occam's_razor). This simplicity enhances its robustness across different contexts.
+*   **Simplicity and robustness:** RRF's simplicity makes it less prone to overfitting specific scenarios, aligning with the principle of [Occam's razor](https://en.wikipedia.org/wiki/Occam's_razor). This simplicity enhances its robustness across different contexts.
 *   **Minimal tuning:** RRF provides a straightforward and effective way to rank results without the need for extensive parameter tuning. This is particularly advantageous given our diverse customer base and their varying knowledge bases.
 
 By implementing RRF, we achieved a flexible and scalable method for combining search results. Using RRF, we not only enhanced the accuracy and relevance of search outcomes but also simplified the overall search infrastructure, ensuring a robust solution for our diverse customer set.
 
-## Optimizing our search infrastructure
+# Optimizing our search infrastructure
 
 Finally, a note on our search engine choices. At Assembled, we use [Pinecone](https://www.pinecone.io/) for vector search and [Algolia](https://www.algolia.com/) for keyword search. After minimal testing with other providers, we concluded that the marginal benefits of further optimization were not significant. Consequently, we decided against hosting our own open-source vector database, such as [Milvus](https://github.com/milvus-io/milvus), or managing our own keyword search on [Elasticsearch](https://github.com/elastic/elasticsearch).
 
 Using B2B solutions like [Pinecone](https://www.pinecone.io/customers/assembled/) and Algolia offers several advantages:
 
 *   **Cost efficiency:** These services are reasonably cost-effective (especially when comparing to engineering time) and eliminate the need for significant upfront investment in infrastructure.
-*   **Maintenance reduction:** Like most companies, we’re resource constrained by engineering resources, so by outsourcing to specialized search companies, we avoid the substantial maintenance burden associated with self-hosted solutions. This allows our team to focus on our core functionality of AI replies for support issues.
+*   **Maintenance reduction:** Like most companies, we're resource constrained by engineering resources, so by outsourcing to specialized search companies, we avoid the substantial maintenance burden associated with self-hosted solutions. This allows our team to focus on our core functionality of AI replies for support issues.
 *   **Performance:** Algolia in particular provides low-latency responses, a robust API, and highly optimized search outputs which would likely outperform anything we could build on Elasticsearch.
 ```
 
 ### external-better-rag--full
 
-`train` - `candidate` - 2361 approximate tokens - 1349 words - exceeds target size
+`train` - `candidate` - 2359 approximate tokens - 1349 words - exceeds target size
 
 Headings: The problem with vector-only search / The solution: Hybrid Search with Reciprocal Rank Fusion / Document store abstraction / Syncing documents across stores / Combining results across multiple search engines / Weighting-based fusion / Rank fusion / Why we chose RRF / Optimizing our search infrastructure
 
 ```markdown
-## The problem with vector-only search
+# The problem with vector-only search
 
-At Assembled, [our issue resolution engine](https://www.assembled.com/features/assembled-assist) is designed to assist customer support by suggesting potential answers to support queries. We use Retrieval Augmented Generation (RAG) for much of this pipeline because it's quicker to iterate on than fine-tuning, doesn’t require training on customer data (which many companies prefer), and generally provides high-quality results.
+At Assembled, [our issue resolution engine](https://www.assembled.com/features/assembled-assist) is designed to assist customer support by suggesting potential answers to support queries. We use Retrieval Augmented Generation (RAG) for much of this pipeline because it's quicker to iterate on than fine-tuning, doesn't require training on customer data (which many companies prefer), and generally provides high-quality results.
 
-However, we encountered a significant challenge with RAG: relying solely on vector search (even using both dense and sparse vectors) doesn’t always deliver satisfactory results for certain queries. This issue was particularly evident when users entered specific keywords that didn’t accurately match stored knowledge articles.
+However, we encountered a significant challenge with RAG: relying solely on vector search (even using both dense and sparse vectors) doesn't always deliver satisfactory results for certain queries. This issue was particularly evident when users entered specific keywords that didn't accurately match stored knowledge articles.
 
 Customer support teams often have multiple articles on similar topics and lack a tightly curated knowledge base, leading vector search to sometimes return irrelevant results to our RAG engine and reduce response accuracy. Users familiar with traditional keyword searches were puzzled when our system couldn't find the right documents, especially for short queries with prominent but ambiguous keywords.
 
-For example, if a user asked “what features are included in a premium plan?”, vector search would excel at pulling documents about different plans, customer testimonials, or marketing materials. However, vector search would often fail at finding articles specifically targeting premium plans.
+For example, if a user asked "what features are included in a premium plan?", vector search would excel at pulling documents about different plans, customer testimonials, or marketing materials. However, vector search would often fail at finding articles specifically targeting premium plans.
 
-## The solution: Hybrid Search with Reciprocal Rank Fusion
+# The solution: Hybrid Search with Reciprocal Rank Fusion
 
-To address this issue, we integrated a new keyword search infrastructure that combines its results with vector search for optimal performance. In the above example, keyword search would hone in on “features”, “premium”, and “plan”, and narrow search results to documents specifically matching these keywords. A hybrid approach with both vector and keyword search allows us to effectively return articles with semantic matches while also providing users with the familiar feel of traditional keyword search. Our intuition was based on our experience with other machine learning systems where ensemble models generally outperform single models.
+To address this issue, we integrated a new keyword search infrastructure that combines its results with vector search for optimal performance. In the above example, keyword search would hone in on "features", "premium", and "plan", and narrow search results to documents specifically matching these keywords. A hybrid approach with both vector and keyword search allows us to effectively return articles with semantic matches while also providing users with the familiar feel of traditional keyword search. Our intuition was based on our experience with other machine learning systems where ensemble models generally outperform single models.
 
-### Document store abstraction
+## Document store abstraction
 
-To enable a hybrid store solution, we developed a document store abstraction in our code, allowing us to integrate multiple search algorithms. The abstraction is simple but captures all the essential functionalities of a document store and search system. It handles document management and querying and is agnostic to the actual implementation (vector search, keyword search, etc.). Here’s what it looks like:
+To enable a hybrid store solution, we developed a document store abstraction in our code, allowing us to integrate multiple search algorithms. The abstraction is simple but captures all the essential functionalities of a document store and search system. It handles document management and querying and is agnostic to the actual implementation (vector search, keyword search, etc.). Here's what it looks like:
 
 With this abstraction, we had the primitives we needed to swap different search systems in and out easily. Uploading a document could be done once and then sync across multiple document stores. Similarly, searching for a document could be done in parallel across multiple document stores using a standardized query.
 
 The interesting part is that our hybrid search store itself implements the **`DocumentStore`** interface. This means that, from the perspective of the caller, it doesn't matter whether they are interacting with a single store or our complex hybrid store — they use the same interface and methods. This design ensures that all of the logic for determining which documents are retrieved is hidden from the caller and can be tested separately. To implement the hybrid store, we passed in multiple child document stores and parallelized the search across all of the child stores.
 
-### Syncing documents across stores
+## Syncing documents across stores
 
 Enabling multiple document stores introduced technical challenges, especially around ensuring synchronization. Out-of-sync document stores could lead to subtle bugs, such as a document being present in one store but not another. To address this, we implemented the following:
 
@@ -373,41 +373,41 @@ Enabling multiple document stores introduced technical challenges, especially ar
 *   **Asynchronous updates:** Due to higher latency in storing articles, we first update our source of truth in the database and provide an acknowledgement to the frontend. We then asynchronously store the documents in our child stores. This approach helps manage latency across multiple stores and ensures our document stores are eventually consistent.
 *   **Error handling:** We also need to handle errors across different platforms. For example, one store might experience a network outage while another completes the storage process successfully. Our PostgreSQL database tracks the synchronization status of each store. If a store fails to sync, we employ [exponential backoff](https://en.wikipedia.org/wiki/Exponential_backoff) to retry the operation, ensuring that all stores are eventually brought into sync.
 
-## Combining results across multiple search engines
+# Combining results across multiple search engines
 
 To optimize search performance, we explored several algorithms for merging the results from our different document stores.
 
-### Weighting-based fusion
+## Weighting-based fusion
 
 Our initial approach involved experimenting with various weighting mechanisms for sparse/dense vectors and keyword search. The goal was to find optimal weightings that leverage the strengths of each search method. However, identifying the correct weightings proved challenging due to the unknown distribution of vector search scores. This variability made it difficult to determine the relative importance of different weightings.
 
-What’s more, empirical data showed that similarity scores (dot product and Euclidean distance) varied widely across our customer base. The differential performance across these metrics made it impractical to develop a universal weighting scheme for combining vector and keyword searches. Tuning these weights on a per-customer basis was not scalable.
+What's more, empirical data showed that similarity scores (dot product and Euclidean distance) varied widely across our customer base. The differential performance across these metrics made it impractical to develop a universal weighting scheme for combining vector and keyword searches. Tuning these weights on a per-customer basis was not scalable.
 
-### Rank fusion
+## Rank fusion
 
-Next, we turned to rank fusion algorithms, inspired by literature reviews and their demonstrated effectiveness in search optimization (see [[0]](https://rodgerbenham.github.io/bc17-adcs.pdf) and [[1]](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf)). Rank fusion algorithms, particularly Reciprocal Rank Fusion (RRF), provided a promising alternative. Here’s how most rank fusion algorithms work:
+Next, we turned to rank fusion algorithms, inspired by literature reviews and their demonstrated effectiveness in search optimization (see [[0]](https://rodgerbenham.github.io/bc17-adcs.pdf) and [[1]](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf)). Rank fusion algorithms, particularly Reciprocal Rank Fusion (RRF), provided a promising alternative. Here's how most rank fusion algorithms work:
 
 1.   **Rank assignment:** Each document from the individual ranked lists is assigned a score based on its rank position. Typically, the score is the reciprocal of its rank (i.e., 1/rank). For example, a document ranked first gets a score of 1, the second gets 0.5, the third gets 0.33, and so on.
 2.   **Score summation:** The scores from all ranked lists are summed for each document. Documents appearing in multiple lists accumulate higher combined scores.
 3.   **Final ranking:** Documents are re-ranked based on their combined scores, producing a final ranked list that integrates the rankings from all individual search engines.
 
-### Why we chose RRF
+## Why we chose RRF
 
 After extensive testing, Reciprocal Rank Fusion (RRF) consistently outperformed many of the more complex methods we evaluated. Several factors contributed to this:
 
-*   **Simplicity and robustness:** RRF's simplicity makes it less prone to overfitting specific scenarios, aligning with the principle of [Occam’s razor](https://en.wikipedia.org/wiki/Occam's_razor). This simplicity enhances its robustness across different contexts.
+*   **Simplicity and robustness:** RRF's simplicity makes it less prone to overfitting specific scenarios, aligning with the principle of [Occam's razor](https://en.wikipedia.org/wiki/Occam's_razor). This simplicity enhances its robustness across different contexts.
 *   **Minimal tuning:** RRF provides a straightforward and effective way to rank results without the need for extensive parameter tuning. This is particularly advantageous given our diverse customer base and their varying knowledge bases.
 
 By implementing RRF, we achieved a flexible and scalable method for combining search results. Using RRF, we not only enhanced the accuracy and relevance of search outcomes but also simplified the overall search infrastructure, ensuring a robust solution for our diverse customer set.
 
-## Optimizing our search infrastructure
+# Optimizing our search infrastructure
 
 Finally, a note on our search engine choices. At Assembled, we use [Pinecone](https://www.pinecone.io/) for vector search and [Algolia](https://www.algolia.com/) for keyword search. After minimal testing with other providers, we concluded that the marginal benefits of further optimization were not significant. Consequently, we decided against hosting our own open-source vector database, such as [Milvus](https://github.com/milvus-io/milvus), or managing our own keyword search on [Elasticsearch](https://github.com/elastic/elasticsearch).
 
 Using B2B solutions like [Pinecone](https://www.pinecone.io/customers/assembled/) and Algolia offers several advantages:
 
 *   **Cost efficiency:** These services are reasonably cost-effective (especially when comparing to engineering time) and eliminate the need for significant upfront investment in infrastructure.
-*   **Maintenance reduction:** Like most companies, we’re resource constrained by engineering resources, so by outsourcing to specialized search companies, we avoid the substantial maintenance burden associated with self-hosted solutions. This allows our team to focus on our core functionality of AI replies for support issues.
+*   **Maintenance reduction:** Like most companies, we're resource constrained by engineering resources, so by outsourcing to specialized search companies, we avoid the substantial maintenance burden associated with self-hosted solutions. This allows our team to focus on our core functionality of AI replies for support issues.
 *   **Performance:** Algolia in particular provides low-latency responses, a robust API, and highly optimized search outputs which would likely outperform anything we could build on Elasticsearch.
 ```
 
@@ -430,13 +430,13 @@ To optimize search performance, we explored several algorithms for merging the r
 Headings: (intro or continuation)
 
 ```markdown
-Perplexity was recently accused of [scraping sites that had explicitly disallowed LLM crawlers](https://techcrunch.com/2025/08/04/perplexity-accused-of-scraping-websites-that-explicitly-blocked-ai-scraping/) in their robots.txt files. In the wake of that revelation, a wave of how-to guides for blocking large-language-model scraping has surfaced [0]. They’re generally highly vitriolic, with people opposing this on both moral grounds (“AI is stealing your content”) as well as displaying a general distaste for AI.
+Perplexity was recently accused of [scraping sites that had explicitly disallowed LLM crawlers](https://techcrunch.com/2025/08/04/perplexity-accused-of-scraping-websites-that-explicitly-blocked-ai-scraping/) in their robots.txt files. In the wake of that revelation, a wave of how-to guides for blocking large-language-model scraping has surfaced [0]. They're generally highly vitriolic, with people opposing this on both moral grounds ("AI is stealing your content") as well as displaying a general distaste for AI.
 
-**But how many of you wouldn’t hook up your website to Google?**
+**But how many of you wouldn't hook up your website to Google?**
 
-I know one of the primary reasons that I do anything online is to provide an outlet for someone else to see it. If I didn’t want someone else to see it, I’d write it down on my notebook, not on the public web.
+I know one of the primary reasons that I do anything online is to provide an outlet for someone else to see it. If I didn't want someone else to see it, I'd write it down on my notebook, not on the public web.
 
-LLMs are the next generation’s search layer. They’re already generating massive amounts of pipeline for the companies and websites that have gotten good at getting their content displayed in LLMs. Combine that with the fact that most LLMs have an agentic web-search component that will actively generate links, and you have a massive funnel of potential readers for your content.
+LLMs are the next generation's search layer. They're already generating massive amounts of pipeline for the companies and websites that have gotten good at getting their content displayed in LLMs. Combine that with the fact that most LLMs have an agentic web-search component that will actively generate links, and you have a massive funnel of potential readers for your content.
 
 Blocking that pipeline may feel righteous, but it also cuts you off from the fastest-growing distribution channel on the web.
 
@@ -452,13 +452,13 @@ Providing high quality content that LLMs will actually cite is the new game in t
 Headings: (intro or continuation)
 
 ```markdown
-Perplexity was recently accused of [scraping sites that had explicitly disallowed LLM crawlers](https://techcrunch.com/2025/08/04/perplexity-accused-of-scraping-websites-that-explicitly-blocked-ai-scraping/) in their robots.txt files. In the wake of that revelation, a wave of how-to guides for blocking large-language-model scraping has surfaced [0]. They’re generally highly vitriolic, with people opposing this on both moral grounds (“AI is stealing your content”) as well as displaying a general distaste for AI.
+Perplexity was recently accused of [scraping sites that had explicitly disallowed LLM crawlers](https://techcrunch.com/2025/08/04/perplexity-accused-of-scraping-websites-that-explicitly-blocked-ai-scraping/) in their robots.txt files. In the wake of that revelation, a wave of how-to guides for blocking large-language-model scraping has surfaced [0]. They're generally highly vitriolic, with people opposing this on both moral grounds ("AI is stealing your content") as well as displaying a general distaste for AI.
 
-**But how many of you wouldn’t hook up your website to Google?**
+**But how many of you wouldn't hook up your website to Google?**
 
-I know one of the primary reasons that I do anything online is to provide an outlet for someone else to see it. If I didn’t want someone else to see it, I’d write it down on my notebook, not on the public web.
+I know one of the primary reasons that I do anything online is to provide an outlet for someone else to see it. If I didn't want someone else to see it, I'd write it down on my notebook, not on the public web.
 
-LLMs are the next generation’s search layer. They’re already generating massive amounts of pipeline for the companies and websites that have gotten good at getting their content displayed in LLMs. Combine that with the fact that most LLMs have an agentic web-search component that will actively generate links, and you have a massive funnel of potential readers for your content.
+LLMs are the next generation's search layer. They're already generating massive amounts of pipeline for the companies and websites that have gotten good at getting their content displayed in LLMs. Combine that with the fact that most LLMs have an agentic web-search component that will actively generate links, and you have a massive funnel of potential readers for your content.
 
 Blocking that pipeline may feel righteous, but it also cuts you off from the fastest-growing distribution channel on the web.
 
@@ -490,13 +490,13 @@ This post covers how we found the bottleneck, how we built the auto-reviewer, an
 Headings: Reviewers couldn't keep up with agent-generated code
 
 ```markdown
-## Reviewers couldn't keep up with agent-generated code
+# Reviewers couldn't keep up with agent-generated code
 
 For some context, we sell customer support software to companies like Salesforce and DoorDash, as well as organizations like the State of Georgia. Hundreds of thousands of support agents rely on our product being stable. Vibe coding without verifying correctness was never an option for us. Still, we felt like we should be moving faster given the coding agents and other AI tools we now had access to.
 
 So we did an investigation into our engineering productivity. As we dug into the metrics, we found a few things:
 
-*   **The number of open PRs was much larger than before**, and the majority of them weren't getting merged (and if they were, they weren’t getting merged quickly).
+*   **The number of open PRs was much larger than before**, and the majority of them weren't getting merged (and if they were, they weren't getting merged quickly).
 *   **Stacks were getting deeper.** Engineers were breaking big features into reviewable pieces, which is the right instinct, but it regularly produced stacks of 20 PRs for a single project.
 *   **Time to first review was up** from a median of 3.5h in December 2025 to over 16h in May 2026, driven by a much larger incoming PR count.
 *   **PR size had increased 2.5x**, since agent-written diffs tend to be larger than the human-written version of the same change.
@@ -508,19 +508,19 @@ Every property of coding agents points toward more code, but we were still routi
 
 ### external-code-review-bottlenecks--003
 
-`train` - `approved` - 431 approximate tokens - 261 words
+`train` - `approved` - 430 approximate tokens - 261 words
 
 Headings: Setting up an automated reviewer for low-risk PRs
 
 ```markdown
-## Setting up an automated reviewer for low-risk PRs
+# Setting up an automated reviewer for low-risk PRs
 
 To alleviate this, we started with the safest possible experiment: auto-approving test-only PRs. It worked fine, but there were relatively few test-only PRs (only a handful per week), so it didn't move the needle perceptibly.
 
 Then we got more aggressive and built a review system directly into [143.dev](http://143.dev/), our internal coding agent platform [0]. The system:
 
 *   **Runs two independent reviews.** Codex (GPT-5.6-sol, high) and Claude Code (Claude Opus 5, high) each review the PR in separate cloud sandboxes. We intentionally made the prompts simple, using the built-in `/review` command. OpenAI and Anthropic have enormous resources making sure their agents work well for review, so we leveraged that as much as possible.
-*   **Makes an approval decision.** An orchestrator agent (GPT-5.6-sol, high) pulls in both reviews, applies our approval policy, and decides whether the PR gets auto-approved. The approval policy includes both deterministic rules (e.g. only approve PRs under 1000 lines changed) as well as LLM-based policies (e.g. don’t approve any changes in credential or secret handling or cryptographic key management).
+*   **Makes an approval decision.** An orchestrator agent (GPT-5.6-sol, high) pulls in both reviews, applies our approval policy, and decides whether the PR gets auto-approved. The approval policy includes both deterministic rules (e.g. only approve PRs under 1000 lines changed) as well as LLM-based policies (e.g. don't approve any changes in credential or secret handling or cryptographic key management).
 
 We spent a large amount of time tuning the policy that we use, landing on something similar to the following:
 
@@ -534,18 +534,18 @@ We spent a large amount of time tuning the policy that we use, landing on someth
 
 ### external-code-review-bottlenecks--004
 
-`train` - `approved` - 289 approximate tokens - 196 words
+`train` - `approved` - 288 approximate tokens - 196 words
 
 Headings: Iterating on the policy
 
 ```markdown
-## Iterating on the policy
+# Iterating on the policy
 
-As Greg Mankiw says: “People respond to incentives” and the auto-approval policy was the ultimate version of this. We saw that our engineers ended up shaping PRs for the approval policy, so whatever the policy rewards, you get more of.
+As Greg Mankiw says: "People respond to incentives" and the auto-approval policy was the ultimate version of this. We saw that our engineers ended up shaping PRs for the approval policy, so whatever the policy rewards, you get more of.
 
-This meant we had to be very thoughtful about what we wanted to let through. We realized that the only usable version of an auto-approval policy was one with high integrity and broad coverage. When there was low coverage (e.g. it doesn’t auto-approve enough things), the reviewer didn’t get enough traction to be used and people abandoned or forgot about it.
+This meant we had to be very thoughtful about what we wanted to let through. We realized that the only usable version of an auto-approval policy was one with high integrity and broad coverage. When there was low coverage (e.g. it doesn't auto-approve enough things), the reviewer didn't get enough traction to be used and people abandoned or forgot about it.
 
-At the same time, we needed to ensure we weren’t approving low quality PRs either:
+At the same time, we needed to ensure we weren't approving low quality PRs either:
 
 *   Policy too loose: people route work through it precisely because it doesn't look closely, mistakes compound in master, and we have an incredibly dangerous buildup of bugs.
 *   Policy too strict: it fails silently and you never recover usage. Engineers try it twice, get rejected, and stop asking, which means you save no review time and stop learning where the policy is wrong.
@@ -560,11 +560,11 @@ So the job was to hold a narrow ridge between the two cliffs.
 Headings: Rolling out safely
 
 ```markdown
-## Rolling out safely
+# Rolling out safely
 
-We found the best way to make adjustments to the policy to tune it towards the “Useful automation” region was a phased approach:
+We found the best way to make adjustments to the policy to tune it towards the "Useful automation" region was a phased approach:
 
-*   **Start with trusted alpha testers and review everything.** We launched with a small group that reported both false positives and false negatives, with much more scrutiny on false positives. Before a wider launch, a mistaken approval would still be noticed by the group. The team that owned the policy also reviewed **every PR** as they came in and compared its decision with the system’s. Surprisingly, we found that our initial policy was far too conservative. We had added a lot of restrictions that were not buying us meaningful safety, and the reviewer rejected so much that engineers were unlikely to keep using it.
+*   **Start with trusted alpha testers and review everything.** We launched with a small group that reported both false positives and false negatives, with much more scrutiny on false positives. Before a wider launch, a mistaken approval would still be noticed by the group. The team that owned the policy also reviewed **every PR** as they came in and compared its decision with the system's. Surprisingly, we found that our initial policy was far too conservative. We had added a lot of restrictions that were not buying us meaningful safety, and the reviewer rejected so much that engineers were unlikely to keep using it.
 *   **Expand gradually, with audits and direct feedback.** Once we were confident in the initial behavior, we rolled it out more broadly.
     *   We started with daily reviews of approval quality, then moved to a regular cadence as usage and confidence grew. We also built automations that scanned review sessions and identified recurring failure patterns.
     *   Engineers could request a re-review or leave free-form feedback directly on the PR. The 143 reviewer categorized that feedback for the admins, who could then decide whether the policy needed to change.
@@ -582,7 +582,7 @@ The goal was to begin with a narrow set of changes where we could establish trus
 Headings: Results: 2.4× more PRs merged
 
 ```markdown
-## Results: 2.4× more PRs merged
+# Results: 2.4× more PRs merged
 
 The metrics from our rollout were incredible and they far exceeded our initial expectations:
 
@@ -590,14 +590,14 @@ The metrics from our rollout were incredible and they far exceeded our initial e
 *   **Auto-approvals grew to 43% of merges** over the three weeks after the full-team launch.
 *   **Large PRs (600+ lines) increased 3.5× in throughput**, with p90 wait time holding steady.
 *   **Refactoring went up 7.5× and test work went up 3.4×.** Nearly half of our peak week was debt paydown we'd previously never gotten to.
-*   **Bugs reported per week went down 27%** and **reverts per PR stayed steady at 0.8%**. Note this window is too short to be conclusive, especially because of the time delay of bugs being reported, but it is encouraging and these are numbers we’ll continue to check.
+*   **Bugs reported per week went down 27%** and **reverts per PR stayed steady at 0.8%**. Note this window is too short to be conclusive, especially because of the time delay of bugs being reported, but it is encouraging and these are numbers we'll continue to check.
 *   **Non-engineers accounted for 13% of all PRs.** We had a stricter approval policy set up for designers, PM, and customer support, but we still allowed auto approval for small changes (updating copy, fixing bugs, etc.). The auto-reviewer, combined with cloud agents like Devin, allowed non-engineers to contribute significantly without requiring a large amount of engineering handholding.
 
 These are observational results from a rollout, not a randomized trial, and we don't think the auto-reviewer gets credit for every point of movement (and there are still observations of bugs and long-term quality that need to be made). But the timing, the composition of the extra work, and what engineers told us point to a few mechanisms at work:
 
-**Fast, predictable review changed which work people attempted.** The median auto-review takes eight minutes, and just as importantly, you know roughly when it's coming and what bar you have to clear. Before, an engineer who noticed a minor refactor or a missing test had to decide whether it was worth consuming a human reviewer's attention. These PRs were easy to deprioritize because they weren’t urgent. With a reliable fast lane, engineers became much more willing to spin off small improvements. If you're in an area of the codebase and see something small worth fixing, it's now easy to kick off a separate job and get it reviewed quickly. This is a big part of why refactoring grew 7.5x while overall output grew 2.4x.
+**Fast, predictable review changed which work people attempted.** The median auto-review takes eight minutes, and just as importantly, you know roughly when it's coming and what bar you have to clear. Before, an engineer who noticed a minor refactor or a missing test had to decide whether it was worth consuming a human reviewer's attention. These PRs were easy to deprioritize because they weren't urgent. With a reliable fast lane, engineers became much more willing to spin off small improvements. If you're in an area of the codebase and see something small worth fixing, it's now easy to kick off a separate job and get it reviewed quickly. This is a big part of why refactoring grew 7.5x while overall output grew 2.4x.
 
-**Much of the new speed centered on bug-fixes and performance work.** Instead of unleashing a bevy of bad PRs, the auto-reviewer has actually encouraged better code because of the ease at which smaller bugfixes and targeted performance work move through the system. We’ve seen our primary database CPU usage decrease by 20% as teams set up automations to improve slow queries they owned.
+**Much of the new speed centered on bug-fixes and performance work.** Instead of unleashing a bevy of bad PRs, the auto-reviewer has actually encouraged better code because of the ease at which smaller bugfixes and targeted performance work move through the system. We've seen our primary database CPU usage decrease by 20% as teams set up automations to improve slow queries they owned.
 ```
 
 ### external-code-review-bottlenecks--007
@@ -614,7 +614,7 @@ Headings: (intro or continuation)
 
 ### external-code-review-bottlenecks--full
 
-`train` - `candidate` - 2945 approximate tokens - 1922 words - exceeds target size
+`train` - `candidate` - 2944 approximate tokens - 1922 words - exceeds target size
 
 Headings: Reviewers couldn't keep up with agent-generated code / Setting up an automated reviewer for low-risk PRs / Iterating on the policy / Rolling out safely / Results: 2.4× more PRs merged
 
@@ -625,13 +625,13 @@ We dug into our engineering productivity data and found that human code review h
 
 This post covers how we found the bottleneck, how we built the auto-reviewer, and our hypotheses for why it worked as well as it did.
 
-## Reviewers couldn't keep up with agent-generated code
+# Reviewers couldn't keep up with agent-generated code
 
 For some context, we sell customer support software to companies like Salesforce and DoorDash, as well as organizations like the State of Georgia. Hundreds of thousands of support agents rely on our product being stable. Vibe coding without verifying correctness was never an option for us. Still, we felt like we should be moving faster given the coding agents and other AI tools we now had access to.
 
 So we did an investigation into our engineering productivity. As we dug into the metrics, we found a few things:
 
-*   **The number of open PRs was much larger than before**, and the majority of them weren't getting merged (and if they were, they weren’t getting merged quickly).
+*   **The number of open PRs was much larger than before**, and the majority of them weren't getting merged (and if they were, they weren't getting merged quickly).
 *   **Stacks were getting deeper.** Engineers were breaking big features into reviewable pieces, which is the right instinct, but it regularly produced stacks of 20 PRs for a single project.
 *   **Time to first review was up** from a median of 3.5h in December 2025 to over 16h in May 2026, driven by a much larger incoming PR count.
 *   **PR size had increased 2.5x**, since agent-written diffs tend to be larger than the human-written version of the same change.
@@ -640,14 +640,14 @@ There were also costs that didn't show up on a dashboard. Engineers had to multi
 
 Every property of coding agents points toward more code, but we were still routing all of it through the same number of human reviewers.
 
-## Setting up an automated reviewer for low-risk PRs
+# Setting up an automated reviewer for low-risk PRs
 
 To alleviate this, we started with the safest possible experiment: auto-approving test-only PRs. It worked fine, but there were relatively few test-only PRs (only a handful per week), so it didn't move the needle perceptibly.
 
 Then we got more aggressive and built a review system directly into [143.dev](http://143.dev/), our internal coding agent platform [0]. The system:
 
 *   **Runs two independent reviews.** Codex (GPT-5.6-sol, high) and Claude Code (Claude Opus 5, high) each review the PR in separate cloud sandboxes. We intentionally made the prompts simple, using the built-in `/review` command. OpenAI and Anthropic have enormous resources making sure their agents work well for review, so we leveraged that as much as possible.
-*   **Makes an approval decision.** An orchestrator agent (GPT-5.6-sol, high) pulls in both reviews, applies our approval policy, and decides whether the PR gets auto-approved. The approval policy includes both deterministic rules (e.g. only approve PRs under 1000 lines changed) as well as LLM-based policies (e.g. don’t approve any changes in credential or secret handling or cryptographic key management).
+*   **Makes an approval decision.** An orchestrator agent (GPT-5.6-sol, high) pulls in both reviews, applies our approval policy, and decides whether the PR gets auto-approved. The approval policy includes both deterministic rules (e.g. only approve PRs under 1000 lines changed) as well as LLM-based policies (e.g. don't approve any changes in credential or secret handling or cryptographic key management).
 
 We spent a large amount of time tuning the policy that we use, landing on something similar to the following:
 
@@ -658,24 +658,24 @@ We spent a large amount of time tuning the policy that we use, landing on someth
 *   No new architectural patterns
 *   A few other guardrails based on failure modes we saw during rollout
 
-## Iterating on the policy
+# Iterating on the policy
 
-As Greg Mankiw says: “People respond to incentives” and the auto-approval policy was the ultimate version of this. We saw that our engineers ended up shaping PRs for the approval policy, so whatever the policy rewards, you get more of.
+As Greg Mankiw says: "People respond to incentives" and the auto-approval policy was the ultimate version of this. We saw that our engineers ended up shaping PRs for the approval policy, so whatever the policy rewards, you get more of.
 
-This meant we had to be very thoughtful about what we wanted to let through. We realized that the only usable version of an auto-approval policy was one with high integrity and broad coverage. When there was low coverage (e.g. it doesn’t auto-approve enough things), the reviewer didn’t get enough traction to be used and people abandoned or forgot about it.
+This meant we had to be very thoughtful about what we wanted to let through. We realized that the only usable version of an auto-approval policy was one with high integrity and broad coverage. When there was low coverage (e.g. it doesn't auto-approve enough things), the reviewer didn't get enough traction to be used and people abandoned or forgot about it.
 
-At the same time, we needed to ensure we weren’t approving low quality PRs either:
+At the same time, we needed to ensure we weren't approving low quality PRs either:
 
 *   Policy too loose: people route work through it precisely because it doesn't look closely, mistakes compound in master, and we have an incredibly dangerous buildup of bugs.
 *   Policy too strict: it fails silently and you never recover usage. Engineers try it twice, get rejected, and stop asking, which means you save no review time and stop learning where the policy is wrong.
 
 So the job was to hold a narrow ridge between the two cliffs.
 
-## Rolling out safely
+# Rolling out safely
 
-We found the best way to make adjustments to the policy to tune it towards the “Useful automation” region was a phased approach:
+We found the best way to make adjustments to the policy to tune it towards the "Useful automation" region was a phased approach:
 
-*   **Start with trusted alpha testers and review everything.** We launched with a small group that reported both false positives and false negatives, with much more scrutiny on false positives. Before a wider launch, a mistaken approval would still be noticed by the group. The team that owned the policy also reviewed **every PR** as they came in and compared its decision with the system’s. Surprisingly, we found that our initial policy was far too conservative. We had added a lot of restrictions that were not buying us meaningful safety, and the reviewer rejected so much that engineers were unlikely to keep using it.
+*   **Start with trusted alpha testers and review everything.** We launched with a small group that reported both false positives and false negatives, with much more scrutiny on false positives. Before a wider launch, a mistaken approval would still be noticed by the group. The team that owned the policy also reviewed **every PR** as they came in and compared its decision with the system's. Surprisingly, we found that our initial policy was far too conservative. We had added a lot of restrictions that were not buying us meaningful safety, and the reviewer rejected so much that engineers were unlikely to keep using it.
 *   **Expand gradually, with audits and direct feedback.** Once we were confident in the initial behavior, we rolled it out more broadly.
     *   We started with daily reviews of approval quality, then moved to a regular cadence as usage and confidence grew. We also built automations that scanned review sessions and identified recurring failure patterns.
     *   Engineers could request a re-review or leave free-form feedback directly on the PR. The 143 reviewer categorized that feedback for the admins, who could then decide whether the policy needed to change.
@@ -685,7 +685,7 @@ We found the best way to make adjustments to the policy to tune it towards the �
 
 The goal was to begin with a narrow set of changes where we could establish trust, then gradually expand coverage as our evidence and guardrails improved. The policy needed to be strict enough that an approval meant something, but useful enough that engineers would actually change their behavior to qualify for it.
 
-## Results: 2.4× more PRs merged
+# Results: 2.4× more PRs merged
 
 The metrics from our rollout were incredible and they far exceeded our initial expectations:
 
@@ -693,14 +693,14 @@ The metrics from our rollout were incredible and they far exceeded our initial e
 *   **Auto-approvals grew to 43% of merges** over the three weeks after the full-team launch.
 *   **Large PRs (600+ lines) increased 3.5× in throughput**, with p90 wait time holding steady.
 *   **Refactoring went up 7.5× and test work went up 3.4×.** Nearly half of our peak week was debt paydown we'd previously never gotten to.
-*   **Bugs reported per week went down 27%** and **reverts per PR stayed steady at 0.8%**. Note this window is too short to be conclusive, especially because of the time delay of bugs being reported, but it is encouraging and these are numbers we’ll continue to check.
+*   **Bugs reported per week went down 27%** and **reverts per PR stayed steady at 0.8%**. Note this window is too short to be conclusive, especially because of the time delay of bugs being reported, but it is encouraging and these are numbers we'll continue to check.
 *   **Non-engineers accounted for 13% of all PRs.** We had a stricter approval policy set up for designers, PM, and customer support, but we still allowed auto approval for small changes (updating copy, fixing bugs, etc.). The auto-reviewer, combined with cloud agents like Devin, allowed non-engineers to contribute significantly without requiring a large amount of engineering handholding.
 
 These are observational results from a rollout, not a randomized trial, and we don't think the auto-reviewer gets credit for every point of movement (and there are still observations of bugs and long-term quality that need to be made). But the timing, the composition of the extra work, and what engineers told us point to a few mechanisms at work:
 
-**Fast, predictable review changed which work people attempted.** The median auto-review takes eight minutes, and just as importantly, you know roughly when it's coming and what bar you have to clear. Before, an engineer who noticed a minor refactor or a missing test had to decide whether it was worth consuming a human reviewer's attention. These PRs were easy to deprioritize because they weren’t urgent. With a reliable fast lane, engineers became much more willing to spin off small improvements. If you're in an area of the codebase and see something small worth fixing, it's now easy to kick off a separate job and get it reviewed quickly. This is a big part of why refactoring grew 7.5x while overall output grew 2.4x.
+**Fast, predictable review changed which work people attempted.** The median auto-review takes eight minutes, and just as importantly, you know roughly when it's coming and what bar you have to clear. Before, an engineer who noticed a minor refactor or a missing test had to decide whether it was worth consuming a human reviewer's attention. These PRs were easy to deprioritize because they weren't urgent. With a reliable fast lane, engineers became much more willing to spin off small improvements. If you're in an area of the codebase and see something small worth fixing, it's now easy to kick off a separate job and get it reviewed quickly. This is a big part of why refactoring grew 7.5x while overall output grew 2.4x.
 
-**Much of the new speed centered on bug-fixes and performance work.** Instead of unleashing a bevy of bad PRs, the auto-reviewer has actually encouraged better code because of the ease at which smaller bugfixes and targeted performance work move through the system. We’ve seen our primary database CPU usage decrease by 20% as teams set up automations to improve slow queries they owned.
+**Much of the new speed centered on bug-fixes and performance work.** Instead of unleashing a bevy of bad PRs, the auto-reviewer has actually encouraged better code because of the ease at which smaller bugfixes and targeted performance work move through the system. We've seen our primary database CPU usage decrease by 20% as teams set up automations to improve slow queries they owned.
 
 **The policy improved the PRs themselves.** To qualify for auto-approval, a PR needs a real description, direct testing evidence, and an implementation that follows existing patterns. Engineers adapted to this quickly. More PRs showed up with testing evidence at the top and screenshots of the change, and large changes got broken into smaller units so each piece was more likely to qualify. This raised the baseline quality of all PRs, including the ones humans review, and it pushed the codebase toward smaller, cleaner changes, which is something we wanted anyway.
 
@@ -714,13 +714,13 @@ These are observational results from a rollout, not a randomized trial, and we d
 Headings: Costs / What's next
 
 ```markdown
-## Costs
+# Costs
 
-Across a 14-day sample, our automated code reviews consumed an estimated $3.57 in LLM usage per attempt. That’s more than a lightweight review bot but substantially less than premium managed multi-agent review (e.g. Anthropic’s managed code review), while buying two independent frontier-model assessments and a separate synthesis pass.
+Across a 14-day sample, our automated code reviews consumed an estimated $3.57 in LLM usage per attempt. That's more than a lightweight review bot but substantially less than premium managed multi-agent review (e.g. Anthropic's managed code review), while buying two independent frontier-model assessments and a separate synthesis pass.
 
 Our internal system is also connected to OpenCode and we can relatively straightforwardly swap out any of the reviewer models with other cheaper model types in the future (e.g. Kimi K3 or Qwen3.8). The framework we use allows us to have any number of coding agent reviewers under the orchestrator so this is tunable in the future.
 
-## What's next
+# What's next
 
 The results are early, so we still need to understand how these auto-reviews affect our long term outcomes like bugs shipped, product quality, roadmap speed, etc.
 
@@ -743,563 +743,374 @@ Speeding up one stage of a pipeline tends to move the constraint to the next sta
 
 ### external-database-abstractions-golang--001
 
-`test` - `candidate` - 659 approximate tokens - 420 words
+`test` - `candidate` - 655 approximate tokens - 422 words
 
 Headings: Challenge 1: Writing performant, reusable SQL queries / The problem: Sharing code between single and multi-row getters
 
-```markdown
-At [Assembled](http://assembled.com/), we’ve been using Golang as our exclusive backend language since our founding in 2018. We run a pretty standard web application, but we found that accessing the database comes with its own particular set of challenges that haven’t been fully addressed by the Go standard library or community packages.
+````markdown
+At [Assembled](http://assembled.com/), we've been using Golang as our exclusive backend language since our founding in 2018. We run a pretty standard web application, but we found that accessing the database comes with its own particular set of challenges that haven't been fully addressed by the Go standard library or community packages.
 
-In this article, we’ll talk about 3 abstractions we’ve built at Assembled that make database access in Golang easier:
+In this article, we'll talk about 3 abstractions we've built at Assembled that make database access in Golang easier:
 
 *   An interface to share code between single- and multi-row getters
-*   A helper method to ensure you’re always handling errors and closing rows when scanning from the database
+*   A helper method to ensure you're always handling errors and closing rows when scanning from the database
 *   An interface to share code between transactions and non-transactions
 
-## Challenge 1: Writing performant, reusable SQL queries
+# Challenge 1: Writing performant, reusable SQL queries
 
-### The problem: Sharing code between single and multi-row getters
+## The problem: Sharing code between single and multi-row getters
 
-When we first started writing SQL queries, we dutifully wrote raw SQL like many Golang tutorials told us. But we soon ran into problems with this approach. Let’s say you’re writing an e-commerce application, then you might have the following method to get the information for a particular order:
+When we first started writing SQL queries, we dutifully wrote raw SQL like many Golang tutorials told us. But we soon ran into problems with this approach. Let's say you're writing an e-commerce application, then you might have the following method to get the information for a particular order:
 
+```go
 type Order struct {
-
  ID string
-
  ItemID string
-
  Price int
-
 }
 func GetOrder(id string) (*Order, error) {
-
  var order Order
-
 row := db.QueryRow("SELECT id, item_id, price FROM orders WHERE id = $1;", id)
-
  err := row.Scan(&order.ID, &order.ItemID, &order.Price)
-
  if err != nil {
-
  return nil, err
-
  }
-
  return &order, nil
-
 }
+```
 
 This is great if you only need to get one order, but what if you want to implement a page where a customer can see all their orders and now you need to add a method to fetch multiple orders? The easiest way to reuse your old code is by getting all the order ids that match and then reusing that original method that you wrote for `GetOrder()`.
 
+```go
 func GetAllOrders() ([]Order, error) {
-
  rows, err := db.QueryRows("SELECT id FROM orders;")
-
  if err != nil {
-
  return nil, err
-
  }
-
  defer rows.Close()
 var ids []string
-
  for rows.Next() {
-
  var id string
-
  if err := rows.Scan(&id); err != nil {
-
  return nil, err
-
  }
-
  ids = append(ids, id)
-
  }
-
 var orders []Order
-
  for _, id := range ids {
-
  order, err := GetOrder(id)
-
  if err != nil {
-
  return nil, err
-
  }
-
  orders = append(orders, order)
-
  }
-
  return orders, nil
-
 }
+```
 
-The problem with the above is that you’re now making `O(# of orders)`queries. This is expensive and non-performant because:
+The problem with the above is that you're now making `O(# of orders)`queries. This is expensive and non-performant because:
 
 *   Postgres has to parse and generate a query plan for every query
-*   You’ll add the packet roundtrip time from your webserver to the database to every request, which can blow up very quickly if you have lots of requests [0].
-```
+*   You'll add the packet roundtrip time from your webserver to the database to every request, which can blow up very quickly if you have lots of requests [0].
+````
 
 ### external-database-abstractions-golang--002
 
-`test` - `candidate` - 556 approximate tokens - 341 words
+`test` - `candidate` - 552 approximate tokens - 342 words
 
 Headings: The solution: Create an abstraction for scanning a database row
 
-```markdown
-### The solution: Create an abstraction for scanning a database row
+````markdown
+## The solution: Create an abstraction for scanning a database row
 
-To solve this problem at Assembled, we introduced an abstraction for scans. The important insight here is to realize that whether you’re scanning a single database row or multiple database rows, you should be performing the same operations. You always want to populate the same fields on an `Order` every time you pull one out of the database (whether you’re fetching one order or multiple). So we created a `Scannable` interface that hides the way in which you’re fetching a database row.
+To solve this problem at Assembled, we introduced an abstraction for scans. The important insight here is to realize that whether you're scanning a single database row or multiple database rows, you should be performing the same operations. You always want to populate the same fields on an `Order` every time you pull one out of the database (whether you're fetching one order or multiple). So we created a `Scannable` interface that hides the way in which you're fetching a database row.
 
+```
 type Scannable interface {
-
- Scan(dest ...interface{}) error
-
+  Scan(dest ...interface{}) error
 }
-Now, you can pass in either `sql.Row` or `sql.Rows` into a single method and perform the same operation. Here’s an example of how you might use the `Scannable` interface to reuse code:
+```
+Now, you can pass in either `sql.Row` or `sql.Rows` into a single method and perform the same operation. Here's an example of how you might use the `Scannable` interface to reuse code:
 
+```go
 var orderAttributes = []string{
-
  "id",
-
  "item_id",
-
  "price",
-
 }
 func ScanOrder(row Scannable) (*Order, error) {
-
  var order Order
-
 err := row.Scan(&order.ID, &order.ItemID, &order.Price)
-
  if err != nil {
-
  return nil, err
-
  }
-
  return &order, nil
-
 }
-
 func GetOrder(id string) (*Order, error) {
-
  query := fmt.Sprintf("SELECT %s FROM orders WHERE id = $1;",
-
  strings.Join(orderAttributes, ","))
-
 row := db.QueryRow(query, id)
-
  return ScanOrder(row)
-
 }
-
 func GetOrders(ids []string) ([]Order, error) {
-
  query := fmt.Sprintf("SELECT %s FROM orders WHERE id = ANY($1);",
-
  strings.Join(orderAttributes, ","))
-
 rows, err := db.Query(query, pq.Array(ids))
-
  if err != nil {
-
  return nil, err
-
  }
-
  defer rows.Close()
-
 var orders []Order
-
  for rows.Next() {
-
  order, err := ScanOrder(rows)
-
  if err != nil {
-
  return nil, err
-
  }
-
  orders = append(orders, *order)
-
  }
-
  return orders, nil
-
 }
-
-Now the total time to run `GetOrders` is just a single roundtrip time to your database plus the time it takes to select your matching orders and return them from Postgres. In addition to the query speed improvements, you’ve reduced the number of database queries to a constant number for each `GetOrders` call and significantly decreased database load. Finally, you’ve also made the code easier to reason about and refactor because there is only a single point of entry when you update an attribute on the `Order` struct.
 ```
+
+Now the total time to run `GetOrders` is just a single roundtrip time to your database plus the time it takes to select your matching orders and return them from Postgres. In addition to the query speed improvements, you've reduced the number of database queries to a constant number for each `GetOrders` call and significantly decreased database load. Finally, you've also made the code easier to reason about and refactor because there is only a single point of entry when you update an attribute on the `Order` struct.
+````
 
 ### external-database-abstractions-golang--003
 
-`test` - `candidate` - 614 approximate tokens - 371 words
+`test` - `candidate` - 606 approximate tokens - 373 words
 
-Headings: Challenge 2: Remembering to close a set of rows / The problem: At some point, you’re going to forget to close your rows / The solution: A helper method where you can’t forget
+Headings: Challenge 2: Remembering to close a set of rows / The problem: At some point, you're going to forget to close your rows / The solution: A helper method where you can't forget
 
-```markdown
-## Challenge 2: Remembering to close a set of rows
+````markdown
+# Challenge 2: Remembering to close a set of rows
 
-### The problem: At some point, you’re going to forget to close your rows
+## The problem: At some point, you're going to forget to close your rows
 
 > Nothing is certain, except death, taxes, and forgetting to close your rows.
 >
 >  — Benjamin Franklin (probably)
 
-One of the nasty things about Golang’s SQL driver is the mandatory call to`rows.Close()` after completion which releases your connection back into your pool. Failure to call this method results in increased latency, escalating connection pool sizes, and in the worst-case scenario, outages during holidays when no one is deploying.
+One of the nasty things about Golang's SQL driver is the mandatory call to`rows.Close()` after completion which releases your connection back into your pool. Failure to call this method results in increased latency, escalating connection pool sizes, and in the worst-case scenario, outages during holidays when no one is deploying.
 
-Unfortunately, this is one of the hardest problems to debug if you don’t know what you’re looking for. You have to step through a giant codebase, looking for those places where someone forgot to call `rows.Close()`. Let me tell you — it’s not easy to find these instances.
+Unfortunately, this is one of the hardest problems to debug if you don't know what you're looking for. You have to step through a giant codebase, looking for those places where someone forgot to call `rows.Close()`. Let me tell you — it's not easy to find these instances.
 
-### The solution: A helper method where you can’t forget
+## The solution: A helper method where you can't forget
 
 How did we fix this problem at Assembled? We had weekly trainings to remind everyone to never ever ever forget to call `defer rows.Close()` and publicly shamed engineers who still forgot.
 
 Just kidding — we created a better abstraction via the `ScanRows` helper method:
 
+```go
 type Rows interface {
-
  Close() error
-
  Err() error
-
  Next() bool
-
  Scan(dest ...interface{}) error
-
 }
 func ScanRows(r Rows, scanFunc func(row Scannable) error) error {
-
  var closeErr error
-
  defer func() {
-
  if err := r.Close(); err != nil {
-
  closeErr = err
-
  }
-
  }()
-
 var scanErr error
-
  for r.Next() {
-
  err := scanFunc(r)
-
  if err != nil {
-
  scanErr = err
-
  break
-
  }
-
  }
-
  if r.Err() != nil {
-
  return r.Err()
-
  }
-
  if scanErr != nil {
-
  return scanErr
-
  }
-
 return closeErr
-
-}
-
-Notice that `ScanRows` will always close the rows after it’s finished with them. The function has an added convenience benefit too: it contains error handling that previously was copy pasted over and over again by every engineer.
-
-Here’s how it would work in our `GetOrders` function:
-
-func GetOrders(ids []string) ([]Order, error) {
-
- query := fmt.Sprintf("SELECT %s FROM orders WHERE id = ANY($1);",
-
- strings.Join(orderAttributes, ","))
-rows, err := db.Query(query, pq.Array(ids))
-
- if err != nil {
-
- return nil, err
-
- }
-
-var orders []Order
-
- err := models.ScanRows(rows, func(row Scannable) error) error {
-
- order, err := ScanOrder(rows)
-
- if err != nil {
-
- return err
-
- }
-
- orders = append(orders, *order)
-
- return nil
-
- })
-
- if err != nil {
-
- return nil, err
-
- }
-
-return orders, nil
-
 }
 ```
+
+Notice that `ScanRows` will always close the rows after it's finished with them. The function has an added convenience benefit too: it contains error handling that previously was copy pasted over and over again by every engineer.
+
+Here's how it would work in our `GetOrders` function:
+
+```go
+func GetOrders(ids []string) ([]Order, error) {
+ query := fmt.Sprintf("SELECT %s FROM orders WHERE id = ANY($1);",
+ strings.Join(orderAttributes, ","))
+rows, err := db.Query(query, pq.Array(ids))
+ if err != nil {
+ return nil, err
+ }
+var orders []Order
+ err := models.ScanRows(rows, func(row Scannable) error) error {
+ order, err := ScanOrder(rows)
+ if err != nil {
+ return err
+ }
+ orders = append(orders, *order)
+ return nil
+ })
+ if err != nil {
+ return nil, err
+ }
+return orders, nil
+}
+```
+````
 
 ### external-database-abstractions-golang--004
 
-`test` - `candidate` - 680 approximate tokens - 418 words
+`test` - `candidate` - 671 approximate tokens - 420 words
 
 Headings: Challenge 3: Reusing queries inside of transactions / The problem: Sharing SQL between transactions and non-transactions
 
-```markdown
-## Challenge 3: Reusing queries inside of transactions
+````markdown
+# Challenge 3: Reusing queries inside of transactions
 
-### The problem: Sharing SQL between transactions and non-transactions
+## The problem: Sharing SQL between transactions and non-transactions
 
-Let’s say you just wrote a method to store an `Order` into your database:
+Let's say you just wrote a method to store an `Order` into your database:
 
+```go
 func StoreOrder(db *sql.DB, order Order) error {
-
  _, err := db.Exec("INSERT INTO orders (item_id, price) VALUES ($1, $2)",
-
  order.ItemID,
-
  order.Price,
-
  )
-
  if err != nil {
-
  return err
-
  }
 return nil
-
 }
+```
 
 There are a couple of ways you might want to call this method:
 
-1.   Use `StoreOrder` directly. For example, if you’re syncing orders from Stripe
+1.   Use `StoreOrder` directly. For example, if you're syncing orders from Stripe
 2.   Use `StoreOrder` in conjunction with other database methods. For example, if someone makes a purchase on your site, you want to store both payment information and order information at the same time
 
-In case 1, you don’t want to store orders in a transaction — long running transactions can be bad for database performance, so you can simply use your `StoreOrder` method that you’ve already written. But in case 2, you do want to store your order in a transaction, so you have to add some additional code. Here’s what it ends up looking like:
+In case 1, you don't want to store orders in a transaction — long running transactions can be bad for database performance, so you can simply use your `StoreOrder` method that you've already written. But in case 2, you do want to store your order in a transaction, so you have to add some additional code. Here's what it ends up looking like:
 
+```go
 func StoreOrder(db *sql.DB, order Order) error {
-
  _, err := db.Exec("INSERT INTO orders (item_id, price) VALUES ($1, $2)",
-
  order.ItemID,
-
  order.Price,
-
  )
-
  if err != nil {
-
  return err
-
  }
 return nil
-
 }
-
 func StoreOrderTx(tx sql.Tx, order Order) (*Order, error) {
-
  _, err := tx.Exec("INSERT INTO orders (item_id, price) VALUES ($1, $2)",
-
  order.ItemID,
-
  order.Price,
-
  )
-
  if err != nil {
-
  return err
-
  }
-
 return nil
-
 }
-
 func SyncOrderFromStripe(db *sql.DB, stripeID string) (*Order, error) {
-
  stripeOrder, err := stripeClient.Get(stripeID)
-
  if err != nil {
-
  return err
-
  }
-
  order := Order{ItemID: stripeOrder.Items[0].ID, Price: stripeOrder.Amount}
-
  return StoreOrder(db, order)
-
 }
-
 func StoreOrderAndPayment(db *sql.DB, order Order, payment Payment) (*Order, *Payment, error) {
-
  tx, err := db.Begin()
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
 storedOrder, err := StoreOrderTx(tx, order)
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
  storedPayment, err := StorePaymentTx(tx, payment)
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
 err = tx.Commit()
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
  return storedOrder, storedPayment, nil
-
 }
+```
 
 Notice that you have to basically copy everything inside of `StoreOrder` into `StoreOrderTx` with the only difference being that in the former you run the method on `sql.DB` whereas in the latter you run it on `sql.Tx`.
 
-This is a lot of unfortunate code copying, and if you change any attribute in `Order`, you have to remember to update both `StoreOrder` and `StoreOrderTx`. And let’s face it, at some point someone is going to forget and cause a bug.
-```
+This is a lot of unfortunate code copying, and if you change any attribute in `Order`, you have to remember to update both `StoreOrder` and `StoreOrderTx`. And let's face it, at some point someone is going to forget and cause a bug.
+````
 
 ### external-database-abstractions-golang--005
 
-`test` - `candidate` - 452 approximate tokens - 258 words
+`test` - `candidate` - 447 approximate tokens - 260 words
 
 Headings: The solution: Interface for database-like objects and a helper for transactions
 
-```markdown
-### The solution: Interface for database-like objects and a helper for transactions
+````markdown
+## The solution: Interface for database-like objects and a helper for transactions
 
-Instead of copying code, notice that the `StoreOrder` method doesn’t really care whether it’s operating on `sql.DB` or `sql.Tx`, it just cares that it can write to the database. This is a perfect time to bring in the `Database` abstraction to hide this away:
+Instead of copying code, notice that the `StoreOrder` method doesn't really care whether it's operating on `sql.DB` or `sql.Tx`, it just cares that it can write to the database. This is a perfect time to bring in the `Database` abstraction to hide this away:
 
+```go
 type Database interface {
-
  Query(query string, args ...interface{}) (*sql.Rows, error)
-
  QueryRow(query string, args ...interface{}) *sql.Row
-
  Exec(query string, args ...interface{}) (sql.Result, error)
-
 }
+```
 Now you can delete your `StoreOrderTx` method because both `sql.DB` and `sql.Tx` will implement the `Database` interface, which can greatly simplify your code:
 
+```go
 func StoreOrder(db Database, order Order) error {
-
  _, err := db.Exec("INSERT INTO orders (item_id, price) VALUES ($1, $2)",
-
  order.ItemID,
-
  order.Price,
-
  )
-
  if err != nil {
-
  return err
-
  }
 return nil
-
 }
-
 func SyncOrderFromStripe(db *sql.DB, stripeID string) (*Order, error) {
-
  stripeOrder, err := stripeClient.Get(stripeID)
-
  if err != nil {
-
  return err
-
  }
-
  order := Order{ItemID: stripeOrder.Items[0].ID, Price: stripeOrder.Amount}
-
  return StoreOrder(db, order)
-
 }
-
 func StoreOrderAndPayment(db *sql.DB, order Order, payment Payment) (*Order, *Payment, error) {
-
  tx, err := db.Begin()
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
 storedOrder, err := StoreOrder(tx, order)
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
  storedPayment, err := StorePayment(tx, payment)
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
 err = tx.Commit()
-
  if err != nil {
-
  return nil, nil, err
-
  }
-
  return storedOrder, storedPayment, nil
-
 }
-
-The `Database` abstraction allows you to create methods for storing and getting from the database that don’t care whether they’re used in a transaction or not.
 ```
+
+The `Database` abstraction allows you to create methods for storing and getting from the database that don't care whether they're used in a transaction or not.
+````
 
 ### external-database-abstractions-golang--006
 
@@ -1308,13 +1119,13 @@ The `Database` abstraction allows you to create methods for storing and getting 
 Headings: Conclusion
 
 ```markdown
-## Conclusion
+# Conclusion
 
-We came up with a set of abstractions that solve some common problems we’ve run into while running Golang and PostgreSQL in production. The abstractions are pretty simple, but they’ve saved us a ton of headaches in production and made it much easier to reason about the code we write.
+We came up with a set of abstractions that solve some common problems we've run into while running Golang and PostgreSQL in production. The abstractions are pretty simple, but they've saved us a ton of headaches in production and made it much easier to reason about the code we write.
 
-If you’re interested in building on top of these abstractions (or creating more of them), reach out to me at john@assembled.com or check out our careers page: [https://www.assembled.com/careers-at-assembled](https://www.assembled.com/careers-at-assembled).
+If you're interested in building on top of these abstractions (or creating more of them), reach out to me at john@assembled.com or check out our careers page: [https://www.assembled.com/careers-at-assembled](https://www.assembled.com/careers-at-assembled).
 
-[0]: It’s especially expensive if your web server and your database aren’t co-located — this was the case for Assembled in some cases as we started to build out a more global infrastructure. If the query to select your matching order ids takes 100ms and if it takes 30ms to round trip from your webserver to your database, and let’s say it takes 10ms to fetch a single order from Postgres, then a measly 30 orders will take `(30ms + 100ms) + (30ms + 10ms)*30 = 1.3s`. That’s unacceptable performance for most self-respecting e-commerce applications. Of course, you can always try to colocate your webserver and your database in the same datacenter, but that has its own set of problems. In addition, you’d still be making `O(# of orders)`separate database connections which can very quickly cause degraded database performance if you’re not careful.
+[0]: It's especially expensive if your web server and your database aren't co-located — this was the case for Assembled in some cases as we started to build out a more global infrastructure. If the query to select your matching order ids takes 100ms and if it takes 30ms to round trip from your webserver to your database, and let's say it takes 10ms to fetch a single order from Postgres, then a measly 30 orders will take `(30ms + 100ms) + (30ms + 10ms)*30 = 1.3s`. That's unacceptable performance for most self-respecting e-commerce applications. Of course, you can always try to colocate your webserver and your database in the same datacenter, but that has its own set of problems. In addition, you'd still be making `O(# of orders)`separate database connections which can very quickly cause degraded database performance if you're not careful.
 
 Many thanks to Anthony Duong and Ryan Wang for reading drafts of this.
 ```
@@ -1325,40 +1136,40 @@ Many thanks to Anthony Duong and Ryan Wang for reading drafts of this.
 
 `dev` - `candidate` - 472 approximate tokens - 274 words
 
-Headings: Manual switchovers (and why they don’t work)
+Headings: Manual switchovers (and why they don't work)
 
 ```markdown
 LLM providers are famously unreliable. When writing this article, I took a look at OpenAI and Anthropic's status pages, and they reported 99.80% and 99.58% uptime respectively over recent months. This translates to over **3 hours of potential downtime per month** — an eternity when you're powering customer-facing features.
 
-At Assembled, we've adopted Stripe's philosophy: we get to choose our own vendors, so we’re responsible for downtime regardless of which vendor caused the failure.
+At Assembled, we've adopted Stripe's philosophy: we get to choose our own vendors, so we're responsible for downtime regardless of which vendor caused the failure.
 
 Before implementing automated fallbacks, we experienced multiple customer-impacting outages. These incidents were particularly frustrating because there wasn't much we could do in real-time other than manually switch models — a process that could take precious minutes during an active outage.
 
 These experiences taught us that reactive fixes weren't enough. We needed an engineering approach that builds resilience into the architecture from the start.
 
-## Manual switchovers (and why they don’t work)
+# Manual switchovers (and why they don't work)
 
 Our first attempt at handling provider outages involved on-call engineers manually switching providers during outages with an easily accessible configuration. Though clever, this ultimately failed because:
 
 *   **Multiple providers per use case**: We use a variety of different models and are constantly swapping in new models, so blanket switches broke our nuanced routing.
 *   **Response delays**: Even with good procedures, manual switchovers often took several minutes and caused stress for the on-call engineer.
-*   **Poor outage classification**: It was hard for humans to quickly distinguish between full outages and transient issues, meaning judgment calls would have to be made for elevated error rates that didn’t take a provider fully down.
+*   **Poor outage classification**: It was hard for humans to quickly distinguish between full outages and transient issues, meaning judgment calls would have to be made for elevated error rates that didn't take a provider fully down.
 
 The manual approach taught us that we needed automation, but it also revealed the complexity that our automated system would need to handle.
 ```
 
 ### external-llm-provider-fallbacks--002
 
-`dev` - `candidate` - 251 approximate tokens - 107 words
+`dev` - `candidate` - 252 approximate tokens - 108 words
 
 Headings: Building automated fallbacks / Model categories
 
-```markdown
-## Building automated fallbacks
+````markdown
+# Building automated fallbacks
 
 To combat these problems, we designed a very simple automated fallback system that maintains separate ordering preferences for different model categories. This enabled instant failovers when providers become unavailable.
 
-### Model categories
+## Model categories
 
 First, we organized our models into categories based on their intended use cases.
 
@@ -1368,8 +1179,8 @@ const (
 Fast ModelCategory="fast"
 Smart ModelCategory="smart"
 Reasoning ModelCategory="reasoning"
+```go
 )
-
 func GetModelForCategory(category ModelCategory, platform ModelPlatform) ModelType {
 switch platform {
 case ModelPlatformOpenAI:
@@ -1389,23 +1200,26 @@ case Reasoning: return ModelTypeClaude4_Opus
 return ModelTypeGPT_4_1// sensible default
 }
 ```
+````
 
 ### external-llm-provider-fallbacks--003
 
-`dev` - `candidate` - 402 approximate tokens - 206 words
+`dev` - `candidate` - 406 approximate tokens - 208 words
 
 Headings: Provider ordering and fallback logic
 
-```markdown
-### Provider ordering and fallback logic
+````markdown
+## Provider ordering and fallback logic
 
 Then we established a global provider ordering that determines our fallback sequence when the primary model fails:
 
+```go
 var GlobalFallbackOrder= []ModelPlatform{
 ModelPlatformOpenAI, // Primary choice
 ModelPlatformAnthropic, // Secondary
 ModelPlatformGemini, // Tertiary
 }
+```
 
 The fallback logic maintains model category consistency across providers. If GPT-4.1-Mini fails, we fall back to Claude 3.5 Haiku (both "Fast" category), then Gemini 2.5 Flash. This ensures users get equivalent capability levels regardless of which provider ultimately handles the request.
 
@@ -1413,6 +1227,7 @@ We also provided configurable timeouts for each LLM request to cancel a request 
 
 Once we established fallback ordering and categories, the implementation was relatively straightforward: listen for an error or a timeout, then try the next model in that category.
 
+```go
 func (agent*LLMAgent) CreateCompletion(ctx context.Context, request*CompletionRequest) (*Response, error) {
 // Build list of primary model + fallbacks for same category
 modelsToTry:= []ModelType{agent.primaryModel}
@@ -1422,7 +1237,6 @@ fallbackModel:=GetModelForCategory(agent.category, platform)
 modelsToTry=append(modelsToTry, fallbackModel)
 }
 }
-
 // Try each model in order until one succeeds
 var lastError error
 for i, model:=range modelsToTry {
@@ -1432,42 +1246,40 @@ return response, nil
 }
 lastError=err
 }
-
 return nil, fmt.Errorf("all models failed: %w", lastError)
 }
 ```
+````
 
 ### external-llm-provider-fallbacks--004
 
-`dev` - `candidate` - 551 approximate tokens - 313 words
+`dev` - `candidate` - 552 approximate tokens - 314 words
 
 Headings: Handling streaming responses / Benefits of our simple fallback approach
 
-```markdown
-### Handling streaming responses
+````markdown
+## Handling streaming responses
 
 Streaming adds one key complexity: once we start sending tokens to a user, we can't easily retry with a different model since you may be in the middle of a response (and restarting the stream would cause awkward end user results). Luckily, we found that most outages happen before the first token is returned, so we only attempt a fallback if streaming hasn't yet begun:
 
+```go
 func (agent*LLMAgent) StreamCompletion(ctx context.Context, request*CompletionRequest, tokens chan<-Token) error {
 modelsToTry:=agent.getModelsToTry()
-
 for i, model:=range modelsToTry {
 hasReceivedFirstToken, err:=agent.tryStreamSingleModel(ctx, request, model, tokens, agent.getModelTimeout())
-
 if err==nil {
 return nil// Success
 }
-
 // Only retry if we haven't started streaming and have more models to try
 if!hasReceivedFirstToken&&i<len(modelsToTry)-1 {
 continue// Try next model
 }
-
 return err
 }
 }
+```
 
-## Benefits of our simple fallback approach
+# Benefits of our simple fallback approach
 
 **Instant failover**: Our system detects failures and switches providers within milliseconds, eliminating the 5+ minute manual switchover delays that previously caused customer-visible outages.
 
@@ -1476,24 +1288,24 @@ return err
 **Hybrid approach for optimization**: We still have the ability to perform manual switchovers of our main model provider, but now it's more of a latency or quality optimization rather than an emergency response to keep us operational.
 
 During a recent multi-hour LLM provider outage, customers experienced near-zero impact with request failure rates below 0.001% — all thanks to automated failover. More importantly, we've eliminated the stress and urgency of emergency manual failovers. Our on-call engineers can focus on building new features rather than frantically switching configurations during outages.
-```
+````
 
 ### external-llm-provider-fallbacks--005
 
-`dev` - `candidate` - 570 approximate tokens - 331 words
+`dev` - `candidate` - 569 approximate tokens - 328 words
 
 Headings: The cost of redundancy: More evals / Results and lessons learned
 
 ```markdown
-## The cost of redundancy: More evals
+# The cost of redundancy: More evals
 
 Automated fallbacks significantly improved reliability but introduced new quality challenges. We can no longer evaluate prompts against a single model — we have to ensure consistent quality across the entire fallback chain.
 
 Our evaluation burden increased quite significantly as every prompt change requires evaluation against at least the first two providers in our fallback sequence. This expanded evaluation added 20–30% to our prompt development time.
 
-However, the change has pushed us to invest more in our LLM-as-a-judge tooling so that we can more easily evaluate results across providers in an automated way — something we'll be diving deeper into in an upcoming blog post. Since secondary providers are not hit that often and used as fallbacks, we don’t need a full human evaluation on those fallback providers prompts.
+However, the change has pushed us to invest more in our LLM-as-a-judge tooling so that we can more easily evaluate results across providers in an automated way — something we'll be diving deeper into in an upcoming blog post. Since secondary providers are not hit that often and used as fallbacks, we don't need a full human evaluation on those fallback providers prompts.
 
-## Results and lessons learned
+# Results and lessons learned
 
 Since implementing automated fallbacks, we've seen dramatic improvements in system reliability:
 
@@ -1505,35 +1317,35 @@ The hybrid approach has proved particularly valuable. We maintain the ability to
 
 Perhaps most importantly, we've learned that treating vendor reliability as a solvable engineering problem (rather than an external dependency we can't control) leads to more robust and customer-friendly solutions. Our customers shouldn't have to care which LLM provider is having issues on any given day. Building reliable systems on top of unreliable dependencies is both good engineering and essential for maintaining customer trust.
 
-_We're always working on making our systems more robust and our customer experiences more reliable. We’re working on everything from AI voice agents to knowledge processing pipelines to customer-facing automation tools. If you're interested in helping us solve these kinds of challenges,_[_check out our open roles_](https://www.assembled.com/careers)_._
+*We're always working on making our systems more robust and our customer experiences more reliable. We're working on everything from AI voice agents to knowledge processing pipelines to customer-facing automation tools. If you're interested in helping us solve these kinds of challenges,*[*check out our open roles*](https://www.assembled.com/careers)*.*
 ```
 
 ## How we Built Assembled's New Products Team
 
 ### external-new-products-team--001
 
-`test` - `candidate` - 647 approximate tokens - 436 words
+`test` - `candidate` - 646 approximate tokens - 436 words
 
 Headings: Talk to users
 
 ```markdown
-Four months ago, we embarked on a journey to create a new AI-powered product at [Assembled](https://www.assembled.com/). While there are many ways to launch a new product at a Series-B company, we decided to create a “startup within a startup” and put the team through a modified version of [YCombinator](https://www.ycombinator.com/) (YC). We had 3 months of intense building and a demo day at the end. Though we knew these initiatives don’t always pan out, I wanted to recreate the early startup atmosphere that I had experienced when founding Assembled in 2018 and when I was a [YC founder](https://www.linkedin.com/in/johnjianwang/) back in 2014.
+Four months ago, we embarked on a journey to create a new AI-powered product at [Assembled](https://www.assembled.com/). While there are many ways to launch a new product at a Series-B company, we decided to create a "startup within a startup" and put the team through a modified version of [YCombinator](https://www.ycombinator.com/) (YC). We had 3 months of intense building and a demo day at the end. Though we knew these initiatives don't always pan out, I wanted to recreate the early startup atmosphere that I had experienced when founding Assembled in 2018 and when I was a [YC founder](https://www.linkedin.com/in/johnjianwang/) back in 2014.
 
-So we formed the New Products Team to build something that enhanced the efficiency of customer support agents. Here’s how we approached our mission:
+So we formed the New Products Team to build something that enhanced the efficiency of customer support agents. Here's how we approached our mission:
 
-The New Products Team at work in “the dungeon”. Kaytlin made sure we hung up the “Live, laugh, love” sign.
+The New Products Team at work in "the dungeon". Kaytlin made sure we hung up the "Live, laugh, love" sign.
 
-## Talk to users
+# Talk to users
 
-A classic YC mantra says that the two most important tasks at a small startup are to [**write code and talk to users**](https://www.ycombinator.com/library/4D-yc-s-essential-startup-advice)**.** We took that to heart, especially the “talk to users” part.
+A classic YC mantra says that the two most important tasks at a small startup are to [**write code and talk to users**](https://www.ycombinator.com/library/4D-yc-s-essential-startup-advice)**.** We took that to heart, especially the "talk to users" part.
 
-Since we’re building for support teams, we focused really heavily on listening and interacting with support agents and managers. We’ve done many dozens of shadowing sessions where we watch a support agent work. These shadow sessions really enhanced our knowledge of agent workflows, but there’s still a barrier of observability where you’re not actually on the hook to finish out a support ticket and you don’t have to deal with the consequences of your replies.
+Since we're building for support teams, we focused really heavily on listening and interacting with support agents and managers. We've done many dozens of shadowing sessions where we watch a support agent work. These shadow sessions really enhanced our knowledge of agent workflows, but there's still a barrier of observability where you're not actually on the hook to finish out a support ticket and you don't have to deal with the consequences of your replies.
 
-That’s why we also do support takeovers: our team of 4 takes full responsibility of support for a few days and relieves the Assembled customer support team so they can work on other projects. These sessions really helped hone our thinking of what it’s like to literally be a support agent.
+That's why we also do support takeovers: our team of 4 takes full responsibility of support for a few days and relieves the Assembled customer support team so they can work on other projects. These sessions really helped hone our thinking of what it's like to literally be a support agent.
 
-By being the backstop for Assembled customers, we started to understand small intricacies about a support agent’s day to day that would be difficult observe passively. It’s hard to fathom how much context switching support agents do until you actually run into a ticket that requires the internal admin dashboard, the metrics dashboard, a help center article, and 3 other tabs open to solve. It’s also hard to understand the cognitive load it takes to write an empathetic reply until you spend 5 minutes rewriting the last paragraph over and over again.
+By being the backstop for Assembled customers, we started to understand small intricacies about a support agent's day to day that would be difficult observe passively. It's hard to fathom how much context switching support agents do until you actually run into a ticket that requires the internal admin dashboard, the metrics dashboard, a help center article, and 3 other tabs open to solve. It's also hard to understand the cognitive load it takes to write an empathetic reply until you spend 5 minutes rewriting the last paragraph over and over again.
 
-The team talking to users: we’re very heavy on our usage of hand gestures and phone booths.
+The team talking to users: we're very heavy on our usage of hand gestures and phone booths.
 ```
 
 ### external-new-products-team--002
@@ -1543,15 +1355,15 @@ The team talking to users: we’re very heavy on our usage of hand gestures and 
 Headings: One room, one team
 
 ```markdown
-## One room, one team
+# One room, one team
 
-A core belief we held throughout our time was that everyone on the team would be in person, 5 days a week. We ended up commandeering a conference room for the team and we set up a little pod of desks. We even bought a professional sound system with an amplifier to blast electronic music as we were working [0]. We nicknamed it “the dungeon.”
+A core belief we held throughout our time was that everyone on the team would be in person, 5 days a week. We ended up commandeering a conference room for the team and we set up a little pod of desks. We even bought a professional sound system with an amplifier to blast electronic music as we were working [0]. We nicknamed it "the dungeon."
 
 The dungeon did a few things for us:
 
-*   **It made changes in direction easier and faster.** Early in our journey, we were making micro-pivots to our strategy every few hours. One hour, we’d be working on a settings page, and the next hour, we’d realize we didn’t really need that setting to be customer visible, so we’d only make it a backend configuration. We were also making larger pivots to strategy every few days. For example, should we investigate that sales use case that came up in our call? Being in person let us brainstorm and adapt quickly to new information and ideas, especially since our strategy was constantly shifting.
-*   **It helped separate us from the rest of the company.** Everyone on the team had expertise in Assembled’s core product of workforce management. However, we needed space to think deeply about our new product, and our separate room helped make clear that we were focusing on a new problem and allowed us to set more specific times on when we’d work on Assembled’s core product.
-*   **Most importantly, it was way more fun.** There’s something magical about working and goofing off late into the night in a small room. It makes you feel really connected to the people you’re working with. Disagreements were addressed more candidly, ideas were shared more freely, and the team grew closer. This connection translated into a more cohesive vision and execution of our goals, making “the dungeon” not just a place, but a symbol of our team’s identity and mission.
+*   **It made changes in direction easier and faster.** Early in our journey, we were making micro-pivots to our strategy every few hours. One hour, we'd be working on a settings page, and the next hour, we'd realize we didn't really need that setting to be customer visible, so we'd only make it a backend configuration. We were also making larger pivots to strategy every few days. For example, should we investigate that sales use case that came up in our call? Being in person let us brainstorm and adapt quickly to new information and ideas, especially since our strategy was constantly shifting.
+*   **It helped separate us from the rest of the company.** Everyone on the team had expertise in Assembled's core product of workforce management. However, we needed space to think deeply about our new product, and our separate room helped make clear that we were focusing on a new problem and allowed us to set more specific times on when we'd work on Assembled's core product.
+*   **Most importantly, it was way more fun.** There's something magical about working and goofing off late into the night in a small room. It makes you feel really connected to the people you're working with. Disagreements were addressed more candidly, ideas were shared more freely, and the team grew closer. This connection translated into a more cohesive vision and execution of our goals, making "the dungeon" not just a place, but a symbol of our team's identity and mission.
 
 Jason and Nelson discussing data science techniques. More keyboards mean we can ship faster.
 ```
@@ -1560,18 +1372,18 @@ Jason and Nelson discussing data science techniques. More keyboards mean we can 
 
 `test` - `candidate` - 496 approximate tokens - 342 words
 
-Headings: Existential crisis? That’s a feature, not a bug
+Headings: Existential crisis? That's a feature, not a bug
 
 ```markdown
-## Existential crisis? That’s a feature, not a bug
+# Existential crisis? That's a feature, not a bug
 
-On our fourth day working together, I made an announcement to the team: what we were doing wasn’t working. We had started out writing code 12 hours a day based on a cool prototype. This prototype wowed our executives, so we jumped into building a real version. But I realized that we had already broken the first rule of startups: you have to build something people want.
+On our fourth day working together, I made an announcement to the team: what we were doing wasn't working. We had started out writing code 12 hours a day based on a cool prototype. This prototype wowed our executives, so we jumped into building a real version. But I realized that we had already broken the first rule of startups: you have to build something people want.
 
-We hadn’t yet validated the problem and we hadn’t spoken to users about what their problems were. So we went back to the drawing board and focused exclusively on booking user interviews. We ended up doing ten user interviews the next week. Happily, three of these turned into sales calls and would eventually be our first three users.
+We hadn't yet validated the problem and we hadn't spoken to users about what their problems were. So we went back to the drawing board and focused exclusively on booking user interviews. We ended up doing ten user interviews the next week. Happily, three of these turned into sales calls and would eventually be our first three users.
 
-Another existential crisis occurred the week after we had launched to two large teams. During launch week, we saw all of our metrics skyrocket — we were hitting all time highs for number of power users, messages sent, and daily actives. But the week after, usage dropped like a ton of bricks. We sat down as a team and tried to introspect what had gone wrong. We realized that this skyrocketing usage was merely people testing our product, and we still weren’t sticky enough to keep users. We needed to keep adding functionality and value before we could keep these users, so we threw out our plans to make it easier to onboard onto the product, and instead focused exclusively on making the product itself more valuable for existing users.
+Another existential crisis occurred the week after we had launched to two large teams. During launch week, we saw all of our metrics skyrocket — we were hitting all time highs for number of power users, messages sent, and daily actives. But the week after, usage dropped like a ton of bricks. We sat down as a team and tried to introspect what had gone wrong. We realized that this skyrocketing usage was merely people testing our product, and we still weren't sticky enough to keep users. We needed to keep adding functionality and value before we could keep these users, so we threw out our plans to make it easier to onboard onto the product, and instead focused exclusively on making the product itself more valuable for existing users.
 
-We continued to have many more existential crises. In fact, if we went a week or two without one, we’d start to get worried and introspect if we were being honest enough with ourselves. These existential crises are a feature of startups though — you only lose your existential angst once you find product market fit and a repeatable business model. By design, we were always questioning whether our product provided sufficient value and always introspecting how to add more value.
+We continued to have many more existential crises. In fact, if we went a week or two without one, we'd start to get worried and introspect if we were being honest enough with ourselves. These existential crises are a feature of startups though — you only lose your existential angst once you find product market fit and a repeatable business model. By design, we were always questioning whether our product provided sufficient value and always introspecting how to add more value.
 ```
 
 ### external-new-products-team--004
@@ -1581,15 +1393,15 @@ We continued to have many more existential crises. In fact, if we went a week or
 Headings: Tuesday dinners
 
 ```markdown
-## Tuesday dinners
+# Tuesday dinners
 
-Our YC-inspired approach extended to extracurriculars as well. Every Tuesday night, we would invite folks like [Dan Robinson](https://www.linkedin.com/in/dan-robinson-a6930726/) (ex-CTO of Heap), [Josh Ma](https://www.linkedin.com/in/joshmaa/) (ex-CTO of Benchling), [Harry](https://www.linkedin.com/in/harry-z-yu/) and [Peter Xu](https://www.linkedin.com/in/pxpeterxu/) (co-founders of Wanderlog) to grab dinner with us and share their startup journey and the mistakes they’d made along the way. That said, even though we had quite a few illustrious people come chat with us, the dinners I enjoyed the most were the ones where we had failed to find a speaker and instead went out to eat as a team.
+Our YC-inspired approach extended to extracurriculars as well. Every Tuesday night, we would invite folks like [Dan Robinson](https://www.linkedin.com/in/dan-robinson-a6930726/) (ex-CTO of Heap), [Josh Ma](https://www.linkedin.com/in/joshmaa/) (ex-CTO of Benchling), [Harry](https://www.linkedin.com/in/harry-z-yu/) and [Peter Xu](https://www.linkedin.com/in/pxpeterxu/) (co-founders of Wanderlog) to grab dinner with us and share their startup journey and the mistakes they'd made along the way. That said, even though we had quite a few illustrious people come chat with us, the dinners I enjoyed the most were the ones where we had failed to find a speaker and instead went out to eat as a team.
 
-I remember one night, we went to an Indian restaurant, ordered gobs of food, and talked about what we wanted in life. Each person had a different motivation. One team member grew up in a world with adults telling him he wouldn’t amount to much. Because of his early experience, he became hyper competitive and wanted to prove everyone wrong. One team member was a true non-conformist and wanted to carve her own path. Yet another team member wanted to be constantly challenged and was scared of ever being too comfortable.
+I remember one night, we went to an Indian restaurant, ordered gobs of food, and talked about what we wanted in life. Each person had a different motivation. One team member grew up in a world with adults telling him he wouldn't amount to much. Because of his early experience, he became hyper competitive and wanted to prove everyone wrong. One team member was a true non-conformist and wanted to carve her own path. Yet another team member wanted to be constantly challenged and was scared of ever being too comfortable.
 
 While everyone had a different reason for being on the team, all of our motivations were deeply rooted and had nothing to do with career progression or resume padding. We were quite far from what you would describe as folks who wanted conventional success. Each of us had a chip on our shoulder in our own way, and this bound us together in our desire to craft something meaningful.
 
-If you’re interested in joining the team, we’re looking for a few hungry, product oriented engineers. You can apply on our careers page [https://www.assembled.com/careers-at-assembled](https://www.assembled.com/careers-at-assembled) or shoot me an email at john@assembledhq.com if you want to chat more.
+If you're interested in joining the team, we're looking for a few hungry, product oriented engineers. You can apply on our careers page [https://www.assembled.com/careers-at-assembled](https://www.assembled.com/careers-at-assembled) or shoot me an email at john@assembledhq.com if you want to chat more.
 
 Thanks to Anthony Duong, Brian Sze, Kaytlin Louton, and Ryan Wang for reading drafts of this article.
 ```
@@ -1603,13 +1415,13 @@ Thanks to Anthony Duong, Brian Sze, Kaytlin Louton, and Ryan Wang for reading dr
 Headings: (intro or continuation)
 
 ```markdown
-At [Assembled](https://www.assembled.com/), we’ve made it our mission to have a culture of continuous learning. We’ve been inviting the best minds from the startup space to share their wisdom on building successful products. A few weeks ago, we had the privilege of hosting [Dan Robinson](https://www.linkedin.com/in/dan-robinson-a6930726/) for a dinner discussion.
+At [Assembled](https://www.assembled.com/), we've made it our mission to have a culture of continuous learning. We've been inviting the best minds from the startup space to share their wisdom on building successful products. A few weeks ago, we had the privilege of hosting [Dan Robinson](https://www.linkedin.com/in/dan-robinson-a6930726/) for a dinner discussion.
 
-Dan was one of the first engineers at [Heap](https://www.heap.io/) and served as its CTO for almost 9 years. He helped Heap scale to more than 350 employees and a $110M Series D funding round, so he’s in the unique position to have seen a company scaling at many different points of growth.
+Dan was one of the first engineers at [Heap](https://www.heap.io/) and served as its CTO for almost 9 years. He helped Heap scale to more than 350 employees and a $110M Series D funding round, so he's in the unique position to have seen a company scaling at many different points of growth.
 
 Here were some of the top takeaways from the discussion:
 
-*   **Execution, execution, execution:** Most businesses come down to how well you can make a product that matches your user’s needs
+*   **Execution, execution, execution:** Most businesses come down to how well you can make a product that matches your user's needs
 *   **Talk to your users with intellectual honesty**: Be careful with leading questions that can bias your users
 *   **Taste the soup:** Try out your own product as often as you can
 ```
@@ -1621,15 +1433,15 @@ Here were some of the top takeaways from the discussion:
 Headings: The Burnt Pizza Problem
 
 ```markdown
-## The Burnt Pizza Problem
+# The Burnt Pizza Problem
 
 > You need to determine whether the pizza is burnt (e.g. did you execute poorly) or if the pizza was a bad idea.
 
 The default state for early stage startups is to have low, inconsistent usage. Thus, one of the most important jobs of anyone at a startup is to diagnose low usage and identify strategies for increasing it.
 
-Dan uses the Burnt Pizza paradigm as one way to think through this. Let’s say you’re experimenting with a new food and you give your test users burnt pizza. They don’t like it. Was pizza a bad idea or was the problem that it was burnt? Whenever Heap shipped a feature that got weak usage, the right question was: “were we wrong about the user need or did we do a bad job solving it?”
+Dan uses the Burnt Pizza paradigm as one way to think through this. Let's say you're experimenting with a new food and you give your test users burnt pizza. They don't like it. Was pizza a bad idea or was the problem that it was burnt? Whenever Heap shipped a feature that got weak usage, the right question was: "were we wrong about the user need or did we do a bad job solving it?"
 
-What I found most interesting about this paradigm is that often many of the best companies have ideas that are very similar to a myriad of other competitors. Facebook, Myspace, and Friendster famously had very similar ideas for their offerings. However, Facebook grew into a generational company by focusing on execution of viral features and moving very quickly. They didn’t “burn the pizza” but instead focused on listening to their users.
+What I found most interesting about this paradigm is that often many of the best companies have ideas that are very similar to a myriad of other competitors. Facebook, Myspace, and Friendster famously had very similar ideas for their offerings. However, Facebook grew into a generational company by focusing on execution of viral features and moving very quickly. They didn't "burn the pizza" but instead focused on listening to their users.
 ```
 
 ### external-product-lessons-dan-robinson--003
@@ -1639,55 +1451,55 @@ What I found most interesting about this paradigm is that often many of the best
 Headings: Talk to users, but in a specific way
 
 ```markdown
-## Talk to users, but in a specific way
+# Talk to users, but in a specific way
 
-Which brings us to the next topic: how to listen to your users. YCombinator famously says [you should only do two things](https://www.ycombinator.com/library/4D-yc-s-essential-startup-advice) at your startup: “write code [and] talk to users.” However, it’s really hard to talk to users in the right way and not bias them in the wrong ways.
+Which brings us to the next topic: how to listen to your users. YCombinator famously says [you should only do two things](https://www.ycombinator.com/library/4D-yc-s-essential-startup-advice) at your startup: "write code [and] talk to users." However, it's really hard to talk to users in the right way and not bias them in the wrong ways.
 
-Dan mentioned there was a product at Heap that didn’t work out. Heap had many internal meetings about how to build this product and how it would fit into Heap’s future strategy, and only once most of this had been figured out did they talk to customers.
+Dan mentioned there was a product at Heap that didn't work out. Heap had many internal meetings about how to build this product and how it would fit into Heap's future strategy, and only once most of this had been figured out did they talk to customers.
 
-This led to customer conversations like: “If you could have X, would you use it?” or “Do you think X is a good idea?” These questions are predisposed to cause your users to say nice things to you. A user can always say “yes, I’d use it” but they don’t have any skin in the game. You’re also not getting any useful information on how valuable your product is.
+This led to customer conversations like: "If you could have X, would you use it?" or "Do you think X is a good idea?" These questions are predisposed to cause your users to say nice things to you. A user can always say "yes, I'd use it" but they don't have any skin in the game. You're also not getting any useful information on how valuable your product is.
 
-For Heap’s next product launch (which was much more successful), Dan ensured the team got very precise about how they would learn about what users wanted. He asked questions like “How would you articulate the value of this product to your teammate?” (helps you identify how the user thinks about the value of the product) and “what have you already done to solve your problem?” (helps determine how much of a problem it really is). He also asked for pilot users to pay, which is the true determiner of how valuable a product is.
+For Heap's next product launch (which was much more successful), Dan ensured the team got very precise about how they would learn about what users wanted. He asked questions like "How would you articulate the value of this product to your teammate?" (helps you identify how the user thinks about the value of the product) and "what have you already done to solve your problem?" (helps determine how much of a problem it really is). He also asked for pilot users to pay, which is the true determiner of how valuable a product is.
 
 Ultimately, Dan said this all came down to **intellectual honesty**. The best way to build a useless product for months is by letting your excitement influence the conversations you have with users. Instead, you should focus on trying to be as unbiased as possible on the most important problems that users are actually facing.
 ```
 
 ### external-product-lessons-dan-robinson--full
 
-`train` - `candidate` - 1017 approximate tokens - 712 words - exceeds target size
+`train` - `candidate` - 1016 approximate tokens - 712 words - exceeds target size
 
 Headings: The Burnt Pizza Problem / Talk to users, but in a specific way
 
 ```markdown
-At [Assembled](https://www.assembled.com/), we’ve made it our mission to have a culture of continuous learning. We’ve been inviting the best minds from the startup space to share their wisdom on building successful products. A few weeks ago, we had the privilege of hosting [Dan Robinson](https://www.linkedin.com/in/dan-robinson-a6930726/) for a dinner discussion.
+At [Assembled](https://www.assembled.com/), we've made it our mission to have a culture of continuous learning. We've been inviting the best minds from the startup space to share their wisdom on building successful products. A few weeks ago, we had the privilege of hosting [Dan Robinson](https://www.linkedin.com/in/dan-robinson-a6930726/) for a dinner discussion.
 
-Dan was one of the first engineers at [Heap](https://www.heap.io/) and served as its CTO for almost 9 years. He helped Heap scale to more than 350 employees and a $110M Series D funding round, so he’s in the unique position to have seen a company scaling at many different points of growth.
+Dan was one of the first engineers at [Heap](https://www.heap.io/) and served as its CTO for almost 9 years. He helped Heap scale to more than 350 employees and a $110M Series D funding round, so he's in the unique position to have seen a company scaling at many different points of growth.
 
 Here were some of the top takeaways from the discussion:
 
-*   **Execution, execution, execution:** Most businesses come down to how well you can make a product that matches your user’s needs
+*   **Execution, execution, execution:** Most businesses come down to how well you can make a product that matches your user's needs
 *   **Talk to your users with intellectual honesty**: Be careful with leading questions that can bias your users
 *   **Taste the soup:** Try out your own product as often as you can
 
-## The Burnt Pizza Problem
+# The Burnt Pizza Problem
 
 > You need to determine whether the pizza is burnt (e.g. did you execute poorly) or if the pizza was a bad idea.
 
 The default state for early stage startups is to have low, inconsistent usage. Thus, one of the most important jobs of anyone at a startup is to diagnose low usage and identify strategies for increasing it.
 
-Dan uses the Burnt Pizza paradigm as one way to think through this. Let’s say you’re experimenting with a new food and you give your test users burnt pizza. They don’t like it. Was pizza a bad idea or was the problem that it was burnt? Whenever Heap shipped a feature that got weak usage, the right question was: “were we wrong about the user need or did we do a bad job solving it?”
+Dan uses the Burnt Pizza paradigm as one way to think through this. Let's say you're experimenting with a new food and you give your test users burnt pizza. They don't like it. Was pizza a bad idea or was the problem that it was burnt? Whenever Heap shipped a feature that got weak usage, the right question was: "were we wrong about the user need or did we do a bad job solving it?"
 
-What I found most interesting about this paradigm is that often many of the best companies have ideas that are very similar to a myriad of other competitors. Facebook, Myspace, and Friendster famously had very similar ideas for their offerings. However, Facebook grew into a generational company by focusing on execution of viral features and moving very quickly. They didn’t “burn the pizza” but instead focused on listening to their users.
+What I found most interesting about this paradigm is that often many of the best companies have ideas that are very similar to a myriad of other competitors. Facebook, Myspace, and Friendster famously had very similar ideas for their offerings. However, Facebook grew into a generational company by focusing on execution of viral features and moving very quickly. They didn't "burn the pizza" but instead focused on listening to their users.
 
-## Talk to users, but in a specific way
+# Talk to users, but in a specific way
 
-Which brings us to the next topic: how to listen to your users. YCombinator famously says [you should only do two things](https://www.ycombinator.com/library/4D-yc-s-essential-startup-advice) at your startup: “write code [and] talk to users.” However, it’s really hard to talk to users in the right way and not bias them in the wrong ways.
+Which brings us to the next topic: how to listen to your users. YCombinator famously says [you should only do two things](https://www.ycombinator.com/library/4D-yc-s-essential-startup-advice) at your startup: "write code [and] talk to users." However, it's really hard to talk to users in the right way and not bias them in the wrong ways.
 
-Dan mentioned there was a product at Heap that didn’t work out. Heap had many internal meetings about how to build this product and how it would fit into Heap’s future strategy, and only once most of this had been figured out did they talk to customers.
+Dan mentioned there was a product at Heap that didn't work out. Heap had many internal meetings about how to build this product and how it would fit into Heap's future strategy, and only once most of this had been figured out did they talk to customers.
 
-This led to customer conversations like: “If you could have X, would you use it?” or “Do you think X is a good idea?” These questions are predisposed to cause your users to say nice things to you. A user can always say “yes, I’d use it” but they don’t have any skin in the game. You’re also not getting any useful information on how valuable your product is.
+This led to customer conversations like: "If you could have X, would you use it?" or "Do you think X is a good idea?" These questions are predisposed to cause your users to say nice things to you. A user can always say "yes, I'd use it" but they don't have any skin in the game. You're also not getting any useful information on how valuable your product is.
 
-For Heap’s next product launch (which was much more successful), Dan ensured the team got very precise about how they would learn about what users wanted. He asked questions like “How would you articulate the value of this product to your teammate?” (helps you identify how the user thinks about the value of the product) and “what have you already done to solve your problem?” (helps determine how much of a problem it really is). He also asked for pilot users to pay, which is the true determiner of how valuable a product is.
+For Heap's next product launch (which was much more successful), Dan ensured the team got very precise about how they would learn about what users wanted. He asked questions like "How would you articulate the value of this product to your teammate?" (helps you identify how the user thinks about the value of the product) and "what have you already done to solve your problem?" (helps determine how much of a problem it really is). He also asked for pilot users to pay, which is the true determiner of how valuable a product is.
 
 Ultimately, Dan said this all came down to **intellectual honesty**. The best way to build a useless product for months is by letting your excitement influence the conversations you have with users. Instead, you should focus on trying to be as unbiased as possible on the most important problems that users are actually facing.
 ```
@@ -1699,47 +1511,45 @@ Ultimately, Dan said this all came down to **intellectual honesty**. The best wa
 Headings: Create a culture of product learning and product focus
 
 ```markdown
-## Create a culture of product learning and product focus
+# Create a culture of product learning and product focus
 
-Dan recounted a story of Heap’s goal to have every single employee “taste the soup”. For the quarter, every single Heap employee (from engineers to salespeople to HR folks) was required to engage with the Heap product. Dan mentioned that the night before the deadline, he and the CEO were furiously direct messaging folks on Slack making sure they would finish this requirement.
+Dan recounted a story of Heap's goal to have every single employee "taste the soup". For the quarter, every single Heap employee (from engineers to salespeople to HR folks) was required to engage with the Heap product. Dan mentioned that the night before the deadline, he and the CEO were furiously direct messaging folks on Slack making sure they would finish this requirement.
 
-I found that anecdote fascinating: here’s a CTO of a 200+ person company going out of his way to create a culture of product focus. When asked why, Dan pointed out that it’s relatively easy for the entire team to have a deep understanding of the product in the early days of a startup. However, as Heap expanded, maintaining this depth of knowledge and empathy with users became harder and harder. Therefore, a sustained focus on the product became even more crucial — it was the only way to get everyone aligned on how to create a great product.
+I found that anecdote fascinating: here's a CTO of a 200+ person company going out of his way to create a culture of product focus. When asked why, Dan pointed out that it's relatively easy for the entire team to have a deep understanding of the product in the early days of a startup. However, as Heap expanded, maintaining this depth of knowledge and empathy with users became harder and harder. Therefore, a sustained focus on the product became even more crucial — it was the only way to get everyone aligned on how to create a great product.
 
-Dan closed with this: startups ultimately have to build something that people find valuable enough to pay money for. It’s one of the most basic observations, but often the basic things are the most important.
+Dan closed with this: startups ultimately have to build something that people find valuable enough to pay money for. It's one of the most basic observations, but often the basic things are the most important.
 ```
 
 ## Scaling LLMs with Golang: How we serve millions of LLM requests
 
 ### external-scaling-llms-golang--001
 
-`train` - `approved` - 689 approximate tokens - 353 words
+`train` - `candidate` - 691 approximate tokens - 354 words
 
 Headings: Type safety and structured outputs
 
-```markdown
-While the LLM ecosystem is overwhelmingly Python-first, we've found Go to be exceptionally well-suited for production deployments. Our Go-based infrastructure handles millions of monthly LLM requests with minimal performance tuning. Beyond Go's well-documented advantages (see Rob Pike’s excellent [distillation of Go's benefits](https://go.dev/talks/2012/splash.article)), three capabilities have proven particularly valuable for LLM workloads: static type checking for handling model outputs, goroutines for managing concurrent API calls, and interfaces for building composable response pipelines. Here's how we've implemented each of these in our production stack.
+````markdown
+While the LLM ecosystem is overwhelmingly Python-first, we've found Go to be exceptionally well-suited for production deployments. Our Go-based infrastructure handles millions of monthly LLM requests with minimal performance tuning. Beyond Go's well-documented advantages (see Rob Pike's excellent [distillation of Go's benefits](https://go.dev/talks/2012/splash.article)), three capabilities have proven particularly valuable for LLM workloads: static type checking for handling model outputs, goroutines for managing concurrent API calls, and interfaces for building composable response pipelines. Here's how we've implemented each of these in our production stack.
 
-## Type safety and structured outputs
+# Type safety and structured outputs
 
-One of the main challenges with LLMs is handling their unstructured outputs. OpenAI's [structured output support](https://platform.openai.com/docs/guides/structured-outputs) has been a significant advancement for us, and Go's type system makes it particularly elegant to implement. Rather than writing separate schema definitions, we can leverage Go's struct tags and reflection to generate well defined schemas. Here’s an example where we automatically convert a `SupportResponse` into OpenAI's JSON schema format using the [go-openai](https://github.com/sashabaranov/go-openai) library:
+One of the main challenges with LLMs is handling their unstructured outputs. OpenAI's [structured output support](https://platform.openai.com/docs/guides/structured-outputs) has been a significant advancement for us, and Go's type system makes it particularly elegant to implement. Rather than writing separate schema definitions, we can leverage Go's struct tags and reflection to generate well defined schemas. Here's an example where we automatically convert a `SupportResponse` into OpenAI's JSON schema format using the [go-openai](https://github.com/sashabaranov/go-openai) library:
 
 import (
 "github.com/sashabaranov/go-openai"
 "github.com/sashabaranov/go-openai/jsonschema"
+```go
 )
-
 type SupportResponse struct {
 Answer string`json:"answer"`
 RelatedDocs []string`json:"related_docs"`
 }
-
 func GetSupportResponse(messages []openai.ChatCompletionMessage) (*SupportResponse, error) {
 var supportResponse SupportResponse
 schema, err:=jsonschema.GenerateSchemaForType(supportResponse)
 if err!=nil {
 return nil, err
 }
-
 resp, err:=client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
 Messages: messages,
 ResponseFormat: &openai.ChatCompletionResponseFormat{
@@ -1760,32 +1570,32 @@ return nil, err
 }
 return&supportResponse, nil
 }
+```
 
 The above code will provide us with `Answer` and `RelatedDocs` populated directly from an LLM call. Now, the `SupportResponse` can be easily passed to our frontend or saved in our database.
 
-Notice that because Golang has a type system built in, you don’t have to spend any extra time defining the object structure ([like you would in Python](https://platform.openai.com/docs/guides/structured-outputs#how-to-use)) — it’s already available via reflection and you can spend more of your time on prompting, inputs, and outputs of the LLM.
-```
+Notice that because Golang has a type system built in, you don't have to spend any extra time defining the object structure ([like you would in Python](https://platform.openai.com/docs/guides/structured-outputs#how-to-use)) — it's already available via reflection and you can spend more of your time on prompting, inputs, and outputs of the LLM.
+````
 
 ### external-scaling-llms-golang--002
 
-`train` - `approved` - 399 approximate tokens - 212 words
+`train` - `candidate` - 400 approximate tokens - 213 words
 
 Headings: Parallel processing and latency
 
-```markdown
-## Parallel processing and latency
+````markdown
+# Parallel processing and latency
 
 LLM applications often require concurrent API calls and complex orchestration. Go's goroutines and channels make this remarkably straightforward.
 
 For instance, suppose we're running a Retrieval Augmented Generation (RAG) pipeline and want to perform hybrid search across three different search backends (see our article on [Better RAG Results with Reciprocal Rank Fusion and Hybrid Search](https://www.assembled.com/blog/better-rag-results-with-reciprocal-rank-fusion-and-hybrid-search)). Running these searches serially would add up their individual latencies, resulting in slower responses. With Go we can relatively easily parallelize searches across multiple backends:
 
+```go
 func ParallelSearch(query string) []SearchResult {
 ctx, cancel:=context.WithTimeout(context.Background(), 750*time.Millisecond)
 defer cancel()
-
 resultsChan:=make(chan []SearchResult, len(backends))
 var wg sync.WaitGroup
-
 for _, backend:=range backends {
 wg.Add(1)
 go func(backend func(string) ([]SearchResult, error)) {
@@ -1800,51 +1610,49 @@ case<-ctx.Done():
 }
 }(backend)
 }
-
 wg.Wait()
 close(resultsChan)
-
 var combined []SearchResult
 for res:=range resultsChan {
 combined=append(combined, res...)
 }
-
 return combined
 }
+```
 
 This pattern reduces our total latency to that of the slowest backend, with a configurable timeout to prevent any single slow backend from bottlenecking the entire system. The results are collected via a Go channel and combined after all the Goroutines have completed or timed out.
-```
+````
 
 ### external-scaling-llms-golang--003
 
-`train` - `approved` - 496 approximate tokens - 275 words
+`train` - `candidate` - 500 approximate tokens - 277 words
 
 Headings: Response processing pipeline
 
-```markdown
-## Response processing pipeline
+````markdown
+# Response processing pipeline
 
 LLM outputs often need multiple transformations before they're ready for end users. For example, if you're using an LLM provider with great reasoning ability but doesn't yet have structured outputs (e.g. Claude 3.5 Sonnet), you'll likely want to structure the output in your prompt and parse the output before passing it to an end user.
 
 We've built a composable pipeline that makes these transformations both maintainable and testable:
 
+```go
 type ResponseCleaner interface {
 Clean(context.Context, string) (string, []ResponseDetails, error)
 }
-
 type ResponseDetails struct {
 DetailType string`json:"detail_type"`
 Content interface{} `json:"content"`
 }
+```
 
 Each cleaner is a discrete unit that handles one specific transformation. This separation of concerns makes testing straightforward and allows us to modify individual transformations without touching the rest of the pipeline. Here's how we handle source citations:
 
+```go
 type CitedSourceCleaner struct{}
-
 func (c CitedSourceCleaner) Clean(ctx context.Context, message string) (string, []ResponseDetails, error) {
 sourceRegex:=regexp.MustCompile(`\[(Source|Ref):\s*([^\]]+)\]`)
 var citations []ResponseDetails
-
 matches:=sourceRegex.FindAllStringSubmatch(message, -1)
 for i, match:=range matches {
 citations=append(citations, ResponseDetails{
@@ -1857,9 +1665,9 @@ Content: map[string]interface{}{
 message=strings.Replace(message, match[0],
 fmt.Sprintf("[%d]", i+1), 1)
 }
-
 return message, citations, nil
 }
+```
 
 Using the above cleaner, when an LLM responds with:
 
@@ -1868,16 +1676,16 @@ Using the above cleaner, when an LLM responds with:
 The cleaner will parse the sources and pass them to the frontend as response details. It will also transform the raw LLM output into:
 
 > According to [1] and [2], the API rate limit is 100 requests per minute for [3] premium accounts.
-```
+````
 
 ### external-scaling-llms-golang--004
 
-`train` - `approved` - 425 approximate tokens - 227 words
+`train` - `approved` - 424 approximate tokens - 227 words
 
 Headings: Complementing with Python / Conclusion
 
 ```markdown
-## Complementing with Python
+# Complementing with Python
 
 While Go powers our production infrastructure, Python remains essential for ML experimentation and rapid prototyping. The Python ecosystem excels at tasks like:
 
@@ -1889,41 +1697,39 @@ These tasks would be significantly more complex in Go, where ML libraries are ei
 
 To bridge the Go / Python gap, we maintain a lightweight Python service that our Go infrastructure calls. This service handles computationally intensive ML tasks (like generating embeddings or clustering) while keeping our core infrastructure in Go. In practice, we often prototype features entirely in Python, then gradually port performance-critical components to Go once they're proven. This approach lets us ship improvements incrementally without waiting for a complete Go implementation.
 
-## Conclusion
+# Conclusion
 
 Go's strengths in type safety, concurrency, and building interfaces have made it an excellent choice for our LLM infrastructure. While Python remains our go-to language for ML development, Go provides the performance and reliability we need in production. The combination of both languages lets us move fast while maintaining a robust, scalable system.
 ```
 
 ### external-scaling-llms-golang--full
 
-`train` - `candidate` - 2009 approximate tokens - 1067 words - exceeds target size
+`train` - `candidate` - 2015 approximate tokens - 1071 words - exceeds target size
 
 Headings: Type safety and structured outputs / Parallel processing and latency / Response processing pipeline / Complementing with Python / Conclusion
 
-```markdown
-While the LLM ecosystem is overwhelmingly Python-first, we've found Go to be exceptionally well-suited for production deployments. Our Go-based infrastructure handles millions of monthly LLM requests with minimal performance tuning. Beyond Go's well-documented advantages (see Rob Pike’s excellent [distillation of Go's benefits](https://go.dev/talks/2012/splash.article)), three capabilities have proven particularly valuable for LLM workloads: static type checking for handling model outputs, goroutines for managing concurrent API calls, and interfaces for building composable response pipelines. Here's how we've implemented each of these in our production stack.
+````markdown
+While the LLM ecosystem is overwhelmingly Python-first, we've found Go to be exceptionally well-suited for production deployments. Our Go-based infrastructure handles millions of monthly LLM requests with minimal performance tuning. Beyond Go's well-documented advantages (see Rob Pike's excellent [distillation of Go's benefits](https://go.dev/talks/2012/splash.article)), three capabilities have proven particularly valuable for LLM workloads: static type checking for handling model outputs, goroutines for managing concurrent API calls, and interfaces for building composable response pipelines. Here's how we've implemented each of these in our production stack.
 
-## Type safety and structured outputs
+# Type safety and structured outputs
 
-One of the main challenges with LLMs is handling their unstructured outputs. OpenAI's [structured output support](https://platform.openai.com/docs/guides/structured-outputs) has been a significant advancement for us, and Go's type system makes it particularly elegant to implement. Rather than writing separate schema definitions, we can leverage Go's struct tags and reflection to generate well defined schemas. Here’s an example where we automatically convert a `SupportResponse` into OpenAI's JSON schema format using the [go-openai](https://github.com/sashabaranov/go-openai) library:
+One of the main challenges with LLMs is handling their unstructured outputs. OpenAI's [structured output support](https://platform.openai.com/docs/guides/structured-outputs) has been a significant advancement for us, and Go's type system makes it particularly elegant to implement. Rather than writing separate schema definitions, we can leverage Go's struct tags and reflection to generate well defined schemas. Here's an example where we automatically convert a `SupportResponse` into OpenAI's JSON schema format using the [go-openai](https://github.com/sashabaranov/go-openai) library:
 
 import (
 "github.com/sashabaranov/go-openai"
 "github.com/sashabaranov/go-openai/jsonschema"
+```go
 )
-
 type SupportResponse struct {
 Answer string`json:"answer"`
 RelatedDocs []string`json:"related_docs"`
 }
-
 func GetSupportResponse(messages []openai.ChatCompletionMessage) (*SupportResponse, error) {
 var supportResponse SupportResponse
 schema, err:=jsonschema.GenerateSchemaForType(supportResponse)
 if err!=nil {
 return nil, err
 }
-
 resp, err:=client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
 Messages: messages,
 ResponseFormat: &openai.ChatCompletionResponseFormat{
@@ -1944,24 +1750,24 @@ return nil, err
 }
 return&supportResponse, nil
 }
+```
 
 The above code will provide us with `Answer` and `RelatedDocs` populated directly from an LLM call. Now, the `SupportResponse` can be easily passed to our frontend or saved in our database.
 
-Notice that because Golang has a type system built in, you don’t have to spend any extra time defining the object structure ([like you would in Python](https://platform.openai.com/docs/guides/structured-outputs#how-to-use)) — it’s already available via reflection and you can spend more of your time on prompting, inputs, and outputs of the LLM.
+Notice that because Golang has a type system built in, you don't have to spend any extra time defining the object structure ([like you would in Python](https://platform.openai.com/docs/guides/structured-outputs#how-to-use)) — it's already available via reflection and you can spend more of your time on prompting, inputs, and outputs of the LLM.
 
-## Parallel processing and latency
+# Parallel processing and latency
 
 LLM applications often require concurrent API calls and complex orchestration. Go's goroutines and channels make this remarkably straightforward.
 
 For instance, suppose we're running a Retrieval Augmented Generation (RAG) pipeline and want to perform hybrid search across three different search backends (see our article on [Better RAG Results with Reciprocal Rank Fusion and Hybrid Search](https://www.assembled.com/blog/better-rag-results-with-reciprocal-rank-fusion-and-hybrid-search)). Running these searches serially would add up their individual latencies, resulting in slower responses. With Go we can relatively easily parallelize searches across multiple backends:
 
+```go
 func ParallelSearch(query string) []SearchResult {
 ctx, cancel:=context.WithTimeout(context.Background(), 750*time.Millisecond)
 defer cancel()
-
 resultsChan:=make(chan []SearchResult, len(backends))
 var wg sync.WaitGroup
-
 for _, backend:=range backends {
 wg.Add(1)
 go func(backend func(string) ([]SearchResult, error)) {
@@ -1976,43 +1782,41 @@ case<-ctx.Done():
 }
 }(backend)
 }
-
 wg.Wait()
 close(resultsChan)
-
 var combined []SearchResult
 for res:=range resultsChan {
 combined=append(combined, res...)
 }
-
 return combined
 }
+```
 
 This pattern reduces our total latency to that of the slowest backend, with a configurable timeout to prevent any single slow backend from bottlenecking the entire system. The results are collected via a Go channel and combined after all the Goroutines have completed or timed out.
 
-## Response processing pipeline
+# Response processing pipeline
 
 LLM outputs often need multiple transformations before they're ready for end users. For example, if you're using an LLM provider with great reasoning ability but doesn't yet have structured outputs (e.g. Claude 3.5 Sonnet), you'll likely want to structure the output in your prompt and parse the output before passing it to an end user.
 
 We've built a composable pipeline that makes these transformations both maintainable and testable:
 
+```go
 type ResponseCleaner interface {
 Clean(context.Context, string) (string, []ResponseDetails, error)
 }
-
 type ResponseDetails struct {
 DetailType string`json:"detail_type"`
 Content interface{} `json:"content"`
 }
+```
 
 Each cleaner is a discrete unit that handles one specific transformation. This separation of concerns makes testing straightforward and allows us to modify individual transformations without touching the rest of the pipeline. Here's how we handle source citations:
 
+```go
 type CitedSourceCleaner struct{}
-
 func (c CitedSourceCleaner) Clean(ctx context.Context, message string) (string, []ResponseDetails, error) {
 sourceRegex:=regexp.MustCompile(`\[(Source|Ref):\s*([^\]]+)\]`)
 var citations []ResponseDetails
-
 matches:=sourceRegex.FindAllStringSubmatch(message, -1)
 for i, match:=range matches {
 citations=append(citations, ResponseDetails{
@@ -2025,9 +1829,9 @@ Content: map[string]interface{}{
 message=strings.Replace(message, match[0],
 fmt.Sprintf("[%d]", i+1), 1)
 }
-
 return message, citations, nil
 }
+```
 
 Using the above cleaner, when an LLM responds with:
 
@@ -2037,7 +1841,7 @@ The cleaner will parse the sources and pass them to the frontend as response det
 
 > According to [1] and [2], the API rate limit is 100 requests per minute for [3] premium accounts.
 
-## Complementing with Python
+# Complementing with Python
 
 While Go powers our production infrastructure, Python remains essential for ML experimentation and rapid prototyping. The Python ecosystem excels at tasks like:
 
@@ -2049,10 +1853,10 @@ These tasks would be significantly more complex in Go, where ML libraries are ei
 
 To bridge the Go / Python gap, we maintain a lightweight Python service that our Go infrastructure calls. This service handles computationally intensive ML tasks (like generating embeddings or clustering) while keeping our core infrastructure in Go. In practice, we often prototype features entirely in Python, then gradually port performance-critical components to Go once they're proven. This approach lets us ship improvements incrementally without waiting for a complete Go implementation.
 
-## Conclusion
+# Conclusion
 
 Go's strengths in type safety, concurrency, and building interfaces have made it an excellent choice for our LLM infrastructure. While Python remains our go-to language for ML development, Go provides the performance and reliability we need in production. The combination of both languages lets us move fast while maintaining a robust, scalable system.
-```
+````
 
 ## My Startup Journey
 
@@ -2060,34 +1864,34 @@ Go's strengths in type safety, concurrency, and building interfaces have made it
 
 `train` - `approved` - 201 approximate tokens - 134 words
 
-Headings: How I “failed” at a YC startup, worked at early Stripe, and then raised $20M
+Headings: How I "failed" at a YC startup, worked at early Stripe, and then raised $20M
 
 ```markdown
-## How I “failed” at a YC startup, worked at early Stripe, and then raised $20M
+# How I "failed" at a YC startup, worked at early Stripe, and then raised $20M
 
-**Lessons (for those who don’t care for my rambling narrative account):**
+**Lessons (for those who don't care for my rambling narrative account):**
 
 *   Figure out what great looks like.
 *   You have to get lucky, but you also have to capitalize on the lucky opportunities.
-*   It’s ok to miss out on your top choice. Your optimization function might be different in a couple of years.
-*   It’s hard to spot great businesses, but if you can spot great people to work with, you can narrow the window.
+*   It's ok to miss out on your top choice. Your optimization function might be different in a couple of years.
+*   It's hard to spot great businesses, but if you can spot great people to work with, you can narrow the window.
 *   Failing gives you better perspective than being told that you will fail.
-*   Great engineers aren’t defined by years of experience. They need to care deeply about the product and have the technical prowess to build a great experience.
+*   Great engineers aren't defined by years of experience. They need to care deeply about the product and have the technical prowess to build a great experience.
 *   Early decisions at a company have compounding effects.
 ```
 
 ### external-startup-journey--002
 
-`train` - `approved` - 519 approximate tokens - 363 words
+`train` - `approved` - 518 approximate tokens - 363 words
 
 Headings: **Contributing to Ruby on Rails**
 
 ```markdown
-## **Contributing to Ruby on Rails**
+# **Contributing to Ruby on Rails**
 
 > Lesson: Figure out what great looks like.
 
-In my junior year of MIT, I took a class on open source software. By far my favorite memory was going to an open source conference and meeting [Aaron Patterson (aka Tenderlove)](https://github.com/tenderlove). Aaron is a legend: a member of the Rails core team and an incredibly fascinating person (just take a look at [his website](https://tenderlovemaking.com/) and you’ll understand why). I had never seen someone fix bugs as quickly as him or have such deep knowledge of knowledge of Linux, Rails, and Ruby.
+In my junior year of MIT, I took a class on open source software. By far my favorite memory was going to an open source conference and meeting [Aaron Patterson (aka Tenderlove)](https://github.com/tenderlove). Aaron is a legend: a member of the Rails core team and an incredibly fascinating person (just take a look at [his website](https://tenderlovemaking.com/) and you'll understand why). I had never seen someone fix bugs as quickly as him or have such deep knowledge of knowledge of Linux, Rails, and Ruby.
 
 Taking a group photo with Aaron Patterson at an open source conference.
 
@@ -2095,9 +1899,9 @@ After I met Aaron, I knew I wanted to be just as good as him at programming. So 
 
 > Lesson: You have to get lucky, but you also have to capitalize on the lucky opportunities.
 
-Over the summer, I got assigned to my first big project. I was asked to complete a major refactor of the structure of the Rails application. Unfortunately, [my patch](https://github.com/rails/rails/pull/9655) ran into many issues and never made it into Rails. I learned that making big changes in heavily used code usually leads to bad outcomes (especially when you don’t fully understand a system).
+Over the summer, I got assigned to my first big project. I was asked to complete a major refactor of the structure of the Rails application. Unfortunately, [my patch](https://github.com/rails/rails/pull/9655) ran into many issues and never made it into Rails. I learned that making big changes in heavily used code usually leads to bad outcomes (especially when you don't fully understand a system).
 
-However, I persisted and kept making smaller patches. As the summer came to a close, I had climbed up to become one of the top 50 Rails contributors (to this day, [I’m still in the top 100](https://contributors.rubyonrails.org/contributors/john-j-wang/commits)). But my commits started petering out as the school year started and I began looking for jobs.
+However, I persisted and kept making smaller patches. As the summer came to a close, I had climbed up to become one of the top 50 Rails contributors (to this day, [I'm still in the top 100](https://contributors.rubyonrails.org/contributors/john-j-wang/commits)). But my commits started petering out as the school year started and I began looking for jobs.
 ```
 
 ### external-startup-journey--003
@@ -2107,19 +1911,19 @@ However, I persisted and kept making smaller patches. As the summer came to a cl
 Headings: Looking for a job in Silicon Valley
 
 ```markdown
-## Looking for a job in Silicon Valley
+# Looking for a job in Silicon Valley
 
-> Lesson: It’s ok to miss out on your top choice. Your optimization function might be different in a couple of years.
+> Lesson: It's ok to miss out on your top choice. Your optimization function might be different in a couple of years.
 
-As I started job hunting, one company stood out amongst all the others: [Meteor](https://www.meteor.com/). I was incredibly excited about Meteor’s team and product. They were a team of ex-Asana engineers building a new open source web framework that automatically pushed database changes out to the frontend. Meteor combined my love of open source software with the new exciting technologies of the time. The only problem was that I didn’t get the job.
+As I started job hunting, one company stood out amongst all the others: [Meteor](https://www.meteor.com/). I was incredibly excited about Meteor's team and product. They were a team of ex-Asana engineers building a new open source web framework that automatically pushed database changes out to the frontend. Meteor combined my love of open source software with the new exciting technologies of the time. The only problem was that I didn't get the job.
 
 I was devastated at the time, but looking back, this ended up being a good thing. I was lucky enough to get job offers from a range of small to large companies. I decided to accept an offer from a little known company called Stripe.
 
-At the time, Stripe wasn’t an obvious choice. My parents had never heard of it, nor had any of my friends (and it would be years before any of my friends had any idea what Stripe did). It was hard to square Stripe’s salary with the money and stability offered at larger tech companies. When I tried to negotiate, I was given the party line: “all engineering salaries are the same.” And I still wanted to work on open source software (ya, I was pretty bummed about Meteor).
+At the time, Stripe wasn't an obvious choice. My parents had never heard of it, nor had any of my friends (and it would be years before any of my friends had any idea what Stripe did). It was hard to square Stripe's salary with the money and stability offered at larger tech companies. When I tried to negotiate, I was given the party line: "all engineering salaries are the same." And I still wanted to work on open source software (ya, I was pretty bummed about Meteor).
 
 I loved the excitement of Silicon Valley and wanted to be a part of it, so I was determined to find a company where I could be a sponge. There were a lot of companies doing exciting things, from big data companies started by world renowned professors to companies producing the next cutting edge frontend web framework. Every startup seemed to be growing. But it became apparent that external factors were lagging indicators of great companies.
 
-> Lesson: It’s hard to spot great businesses, but if you can spot great people to work with, you can narrow the window.
+> Lesson: It's hard to spot great businesses, but if you can spot great people to work with, you can narrow the window.
 
 Stripe was ever so slightly different because it had intelligent people doing things with humility and care. Everyone I talked to genuinely cared about their job and about me as a person, and everyone was high powered. I remember being in awe of [Nelson Elhage](https://nelhage.com/) and [Evan Broder](https://ebroder.net/about/) who worked on technology to hot-swap a linux kernel without rebooting. They were always excited to talk about problems and how to solve them.
 ```
@@ -2131,9 +1935,9 @@ Stripe was ever so slightly different because it had intelligent people doing th
 Headings: (intro or continuation)
 
 ```markdown
-I also remember the care Stripe put into the recruiting process. [Patrick Collison](https://patrickcollison.com/) went on a coffee walk with me, chatting about everything from Stripe’s machinations to acquire a defunct bank to the economic drivers of productivity growth. They introduced me, a random college student, to their investors. I was in awe and quite literally shaking when they had [Michael Moritz](https://en.wikipedia.org/wiki/Michael_Moritz) and [Paul Graham](http://www.paulgraham.com/) do 20 minute chats with me.
+I also remember the care Stripe put into the recruiting process. [Patrick Collison](https://patrickcollison.com/) went on a coffee walk with me, chatting about everything from Stripe's machinations to acquire a defunct bank to the economic drivers of productivity growth. They introduced me, a random college student, to their investors. I was in awe and quite literally shaking when they had [Michael Moritz](https://en.wikipedia.org/wiki/Michael_Moritz) and [Paul Graham](http://www.paulgraham.com/) do 20 minute chats with me.
 
-In the end, it was the thoughtfulness and drive in Stripe’s culture that set it apart. Many companies had one or the other, but very few had both.
+In the end, it was the thoughtfulness and drive in Stripe's culture that set it apart. Many companies had one or the other, but very few had both.
 ```
 
 ### external-startup-journey--005
@@ -2143,43 +1947,43 @@ In the end, it was the thoughtfulness and drive in Stripe’s culture that set i
 Headings: Starting a YC company
 
 ```markdown
-## Starting a YC company
+# Starting a YC company
 
 So there I was, ready to start working at Stripe in the summer, when Max Kolysh (now the CEO of [Dover](http://www.dover.com/)) sat me down for lunch at Chipotle. It was November of my senior year in college and I was excited to spend my last semester learning and not having to care about grades.
 
-I listened intently to Max talk about how he and [Doug Feigelson](https://www.linkedin.com/in/doug-feigelson-95371825/) had gotten into YC to build an API to connect online shopping. I thought the idea was a bit ridiculous, but Max and Doug were incredibly smart, driven, and humble people. I’ve always optimized my environment for learning and being around great people, so next thing I knew I was signing incorporation documents and flying out to Mountain View. I had no idea what I’d do about the Stripe offer come summer, but I would figure it out when the time came.
+I listened intently to Max talk about how he and [Doug Feigelson](https://www.linkedin.com/in/doug-feigelson-95371825/) had gotten into YC to build an API to connect online shopping. I thought the idea was a bit ridiculous, but Max and Doug were incredibly smart, driven, and humble people. I've always optimized my environment for learning and being around great people, so next thing I knew I was signing incorporation documents and flying out to Mountain View. I had no idea what I'd do about the Stripe offer come summer, but I would figure it out when the time came.
 
-**Left**: Listening to Paul Graham give a talk just before starting YC. **Middle**: Doug at his typical desk set up. **Right**: Max and Doug talking with other founders at YC’s office in Mountain View.
+**Left**: Listening to Paul Graham give a talk just before starting YC. **Middle**: Doug at his typical desk set up. **Right**: Max and Doug talking with other founders at YC's office in Mountain View.
 
-I packed up a duffel bag of clothes and headed out to Palo Alto to start [Zinc](https://www.ycombinator.com/companies/zinc). During this time, I learned to grind. Each morning, we’d wake up around noon and code until 8pm. We’d eat a quick dinner and go to the gym before returning at 11pm to continue coding until 3 or 4am in the morning. Many people would say we worked too hard, but I loved it. We were doing something exciting and I poured my heart and soul into it.
+I packed up a duffel bag of clothes and headed out to Palo Alto to start [Zinc](https://www.ycombinator.com/companies/zinc). During this time, I learned to grind. Each morning, we'd wake up around noon and code until 8pm. We'd eat a quick dinner and go to the gym before returning at 11pm to continue coding until 3 or 4am in the morning. Many people would say we worked too hard, but I loved it. We were doing something exciting and I poured my heart and soul into it.
 
-> Lesson: Failing gives you better perspective than being told that you’ll fail.
+> Lesson: Failing gives you better perspective than being told that you'll fail.
 
-However, as YC came to an end, we still hadn’t come up with a real product. We had been instilled with the YC mentality that growth is paramount and we did everything we could to achieve growth. This led us to create a consumer app that lost money on every transaction. YC was a great forcing function for us to focus exclusively on growth, but we didn’t spend enough time figuring out the fundamentals of what we were doing. What’s more, I learned that coding 13 hours a day doesn’t guarantee anything.
+However, as YC came to an end, we still hadn't come up with a real product. We had been instilled with the YC mentality that growth is paramount and we did everything we could to achieve growth. This led us to create a consumer app that lost money on every transaction. YC was a great forcing function for us to focus exclusively on growth, but we didn't spend enough time figuring out the fundamentals of what we were doing. What's more, I learned that coding 13 hours a day doesn't guarantee anything.
 
-These were hard lessons that I’d carry into the future. As we shut down our product, I knew my startup experience was coming to an end. I had already accepted Stripe’s offer and I was going to stay true to my word. So in June of 2014, I had a somber meeting with Max and Doug and went to work for Stripe.
+These were hard lessons that I'd carry into the future. As we shut down our product, I knew my startup experience was coming to an end. I had already accepted Stripe's offer and I was going to stay true to my word. So in June of 2014, I had a somber meeting with Max and Doug and went to work for Stripe.
 ```
 
 ### external-startup-journey--006
 
-`train` - `approved` - 455 approximate tokens - 317 words
+`train` - `approved` - 454 approximate tokens - 317 words
 
 Headings: Working at early Stripe
 
 ```markdown
-## Working at early Stripe
+# Working at early Stripe
 
 When I started at Stripe, I asked to delay my start date until after a family vacation, but my manager just told me to start sooner and take time off later (Stripe was just shy of 100 employees and moving incredibly quickly). I now had an artificial deadline of one month to ship my first project.
 
 I was assigned to improve email receipts with [Michelle Bu](https://www.linkedin.com/in/michellebu/). We spent the month touching different parts of the Stripe infrastructure and writing a ton of code. Just before launch date, we stayed up the entire night fixing polish items. I remember going to sleep in a phone booth and waking up early in the morning to try to finish out some last edits while Michelle worked on the blog post.
 
-> Lesson: Great engineers aren’t defined by years of experience. They need to care deeply about the product and have the technical prowess to build a great experience.
+> Lesson: Great engineers aren't defined by years of experience. They need to care deeply about the product and have the technical prowess to build a great experience.
 
 At an offsite working on something Stripe related.
 
-One of the things that struck me at Stripe was how humble and hardworking people were. Even though Michelle was a veteran of the Stripe codebase, pushed forward a ton of the project, and even wrote the blog post for the launch, she put my name on the final result (amazingly, this post is still up on [Stripe’s blog](https://stripe.com/blog/improved-email-receipts)). I thought that said a lot about her and Stripe in general.
+One of the things that struck me at Stripe was how humble and hardworking people were. Even though Michelle was a veteran of the Stripe codebase, pushed forward a ton of the project, and even wrote the blog post for the launch, she put my name on the final result (amazingly, this post is still up on [Stripe's blog](https://stripe.com/blog/improved-email-receipts)). I thought that said a lot about her and Stripe in general.
 
-Michelle also taught me that there are different flavors of great engineers. Some great engineers can act like oracles because of their knowledge and experience. Michelle was only one year out of college, but still one of Stripe’s best engineers (in an unsung hero kind of way). She kept standards high, fixed bugs when she saw them, talked to customers to understand problems, and shipped a ton of changes.
+Michelle also taught me that there are different flavors of great engineers. Some great engineers can act like oracles because of their knowledge and experience. Michelle was only one year out of college, but still one of Stripe's best engineers (in an unsung hero kind of way). She kept standards high, fixed bugs when she saw them, talked to customers to understand problems, and shipped a ton of changes.
 ```
 
 ### external-startup-journey--007
@@ -2189,7 +1993,7 @@ Michelle also taught me that there are different flavors of great engineers. Som
 Headings: Building a profitable, (mostly) bootstrapped business
 
 ```markdown
-## Building a profitable, (mostly) bootstrapped business
+# Building a profitable, (mostly) bootstrapped business
 
 Stripe was doing incredibly well and was on track to be a very special company. It had an electric atmosphere that combined ambition and humility. But after a year and a half, I started longing for something different. Many of my friends were shocked by my decision to work at Stripe, and many were equally shocked when I quit Stripe to return to Zinc. However, I wanted to optimize for learning and I believed I would learn a broader set of skills at a smaller company.
 
@@ -2207,43 +2011,43 @@ I loved being at Zinc because the feedback loop was extremely fast. We could see
 Headings: Applying lessons and learning new ones at Assembled
 
 ```markdown
-## Applying lessons and learning new ones at Assembled
+# Applying lessons and learning new ones at Assembled
 
 After a few years, we were in great shape at Zinc. However, I itched to throw myself at even bigger problems and started talking to my brother, [Ryan Wang](https://www.linkedin.com/in/ryanywang/), and my old friend, [Brian Sze](https://www.linkedin.com/in/briansze/). They were leading a team that built internal tools for the support team at Stripe.
 
-Stripe had seen triple digit growth for years, but still cared about a great support experience. Patrick Collison used to invite engineers over to his apartment to help answer support tickets. However, this didn’t scale as volume grew and Stripe increasingly had to rely on a set of outdated tools to manage its support team. We saw that many companies had very similar problems as Stripe and that the support ecosystem was lacking good tools.
+Stripe had seen triple digit growth for years, but still cared about a great support experience. Patrick Collison used to invite engineers over to his apartment to help answer support tickets. However, this didn't scale as volume grew and Stripe increasingly had to rely on a set of outdated tools to manage its support team. We saw that many companies had very similar problems as Stripe and that the support ecosystem was lacking good tools.
 
-I vividly remember our first meeting with GoFundMe’s support team when [Morgan Wood](https://www.linkedin.com/in/morgan-wood-gfm/) showed us a Google Sheet containing thousands of rows, a litany of color-coordinated cells, and multiple people trying to make edits. While we were at their office, someone had made an accidental edit on the spreadsheet and the operations lead, [Jordan Philyaw](https://www.linkedin.com/in/jordanphilyaw/), had to manually recreate the entire sheet. The level of wizardry was amazing, but it was clear that the tooling needed to get better.
+I vividly remember our first meeting with GoFundMe's support team when [Morgan Wood](https://www.linkedin.com/in/morgan-wood-gfm/) showed us a Google Sheet containing thousands of rows, a litany of color-coordinated cells, and multiple people trying to make edits. While we were at their office, someone had made an accidental edit on the spreadsheet and the operations lead, [Jordan Philyaw](https://www.linkedin.com/in/jordanphilyaw/), had to manually recreate the entire sheet. The level of wizardry was amazing, but it was clear that the tooling needed to get better.
 
-Seeing these types of struggles across the industry led Brian, Ryan, and I to start [Assembled](http://www.assembled.com/) to transform and elevate customer support. We recently [raised a $16M Series-A](https://techcrunch.com/2021/03/12/assembled-an-operating-system-for-support-teams-raises-16-6m/) and I’m now applying many of the lessons I’ve learned to creating a long-lasting, impactful company:
+Seeing these types of struggles across the industry led Brian, Ryan, and I to start [Assembled](http://www.assembled.com/) to transform and elevate customer support. We recently [raised a $16M Series-A](https://techcrunch.com/2021/03/12/assembled-an-operating-system-for-support-teams-raises-16-6m/) and I'm now applying many of the lessons I've learned to creating a long-lasting, impactful company:
 
-**Left**: Assembled’s office in 2018 (e.g. my living room). **Right**: Assembled’s first career fair where we couldn’t even give away free pizza (recruiting is hard).
+**Left**: Assembled's office in 2018 (e.g. my living room). **Right**: Assembled's first career fair where we couldn't even give away free pizza (recruiting is hard).
 ```
 
 ### external-startup-journey--full
 
-`train` - `candidate` - 3473 approximate tokens - 2395 words - exceeds target size
+`train` - `candidate` - 3471 approximate tokens - 2395 words - exceeds target size
 
-Headings: How I “failed” at a YC startup, worked at early Stripe, and then raised $20M / **Contributing to Ruby on Rails** / Looking for a job in Silicon Valley / Starting a YC company / Working at early Stripe / Building a profitable, (mostly) bootstrapped business / Applying lessons and learning new ones at Assembled
+Headings: How I "failed" at a YC startup, worked at early Stripe, and then raised $20M / **Contributing to Ruby on Rails** / Looking for a job in Silicon Valley / Starting a YC company / Working at early Stripe / Building a profitable, (mostly) bootstrapped business / Applying lessons and learning new ones at Assembled
 
 ```markdown
-## How I “failed” at a YC startup, worked at early Stripe, and then raised $20M
+# How I "failed" at a YC startup, worked at early Stripe, and then raised $20M
 
-**Lessons (for those who don’t care for my rambling narrative account):**
+**Lessons (for those who don't care for my rambling narrative account):**
 
 *   Figure out what great looks like.
 *   You have to get lucky, but you also have to capitalize on the lucky opportunities.
-*   It’s ok to miss out on your top choice. Your optimization function might be different in a couple of years.
-*   It’s hard to spot great businesses, but if you can spot great people to work with, you can narrow the window.
+*   It's ok to miss out on your top choice. Your optimization function might be different in a couple of years.
+*   It's hard to spot great businesses, but if you can spot great people to work with, you can narrow the window.
 *   Failing gives you better perspective than being told that you will fail.
-*   Great engineers aren’t defined by years of experience. They need to care deeply about the product and have the technical prowess to build a great experience.
+*   Great engineers aren't defined by years of experience. They need to care deeply about the product and have the technical prowess to build a great experience.
 *   Early decisions at a company have compounding effects.
 
-## **Contributing to Ruby on Rails**
+# **Contributing to Ruby on Rails**
 
 > Lesson: Figure out what great looks like.
 
-In my junior year of MIT, I took a class on open source software. By far my favorite memory was going to an open source conference and meeting [Aaron Patterson (aka Tenderlove)](https://github.com/tenderlove). Aaron is a legend: a member of the Rails core team and an incredibly fascinating person (just take a look at [his website](https://tenderlovemaking.com/) and you’ll understand why). I had never seen someone fix bugs as quickly as him or have such deep knowledge of knowledge of Linux, Rails, and Ruby.
+In my junior year of MIT, I took a class on open source software. By far my favorite memory was going to an open source conference and meeting [Aaron Patterson (aka Tenderlove)](https://github.com/tenderlove). Aaron is a legend: a member of the Rails core team and an incredibly fascinating person (just take a look at [his website](https://tenderlovemaking.com/) and you'll understand why). I had never seen someone fix bugs as quickly as him or have such deep knowledge of knowledge of Linux, Rails, and Ruby.
 
 Taking a group photo with Aaron Patterson at an open source conference.
 
@@ -2251,61 +2055,61 @@ After I met Aaron, I knew I wanted to be just as good as him at programming. So 
 
 > Lesson: You have to get lucky, but you also have to capitalize on the lucky opportunities.
 
-Over the summer, I got assigned to my first big project. I was asked to complete a major refactor of the structure of the Rails application. Unfortunately, [my patch](https://github.com/rails/rails/pull/9655) ran into many issues and never made it into Rails. I learned that making big changes in heavily used code usually leads to bad outcomes (especially when you don’t fully understand a system).
+Over the summer, I got assigned to my first big project. I was asked to complete a major refactor of the structure of the Rails application. Unfortunately, [my patch](https://github.com/rails/rails/pull/9655) ran into many issues and never made it into Rails. I learned that making big changes in heavily used code usually leads to bad outcomes (especially when you don't fully understand a system).
 
-However, I persisted and kept making smaller patches. As the summer came to a close, I had climbed up to become one of the top 50 Rails contributors (to this day, [I’m still in the top 100](https://contributors.rubyonrails.org/contributors/john-j-wang/commits)). But my commits started petering out as the school year started and I began looking for jobs.
+However, I persisted and kept making smaller patches. As the summer came to a close, I had climbed up to become one of the top 50 Rails contributors (to this day, [I'm still in the top 100](https://contributors.rubyonrails.org/contributors/john-j-wang/commits)). But my commits started petering out as the school year started and I began looking for jobs.
 
-## Looking for a job in Silicon Valley
+# Looking for a job in Silicon Valley
 
-> Lesson: It’s ok to miss out on your top choice. Your optimization function might be different in a couple of years.
+> Lesson: It's ok to miss out on your top choice. Your optimization function might be different in a couple of years.
 
-As I started job hunting, one company stood out amongst all the others: [Meteor](https://www.meteor.com/). I was incredibly excited about Meteor’s team and product. They were a team of ex-Asana engineers building a new open source web framework that automatically pushed database changes out to the frontend. Meteor combined my love of open source software with the new exciting technologies of the time. The only problem was that I didn’t get the job.
+As I started job hunting, one company stood out amongst all the others: [Meteor](https://www.meteor.com/). I was incredibly excited about Meteor's team and product. They were a team of ex-Asana engineers building a new open source web framework that automatically pushed database changes out to the frontend. Meteor combined my love of open source software with the new exciting technologies of the time. The only problem was that I didn't get the job.
 
 I was devastated at the time, but looking back, this ended up being a good thing. I was lucky enough to get job offers from a range of small to large companies. I decided to accept an offer from a little known company called Stripe.
 
-At the time, Stripe wasn’t an obvious choice. My parents had never heard of it, nor had any of my friends (and it would be years before any of my friends had any idea what Stripe did). It was hard to square Stripe’s salary with the money and stability offered at larger tech companies. When I tried to negotiate, I was given the party line: “all engineering salaries are the same.” And I still wanted to work on open source software (ya, I was pretty bummed about Meteor).
+At the time, Stripe wasn't an obvious choice. My parents had never heard of it, nor had any of my friends (and it would be years before any of my friends had any idea what Stripe did). It was hard to square Stripe's salary with the money and stability offered at larger tech companies. When I tried to negotiate, I was given the party line: "all engineering salaries are the same." And I still wanted to work on open source software (ya, I was pretty bummed about Meteor).
 
 I loved the excitement of Silicon Valley and wanted to be a part of it, so I was determined to find a company where I could be a sponge. There were a lot of companies doing exciting things, from big data companies started by world renowned professors to companies producing the next cutting edge frontend web framework. Every startup seemed to be growing. But it became apparent that external factors were lagging indicators of great companies.
 
-> Lesson: It’s hard to spot great businesses, but if you can spot great people to work with, you can narrow the window.
+> Lesson: It's hard to spot great businesses, but if you can spot great people to work with, you can narrow the window.
 
 Stripe was ever so slightly different because it had intelligent people doing things with humility and care. Everyone I talked to genuinely cared about their job and about me as a person, and everyone was high powered. I remember being in awe of [Nelson Elhage](https://nelhage.com/) and [Evan Broder](https://ebroder.net/about/) who worked on technology to hot-swap a linux kernel without rebooting. They were always excited to talk about problems and how to solve them.
 
-I also remember the care Stripe put into the recruiting process. [Patrick Collison](https://patrickcollison.com/) went on a coffee walk with me, chatting about everything from Stripe’s machinations to acquire a defunct bank to the economic drivers of productivity growth. They introduced me, a random college student, to their investors. I was in awe and quite literally shaking when they had [Michael Moritz](https://en.wikipedia.org/wiki/Michael_Moritz) and [Paul Graham](http://www.paulgraham.com/) do 20 minute chats with me.
+I also remember the care Stripe put into the recruiting process. [Patrick Collison](https://patrickcollison.com/) went on a coffee walk with me, chatting about everything from Stripe's machinations to acquire a defunct bank to the economic drivers of productivity growth. They introduced me, a random college student, to their investors. I was in awe and quite literally shaking when they had [Michael Moritz](https://en.wikipedia.org/wiki/Michael_Moritz) and [Paul Graham](http://www.paulgraham.com/) do 20 minute chats with me.
 
-In the end, it was the thoughtfulness and drive in Stripe’s culture that set it apart. Many companies had one or the other, but very few had both.
+In the end, it was the thoughtfulness and drive in Stripe's culture that set it apart. Many companies had one or the other, but very few had both.
 
-## Starting a YC company
+# Starting a YC company
 
 So there I was, ready to start working at Stripe in the summer, when Max Kolysh (now the CEO of [Dover](http://www.dover.com/)) sat me down for lunch at Chipotle. It was November of my senior year in college and I was excited to spend my last semester learning and not having to care about grades.
 
-I listened intently to Max talk about how he and [Doug Feigelson](https://www.linkedin.com/in/doug-feigelson-95371825/) had gotten into YC to build an API to connect online shopping. I thought the idea was a bit ridiculous, but Max and Doug were incredibly smart, driven, and humble people. I’ve always optimized my environment for learning and being around great people, so next thing I knew I was signing incorporation documents and flying out to Mountain View. I had no idea what I’d do about the Stripe offer come summer, but I would figure it out when the time came.
+I listened intently to Max talk about how he and [Doug Feigelson](https://www.linkedin.com/in/doug-feigelson-95371825/) had gotten into YC to build an API to connect online shopping. I thought the idea was a bit ridiculous, but Max and Doug were incredibly smart, driven, and humble people. I've always optimized my environment for learning and being around great people, so next thing I knew I was signing incorporation documents and flying out to Mountain View. I had no idea what I'd do about the Stripe offer come summer, but I would figure it out when the time came.
 
-**Left**: Listening to Paul Graham give a talk just before starting YC. **Middle**: Doug at his typical desk set up. **Right**: Max and Doug talking with other founders at YC’s office in Mountain View.
+**Left**: Listening to Paul Graham give a talk just before starting YC. **Middle**: Doug at his typical desk set up. **Right**: Max and Doug talking with other founders at YC's office in Mountain View.
 
-I packed up a duffel bag of clothes and headed out to Palo Alto to start [Zinc](https://www.ycombinator.com/companies/zinc). During this time, I learned to grind. Each morning, we’d wake up around noon and code until 8pm. We’d eat a quick dinner and go to the gym before returning at 11pm to continue coding until 3 or 4am in the morning. Many people would say we worked too hard, but I loved it. We were doing something exciting and I poured my heart and soul into it.
+I packed up a duffel bag of clothes and headed out to Palo Alto to start [Zinc](https://www.ycombinator.com/companies/zinc). During this time, I learned to grind. Each morning, we'd wake up around noon and code until 8pm. We'd eat a quick dinner and go to the gym before returning at 11pm to continue coding until 3 or 4am in the morning. Many people would say we worked too hard, but I loved it. We were doing something exciting and I poured my heart and soul into it.
 
-> Lesson: Failing gives you better perspective than being told that you’ll fail.
+> Lesson: Failing gives you better perspective than being told that you'll fail.
 
-However, as YC came to an end, we still hadn’t come up with a real product. We had been instilled with the YC mentality that growth is paramount and we did everything we could to achieve growth. This led us to create a consumer app that lost money on every transaction. YC was a great forcing function for us to focus exclusively on growth, but we didn’t spend enough time figuring out the fundamentals of what we were doing. What’s more, I learned that coding 13 hours a day doesn’t guarantee anything.
+However, as YC came to an end, we still hadn't come up with a real product. We had been instilled with the YC mentality that growth is paramount and we did everything we could to achieve growth. This led us to create a consumer app that lost money on every transaction. YC was a great forcing function for us to focus exclusively on growth, but we didn't spend enough time figuring out the fundamentals of what we were doing. What's more, I learned that coding 13 hours a day doesn't guarantee anything.
 
-These were hard lessons that I’d carry into the future. As we shut down our product, I knew my startup experience was coming to an end. I had already accepted Stripe’s offer and I was going to stay true to my word. So in June of 2014, I had a somber meeting with Max and Doug and went to work for Stripe.
+These were hard lessons that I'd carry into the future. As we shut down our product, I knew my startup experience was coming to an end. I had already accepted Stripe's offer and I was going to stay true to my word. So in June of 2014, I had a somber meeting with Max and Doug and went to work for Stripe.
 
-## Working at early Stripe
+# Working at early Stripe
 
 When I started at Stripe, I asked to delay my start date until after a family vacation, but my manager just told me to start sooner and take time off later (Stripe was just shy of 100 employees and moving incredibly quickly). I now had an artificial deadline of one month to ship my first project.
 
 I was assigned to improve email receipts with [Michelle Bu](https://www.linkedin.com/in/michellebu/). We spent the month touching different parts of the Stripe infrastructure and writing a ton of code. Just before launch date, we stayed up the entire night fixing polish items. I remember going to sleep in a phone booth and waking up early in the morning to try to finish out some last edits while Michelle worked on the blog post.
 
-> Lesson: Great engineers aren’t defined by years of experience. They need to care deeply about the product and have the technical prowess to build a great experience.
+> Lesson: Great engineers aren't defined by years of experience. They need to care deeply about the product and have the technical prowess to build a great experience.
 
 At an offsite working on something Stripe related.
 
-One of the things that struck me at Stripe was how humble and hardworking people were. Even though Michelle was a veteran of the Stripe codebase, pushed forward a ton of the project, and even wrote the blog post for the launch, she put my name on the final result (amazingly, this post is still up on [Stripe’s blog](https://stripe.com/blog/improved-email-receipts)). I thought that said a lot about her and Stripe in general.
+One of the things that struck me at Stripe was how humble and hardworking people were. Even though Michelle was a veteran of the Stripe codebase, pushed forward a ton of the project, and even wrote the blog post for the launch, she put my name on the final result (amazingly, this post is still up on [Stripe's blog](https://stripe.com/blog/improved-email-receipts)). I thought that said a lot about her and Stripe in general.
 
-Michelle also taught me that there are different flavors of great engineers. Some great engineers can act like oracles because of their knowledge and experience. Michelle was only one year out of college, but still one of Stripe’s best engineers (in an unsung hero kind of way). She kept standards high, fixed bugs when she saw them, talked to customers to understand problems, and shipped a ton of changes.
+Michelle also taught me that there are different flavors of great engineers. Some great engineers can act like oracles because of their knowledge and experience. Michelle was only one year out of college, but still one of Stripe's best engineers (in an unsung hero kind of way). She kept standards high, fixed bugs when she saw them, talked to customers to understand problems, and shipped a ton of changes.
 
-## Building a profitable, (mostly) bootstrapped business
+# Building a profitable, (mostly) bootstrapped business
 
 Stripe was doing incredibly well and was on track to be a very special company. It had an electric atmosphere that combined ambition and humility. But after a year and a half, I started longing for something different. Many of my friends were shocked by my decision to work at Stripe, and many were equally shocked when I quit Stripe to return to Zinc. However, I wanted to optimize for learning and I believed I would learn a broader set of skills at a smaller company.
 
@@ -2315,17 +2119,17 @@ Zinc began to find traction among a very specific niche of users. Before [Plaid]
 
 I loved being at Zinc because the feedback loop was extremely fast. We could see how our decisions a couple of months ago affected our current day to day. For example, building our backend in NodeJS with callbacks haunted us for years. Every time we wrote code, we would contribute more cruft to a sprawling callback hierarchy. On the other hand, our investment in our DevOps infrastructure allowed us to cheaply scale thousands of servers across many cloud hosting providers. Every cent we saved in server costs led directly to a dollar in profit.
 
-## Applying lessons and learning new ones at Assembled
+# Applying lessons and learning new ones at Assembled
 
 After a few years, we were in great shape at Zinc. However, I itched to throw myself at even bigger problems and started talking to my brother, [Ryan Wang](https://www.linkedin.com/in/ryanywang/), and my old friend, [Brian Sze](https://www.linkedin.com/in/briansze/). They were leading a team that built internal tools for the support team at Stripe.
 
-Stripe had seen triple digit growth for years, but still cared about a great support experience. Patrick Collison used to invite engineers over to his apartment to help answer support tickets. However, this didn’t scale as volume grew and Stripe increasingly had to rely on a set of outdated tools to manage its support team. We saw that many companies had very similar problems as Stripe and that the support ecosystem was lacking good tools.
+Stripe had seen triple digit growth for years, but still cared about a great support experience. Patrick Collison used to invite engineers over to his apartment to help answer support tickets. However, this didn't scale as volume grew and Stripe increasingly had to rely on a set of outdated tools to manage its support team. We saw that many companies had very similar problems as Stripe and that the support ecosystem was lacking good tools.
 
-I vividly remember our first meeting with GoFundMe’s support team when [Morgan Wood](https://www.linkedin.com/in/morgan-wood-gfm/) showed us a Google Sheet containing thousands of rows, a litany of color-coordinated cells, and multiple people trying to make edits. While we were at their office, someone had made an accidental edit on the spreadsheet and the operations lead, [Jordan Philyaw](https://www.linkedin.com/in/jordanphilyaw/), had to manually recreate the entire sheet. The level of wizardry was amazing, but it was clear that the tooling needed to get better.
+I vividly remember our first meeting with GoFundMe's support team when [Morgan Wood](https://www.linkedin.com/in/morgan-wood-gfm/) showed us a Google Sheet containing thousands of rows, a litany of color-coordinated cells, and multiple people trying to make edits. While we were at their office, someone had made an accidental edit on the spreadsheet and the operations lead, [Jordan Philyaw](https://www.linkedin.com/in/jordanphilyaw/), had to manually recreate the entire sheet. The level of wizardry was amazing, but it was clear that the tooling needed to get better.
 
-Seeing these types of struggles across the industry led Brian, Ryan, and I to start [Assembled](http://www.assembled.com/) to transform and elevate customer support. We recently [raised a $16M Series-A](https://techcrunch.com/2021/03/12/assembled-an-operating-system-for-support-teams-raises-16-6m/) and I’m now applying many of the lessons I’ve learned to creating a long-lasting, impactful company:
+Seeing these types of struggles across the industry led Brian, Ryan, and I to start [Assembled](http://www.assembled.com/) to transform and elevate customer support. We recently [raised a $16M Series-A](https://techcrunch.com/2021/03/12/assembled-an-operating-system-for-support-teams-raises-16-6m/) and I'm now applying many of the lessons I've learned to creating a long-lasting, impactful company:
 
-**Left**: Assembled’s office in 2018 (e.g. my living room). **Right**: Assembled’s first career fair where we couldn’t even give away free pizza (recruiting is hard).
+**Left**: Assembled's office in 2018 (e.g. my living room). **Right**: Assembled's first career fair where we couldn't even give away free pizza (recruiting is hard).
 ```
 
 ### external-startup-journey--sentence-001
@@ -2335,7 +2139,7 @@ Seeing these types of struggles across the industry led Brian, Ryan, and I to st
 Headings: (intro or continuation)
 
 ```markdown
-I learned that making big changes in heavily used code usually leads to bad outcomes (especially when you don’t fully understand a system).
+I learned that making big changes in heavily used code usually leads to bad outcomes (especially when you don't fully understand a system).
 ```
 
 ## Applying the Lessons of Stripe to Customer Support
@@ -2347,48 +2151,46 @@ I learned that making big changes in heavily used code usually leads to bad outc
 Headings: Why support is the next payments
 
 ```markdown
-## Why support is the next payments
+# Why support is the next payments
 
-When I left Stripe and started a [company in the customer support space](http://www.assembled.com/), most people thought I was crazy: “why would you leave that rocket ship?” But in many ways, Stripe taught me to see the long game and to invest in the opportunities that no one else paid attention to.
+When I left Stripe and started a [company in the customer support space](http://www.assembled.com/), most people thought I was crazy: "why would you leave that rocket ship?" But in many ways, Stripe taught me to see the long game and to invest in the opportunities that no one else paid attention to.
 
 Think back to 2010: the Collison brothers saw a massive problem to be solved in an industry that was considered a backwater by most startups. Back then, it was all about the flashy consumer apps, social networks, and buzzy tech, but for Stripe, it was about staying focused on the opportunity no one could see.
 
-I strongly believe there’s a new wave of change coming to the customer support industry and that it has many of the trappings of the payments industry a decade ago. The two are quite analogous:
+I strongly believe there's a new wave of change coming to the customer support industry and that it has many of the trappings of the payments industry a decade ago. The two are quite analogous:
 ```
 
 ### external-stripe-customer-support--002
 
-`train` - `approved` - 658 approximate tokens - 382 words
+`train` - `candidate` - 678 approximate tokens - 402 words
 
 Headings: A massive, growing market
 
 ```markdown
-## A massive, growing market
+# A massive, growing market
 
 > Proactively delighting customers earns trust, which earns more business from those customers, even in new business arenas. Take a long-term view, and the interests of customers and shareholders align.
 >
 >  — [Jeff Bezos, Founder of Amazon](https://www.sec.gov/Archives/edgar/data/1018724/000119312513151836/d511111dex991.htm)
 
-Customer support is a massive, growing market and a differentiator for the world’s best businesses. Much like payments in 2010, a confluence of macro factors today have led to the growing importance of customer support:
+Customer support is a massive, growing market and a differentiator for the world's best businesses. Much like payments in 2010, a confluence of macro factors today have led to the growing importance of customer support:
 
-*   **Consumer expectations have shifted.** Amazon changed the way people shop online by opening people’s eyes to what outstanding customer support looks like. Consumers now expect to receive refunds for damaged items, get tracking updates, and have missing items taken care of. Consumers also make purchasing decisions based on the quality of support they receive. In 2020, [Microsoft found](https://clouddamcdnprodep.azureedge.net/gdc/gdcPiLLQw/original?ocid=mkto_eml_EM582302A1LA1) that 90% of consumers use customer support as a factor in whether or not to do business with a company. A decade ago, customer support was hardly a factor in purchasing decisions, but it has now become one of the dominant inputs.
+*   **Consumer expectations have shifted.** Amazon changed the way people shop online by opening people's eyes to what outstanding customer support looks like. Consumers now expect to receive refunds for damaged items, get tracking updates, and have missing items taken care of. Consumers also make purchasing decisions based on the quality of support they receive. In 2020, [Microsoft found](https://clouddamcdnprodep.azureedge.net/gdc/gdcPiLLQw/original?ocid=mkto_eml_EM582302A1LA1) that 90% of consumers use customer support as a factor in whether or not to do business with a company. A decade ago, customer support was hardly a factor in purchasing decisions, but it has now become one of the dominant inputs.
 *   **The world is moving online.** The COVID-19 pandemic accelerated the push to drive life online. Online transactions have been trending upwards for years and now account for over 20% of all retail transactions. Anecdotally, the best brands are advancing with online commerce squarely at the forefront of their minds. [Nike met its goal](https://fortune.com/2020/09/23/nike-q1-ecommerce-results-covid-19/) of moving 30% of its total sales online almost 3 years ahead of time.
 
-Graph from From [https://www.digitalcommerce360.com/article/us-ecommerce-sales/](https://www.digitalcommerce360.com/article/us-ecommerce-sales/)
+*   **Companies have budget to spend.** There's a massive amount of money in customer support. In the United States, there are twice as many [customer support agents](https://www.bls.gov/ooh/office-and-administrative-support/customer-service-representatives.htm) as [truck drivers](https://www.bls.gov/oes/current/oes533032.htm). It's a $105 billion market in the United States alone, and a lot of global spending occurs in Asia and South America. The software industry for customer support is also growing, evidenced by the fact that Salesforce's customer support product now [brings in more revenue](https://www.saastr.com/5-interesting-learnings-from-salesforce-at-24b-arr/) than its namesake sales product.
 
-*   **Companies have budget to spend.** There’s a massive amount of money in customer support. In the United States, there are twice as many [customer support agents](https://www.bls.gov/ooh/office-and-administrative-support/customer-service-representatives.htm) as [truck drivers](https://www.bls.gov/oes/current/oes533032.htm). It’s a $105 billion market in the United States alone, and a lot of global spending occurs in Asia and South America. The software industry for customer support is also growing, evidenced by the fact that Salesforce’s customer support product now [brings in more revenue](https://www.saastr.com/5-interesting-learnings-from-salesforce-at-24b-arr/) than its namesake sales product.
+In 2010, the world was becoming more digital and Stripe rode on the coattails of the growth in internet businesses. Today, those internet businesses have progressed and must offer superb customer support to stay competitive.
 ```
 
 ### external-stripe-customer-support--003
 
-`train` - `approved` - 696 approximate tokens - 418 words
+`train` - `candidate` - 639 approximate tokens - 383 words
 
 Headings: Complex, outdated tools and processes
 
 ```markdown
-In 2010, the world was becoming more digital and Stripe rode on the coattails of the growth in internet businesses. Today, those internet businesses have progressed and must offer superb customer support to stay competitive.
-
-## Complex, outdated tools and processes
+# Complex, outdated tools and processes
 
 > [I was] baffled at how convoluted and awkward [online payments] appeared to be. It seemed like a prevailing ecosystem designed to reduce the number of Internet businesses.
 >
@@ -2396,11 +2198,11 @@ In 2010, the world was becoming more digital and Stripe rode on the coattails of
 
 Building a business in 2010 that took payments online was hard. You had to walk into a bank to fill out an application, pay thousands of dollars in fees, and connect a couple of arcane payments gateways. The whole process could potentially take months, which is what Stripe aimed to solve.
 
-Likewise, scaling up your customer support team today is incredibly difficult. Tools like Zendesk and Intercom send messages but they don’t help you manage your team because they’re the communication layer and not the intelligence layer. Most businesses still rely on spreadsheets to manage a labyrinth of remote workers, all of whom have their own preferences and skills. Modern support teams now work across a wide variety of channels and platforms (like chat, phone, Twitter, WhatsApp) and work in different timezones. What’s more, each agent can have different specializations and skills: from answering developer focused support questions for a company like Stripe to figuring out how to refund a transaction on GoFundMe’s website.
+Likewise, scaling up your customer support team today is incredibly difficult. Tools like Zendesk and Intercom send messages but they don't help you manage your team because they're the communication layer and not the intelligence layer. Most businesses still rely on spreadsheets to manage a labyrinth of remote workers, all of whom have their own preferences and skills. Modern support teams now work across a wide variety of channels and platforms (like chat, phone, Twitter, WhatsApp) and work in different timezones. What's more, each agent can have different specializations and skills: from answering developer focused support questions for a company like Stripe to figuring out how to refund a transaction on GoFundMe's website.
 
-Actual industry-leading customer support software. Many solutions are still desktop based and fighting to move onto the “cloud”.
+Actual industry-leading customer support software. Many solutions are still desktop based and fighting to move onto the "cloud".
 
-Most industry-leading customer support tools were built for use in call centers, where the dominant worldview is one of command and control. A hierarchy of managers instruct workers how to maximize efficiency, leading to incredibly specific requirements. It’s pretty depressing to visit an actual call center: bathroom breaks are scheduled down to the 3 minute interval, and taking too long would be punished with a lower performance score. Most call center software is sold to Fortune 500 companies, costs millions of dollars per year, and requires a team of people to implement and maintain them. This is the world that has spawned most of the support tooling we see today.
+Most industry-leading customer support tools were built for use in call centers, where the dominant worldview is one of command and control. A hierarchy of managers instruct workers how to maximize efficiency, leading to incredibly specific requirements. It's pretty depressing to visit an actual call center: bathroom breaks are scheduled down to the 3 minute interval, and taking too long would be punished with a lower performance score. Most call center software is sold to Fortune 500 companies, costs millions of dollars per year, and requires a team of people to implement and maintain them. This is the world that has spawned most of the support tooling we see today.
 
 > One of our values is that you should be looking out for each other. Everyone should try to make the lives of everyone else who works [at Slack] a little bit simpler.
 >
@@ -2409,14 +2211,14 @@ Most industry-leading customer support tools were built for use in call centers,
 
 ### external-stripe-customer-support--004
 
-`train` - `approved` - 549 approximate tokens - 337 words
+`train` - `approved` - 548 approximate tokens - 337 words
 
 Headings: Fundamental infrastructure for the internet
 
 ```markdown
-Many modern support teams want to scale their operations up, but not by setting up with a cell center with thousands of people. Most fast growing companies don’t see support agents as cogs in a machine, but instead want a system that is rooted in empathetic support. There’s a new era of companies that are pushing for this, and the old tools aren’t ready to handle this shift.
+Many modern support teams want to scale their operations up, but not by setting up with a cell center with thousands of people. Most fast growing companies don't see support agents as cogs in a machine, but instead want a system that is rooted in empathetic support. There's a new era of companies that are pushing for this, and the old tools aren't ready to handle this shift.
 
-## Fundamental infrastructure for the internet
+# Fundamental infrastructure for the internet
 
 > The same way that Google exists as a foundational component of the Internet around information retrieval, it felt like there should be such a foundational component for economic infrastructure, and that was sorely lacking.
 >
@@ -2424,63 +2226,61 @@ Many modern support teams want to scale their operations up, but not by setting 
 
 Payments and customer support are both areas that are fundamental to operating an online business. They are both necessary and a driver of differentiation among companies:
 
-*   **Foundational**. Every single online business needs to accept payments and support its’ customers, there’s no way around it. Imagine buying something online and not having the ability to contact the company about a lost package or a defective product. The concept is very much akin to sending a check through the mail for an online purchase: it may have worked for mail order catalogs in the 1990s, but having no support today would lead to a quick death.
-*   **All companies face the same problems.** Everyone uses the same credit card network because payments systems aren’t created for a specific industry. A company selling balloons can use the same system as a company selling enterprise software. Likewise, customer support remains largely the same across different companies. Whether you’re Glossier selling lipstick or Monzo providing banking services, you must forecast incoming support requests, portion it out to the right people, and solve those requests as quickly and accurately as possible. Some requests may take longer or require multiple steps, but the concept of putting people in the right place at the right time remains the same for all businesses.
+*   **Foundational**. Every single online business needs to accept payments and support its' customers, there's no way around it. Imagine buying something online and not having the ability to contact the company about a lost package or a defective product. The concept is very much akin to sending a check through the mail for an online purchase: it may have worked for mail order catalogs in the 1990s, but having no support today would lead to a quick death.
+*   **All companies face the same problems.** Everyone uses the same credit card network because payments systems aren't created for a specific industry. A company selling balloons can use the same system as a company selling enterprise software. Likewise, customer support remains largely the same across different companies. Whether you're Glossier selling lipstick or Monzo providing banking services, you must forecast incoming support requests, portion it out to the right people, and solve those requests as quickly and accurately as possible. Some requests may take longer or require multiple steps, but the concept of putting people in the right place at the right time remains the same for all businesses.
 ```
 
 ### external-stripe-customer-support--005
 
-`train` - `approved` - 431 approximate tokens - 277 words
+`train` - `approved` - 431 approximate tokens - 276 words
 
 Headings: A hard, non-obvious problem
 
 ```markdown
-## A hard, non-obvious problem
+# A hard, non-obvious problem
 
 > Even the smartest, most imaginative people are surprisingly conservative when deciding what to work on. People who would never dream of being fashionable in any other way get sucked into working on fashionable problems.
 >
 >  — [Paul Graham, Co-founder of YCombinator](http://www.paulgraham.com/fp.html)
 
-Stripe started in a non-obvious place: no one really talked about APIs and few people cared for payments. The sole payments related business in the top 100 most valuable startups in 2010 was TrialPay, valued at [$200 million and sitting at number 58](https://www.businessinsider.com/digital-100#58-trialpay-58). Only the small number of people who had tried starting an online business understood the problem of payments and it wasn’t obvious to the majority of Americans or the even the majority of people in Silicon Valley.
+Stripe started in a non-obvious place: no one really talked about APIs and few people cared for payments. The sole payments related business in the top 100 most valuable startups in 2010 was TrialPay, valued at [$200 million and sitting at number 58](https://www.businessinsider.com/digital-100#58-trialpay-58). Only the small number of people who had tried starting an online business understood the problem of payments and it wasn't obvious to the majority of Americans or the even the majority of people in Silicon Valley.
 
-In the same vein, few people in Silicon Valley have expertise in customer support. I’ve heard anecdotally that engineers will literally quit if they have to work on internal customer support tooling because they don’t believe it to be interesting or impactful. Even fewer people in the management of most technology companies have answered a support ticket themselves.
+In the same vein, few people in Silicon Valley have expertise in customer support. I've heard anecdotally that engineers will literally quit if they have to work on internal customer support tooling because they don't believe it to be interesting or impactful. Even fewer people in the management of most technology companies have answered a support ticket themselves.
 
-But if you‘ve ever seen a large support team run, you’ll realize that support is both important and ripe for innovation. My cofounders at [Assembled](https://www.assembled.com/) built out the support tools team at Stripe and found massive gains from targeted changes. At first, people laughed at them for working on support tools, but towards the end of their tenure, their small team of 2 people was replaced by a full team of dozens of product managers, engineers, and business people.
+But if you've ever seen a large support team run, you'll realize that support is both important and ripe for innovation. My cofounders at [Assembled](https://www.assembled.com/) built out the support tools team at Stripe and found massive gains from targeted changes. At first, people laughed at them for working on support tools, but towards the end of their tenure, their small team of 2 people was replaced by a full team of dozens of product managers, engineers, and business people.
 ```
 
 ### external-stripe-customer-support--full
 
-`train` - `candidate` - 2545 approximate tokens - 1565 words - exceeds target size
+`train` - `candidate` - 2507 approximate tokens - 1549 words - exceeds target size
 
 Headings: Why support is the next payments / A massive, growing market / Complex, outdated tools and processes / Fundamental infrastructure for the internet / A hard, non-obvious problem
 
 ```markdown
-## Why support is the next payments
+# Why support is the next payments
 
-When I left Stripe and started a [company in the customer support space](http://www.assembled.com/), most people thought I was crazy: “why would you leave that rocket ship?” But in many ways, Stripe taught me to see the long game and to invest in the opportunities that no one else paid attention to.
+When I left Stripe and started a [company in the customer support space](http://www.assembled.com/), most people thought I was crazy: "why would you leave that rocket ship?" But in many ways, Stripe taught me to see the long game and to invest in the opportunities that no one else paid attention to.
 
 Think back to 2010: the Collison brothers saw a massive problem to be solved in an industry that was considered a backwater by most startups. Back then, it was all about the flashy consumer apps, social networks, and buzzy tech, but for Stripe, it was about staying focused on the opportunity no one could see.
 
-I strongly believe there’s a new wave of change coming to the customer support industry and that it has many of the trappings of the payments industry a decade ago. The two are quite analogous:
+I strongly believe there's a new wave of change coming to the customer support industry and that it has many of the trappings of the payments industry a decade ago. The two are quite analogous:
 
-## A massive, growing market
+# A massive, growing market
 
 > Proactively delighting customers earns trust, which earns more business from those customers, even in new business arenas. Take a long-term view, and the interests of customers and shareholders align.
 >
 >  — [Jeff Bezos, Founder of Amazon](https://www.sec.gov/Archives/edgar/data/1018724/000119312513151836/d511111dex991.htm)
 
-Customer support is a massive, growing market and a differentiator for the world’s best businesses. Much like payments in 2010, a confluence of macro factors today have led to the growing importance of customer support:
+Customer support is a massive, growing market and a differentiator for the world's best businesses. Much like payments in 2010, a confluence of macro factors today have led to the growing importance of customer support:
 
-*   **Consumer expectations have shifted.** Amazon changed the way people shop online by opening people’s eyes to what outstanding customer support looks like. Consumers now expect to receive refunds for damaged items, get tracking updates, and have missing items taken care of. Consumers also make purchasing decisions based on the quality of support they receive. In 2020, [Microsoft found](https://clouddamcdnprodep.azureedge.net/gdc/gdcPiLLQw/original?ocid=mkto_eml_EM582302A1LA1) that 90% of consumers use customer support as a factor in whether or not to do business with a company. A decade ago, customer support was hardly a factor in purchasing decisions, but it has now become one of the dominant inputs.
+*   **Consumer expectations have shifted.** Amazon changed the way people shop online by opening people's eyes to what outstanding customer support looks like. Consumers now expect to receive refunds for damaged items, get tracking updates, and have missing items taken care of. Consumers also make purchasing decisions based on the quality of support they receive. In 2020, [Microsoft found](https://clouddamcdnprodep.azureedge.net/gdc/gdcPiLLQw/original?ocid=mkto_eml_EM582302A1LA1) that 90% of consumers use customer support as a factor in whether or not to do business with a company. A decade ago, customer support was hardly a factor in purchasing decisions, but it has now become one of the dominant inputs.
 *   **The world is moving online.** The COVID-19 pandemic accelerated the push to drive life online. Online transactions have been trending upwards for years and now account for over 20% of all retail transactions. Anecdotally, the best brands are advancing with online commerce squarely at the forefront of their minds. [Nike met its goal](https://fortune.com/2020/09/23/nike-q1-ecommerce-results-covid-19/) of moving 30% of its total sales online almost 3 years ahead of time.
 
-Graph from From [https://www.digitalcommerce360.com/article/us-ecommerce-sales/](https://www.digitalcommerce360.com/article/us-ecommerce-sales/)
-
-*   **Companies have budget to spend.** There’s a massive amount of money in customer support. In the United States, there are twice as many [customer support agents](https://www.bls.gov/ooh/office-and-administrative-support/customer-service-representatives.htm) as [truck drivers](https://www.bls.gov/oes/current/oes533032.htm). It’s a $105 billion market in the United States alone, and a lot of global spending occurs in Asia and South America. The software industry for customer support is also growing, evidenced by the fact that Salesforce’s customer support product now [brings in more revenue](https://www.saastr.com/5-interesting-learnings-from-salesforce-at-24b-arr/) than its namesake sales product.
+*   **Companies have budget to spend.** There's a massive amount of money in customer support. In the United States, there are twice as many [customer support agents](https://www.bls.gov/ooh/office-and-administrative-support/customer-service-representatives.htm) as [truck drivers](https://www.bls.gov/oes/current/oes533032.htm). It's a $105 billion market in the United States alone, and a lot of global spending occurs in Asia and South America. The software industry for customer support is also growing, evidenced by the fact that Salesforce's customer support product now [brings in more revenue](https://www.saastr.com/5-interesting-learnings-from-salesforce-at-24b-arr/) than its namesake sales product.
 
 In 2010, the world was becoming more digital and Stripe rode on the coattails of the growth in internet businesses. Today, those internet businesses have progressed and must offer superb customer support to stay competitive.
 
-## Complex, outdated tools and processes
+# Complex, outdated tools and processes
 
 > [I was] baffled at how convoluted and awkward [online payments] appeared to be. It seemed like a prevailing ecosystem designed to reduce the number of Internet businesses.
 >
@@ -2488,19 +2288,19 @@ In 2010, the world was becoming more digital and Stripe rode on the coattails of
 
 Building a business in 2010 that took payments online was hard. You had to walk into a bank to fill out an application, pay thousands of dollars in fees, and connect a couple of arcane payments gateways. The whole process could potentially take months, which is what Stripe aimed to solve.
 
-Likewise, scaling up your customer support team today is incredibly difficult. Tools like Zendesk and Intercom send messages but they don’t help you manage your team because they’re the communication layer and not the intelligence layer. Most businesses still rely on spreadsheets to manage a labyrinth of remote workers, all of whom have their own preferences and skills. Modern support teams now work across a wide variety of channels and platforms (like chat, phone, Twitter, WhatsApp) and work in different timezones. What’s more, each agent can have different specializations and skills: from answering developer focused support questions for a company like Stripe to figuring out how to refund a transaction on GoFundMe’s website.
+Likewise, scaling up your customer support team today is incredibly difficult. Tools like Zendesk and Intercom send messages but they don't help you manage your team because they're the communication layer and not the intelligence layer. Most businesses still rely on spreadsheets to manage a labyrinth of remote workers, all of whom have their own preferences and skills. Modern support teams now work across a wide variety of channels and platforms (like chat, phone, Twitter, WhatsApp) and work in different timezones. What's more, each agent can have different specializations and skills: from answering developer focused support questions for a company like Stripe to figuring out how to refund a transaction on GoFundMe's website.
 
-Actual industry-leading customer support software. Many solutions are still desktop based and fighting to move onto the “cloud”.
+Actual industry-leading customer support software. Many solutions are still desktop based and fighting to move onto the "cloud".
 
-Most industry-leading customer support tools were built for use in call centers, where the dominant worldview is one of command and control. A hierarchy of managers instruct workers how to maximize efficiency, leading to incredibly specific requirements. It’s pretty depressing to visit an actual call center: bathroom breaks are scheduled down to the 3 minute interval, and taking too long would be punished with a lower performance score. Most call center software is sold to Fortune 500 companies, costs millions of dollars per year, and requires a team of people to implement and maintain them. This is the world that has spawned most of the support tooling we see today.
+Most industry-leading customer support tools were built for use in call centers, where the dominant worldview is one of command and control. A hierarchy of managers instruct workers how to maximize efficiency, leading to incredibly specific requirements. It's pretty depressing to visit an actual call center: bathroom breaks are scheduled down to the 3 minute interval, and taking too long would be punished with a lower performance score. Most call center software is sold to Fortune 500 companies, costs millions of dollars per year, and requires a team of people to implement and maintain them. This is the world that has spawned most of the support tooling we see today.
 
 > One of our values is that you should be looking out for each other. Everyone should try to make the lives of everyone else who works [at Slack] a little bit simpler.
 >
 >  — [Stewart Butterfield, CEO of Slack](https://www.businessinsider.com/slack-ceo-stewart-butterfield-on-company-culture-he-admires-2015-7)
 
-Many modern support teams want to scale their operations up, but not by setting up with a cell center with thousands of people. Most fast growing companies don’t see support agents as cogs in a machine, but instead want a system that is rooted in empathetic support. There’s a new era of companies that are pushing for this, and the old tools aren’t ready to handle this shift.
+Many modern support teams want to scale their operations up, but not by setting up with a cell center with thousands of people. Most fast growing companies don't see support agents as cogs in a machine, but instead want a system that is rooted in empathetic support. There's a new era of companies that are pushing for this, and the old tools aren't ready to handle this shift.
 
-## Fundamental infrastructure for the internet
+# Fundamental infrastructure for the internet
 
 > The same way that Google exists as a foundational component of the Internet around information retrieval, it felt like there should be such a foundational component for economic infrastructure, and that was sorely lacking.
 >
@@ -2508,20 +2308,20 @@ Many modern support teams want to scale their operations up, but not by setting 
 
 Payments and customer support are both areas that are fundamental to operating an online business. They are both necessary and a driver of differentiation among companies:
 
-*   **Foundational**. Every single online business needs to accept payments and support its’ customers, there’s no way around it. Imagine buying something online and not having the ability to contact the company about a lost package or a defective product. The concept is very much akin to sending a check through the mail for an online purchase: it may have worked for mail order catalogs in the 1990s, but having no support today would lead to a quick death.
-*   **All companies face the same problems.** Everyone uses the same credit card network because payments systems aren’t created for a specific industry. A company selling balloons can use the same system as a company selling enterprise software. Likewise, customer support remains largely the same across different companies. Whether you’re Glossier selling lipstick or Monzo providing banking services, you must forecast incoming support requests, portion it out to the right people, and solve those requests as quickly and accurately as possible. Some requests may take longer or require multiple steps, but the concept of putting people in the right place at the right time remains the same for all businesses.
+*   **Foundational**. Every single online business needs to accept payments and support its' customers, there's no way around it. Imagine buying something online and not having the ability to contact the company about a lost package or a defective product. The concept is very much akin to sending a check through the mail for an online purchase: it may have worked for mail order catalogs in the 1990s, but having no support today would lead to a quick death.
+*   **All companies face the same problems.** Everyone uses the same credit card network because payments systems aren't created for a specific industry. A company selling balloons can use the same system as a company selling enterprise software. Likewise, customer support remains largely the same across different companies. Whether you're Glossier selling lipstick or Monzo providing banking services, you must forecast incoming support requests, portion it out to the right people, and solve those requests as quickly and accurately as possible. Some requests may take longer or require multiple steps, but the concept of putting people in the right place at the right time remains the same for all businesses.
 
-## A hard, non-obvious problem
+# A hard, non-obvious problem
 
 > Even the smartest, most imaginative people are surprisingly conservative when deciding what to work on. People who would never dream of being fashionable in any other way get sucked into working on fashionable problems.
 >
 >  — [Paul Graham, Co-founder of YCombinator](http://www.paulgraham.com/fp.html)
 
-Stripe started in a non-obvious place: no one really talked about APIs and few people cared for payments. The sole payments related business in the top 100 most valuable startups in 2010 was TrialPay, valued at [$200 million and sitting at number 58](https://www.businessinsider.com/digital-100#58-trialpay-58). Only the small number of people who had tried starting an online business understood the problem of payments and it wasn’t obvious to the majority of Americans or the even the majority of people in Silicon Valley.
+Stripe started in a non-obvious place: no one really talked about APIs and few people cared for payments. The sole payments related business in the top 100 most valuable startups in 2010 was TrialPay, valued at [$200 million and sitting at number 58](https://www.businessinsider.com/digital-100#58-trialpay-58). Only the small number of people who had tried starting an online business understood the problem of payments and it wasn't obvious to the majority of Americans or the even the majority of people in Silicon Valley.
 
-In the same vein, few people in Silicon Valley have expertise in customer support. I’ve heard anecdotally that engineers will literally quit if they have to work on internal customer support tooling because they don’t believe it to be interesting or impactful. Even fewer people in the management of most technology companies have answered a support ticket themselves.
+In the same vein, few people in Silicon Valley have expertise in customer support. I've heard anecdotally that engineers will literally quit if they have to work on internal customer support tooling because they don't believe it to be interesting or impactful. Even fewer people in the management of most technology companies have answered a support ticket themselves.
 
-But if you‘ve ever seen a large support team run, you’ll realize that support is both important and ripe for innovation. My cofounders at [Assembled](https://www.assembled.com/) built out the support tools team at Stripe and found massive gains from targeted changes. At first, people laughed at them for working on support tools, but towards the end of their tenure, their small team of 2 people was replaced by a full team of dozens of product managers, engineers, and business people.
+But if you've ever seen a large support team run, you'll realize that support is both important and ripe for innovation. My cofounders at [Assembled](https://www.assembled.com/) built out the support tools team at Stripe and found massive gains from targeted changes. At first, people laughed at them for working on support tools, but towards the end of their tenure, their small team of 2 people was replaced by a full team of dozens of product managers, engineers, and business people.
 ```
 
 ## How we saved hundreds of engineering hours by writing tests with LLMs
@@ -2546,17 +2346,17 @@ We've observed tangible benefits within our team:
 *   Another engineer, known for writing thorough tests, saved weeks of time by using LLMs to streamline the process.
 *   Collectively, our engineers have saved hundreds of hours, reallocating that time to developing new features and refining existing ones.
 
-In this blog post, we'll explore how we’ve used LLMs to enhance our testing practices.
+In this blog post, we'll explore how we've used LLMs to enhance our testing practices.
 ```
 
 ### external-tests-with-llms--002
 
-`train` - `approved` - 564 approximate tokens - 343 words
+`train` - `approved` - 563 approximate tokens - 343 words
 
 Headings: Leveraging LLMs for testing
 
 ````markdown
-## Leveraging LLMs for testing
+# Leveraging LLMs for testing
 
 To get started, you'll need access to a high-quality LLM for code generation like OpenAI's o1-preview or Anthropic's Claude 3.5 Sonnet.
 
@@ -2588,23 +2388,23 @@ Please ensure that:
 
 In this prompt, you need to provide:
 
-*   **Function to test**: Copy and paste the exact code you’re looking to write tests for.
+*   **Function to test**: Copy and paste the exact code you're looking to write tests for.
 *   **Struct definitions**: Include any relevant definitions that the function uses (especially for any objects that appear in the input or output of the function).
 *   **Example of a test suite**: An example of existing tests that reflect your codebase's style and conventions.
 
-Once you’ve dropped this into an LLM and generated a result, you might need to review and refine the generated tests. You should check for compilation issues, add any potential edge cases the LLM missed, and adjust the style to match your codebase conventions. We’ve found that a few iterations of back and forth are sometimes necessary to arrive at an acceptable test suite. Once you’re close enough, just copy and paste the resulting tests back into your codebase.
+Once you've dropped this into an LLM and generated a result, you might need to review and refine the generated tests. You should check for compilation issues, add any potential edge cases the LLM missed, and adjust the style to match your codebase conventions. We've found that a few iterations of back and forth are sometimes necessary to arrive at an acceptable test suite. Once you're close enough, just copy and paste the resulting tests back into your codebase.
 
 If you have an AI-assisted code editor like Copilot or Cursor, the principles remain the same; though, because tools can provide context-aware suggestions based on your existing code, you often can get away with less detailed prompts.
 ````
 
 ### external-tests-with-llms--003
 
-`train` - `approved` - 522 approximate tokens - 263 words
+`train` - `approved` - 521 approximate tokens - 263 words
 
 Headings: Example in action
 
 ````markdown
-## Example in action
+# Example in action
 
 Suppose you're building an e-commerce platform and have a function that calculates an order summary. Here's how you might apply the above approach.
 
@@ -2649,9 +2449,9 @@ func CalculateOrderSummary(items []OrderItem) OrderSummary {
 }
 ```
 
-Using the suggested prompt, we fed this code into ChatGPT o1-preview and, in **just 48 seconds**, it generated a comprehensive test suite that was ready to use straight out of the box. [Here’s the full prompt and results from ChatGPT](https://chatgpt.com/share/671576aa-c914-8000-9458-798e847e3c2c).
+Using the suggested prompt, we fed this code into ChatGPT o1-preview and, in **just 48 seconds**, it generated a comprehensive test suite that was ready to use straight out of the box. [Here's the full prompt and results from ChatGPT](https://chatgpt.com/share/671576aa-c914-8000-9458-798e847e3c2c).
 
-You’ll notice that the resulting tests are both comprehensive and well written:
+You'll notice that the resulting tests are both comprehensive and well written:
 
 *   The tests cover basically all of the cases that you might think of: empty slices, nil slices, single item, multiple items, items with zero quantity, etc. These test cases are mutually exclusive and collectively exhaustive and cover most of the edge cases a good engineer would think of.
 *   Moreover, the resultant code is in the table-driven fixture style that is idiomatic in Go — the exact format that we specified in the initial prompt. The resultant tests even use the `testify/require` library, which is prescribed in the original example.
@@ -2727,14 +2527,14 @@ func TestCalculateOrderSummary(t *testing.T) {
 Headings: Extending to more complex scenarios
 
 ```markdown
-## Extending to more complex scenarios
+# Extending to more complex scenarios
 
 The same approach can be applied to more complex testing scenarios. By adjusting the prompt and providing a different set of baseline test cases, you can generate tests for:
 
-*   **Different programming languages**. It’s relatively straightforward to adjust the prompt for other languages and tailor the results to specific testing frameworks.
+*   **Different programming languages**. It's relatively straightforward to adjust the prompt for other languages and tailor the results to specific testing frameworks.
     *   [Example: Unit tests for a typescript function that converts roman numerals to integers, using Claude 3.5 Sonnet](https://gist.github.com/wangjohn/418991f0dac46efdd7daab73a87c722b)
 
-*   **Frontend component testing.** You can also extend this to test React components with user interactions and state changes — just make sure your examples capture the libraries you’d use.
+*   **Frontend component testing.** You can also extend this to test React components with user interactions and state changes — just make sure your examples capture the libraries you'd use.
     *   [Example: Testing a React dropdown component with Jest and React Testing Library, including user interactions and DOM assertions, using o1-preview.](https://chatgpt.com/share/67191e6b-9b54-8000-b9b0-17fcd391b677)
 
 *   **Integration testing with mocked services.** By changing the test case examples, you can test functions that interact with external APIs by mocking HTTP clients.
@@ -2748,22 +2548,22 @@ The same approach can be applied to more complex testing scenarios. By adjusting
 Headings: Considerations
 
 ```markdown
-## Considerations
+# Considerations
 
-At Assembled, we’ve been using LLMs to write tests for a few months now and have seen big boosts in engineering productivity. That said, there are a few considerations to keep in mind as you start using LLMs for test writing:
+At Assembled, we've been using LLMs to write tests for a few months now and have seen big boosts in engineering productivity. That said, there are a few considerations to keep in mind as you start using LLMs for test writing:
 
-*   **Iterative refinement**: You may need several iterations to cover missed edge cases or adjust to your codebase standards. Sometimes, the LLMs might generate code that doesn’t compile, so asking the LLM to make adjustments is critical.
+*   **Iterative refinement**: You may need several iterations to cover missed edge cases or adjust to your codebase standards. Sometimes, the LLMs might generate code that doesn't compile, so asking the LLM to make adjustments is critical.
 *   **Double check your test logic:** While LLMs are pretty good out of the box, they can sometimes get tests wrong. For example, one of our engineers had an experience where the model gave incorrect output because of improper formatting. We insist that all Assembled engineers read and run any LLM-generated tests before merging into production.
-*   **Customize your prompt to your specific context**: Our engineers have found that tailoring their prompts can significantly enhance the quality of the generated tests. For example, you might consider specifying your test frameworks (e.g. “Use Jest and React Testing Library for testing this React component.”) or highlighting important edge cases (e.g. “Ensure you include tests for handling null inputs and maximum integer values.”).
+*   **Customize your prompt to your specific context**: Our engineers have found that tailoring their prompts can significantly enhance the quality of the generated tests. For example, you might consider specifying your test frameworks (e.g. "Use Jest and React Testing Library for testing this React component.") or highlighting important edge cases (e.g. "Ensure you include tests for handling null inputs and maximum integer values.").
 *   **Examples matter:** LLMs do their best work when they have a good example of tests to learn from. The engineering team at Assembled has built a large repository of comprehensive and idiomatic tests over time, which makes it easier to use these techniques. Remember that your examples are often your most important way to drive the LLM to do what you want.
 *   **Use the smartest models**: Models like o1-preview or Claude 3.5 Sonnet generally provide better results. Since latency isn't a major concern, we tend to use the best available models.
-*   **Code structure reflects testability**: If you’re having trouble getting the LLM to construct suitable tests, consider refactoring your code. It’s likely that whatever combination of inputs and outputs you have may be poorly structured or overly complex. You can even ask the LLM to break things up and refactor your code with the same prompting principles discussed above.
-*   **Don’t overdo testing**: You generally want to test the functions that have clear input / output and which contain the most important pieces of logic. You don’t need to test that a checkbox is working correctly (unless you’re the maintainer of a component library). Likewise, glue code is tough to test, and writing tests for some pretty straightforward glue code may not be worth it — though you should check on a case-by-case basis (e.g., if that glue code is a very hot codepath).
+*   **Code structure reflects testability**: If you're having trouble getting the LLM to construct suitable tests, consider refactoring your code. It's likely that whatever combination of inputs and outputs you have may be poorly structured or overly complex. You can even ask the LLM to break things up and refactor your code with the same prompting principles discussed above.
+*   **Don't overdo testing**: You generally want to test the functions that have clear input / output and which contain the most important pieces of logic. You don't need to test that a checkbox is working correctly (unless you're the maintainer of a component library). Likewise, glue code is tough to test, and writing tests for some pretty straightforward glue code may not be worth it — though you should check on a case-by-case basis (e.g., if that glue code is a very hot codepath).
 ```
 
 ### external-tests-with-llms--full
 
-`train` - `candidate` - 2747 approximate tokens - 1551 words - exceeds target size
+`train` - `candidate` - 2746 approximate tokens - 1551 words - exceeds target size
 
 Headings: Leveraging LLMs for testing / Example in action / Extending to more complex scenarios / Considerations
 
@@ -2781,9 +2581,9 @@ We've observed tangible benefits within our team:
 *   Another engineer, known for writing thorough tests, saved weeks of time by using LLMs to streamline the process.
 *   Collectively, our engineers have saved hundreds of hours, reallocating that time to developing new features and refining existing ones.
 
-In this blog post, we'll explore how we’ve used LLMs to enhance our testing practices.
+In this blog post, we'll explore how we've used LLMs to enhance our testing practices.
 
-## Leveraging LLMs for testing
+# Leveraging LLMs for testing
 
 To get started, you'll need access to a high-quality LLM for code generation like OpenAI's o1-preview or Anthropic's Claude 3.5 Sonnet.
 
@@ -2815,15 +2615,15 @@ Please ensure that:
 
 In this prompt, you need to provide:
 
-*   **Function to test**: Copy and paste the exact code you’re looking to write tests for.
+*   **Function to test**: Copy and paste the exact code you're looking to write tests for.
 *   **Struct definitions**: Include any relevant definitions that the function uses (especially for any objects that appear in the input or output of the function).
 *   **Example of a test suite**: An example of existing tests that reflect your codebase's style and conventions.
 
-Once you’ve dropped this into an LLM and generated a result, you might need to review and refine the generated tests. You should check for compilation issues, add any potential edge cases the LLM missed, and adjust the style to match your codebase conventions. We’ve found that a few iterations of back and forth are sometimes necessary to arrive at an acceptable test suite. Once you’re close enough, just copy and paste the resulting tests back into your codebase.
+Once you've dropped this into an LLM and generated a result, you might need to review and refine the generated tests. You should check for compilation issues, add any potential edge cases the LLM missed, and adjust the style to match your codebase conventions. We've found that a few iterations of back and forth are sometimes necessary to arrive at an acceptable test suite. Once you're close enough, just copy and paste the resulting tests back into your codebase.
 
 If you have an AI-assisted code editor like Copilot or Cursor, the principles remain the same; though, because tools can provide context-aware suggestions based on your existing code, you often can get away with less detailed prompts.
 
-## Example in action
+# Example in action
 
 Suppose you're building an e-commerce platform and have a function that calculates an order summary. Here's how you might apply the above approach.
 
@@ -2868,9 +2668,9 @@ func CalculateOrderSummary(items []OrderItem) OrderSummary {
 }
 ```
 
-Using the suggested prompt, we fed this code into ChatGPT o1-preview and, in **just 48 seconds**, it generated a comprehensive test suite that was ready to use straight out of the box. [Here’s the full prompt and results from ChatGPT](https://chatgpt.com/share/671576aa-c914-8000-9458-798e847e3c2c).
+Using the suggested prompt, we fed this code into ChatGPT o1-preview and, in **just 48 seconds**, it generated a comprehensive test suite that was ready to use straight out of the box. [Here's the full prompt and results from ChatGPT](https://chatgpt.com/share/671576aa-c914-8000-9458-798e847e3c2c).
 
-You’ll notice that the resulting tests are both comprehensive and well written:
+You'll notice that the resulting tests are both comprehensive and well written:
 
 *   The tests cover basically all of the cases that you might think of: empty slices, nil slices, single item, multiple items, items with zero quantity, etc. These test cases are mutually exclusive and collectively exhaustive and cover most of the edge cases a good engineer would think of.
 *   Moreover, the resultant code is in the table-driven fixture style that is idiomatic in Go — the exact format that we specified in the initial prompt. The resultant tests even use the `testify/require` library, which is prescribed in the original example.
@@ -2930,30 +2730,30 @@ func TestCalculateOrderSummary(t *testing.T) {
 }
 ```
 
-## Extending to more complex scenarios
+# Extending to more complex scenarios
 
 The same approach can be applied to more complex testing scenarios. By adjusting the prompt and providing a different set of baseline test cases, you can generate tests for:
 
-*   **Different programming languages**. It’s relatively straightforward to adjust the prompt for other languages and tailor the results to specific testing frameworks.
+*   **Different programming languages**. It's relatively straightforward to adjust the prompt for other languages and tailor the results to specific testing frameworks.
     *   [Example: Unit tests for a typescript function that converts roman numerals to integers, using Claude 3.5 Sonnet](https://gist.github.com/wangjohn/418991f0dac46efdd7daab73a87c722b)
 
-*   **Frontend component testing.** You can also extend this to test React components with user interactions and state changes — just make sure your examples capture the libraries you’d use.
+*   **Frontend component testing.** You can also extend this to test React components with user interactions and state changes — just make sure your examples capture the libraries you'd use.
     *   [Example: Testing a React dropdown component with Jest and React Testing Library, including user interactions and DOM assertions, using o1-preview.](https://chatgpt.com/share/67191e6b-9b54-8000-b9b0-17fcd391b677)
 
 *   **Integration testing with mocked services.** By changing the test case examples, you can test functions that interact with external APIs by mocking HTTP clients.
     *   [Example: Testing a function that fetches average weather data by mocking a weather API call, using o1-preview.](https://chatgpt.com/share/671942a2-15f8-8000-8815-4dc68f6dd4e8)
 
-## Considerations
+# Considerations
 
-At Assembled, we’ve been using LLMs to write tests for a few months now and have seen big boosts in engineering productivity. That said, there are a few considerations to keep in mind as you start using LLMs for test writing:
+At Assembled, we've been using LLMs to write tests for a few months now and have seen big boosts in engineering productivity. That said, there are a few considerations to keep in mind as you start using LLMs for test writing:
 
-*   **Iterative refinement**: You may need several iterations to cover missed edge cases or adjust to your codebase standards. Sometimes, the LLMs might generate code that doesn’t compile, so asking the LLM to make adjustments is critical.
+*   **Iterative refinement**: You may need several iterations to cover missed edge cases or adjust to your codebase standards. Sometimes, the LLMs might generate code that doesn't compile, so asking the LLM to make adjustments is critical.
 *   **Double check your test logic:** While LLMs are pretty good out of the box, they can sometimes get tests wrong. For example, one of our engineers had an experience where the model gave incorrect output because of improper formatting. We insist that all Assembled engineers read and run any LLM-generated tests before merging into production.
-*   **Customize your prompt to your specific context**: Our engineers have found that tailoring their prompts can significantly enhance the quality of the generated tests. For example, you might consider specifying your test frameworks (e.g. “Use Jest and React Testing Library for testing this React component.”) or highlighting important edge cases (e.g. “Ensure you include tests for handling null inputs and maximum integer values.”).
+*   **Customize your prompt to your specific context**: Our engineers have found that tailoring their prompts can significantly enhance the quality of the generated tests. For example, you might consider specifying your test frameworks (e.g. "Use Jest and React Testing Library for testing this React component.") or highlighting important edge cases (e.g. "Ensure you include tests for handling null inputs and maximum integer values.").
 *   **Examples matter:** LLMs do their best work when they have a good example of tests to learn from. The engineering team at Assembled has built a large repository of comprehensive and idiomatic tests over time, which makes it easier to use these techniques. Remember that your examples are often your most important way to drive the LLM to do what you want.
 *   **Use the smartest models**: Models like o1-preview or Claude 3.5 Sonnet generally provide better results. Since latency isn't a major concern, we tend to use the best available models.
-*   **Code structure reflects testability**: If you’re having trouble getting the LLM to construct suitable tests, consider refactoring your code. It’s likely that whatever combination of inputs and outputs you have may be poorly structured or overly complex. You can even ask the LLM to break things up and refactor your code with the same prompting principles discussed above.
-*   **Don’t overdo testing**: You generally want to test the functions that have clear input / output and which contain the most important pieces of logic. You don’t need to test that a checkbox is working correctly (unless you’re the maintainer of a component library). Likewise, glue code is tough to test, and writing tests for some pretty straightforward glue code may not be worth it — though you should check on a case-by-case basis (e.g., if that glue code is a very hot codepath).
+*   **Code structure reflects testability**: If you're having trouble getting the LLM to construct suitable tests, consider refactoring your code. It's likely that whatever combination of inputs and outputs you have may be poorly structured or overly complex. You can even ask the LLM to break things up and refactor your code with the same prompting principles discussed above.
+*   **Don't overdo testing**: You generally want to test the functions that have clear input / output and which contain the most important pieces of logic. You don't need to test that a checkbox is working correctly (unless you're the maintainer of a component library). Likewise, glue code is tough to test, and writing tests for some pretty straightforward glue code may not be worth it — though you should check on a case-by-case basis (e.g., if that glue code is a very hot codepath).
 ````
 
 ### external-tests-with-llms--clean-conclusion
@@ -2963,7 +2763,7 @@ At Assembled, we’ve been using LLMs to write tests for a few months now and ha
 Headings: Conclusion
 
 ```markdown
-## Conclusion
+# Conclusion
 
 Using LLMs to generate comprehensive test suites in minutes has been a game changer at Assembled. It reduces the activation energy to write tests and makes it less likely that engineers skip tests due to time constraints. This has resulted in a cleaner, safer codebase that has increased development velocity.
 ```
@@ -2982,48 +2782,48 @@ Remember that your examples are often your most important way to drive the LLM t
 
 ### external-why-i-code-as-a-cto--001
 
-`train` - `approved` - 528 approximate tokens - 356 words
+`train` - `approved` - 527 approximate tokens - 356 words
 
 Headings: What I actually build / Long-horizon experimental projects
 
 ```markdown
-Many CTOs I know stopped writing code years ago. The conventional wisdom is that as you become more and more senior, the less and less code you write until eventually you’re spending your days in back-to-back meetings.
+Many CTOs I know stopped writing code years ago. The conventional wisdom is that as you become more and more senior, the less and less code you write until eventually you're spending your days in back-to-back meetings.
 
-That’s not how I operate. In fact, here’s what my last 12 months have looked like:
+That's not how I operate. In fact, here's what my last 12 months have looked like:
 
-I currently manage no direct reports and ship a lot of code. Not in an “I dabble when I have free time in between meetings” way, but in an “I shipped multiple substantial features last quarter” way.
+I currently manage no direct reports and ship a lot of code. Not in an "I dabble when I have free time in between meetings" way, but in an "I shipped multiple substantial features last quarter" way.
 
-I think it’s one of the highest-leverage things I do as a technical leader.
+I think it's one of the highest-leverage things I do as a technical leader.
 
-## What I actually build
+# What I actually build
 
-People assume CTOs who code are either working on pet projects that never ship or doing ceremonial code reviews. That hasn’t been my experience. The code I write falls into three pretty distinct categories, each valuable for different reasons.
+People assume CTOs who code are either working on pet projects that never ship or doing ceremonial code reviews. That hasn't been my experience. The code I write falls into three pretty distinct categories, each valuable for different reasons.
 
-### Long-horizon experimental projects
+## Long-horizon experimental projects
 
 The number of people in an organization who can ship and build substantially new things is actually a scarce resource. Organizations are generally organisms built in a way to maintain status quo and scale current products. I've found there are only a handful of people (founders, a few executives, some really high leverage ICs) who are able to generate new products. So pushing new ideas is quite important because they require intentional, sustained effort. Between org structure, roadmap incentives, and limited risk budget, few engineers can take months to pursue ambiguous bets.
 
-I can. And I’m uniquely positioned to take these meaty experimental projects on as I know the customer pain and the architecture well enough to move fast.
+I can. And I'm uniquely positioned to take these meaty experimental projects on as I know the customer pain and the architecture well enough to move fast.
 
 I've had my share of duds, but I've also had some huge hits. A recent example: we kept talking about building an AI chat product for our customers. It was clearly valuable, but it felt like a daunting task, and no one on the team had the time and headspace to take it on given their existing commitments. During Thanksgiving break, I just decided to build it and knocked out a prototype. I then worked with the team to productionize it into a multi-million dollar ARR product.
 ```
 
 ### external-why-i-code-as-a-cto--002
 
-`train` - `approved` - 395 approximate tokens - 263 words
+`train` - `approved` - 394 approximate tokens - 263 words
 
 Headings: Critical customer asks that needed to be done yesterday / Bugfixes (the surprising one)
 
 ```markdown
-### Critical customer asks that needed to be done yesterday
+## Critical customer asks that needed to be done yesterday
 
 Sometimes a key customer needs something urgently and it becomes a blocker for a major deal or renewal. These situations require someone who can move fast, understands the full system, and can make pragmatic trade-offs.
 
 Instead of pulling an engineer off their current sprint, I can often cut through the noise. I already have the context and I know the stakes.
 
-Last month, we had a million dollar per year customer that came to us with a burning need: they needed full data redaction on one of our integrations for compliance reasons. Our team had considered potentially having the customer build their own integration on top of our API in order to get around this requirement, and scoping it out properly would have required many meetings across product, legal, and engineering. I built and shipped a working version in a day. It wasn’t perfect, but it solved their immediate problem and preserved goodwill with the customer.
+Last month, we had a million dollar per year customer that came to us with a burning need: they needed full data redaction on one of our integrations for compliance reasons. Our team had considered potentially having the customer build their own integration on top of our API in order to get around this requirement, and scoping it out properly would have required many meetings across product, legal, and engineering. I built and shipped a working version in a day. It wasn't perfect, but it solved their immediate problem and preserved goodwill with the customer.
 
-### Bugfixes (the surprising one)
+## Bugfixes (the surprising one)
 
 People are often shocked by this, but I fix a lot of bugs! And bugfixing is one of my favorite ways to maintain a mental map of our codebase.
 
@@ -3037,133 +2837,133 @@ When you're hunting down why pagination breaks on the third page of search resul
 Headings: Why I code / It keeps me up to date with what actually works
 
 ```markdown
-## Why I code
+# Why I code
 
-That’s what I ship. Here’s why I structure my role this way:
+That's what I ship. Here's why I structure my role this way:
 
-### It keeps me up to date with what actually works
+## It keeps me up to date with what actually works
 
-I use Claude Code, Codex, Cursor, and a bunch of other AI tools daily. This experience lets me understand what’s real and what’s bullshit when making strategic decisions about tooling and hiring.
+I use Claude Code, Codex, Cursor, and a bunch of other AI tools daily. This experience lets me understand what's real and what's bullshit when making strategic decisions about tooling and hiring.
 
-Here’s a recent example: I spent hours this weekend trying to vibe-code a feature that touched a few gnarly integrations, but made way more progress when I finally sat down and wrote it mostly by hand. It wasn’t very much code, but it had to be the exact right logic (terrible for LLMs). On the other hand, I’ve shipped a big feature almost entirely with Claude Code. Knowing where AI shines (crud, tests, boilerplate) and where it fails (precision, system nuance) always beats making decisions based on Twitter hype.
+Here's a recent example: I spent hours this weekend trying to vibe-code a feature that touched a few gnarly integrations, but made way more progress when I finally sat down and wrote it mostly by hand. It wasn't very much code, but it had to be the exact right logic (terrible for LLMs). On the other hand, I've shipped a big feature almost entirely with Claude Code. Knowing where AI shines (crud, tests, boilerplate) and where it fails (precision, system nuance) always beats making decisions based on Twitter hype.
 
-Being in the code also lets me know when to push and when to let off the gas. I can sense when architectures are overly complex or when technical debt is becoming a real problem. I’ve seen managers who rely only on what people tell them, and they can miss a lot. When you’re in the code, you develop an intuition for what’s real.
+Being in the code also lets me know when to push and when to let off the gas. I can sense when architectures are overly complex or when technical debt is becoming a real problem. I've seen managers who rely only on what people tell them, and they can miss a lot. When you're in the code, you develop an intuition for what's real.
 ```
 
 ### external-why-i-code-as-a-cto--004
 
 `train` - `approved` - 471 approximate tokens - 319 words
 
-Headings: Because it’s what I love and what I’m good at / AI tools have changed the leverage I have
+Headings: Because it's what I love and what I'm good at / AI tools have changed the leverage I have
 
 ```markdown
-### Because it’s what I love and what I’m good at
+## Because it's what I love and what I'm good at
 
-I don’t particularly enjoy building orgs and figuring out people stuff. Engineering management involves navigating interpersonal dynamics, performance reviews, and organizational design. These are crucial functions, but they’re not where my strengths lie.
+I don't particularly enjoy building orgs and figuring out people stuff. Engineering management involves navigating interpersonal dynamics, performance reviews, and organizational design. These are crucial functions, but they're not where my strengths lie.
 
-That’s why we’ve hired great engineering managers and leaders. They’re better at it than I am, and they enjoy it. This lets me focus on the things that I love: building things, solving technical problems, and writing code.
+That's why we've hired great engineering managers and leaders. They're better at it than I am, and they enjoy it. This lets me focus on the things that I love: building things, solving technical problems, and writing code.
 
-Startups are kind of like a sprinting marathon, so I design my role around the work that keeps me excited and ready to run fast for a long time. That’s how I can continue doing this for years, which matters a lot for the company.
+Startups are kind of like a sprinting marathon, so I design my role around the work that keeps me excited and ready to run fast for a long time. That's how I can continue doing this for years, which matters a lot for the company.
 
-### AI tools have changed the leverage I have
+## AI tools have changed the leverage I have
 
 A few years ago, I struggled to find time to code while handling the strategic parts of my job. As the company grew, I was basically stuck in meetings all day, and I was operating outside my zone of genius. It was one of the toughest periods for me professionally.
 
-But modern AI tools have fundamentally changed this equation (especially in the last few months). I’m probably 2–3x more productive than before. These tools haven’t replaced my judgment or technical knowledge, they’ve actually made those skills more valuable.
+But modern AI tools have fundamentally changed this equation (especially in the last few months). I'm probably 2–3x more productive than before. These tools haven't replaced my judgment or technical knowledge, they've actually made those skills more valuable.
 
-I can tell an AI tool, “Build a data export that matches the format of our existing CSV exports but includes these three additional fields from the user profile table,” and it’ll generate most of the code correctly because I know exactly what I need and where to find it. An engineer unfamiliar with that part of the codebase would spend quite a lot of time figuring out those details.
+I can tell an AI tool, "Build a data export that matches the format of our existing CSV exports but includes these three additional fields from the user profile table," and it'll generate most of the code correctly because I know exactly what I need and where to find it. An engineer unfamiliar with that part of the codebase would spend quite a lot of time figuring out those details.
 
-The job has shifted from “writing every line of code” to “providing context, making decisions, and evaluating solutions.” And luckily, I have a lot of context.
+The job has shifted from "writing every line of code" to "providing context, making decisions, and evaluating solutions." And luckily, I have a lot of context.
 ```
 
 ### external-why-i-code-as-a-cto--full
 
-`train` - `candidate` - 1688 approximate tokens - 1148 words - exceeds target size
+`train` - `candidate` - 1686 approximate tokens - 1148 words - exceeds target size
 
-Headings: What I actually build / Long-horizon experimental projects / Critical customer asks that needed to be done yesterday / Bugfixes (the surprising one) / Why I code / It keeps me up to date with what actually works / Because it’s what I love and what I’m good at / AI tools have changed the leverage I have
+Headings: What I actually build / Long-horizon experimental projects / Critical customer asks that needed to be done yesterday / Bugfixes (the surprising one) / Why I code / It keeps me up to date with what actually works / Because it's what I love and what I'm good at / AI tools have changed the leverage I have
 
 ```markdown
-Many CTOs I know stopped writing code years ago. The conventional wisdom is that as you become more and more senior, the less and less code you write until eventually you’re spending your days in back-to-back meetings.
+Many CTOs I know stopped writing code years ago. The conventional wisdom is that as you become more and more senior, the less and less code you write until eventually you're spending your days in back-to-back meetings.
 
-That’s not how I operate. In fact, here’s what my last 12 months have looked like:
+That's not how I operate. In fact, here's what my last 12 months have looked like:
 
-I currently manage no direct reports and ship a lot of code. Not in an “I dabble when I have free time in between meetings” way, but in an “I shipped multiple substantial features last quarter” way.
+I currently manage no direct reports and ship a lot of code. Not in an "I dabble when I have free time in between meetings" way, but in an "I shipped multiple substantial features last quarter" way.
 
-I think it’s one of the highest-leverage things I do as a technical leader.
+I think it's one of the highest-leverage things I do as a technical leader.
 
-## What I actually build
+# What I actually build
 
-People assume CTOs who code are either working on pet projects that never ship or doing ceremonial code reviews. That hasn’t been my experience. The code I write falls into three pretty distinct categories, each valuable for different reasons.
+People assume CTOs who code are either working on pet projects that never ship or doing ceremonial code reviews. That hasn't been my experience. The code I write falls into three pretty distinct categories, each valuable for different reasons.
 
-### Long-horizon experimental projects
+## Long-horizon experimental projects
 
 The number of people in an organization who can ship and build substantially new things is actually a scarce resource. Organizations are generally organisms built in a way to maintain status quo and scale current products. I've found there are only a handful of people (founders, a few executives, some really high leverage ICs) who are able to generate new products. So pushing new ideas is quite important because they require intentional, sustained effort. Between org structure, roadmap incentives, and limited risk budget, few engineers can take months to pursue ambiguous bets.
 
-I can. And I’m uniquely positioned to take these meaty experimental projects on as I know the customer pain and the architecture well enough to move fast.
+I can. And I'm uniquely positioned to take these meaty experimental projects on as I know the customer pain and the architecture well enough to move fast.
 
 I've had my share of duds, but I've also had some huge hits. A recent example: we kept talking about building an AI chat product for our customers. It was clearly valuable, but it felt like a daunting task, and no one on the team had the time and headspace to take it on given their existing commitments. During Thanksgiving break, I just decided to build it and knocked out a prototype. I then worked with the team to productionize it into a multi-million dollar ARR product.
 
-### Critical customer asks that needed to be done yesterday
+## Critical customer asks that needed to be done yesterday
 
 Sometimes a key customer needs something urgently and it becomes a blocker for a major deal or renewal. These situations require someone who can move fast, understands the full system, and can make pragmatic trade-offs.
 
 Instead of pulling an engineer off their current sprint, I can often cut through the noise. I already have the context and I know the stakes.
 
-Last month, we had a million dollar per year customer that came to us with a burning need: they needed full data redaction on one of our integrations for compliance reasons. Our team had considered potentially having the customer build their own integration on top of our API in order to get around this requirement, and scoping it out properly would have required many meetings across product, legal, and engineering. I built and shipped a working version in a day. It wasn’t perfect, but it solved their immediate problem and preserved goodwill with the customer.
+Last month, we had a million dollar per year customer that came to us with a burning need: they needed full data redaction on one of our integrations for compliance reasons. Our team had considered potentially having the customer build their own integration on top of our API in order to get around this requirement, and scoping it out properly would have required many meetings across product, legal, and engineering. I built and shipped a working version in a day. It wasn't perfect, but it solved their immediate problem and preserved goodwill with the customer.
 
-### Bugfixes (the surprising one)
+## Bugfixes (the surprising one)
 
 People are often shocked by this, but I fix a lot of bugs! And bugfixing is one of my favorite ways to maintain a mental map of our codebase.
 
 When you're hunting down why pagination breaks on the third page of search results, or why WebSocket connections drop after exactly 60 seconds, you traverse huge swaths of the system. You get a visceral understanding of technical debt that's hard to get from code reviews or architecture discussions. This mental map helps me make better decisions about technical investments and where the team should focus.
 
-## Why I code
+# Why I code
 
-That’s what I ship. Here’s why I structure my role this way:
+That's what I ship. Here's why I structure my role this way:
 
-### It keeps me up to date with what actually works
+## It keeps me up to date with what actually works
 
-I use Claude Code, Codex, Cursor, and a bunch of other AI tools daily. This experience lets me understand what’s real and what’s bullshit when making strategic decisions about tooling and hiring.
+I use Claude Code, Codex, Cursor, and a bunch of other AI tools daily. This experience lets me understand what's real and what's bullshit when making strategic decisions about tooling and hiring.
 
-Here’s a recent example: I spent hours this weekend trying to vibe-code a feature that touched a few gnarly integrations, but made way more progress when I finally sat down and wrote it mostly by hand. It wasn’t very much code, but it had to be the exact right logic (terrible for LLMs). On the other hand, I’ve shipped a big feature almost entirely with Claude Code. Knowing where AI shines (crud, tests, boilerplate) and where it fails (precision, system nuance) always beats making decisions based on Twitter hype.
+Here's a recent example: I spent hours this weekend trying to vibe-code a feature that touched a few gnarly integrations, but made way more progress when I finally sat down and wrote it mostly by hand. It wasn't very much code, but it had to be the exact right logic (terrible for LLMs). On the other hand, I've shipped a big feature almost entirely with Claude Code. Knowing where AI shines (crud, tests, boilerplate) and where it fails (precision, system nuance) always beats making decisions based on Twitter hype.
 
-Being in the code also lets me know when to push and when to let off the gas. I can sense when architectures are overly complex or when technical debt is becoming a real problem. I’ve seen managers who rely only on what people tell them, and they can miss a lot. When you’re in the code, you develop an intuition for what’s real.
+Being in the code also lets me know when to push and when to let off the gas. I can sense when architectures are overly complex or when technical debt is becoming a real problem. I've seen managers who rely only on what people tell them, and they can miss a lot. When you're in the code, you develop an intuition for what's real.
 
-### Because it’s what I love and what I’m good at
+## Because it's what I love and what I'm good at
 
-I don’t particularly enjoy building orgs and figuring out people stuff. Engineering management involves navigating interpersonal dynamics, performance reviews, and organizational design. These are crucial functions, but they’re not where my strengths lie.
+I don't particularly enjoy building orgs and figuring out people stuff. Engineering management involves navigating interpersonal dynamics, performance reviews, and organizational design. These are crucial functions, but they're not where my strengths lie.
 
-That’s why we’ve hired great engineering managers and leaders. They’re better at it than I am, and they enjoy it. This lets me focus on the things that I love: building things, solving technical problems, and writing code.
+That's why we've hired great engineering managers and leaders. They're better at it than I am, and they enjoy it. This lets me focus on the things that I love: building things, solving technical problems, and writing code.
 
-Startups are kind of like a sprinting marathon, so I design my role around the work that keeps me excited and ready to run fast for a long time. That’s how I can continue doing this for years, which matters a lot for the company.
+Startups are kind of like a sprinting marathon, so I design my role around the work that keeps me excited and ready to run fast for a long time. That's how I can continue doing this for years, which matters a lot for the company.
 
-### AI tools have changed the leverage I have
+## AI tools have changed the leverage I have
 
 A few years ago, I struggled to find time to code while handling the strategic parts of my job. As the company grew, I was basically stuck in meetings all day, and I was operating outside my zone of genius. It was one of the toughest periods for me professionally.
 
-But modern AI tools have fundamentally changed this equation (especially in the last few months). I’m probably 2–3x more productive than before. These tools haven’t replaced my judgment or technical knowledge, they’ve actually made those skills more valuable.
+But modern AI tools have fundamentally changed this equation (especially in the last few months). I'm probably 2–3x more productive than before. These tools haven't replaced my judgment or technical knowledge, they've actually made those skills more valuable.
 
-I can tell an AI tool, “Build a data export that matches the format of our existing CSV exports but includes these three additional fields from the user profile table,” and it’ll generate most of the code correctly because I know exactly what I need and where to find it. An engineer unfamiliar with that part of the codebase would spend quite a lot of time figuring out those details.
+I can tell an AI tool, "Build a data export that matches the format of our existing CSV exports but includes these three additional fields from the user profile table," and it'll generate most of the code correctly because I know exactly what I need and where to find it. An engineer unfamiliar with that part of the codebase would spend quite a lot of time figuring out those details.
 
-The job has shifted from “writing every line of code” to “providing context, making decisions, and evaluating solutions.” And luckily, I have a lot of context.
+The job has shifted from "writing every line of code" to "providing context, making decisions, and evaluating solutions." And luckily, I have a lot of context.
 ```
 
 ### external-why-i-code-as-a-cto--clean-conclusion
 
-`train` - `approved` - 315 approximate tokens - 195 words
+`train` - `approved` - 314 approximate tokens - 195 words
 
 Headings: Figuring out what works for you
 
 ```markdown
-## Figuring out what works for you
+# Figuring out what works for you
 
-When I was figuring out my role as CTO, I read [Greg Brockman’s blog post](https://blog.gregbrockman.com/figuring-out-the-cto-role-at-stripe) about defining the CTO role at Stripe. He talked to a bunch of other CTOs and realized there’s enormous variance in what the role looks like. Some CTOs are technical visionaries, some are org builders, some are infrastructure-focused. The commonality is that great CTOs figure out where they can create the most value given their particular skills, interests, and company context.
+When I was figuring out my role as CTO, I read [Greg Brockman's blog post](https://blog.gregbrockman.com/figuring-out-the-cto-role-at-stripe) about defining the CTO role at Stripe. He talked to a bunch of other CTOs and realized there's enormous variance in what the role looks like. Some CTOs are technical visionaries, some are org builders, some are infrastructure-focused. The commonality is that great CTOs figure out where they can create the most value given their particular skills, interests, and company context.
 
-For me, that’s meant writing a lot of code. It works because of my particular context: I enjoy building software more than org design, I have deep customer and codebase knowledge that makes me particularly effective, and we’ve hired strong engineering managers.
+For me, that's meant writing a lot of code. It works because of my particular context: I enjoy building software more than org design, I have deep customer and codebase knowledge that makes me particularly effective, and we've hired strong engineering managers.
 
 But this is my particular path, not a prescription. The CTO role is remarkably flexible. Whether building orgs, or developing product strategy, or something else — technical leadership varies depending on your strengths, what energizes you, and what your company needs.
 
-If you’re an engineer worried that leadership means abandoning technical work, know that there are many paths. The key is figuring out where you’re uniquely great.
+If you're an engineer worried that leadership means abandoning technical work, know that there are many paths. The key is figuring out where you're uniquely great.
 ```
 
 ### external-why-i-code-as-a-cto--sentence-001
@@ -3173,7 +2973,7 @@ If you’re an engineer worried that leadership means abandoning technical work,
 Headings: (intro or continuation)
 
 ```markdown
-The job has shifted from “writing every line of code” to “providing context, making decisions, and evaluating solutions.”
+The job has shifted from "writing every line of code" to "providing context, making decisions, and evaluating solutions."
 ```
 
 ## Five opinions on building things well
@@ -3244,14 +3044,14 @@ We use the same "Beta fast, launch slow" framework at Assembled to build high qu
 
 # If no one is ever mad at you, you're probably a bit too risk averse
 
-If you’re trying to do anything meaningful, someone is going to be annoyed, uncomfortable, or outright mad at you sooner or later. If literally no one is ever upset with you, it might be a sign that you’re avoiding hard conversations, difficult tradeoffs, or ambitious bets.
+If you're trying to do anything meaningful, someone is going to be annoyed, uncomfortable, or outright mad at you sooner or later. If literally no one is ever upset with you, it might be a sign that you're avoiding hard conversations, difficult tradeoffs, or ambitious bets.
 
-When someone is mad, I’ve found it useful to pause and ask a couple of questions:
+When someone is mad, I've found it useful to pause and ask a couple of questions:
 
 - Are they mad at a specific action I took (something I did carelessly, unfairly, or without enough context)?
-- Or are they mad at what I represent (a change in direction, a standard I’m trying to uphold, a decision that breaks with the status quo)?
+- Or are they mad at what I represent (a change in direction, a standard I'm trying to uphold, a decision that breaks with the status quo)?
 
-If they’re mad at my actions, there’s usually something I should fix, apologize for, or do better next time. If they’re mad at what I represent, there’s often at least a kernel of truth in the reaction, but it doesn’t automatically mean I should back down.
+If they're mad at my actions, there's usually something I should fix, apologize for, or do better next time. If they're mad at what I represent, there's often at least a kernel of truth in the reaction, but it doesn't automatically mean I should back down.
 ```
 
 ### five-opinions-on-building-things-well--full
@@ -3304,14 +3104,14 @@ We use the same "Beta fast, launch slow" framework at Assembled to build high qu
 
 # If no one is ever mad at you, you're probably a bit too risk averse
 
-If you’re trying to do anything meaningful, someone is going to be annoyed, uncomfortable, or outright mad at you sooner or later. If literally no one is ever upset with you, it might be a sign that you’re avoiding hard conversations, difficult tradeoffs, or ambitious bets.
+If you're trying to do anything meaningful, someone is going to be annoyed, uncomfortable, or outright mad at you sooner or later. If literally no one is ever upset with you, it might be a sign that you're avoiding hard conversations, difficult tradeoffs, or ambitious bets.
 
-When someone is mad, I’ve found it useful to pause and ask a couple of questions:
+When someone is mad, I've found it useful to pause and ask a couple of questions:
 
 - Are they mad at a specific action I took (something I did carelessly, unfairly, or without enough context)?
-- Or are they mad at what I represent (a change in direction, a standard I’m trying to uphold, a decision that breaks with the status quo)?
+- Or are they mad at what I represent (a change in direction, a standard I'm trying to uphold, a decision that breaks with the status quo)?
 
-If they’re mad at my actions, there’s usually something I should fix, apologize for, or do better next time. If they’re mad at what I represent, there’s often at least a kernel of truth in the reaction, but it doesn’t automatically mean I should back down.
+If they're mad at my actions, there's usually something I should fix, apologize for, or do better next time. If they're mad at what I represent, there's often at least a kernel of truth in the reaction, but it doesn't automatically mean I should back down.
 ```
 
 ## How Claude's watermarking (probably) works
@@ -3331,7 +3131,7 @@ Yesterday, [Anthropic announced](https://support.claude.com/en/articles/16266773
 
 Anthropic provides some insight into their approach in their article [How Claude marks AI-generated content](https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content). Though it doesn't actually provide any technical details on the implementation, it provides some guidance to help draw a wide net around the scheme they're using. The key clues Anthropic left in their help center article:
 
-- The scheme "weaves an imperceptible watermark directly into the text itself. You won’t see it, and it doesn’t change the meaning, quality, or readability of Claude’s response."
+- The scheme "weaves an imperceptible watermark directly into the text itself. You won't see it, and it doesn't change the meaning, quality, or readability of Claude's response."
 - The watermarking doesn't work well on very short text.
 - The watermark seems to have started recently (August 2nd or later)
 
@@ -3555,7 +3355,7 @@ So this was a strong detection of a prompt effect, but not a positive detection 
 
 # Conclusions
 
-My current best guess is that Anthropic is using a private-key watermark that changes token selection as Claude generates text. But that guess comes mostly from Anthropic’s description and negative results in other tests as opposed to a positive result in my experiments.
+My current best guess is that Anthropic is using a private-key watermark that changes token selection as Claude generates text. But that guess comes mostly from Anthropic's description and negative results in other tests as opposed to a positive result in my experiments.
 
 I was able to rule out a few things as I found no evidence of hidden Unicode or whitespace, and the constrained-choice tests argue against a large, stable Green/red bias. That said, the apparent SynthID signal turned out to be a likely strong prompt effect that also appeared in Sonnet 4.6, so it doesn't necessarily positively identify a watermark.
 
@@ -3564,7 +3364,7 @@ Note that I'm not actually sure whether the watermarking rollout is fully comple
 
 ### how-claude-watermarking-probably-works--008
 
-`dev` - `candidate` - 603 approximate tokens - 367 words
+`dev` - `candidate` - 519 approximate tokens - 311 words
 
 Headings: UPDATE (2026-08-20): Anthropic confirms it's SynthID-Text
 
@@ -3580,17 +3380,17 @@ Going through what Anthropic confirmed point by point:
 - **Paraphrasing defeats it.** Light editing preserves the watermark, but larger rewrites where a large number of words are adjusted will remove the watermark. This is consistent with my note above that a paraphraser sidesteps this watermarking fairly easily.
 - **No performance cost.** No extra tokens, no added latency, and (per DeepMind's original Nature results) no statistically significant quality difference.
 - **A detection API is coming.** This one is a fun piece of new information. Anthropic says they will "soon be offering a watermark detection API," with details still being worked out. They also state the watermark can't be traced back to a specific person, organization, or chat. I'd bet that you'll be able to pass text to their API, they'll run an analysis using the secret key, and then they'll give you the confidence / probability they have that it was indeed watermarked by Claude.
-
-I also went ahead and re-ran the completed Sonnet 5 experiments on August 20, collecting 11,676 fresh responses with the same prompts and analysis as the August 11–12 archive. The short version is that Sonnet 5's behavior changed substantially between the two runs, but the results did not necessarily change the original analysis much:
 ```
 
 ### how-claude-watermarking-probably-works--009
 
-`dev` - `candidate` - 348 approximate tokens - 214 words
+`dev` - `candidate` - 432 approximate tokens - 270 words
 
 Headings: (intro or continuation)
 
 ```markdown
+I also went ahead and re-ran the completed Sonnet 5 experiments on August 20, collecting 11,676 fresh responses with the same prompts and analysis as the August 11–12 archive. The short version is that Sonnet 5's behavior changed substantially between the two runs, but the results did not necessarily change the original analysis much:
+
 | Probe | Archived result | August 20 re-run | Reading |
 |---|---:|---:|---|
 | Compact-digit red/green | p = 0.6769 | p = 0.2204 | Negative in both runs |
@@ -4108,7 +3908,7 @@ Tokens are an input, and the metrics that matter are almost always outputs.
 Headings: (intro or continuation)
 
 ```markdown
-I think there’s pretty clearly a divide in AI perception between executives and individual contributors (ICs). Executives seem to love it and evangelize it (going so far as to creating mandates at their companies for AI usage). But ICs are typically much more skeptical of its usage. You can see the divide show up everywhere from Hacker News comment threads to internal Slack debates about adopting coding agents.
+I think there's pretty clearly a divide in AI perception between executives and individual contributors (ICs). Executives seem to love it and evangelize it (going so far as to creating mandates at their companies for AI usage). But ICs are typically much more skeptical of its usage. You can see the divide show up everywhere from Hacker News comment threads to internal Slack debates about adopting coding agents.
 
 Here's my current posit for why there's such a big divide: executives have always had to deal with non-determinism and focus on nondeterministic system design, while individual contributors are evaluated by their execution on deterministic tasks.
 ```
@@ -4122,7 +3922,7 @@ Headings: Managing non-deterministic systems
 ```markdown
 # Managing non-deterministic systems
 
-Executives have always had to deal with non-determinism. That’s par for the course:
+Executives have always had to deal with non-determinism. That's par for the course:
 
 - People being out sick or taking time off unexpectedly
 - Someone not finishing an important project and not talking about it until far too late in the process
@@ -4187,13 +3987,13 @@ I think this framing explains a lot of the friction that shows up when companies
 Headings: Managing non-deterministic systems / ICs live in a more deterministic world / So where does the friction come from?
 
 ```markdown
-I think there’s pretty clearly a divide in AI perception between executives and individual contributors (ICs). Executives seem to love it and evangelize it (going so far as to creating mandates at their companies for AI usage). But ICs are typically much more skeptical of its usage. You can see the divide show up everywhere from Hacker News comment threads to internal Slack debates about adopting coding agents.
+I think there's pretty clearly a divide in AI perception between executives and individual contributors (ICs). Executives seem to love it and evangelize it (going so far as to creating mandates at their companies for AI usage). But ICs are typically much more skeptical of its usage. You can see the divide show up everywhere from Hacker News comment threads to internal Slack debates about adopting coding agents.
 
 Here's my current posit for why there's such a big divide: executives have always had to deal with non-determinism and focus on nondeterministic system design, while individual contributors are evaluated by their execution on deterministic tasks.
 
 # Managing non-deterministic systems
 
-Executives have always had to deal with non-determinism. That’s par for the course:
+Executives have always had to deal with non-determinism. That's par for the course:
 
 - People being out sick or taking time off unexpectedly
 - Someone not finishing an important project and not talking about it until far too late in the process

@@ -99,9 +99,10 @@ inherit this. The test set stays frozen, but the prospective set should be perso
 
 ### 4. Chunk boundaries
 
-- `external-stripe-customer-support--001` (train, approved) and
-  `how-claude-watermarking-probably-works--008` (dev) end on a colon; the list they introduce
-  starts the next chunk. A completion target that ends "…the following:" is a bad example.
+- `how-claude-watermarking-probably-works--008` (dev) ended on a colon with the table it
+  introduces cut into the next chunk; the chunker now keeps an introducing colon with its list
+  or table. `external-stripe-customer-support--001` also ends on a colon, but what follows is a
+  heading: the author is introducing the sections, so that boundary is right.
 - `external-tests-with-llms--004` (train, approved, 123 words) is 100 percent code: a prompt
   template inside a fence. `--002` and `--003` are 59 and 78 percent code. These teach the
   adapter to compose code blocks from a brief, which is not the skill you want and is where
@@ -118,6 +119,14 @@ inherit this. The test set stays frozen, but the prospective set should be perso
 - Splits are lineage-clean; every held-out post has an authentic input.
 
 ## Recommended changes, in order
+
+Status (2 September 2026, later the same day): the author confirmed the Assembled posts had an
+editor's pass, prefers no em dashes, types straight quotes, and wants the personal-site voice.
+Items 1, 2, 4, 5, 6, and 7 below are implemented on this branch (`normalize-posts`,
+`training-roles.jsonl`, venue lines, `build-external-posts --repair-code`, `--fence-heuristic`
+and `--target-from-manuscript`, the chunker fix, code pass-through in briefs, `--reference-url-substring`
+for the proxy and judge, `eval generate --ban-string`). Item 3 and the prospective set remain the
+author's work. The Assembled decision (item 9) is applied through the roles file.
 
 | # | Change | Effort | Effect |
 |---|---|---|---|

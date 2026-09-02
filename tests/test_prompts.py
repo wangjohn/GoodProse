@@ -580,3 +580,60 @@ def test_prompt_review_quotes_the_system_prompt_it_binds_approval_to() -> None:
     assert SYSTEM_PROMPT in review
     assert system_prompt_sha256() in review
     assert f"System prompt: `{system_prompt_sha256()[:12]}`" in review
+
+
+def test_prompt_pairs_reject_posts_whose_role_is_not_pairs(tmp_path: Path) -> None:
+    from goodprose.roles import TrainingRole
+
+    chunk = _chunk().model_copy(update={"review_status": ReviewStatus.APPROVED})
+    candidate = _candidate(chunk).model_copy(
+        update={
+            "review_status": ReviewStatus.APPROVED,
+            "approved_system_prompt_sha256": system_prompt_sha256(),
+        }
+    )
+    prompts_path, chunks_path, posts_path, roles_path = (
+        tmp_path / name for name in ("p.jsonl", "c.jsonl", "posts.jsonl", "roles.jsonl")
+    )
+    atomic_write(prompts_path, serialize_jsonl([candidate]))
+    atomic_write(chunks_path, serialize_jsonl([chunk]))
+    atomic_write(
+        posts_path,
+        serialize_jsonl(
+            [
+                BlogPost(
+                    id="post",
+                    lineage_id="post",
+                    title="Post",
+                    body_markdown=chunk.target,
+                    source_path="post.md",
+                )
+            ]
+        ),
+    )
+    atomic_write(
+        roles_path,
+        serialize_jsonl([TrainingRole(post_id="post", role="raw_only", reason="edited")]),
+    )
+
+    with pytest.raises(PromptReviewError, match="training role is not 'pairs'"):
+        build_prompt_pairs(
+            prompts_path, chunks_path, posts_path, tmp_path / "pairs.jsonl", roles_path=roles_path
+        )
+
+
+def test_briefs_must_carry_target_code_blocks_verbatim() -> None:
+    code = 'func main() {\n    fmt.Println("hi")\n}'
+    target = f"Here is the code:\n\n```go\n{code}\n```\n\nAnd why it matters."
+    chunk = _chunk().model_copy(
+        update={"target": target, "target_sha256": hashlib.sha256(target.encode()).hexdigest()}
+    )
+    without_code = _candidate(chunk).model_copy(update={"input": "Explain the main function."})
+
+    with pytest.raises(PromptReviewError, match="must carry the target's code block"):
+        render_prompt_review([without_code], [chunk])
+
+    with_code = without_code.model_copy(
+        update={"input": f"Explain this, include the code as-is:\n\n```go\n{code}\n```"}
+    )
+    assert chunk.target in render_prompt_review([with_code], [chunk]).decode()
