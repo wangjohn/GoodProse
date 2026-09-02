@@ -34,26 +34,29 @@ class _FakeTensor:
         return [99]
 
 
+def _render(messages: list[dict[str, str]]) -> str:
+    return "".join(f"<{m['role']}>{m['content']}" for m in messages) + "<assistant>"
+
+
 class _FakeTokenizer:
     chat_template = "frozen chat template"
     pad_token: str | None = None
     eos_token = "<eos>"
     pad_token_id = 0
     eos_token_id = 1
+
     def __init__(self) -> None:
         self.init_kwargs = {"_commit_hash": "resolved-tokenizer-revision"}
         self.template_kwargs: dict[str, Any] = {}
         self.messages: list[dict[str, str]] = []
 
-    def apply_chat_template(
-        self, messages: list[dict[str, str]], **kwargs: Any
-    ) -> str:
+    def apply_chat_template(self, messages: list[dict[str, str]], **kwargs: Any) -> str:
         self.messages = messages
         self.template_kwargs = kwargs
-        return "rendered prompt"
+        return _render(messages)
 
     def __call__(self, prompt: str, *, return_tensors: str) -> dict[str, _FakeTensor]:
-        assert prompt == "rendered prompt"
+        assert prompt.endswith("Notes for test<assistant>")
         assert return_tensors == "pt"
         return {"input_ids": _FakeTensor(), "attention_mask": _FakeTensor()}
 
@@ -124,7 +127,7 @@ def _config(tmp_path: Path) -> tuple[Path, Path]:
     return config_path, cases_path
 
 
-def test_generate_eval_outputs_uses_matched_greedy_qwen_prompt(
+def test_generate_eval_outputs_uses_matched_sampled_qwen_prompt(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     config_path, cases_path = _config(tmp_path)
@@ -178,13 +181,56 @@ def test_generate_eval_outputs_uses_matched_greedy_qwen_prompt(
         "enable_thinking": False,
     }
     assert model.evaluating is True
-    assert model.generate_kwargs["do_sample"] is False
+    assert model.generate_kwargs["do_sample"] is True
+    assert model.generate_kwargs["temperature"] == 0.7
+    assert model.generate_kwargs["top_p"] == 0.9
+    assert model.generate_kwargs["repetition_penalty"] == 1.05
     assert model.generate_kwargs["max_new_tokens"] == 256
     manifest = GenerationRunManifest.model_validate(json.loads(manifest_path.read_text()))
     assert manifest.base_model_revision == "resolved-model-revision"
     assert manifest.tokenizer_revision == "resolved-tokenizer-revision"
-    assert manifest.decoding.temperature == 0
+    assert manifest.decoding.temperature == 0.7
     assert manifest.decoding.seed == 7
+    assert manifest.prompt_strategy == 'matched-system-prompt:{"enable_thinking":false}'
+    assert manifest.rendered_prompt_prefix_sha256 is not None
+
+
+def test_generate_eval_outputs_temperature_zero_is_greedy(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config_path, cases_path = _config(tmp_path)
+    tokenizer = _FakeTokenizer()
+    model = _FakeModel()
+    monkeypatch.setattr(
+        generation,
+        "_module",
+        lambda name: {
+            "torch": SimpleNamespace(
+                bfloat16="bfloat16",
+                manual_seed=lambda seed: None,
+                cuda=SimpleNamespace(is_available=lambda: False),
+                inference_mode=contextlib.nullcontext,
+            ),
+            "transformers": SimpleNamespace(
+                AutoTokenizer=SimpleNamespace(from_pretrained=lambda *a, **k: tokenizer),
+                AutoModelForCausalLM=SimpleNamespace(from_pretrained=lambda *a, **k: model),
+                set_seed=lambda seed: None,
+            ),
+        }[name],
+    )
+
+    generate_eval_outputs(
+        config_path,
+        cases_path,
+        tmp_path / "greedy.jsonl",
+        tmp_path / "greedy-run.json",
+        role=SystemLabel.BASELINE,
+        run_id="greedy",
+        temperature=0,
+    )
+
+    assert model.generate_kwargs["do_sample"] is False
+    assert "temperature" not in model.generate_kwargs
 
 
 def test_generate_eval_outputs_requires_adapter_only_for_candidate(tmp_path: Path) -> None:

@@ -153,6 +153,11 @@ Data, in order:
 
 ## Concrete repo changes
 
+Status: implemented on this branch on 2026-09-02. Whole-post chunks, multi-form prompts, raw
+completions, template parity, sampled decoding, dev NLL, the stylometric proxy, the judge
+packet, preference building, and the DPO runner all exist; the data steps that need your writing
+(whole-post briefs, extra prompt forms, more of your own text, the prospective test set) do not.
+
 ```
 configs/qwen3-8b-lora-plus.json (and a 14B sibling)
   "eval_strategy": "epoch"            # was "no"

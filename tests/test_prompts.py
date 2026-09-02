@@ -156,9 +156,7 @@ def test_build_prompt_candidates_can_replace_a_complete_lineage(tmp_path: Path) 
     )
     chunks = [first, second, retained]
     base = [
-        _candidate(chunk).model_copy(
-            update={"id": f"{chunk.id}--synthetic", "chunk_id": chunk.id}
-        )
+        _candidate(chunk).model_copy(update={"id": f"{chunk.id}--synthetic", "chunk_id": chunk.id})
         for chunk in chunks
     ]
     chunks_path = tmp_path / "chunks.jsonl"
@@ -445,7 +443,73 @@ def test_build_prompt_pairs_applies_reviewed_exact_text_exclusion(tmp_path: Path
         text_exclusions_path=exclusions_path,
     )
 
-    cleaned = next(
-        pair for pair in load_jsonl(output_path, WritingPair) if pair.id == heldout.id
-    )
+    cleaned = next(pair for pair in load_jsonl(output_path, WritingPair) if pair.id == heldout.id)
     assert cleaned.input == "Authentic test outline."
+
+
+def test_several_prompt_forms_may_target_one_chunk_but_not_the_same_form_twice() -> None:
+    chunk = _chunk()
+    bullets = _candidate(chunk)
+    rough = bullets.model_copy(
+        update={
+            "id": f"{chunk.id}--rough_sentences",
+            "prompt_form": PromptForm.ROUGH_SENTENCES,
+            "input": "rough thought: exact prose matters, keep it short",
+        }
+    )
+
+    review = render_prompt_review([bullets, rough], [chunk]).decode()
+    assert "bullet_notes=1, rough_sentences=1" in review
+
+    duplicate_form = rough.model_copy(update={"id": f"{chunk.id}--rough-again"})
+    with pytest.raises(PromptReviewError, match="same form for the same chunk"):
+        render_prompt_review([bullets, rough, duplicate_form], [chunk])
+
+
+def test_draft_forms_are_not_flagged_for_expected_verbatim_overlap() -> None:
+    chunk = _chunk()
+    draft = _candidate(chunk).model_copy(
+        update={
+            "id": f"{chunk.id}--near_final_draft",
+            "prompt_form": PromptForm.NEAR_FINAL_DRAFT,
+            "input": "# Finished section\n\nThis is the author's exact finished prose, roughly.",
+        }
+    )
+
+    review = render_prompt_review([draft], [chunk]).decode()
+
+    assert "draft form; long shared runs are expected" in review
+    assert "inspect for copying" not in review
+
+
+def test_build_prompt_candidates_keeps_other_forms_for_the_same_chunk(tmp_path: Path) -> None:
+    chunk = _chunk()
+    chunks_path = tmp_path / "chunks.jsonl"
+    base_path = tmp_path / "base.jsonl"
+    drafts_path = tmp_path / "drafts.jsonl"
+    output_path = tmp_path / "prompts.jsonl"
+    atomic_write(chunks_path, serialize_jsonl([chunk]))
+    atomic_write(base_path, serialize_jsonl([_candidate(chunk)]))
+    atomic_write(
+        drafts_path,
+        serialize_jsonl(
+            [
+                SyntheticPromptDraft(
+                    chunk_id=chunk.id,
+                    prompt_form=PromptForm.PHRASES_AND_THOUGHTS,
+                    input="exact prose; concise; finished section",
+                )
+            ]
+        ),
+    )
+
+    count = build_prompt_candidates(
+        drafts_path, chunks_path, output_path, base_prompts_path=base_path
+    )
+
+    assert count == 2
+    candidates = load_jsonl(output_path, SyntheticPromptCandidate)
+    assert [candidate.id for candidate in candidates] == [
+        "post--001--phrases_and_thoughts",
+        "post--001--synthetic",
+    ]

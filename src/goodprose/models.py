@@ -41,6 +41,13 @@ class PromptForm(StrEnum):
     ROUGH_SENTENCES = "rough_sentences"
     PHRASES_AND_THOUGHTS = "phrases_and_thoughts"
     SECTION_BRIEF = "section_brief"
+    POST_BRIEF = "post_brief"
+    ROUGH_DRAFT = "rough_draft"
+    NEAR_FINAL_DRAFT = "near_final_draft"
+
+
+# Forms whose input is expected to share long verbatim runs with the target.
+DRAFT_PROMPT_FORMS = frozenset({PromptForm.ROUGH_DRAFT, PromptForm.NEAR_FINAL_DRAFT})
 
 
 class HistoryStatus(StrEnum):
@@ -326,10 +333,36 @@ class ReviewKey(StrictModel):
 
 
 class DecodingSettings(StrictModel):
-    temperature: Annotated[float, Field(ge=0)] = 0
-    top_p: UnitInterval = 1
+    temperature: Annotated[float, Field(ge=0)] = 0.7
+    top_p: UnitInterval = 0.9
+    repetition_penalty: Annotated[float, Field(ge=1)] = 1.05
     max_new_tokens: Annotated[int, Field(ge=1)]
     seed: int
+
+    @property
+    def do_sample(self) -> bool:
+        return self.temperature > 0
+
+
+class PreferencePair(StrictModel):
+    """A DPO record: the author's published text against the current model's attempt."""
+
+    version: Literal[1] = 1
+    id: NonEmptyString
+    lineage_id: NonEmptyString
+    prompt: tuple[dict[str, str], ...]
+    chosen: NonEmptyString
+    rejected: NonEmptyString
+    rejected_run_id: NonEmptyString
+
+    @model_validator(mode="after")
+    def validate_prompt(self) -> PreferencePair:
+        roles = tuple(message.get("role") for message in self.prompt)
+        if roles != ("system", "user"):
+            raise ValueError("preference prompt must contain exactly system and user turns")
+        if self.chosen == self.rejected:
+            raise ValueError("chosen and rejected completions are identical")
+        return self
 
 
 class GenerationRunManifest(StrictModel):
@@ -343,6 +376,9 @@ class GenerationRunManifest(StrictModel):
     adapter_id: NonEmptyString | None = None
     prompt_strategy: NonEmptyString
     chat_template_sha256: Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
+    rendered_prompt_prefix_sha256: (
+        Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")] | None
+    ) = None
     system_prompt_sha256: Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
     cases_sha256: Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
     dataset_manifest_sha256: Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]

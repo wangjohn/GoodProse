@@ -14,11 +14,17 @@ The repository contains no third-party writing corpus and no synthetic training 
 
 1. Export the blog as Markdown and import the posts.
 2. Freeze each blog lineage into `train`, `dev`, or `test`.
-3. Generate and review verbatim semantic chunk candidates.
-4. Recover an authentic prompt/draft or review a derived brief for each approved target.
+3. Generate and review verbatim semantic chunk candidates, including one post-scale target per
+   training post (`--full-posts`), so training covers the same scope the test cases ask for.
+4. Recover an authentic prompt/draft or review derived briefs for each approved target. Several
+   prompt forms may target one chunk; write them in the rough register of your real drafts.
 5. Join reviewed inputs to the exact published targets to create canonical pairs.
-6. Export `train` and `dev` pairs in chat-style SFT JSONL.
-7. Compare base and fine-tuned outputs on the frozen `test` cases in a blind review.
+6. Export `train` and `dev` pairs in chat-style SFT JSONL, optionally with title-conditioned raw
+   completions of every training target (`--raw-completions`) as a continued-pretraining mix.
+7. Rank checkpoints with the cheap proxies (dev NLL, stylometry, a blinded frontier judge), then
+   compare base and fine-tuned outputs on the frozen `test` cases in a blind human review.
+8. Optionally run one DPO pass with your published text as chosen and the SFT model's own
+   output as rejected.
 
 ```bash
 uv sync
@@ -38,6 +44,7 @@ uv run goodprose build-chunks \
   --splits data/splits.jsonl \
   --exclusions data/chunks/exclusions.jsonl \
   --supplemental-targets data/chunks/supplemental-targets.jsonl \
+  --full-posts \
   --output data/chunks/candidates.jsonl \
   --review-output data/chunks/REVIEW.md
 
@@ -84,7 +91,9 @@ uv run goodprose build-prompt-pairs \
 uv run goodprose build-sft \
   --pairs data/private/pairs.jsonl \
   --output-dir data/sft \
-  --eval-output evals/cases.jsonl
+  --eval-output evals/cases.jsonl \
+  --raw-completions \
+  --train-cases-output data/private/train-cases.jsonl
 
 uv run goodprose build-external-samples \
   --catalog data/external/posts.jsonl \
@@ -139,67 +148,102 @@ The evaluator applies explicit pass/fail gates, records separate voice and overa
 counts unsupported claims, compares edit burden, and reports outcomes per case, lineage, and input
 method. See `evals/README.md` for run manifests, the anchored rubric, and the decision rules.
 
-## LoRA+ training
+## Training
 
-The checked-in starter config uses a pinned Qwen3-8B revision with rank-32 LoRA adapters. PEFT's
-LoRA+ optimizer trains the LoRA A weights at `5e-5` and the B weights at `8e-4` (a 16x ratio). The
-runner validates the exact system prompt, dataset counts, and file hashes before loading the model.
-It converts each conversation into prompt/completion form so TRL computes loss only on the
-author's completion.
+Three starter configs share one data manifest and one prompt render:
 
-Validate the run without installing or loading the model:
+| Config | Base | Update | Learning rate | Use |
+|---|---|---|---|---|
+| `configs/qwen3-8b-lora.json` | Qwen3-8B (pinned) | rank-32 LoRA, all linear layers | 2e-4 | control arm |
+| `configs/qwen3-8b-lora-plus.json` | Qwen3-8B (pinned) | LoRA+ (A 5e-5, B 8e-4) | 16x ratio | comparison arm |
+| `configs/qwen3-14b-lora.json` | Qwen3-14B, 4-bit | rank-32 LoRA, 8-bit Adam | 2e-4 | size comparison |
+
+All three evaluate dev loss every epoch, keep every epoch checkpoint, use an effective batch of
+4, and run 5 epochs. `--validate-only` reports the optimizer step count so you can see whether a
+schedule is meaningful before spending GPU time. Pin the 14B revision to a commit hash before a
+run you intend to keep.
+
+Training renders every prompt to text with the same `chat_template_kwargs` used at inference
+(`enable_thinking: false` for Qwen3), so the adapter learns the exact assistant prefix,
+including the empty think block, that it is conditioned on later. The run manifest and every
+generation manifest record a hash of that prefix, and `eval prepare` refuses to compare runs
+whose prefixes differ. `max_length` is 6144 to fit whole-post pairs; drop it to 4096 on a
+24 GB GPU and accept truncation of the two longest posts.
 
 ```bash
-uv run goodprose train-lora-plus \
-  --config configs/qwen3-8b-lora-plus.json \
-  --validate-only
-```
+uv run goodprose train-lora-plus --config configs/qwen3-8b-lora.json --validate-only
 
-On a CUDA machine, install the training dependencies and start the run:
-
-```bash
 uv sync --extra train
-uv run goodprose train-lora-plus --config configs/qwen3-8b-lora-plus.json
+uv run goodprose train-lora-plus --config configs/qwen3-8b-lora.json
 ```
 
-After training, generate the matched base-model output with greedy decoding and Qwen's thinking
-mode disabled:
+### Ranking checkpoints before anyone reads them
+
+Score held-out likelihood, generate outputs with the deployment decoding (sampled at
+temperature 0.7, top-p 0.9, repetition penalty 1.05, fixed seed; pass `--temperature 0` for a
+greedy pass), and run the stylometric proxy against your published training prose:
 
 ```bash
-uv run goodprose eval generate \
-  --config configs/qwen3-8b-lora-plus.json \
-  --cases evals/cases.jsonl \
-  --role baseline \
-  --run-id base \
-  --output evals/results/base.jsonl \
-  --manifest evals/results/base-run.json
-```
-
-Generate a checkpoint with the same prompt, seed, and decoding settings by replacing
-`checkpoint-N` with an actual saved checkpoint directory:
-
-```bash
-uv run goodprose eval generate \
-  --config configs/qwen3-8b-lora-plus.json \
-  --cases evals/cases.jsonl \
-  --role candidate \
-  --adapter runs/qwen3-8b-lora-plus/checkpoint-N \
+uv run goodprose eval nll \
+  --config configs/qwen3-8b-lora.json \
+  --records data/sft/dev.jsonl \
+  --adapter runs/qwen3-8b-lora/checkpoint-N \
   --run-id checkpoint-N \
-  --output evals/results/checkpoint-N.jsonl \
-  --manifest evals/results/checkpoint-N-run.json
+  --output evals/results/checkpoint-N-nll.json
+
+uv run goodprose eval generate \
+  --config configs/qwen3-8b-lora.json \
+  --cases evals/cases.jsonl \
+  --role baseline --run-id base \
+  --output evals/results/base.jsonl --manifest evals/results/base-run.json
+
+uv run goodprose eval generate \
+  --config configs/qwen3-8b-lora.json \
+  --cases evals/cases.jsonl \
+  --role candidate --adapter runs/qwen3-8b-lora/checkpoint-N --run-id checkpoint-N \
+  --output evals/results/checkpoint-N.jsonl --manifest evals/results/checkpoint-N-run.json
+
+uv run goodprose eval proxy \
+  --cases evals/cases.jsonl \
+  --outputs base=evals/results/base.jsonl \
+  --outputs checkpoint-N=evals/results/checkpoint-N.jsonl \
+  --posts data/posts/posts.jsonl --splits data/splits.jsonl \
+  --output evals/results/proxy.json
 ```
 
-Repeat the candidate command for the final adapter directory and any epoch checkpoints worth
-comparing. The command validates the frozen dataset manifest, checks every reference hash, records
-the resolved model/tokenizer/adapter fingerprints, and writes outputs only after every case
-finishes successfully.
+The proxy reports style and function-word distance to your published prose, repeated 4-gram
+share, how much of the input was copied through, and the longest verbatim run against any
+training post (a memorization flag). `eval judge-packet` renders blinded pairwise prompts for a
+frontier model with three of your training posts as the only evidence; run them with any
+provider, save `{"id", "more_like_author", "confidence", "reason"}` per case, and unblind with
+`eval judge-summarize`. Use these to pick a checkpoint. The blind human review in
+`evals/README.md` remains the shipping gate.
 
-For a lower-memory 4-bit run, also install `train-4bit`, then set `load_in_4bit` to `true` and
-`optimizer` to `adam8bit` in a copy of the config. Each completed run saves the adapter, tokenizer,
-trainer state, metrics, resolved model revisions, dependency versions, and input hashes under
-`runs/`. The starter run retains each of its three epoch checkpoints so they can be compared for
-overfitting. Keep the frozen test cases out of training and use the blind evaluator for the actual
-go/no-go decision.
+### Preference optimisation
+
+After SFT, sample the current adapter on the training inputs and train one DPO epoch with your
+published text as the chosen response:
+
+```bash
+uv run goodprose eval generate \
+  --config configs/qwen3-8b-lora.json \
+  --cases data/private/train-cases.jsonl \
+  --role candidate --adapter runs/qwen3-8b-lora --run-id sft-final \
+  --output data/private/rejected.jsonl --manifest data/private/rejected-run.json
+
+uv run goodprose build-preference \
+  --pairs data/private/pairs.jsonl \
+  --rejected data/private/rejected.jsonl \
+  --rejected-manifest data/private/rejected-run.json \
+  --output data/sft/preference.jsonl
+
+uv run goodprose train-dpo --config configs/qwen3-8b-dpo.json --validate-only
+uv run goodprose train-dpo --config configs/qwen3-8b-dpo.json
+```
+
+The DPO config continues the SFT adapter, keeps an SFT term on the chosen text (`rpo_alpha`),
+and uses the adapter-disabled model as the frozen reference. Watch the proxy for length or
+formatting drift, the usual way DPO cheats.
 
 ## Repository map
 
@@ -214,10 +258,11 @@ data/private/external/  saved pages and authentic held-out inputs
 data/private/eval/      original-site authentic held-out inputs
 data/private/pairs.jsonl generated approved source-to-target pairs
 data/sft/               generated training files
-configs/                validated LoRA+ run configurations
+configs/                validated LoRA, LoRA+, 14B, and DPO run configurations
 evals/cases.jsonl       generated frozen test cases
-evals/results/           local model outputs and reviews
-src/goodprose/           importer, pair builder, exporter, trainer, and evaluator
+evals/results/           local model outputs, proxy reports, judge packets, and reviews
+docs/                    assessments and program notes
+src/goodprose/           importer, pair builder, exporter, trainers, proxies, and evaluator
 tests/                   deterministic unit tests
 ```
 

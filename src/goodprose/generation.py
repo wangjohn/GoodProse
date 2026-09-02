@@ -1,4 +1,4 @@
-"""Generate matched deterministic outputs for the base model and a LoRA checkpoint."""
+"""Generate matched outputs for the base model and a LoRA checkpoint."""
 
 from __future__ import annotations
 
@@ -7,6 +7,12 @@ from importlib import import_module
 from pathlib import Path
 from typing import Any
 
+from goodprose.chat import (
+    ChatTemplateError,
+    prompt_strategy,
+    render_prompt,
+    verify_template_parity,
+)
 from goodprose.jsonl import (
     atomic_write,
     atomic_write_json,
@@ -22,13 +28,16 @@ from goodprose.models import (
     SystemLabel,
 )
 from goodprose.sft import SYSTEM_PROMPT
-from goodprose.training import LoraPlusConfig, prepare_lora_plus_run
-
-PROMPT_STRATEGY = "matched-system-prompt:qwen-no-thinking"
+from goodprose.training import (
+    LoraPlusConfig,
+    base_model_kwargs,
+    load_tokenizer,
+    prepare_lora_plus_run,
+)
 
 
 class GenerationError(ValueError):
-    """A deterministic evaluation generation run is unsafe or incomplete."""
+    """An evaluation generation run is unsafe or incomplete."""
 
 
 def _module(name: str) -> Any:
@@ -40,7 +49,7 @@ def _module(name: str) -> Any:
         ) from error
 
 
-def _validate_cases(cases_path: Path) -> list[EvalCase]:
+def validate_cases(cases_path: Path) -> list[EvalCase]:
     cases = load_jsonl(cases_path, EvalCase)
     if not cases:
         raise GenerationError("evaluation case file is empty")
@@ -55,7 +64,7 @@ def _validate_cases(cases_path: Path) -> list[EvalCase]:
     return cases
 
 
-def _adapter_identifier(adapter_path: Path) -> str:
+def adapter_identifier(adapter_path: Path) -> str:
     if not adapter_path.is_dir():
         raise GenerationError(f"adapter checkpoint directory does not exist: {adapter_path}")
     fingerprint_files = [
@@ -75,30 +84,52 @@ def _adapter_identifier(adapter_path: Path) -> str:
 
 
 def _model_kwargs(config: LoraPlusConfig, torch: Any, transformers: Any) -> dict[str, Any]:
-    dtype = None if config.precision == "auto" else getattr(torch, config.precision)
-    kwargs: dict[str, Any] = {
-        "revision": config.model_revision,
-        "trust_remote_code": config.trust_remote_code,
-        "low_cpu_mem_usage": True,
-        "device_map": "auto",
-    }
-    if dtype is not None:
-        kwargs["dtype"] = dtype
-    if config.load_in_4bit:
-        kwargs["quantization_config"] = transformers.BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_use_double_quant=True,
-            bnb_4bit_compute_dtype=dtype or torch.bfloat16,
-        )
+    kwargs = base_model_kwargs(config, torch, transformers)
+    kwargs["device_map"] = "auto"
     return kwargs
 
 
-def _seed_runtime(torch: Any, transformers: Any, seed: int) -> None:
+def seed_runtime(torch: Any, transformers: Any, seed: int) -> None:
     transformers.set_seed(seed)
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
+
+
+def load_model(
+    config: LoraPlusConfig,
+    adapter_path: Path | None,
+    *,
+    torch: Any,
+    transformers: Any,
+    peft: Any | None,
+) -> Any:
+    base_model = transformers.AutoModelForCausalLM.from_pretrained(
+        config.model_id,
+        **_model_kwargs(config, torch, transformers),
+    )
+    model = (
+        peft.PeftModel.from_pretrained(base_model, str(adapter_path.resolve()), is_trainable=False)
+        if peft is not None and adapter_path is not None
+        else base_model
+    )
+    model.eval()
+    return model
+
+
+def generate_kwargs(decoding: DecodingSettings, tokenizer: Any) -> dict[str, Any]:
+    """Generation settings shared by both arms; temperature 0 means greedy."""
+    kwargs: dict[str, Any] = {
+        "do_sample": decoding.do_sample,
+        "max_new_tokens": decoding.max_new_tokens,
+        "repetition_penalty": decoding.repetition_penalty,
+        "pad_token_id": tokenizer.pad_token_id,
+        "eos_token_id": tokenizer.eos_token_id,
+    }
+    if decoding.do_sample:
+        kwargs["temperature"] = decoding.temperature
+        kwargs["top_p"] = decoding.top_p
+    return kwargs
 
 
 def generate_eval_outputs(
@@ -112,8 +143,16 @@ def generate_eval_outputs(
     adapter_path: Path | None = None,
     max_new_tokens: int = 8192,
     seed: int = 20260901,
+    temperature: float = 0.7,
+    top_p: float = 0.9,
+    repetition_penalty: float = 1.05,
 ) -> int:
-    """Generate one greedy response per frozen case and record complete run provenance."""
+    """Generate one response per frozen case with matched decoding and full provenance.
+
+    The default decoding is the deployment setting (sampled, fixed seed) rather than greedy:
+    greedy decoding over long prose measures repetition failures more than voice. Pass
+    ``temperature=0`` for a greedy pass.
+    """
     if max_new_tokens < 1:
         raise GenerationError("max_new_tokens must be at least 1")
     normalized_run_id = run_id.strip()
@@ -123,42 +162,39 @@ def generate_eval_outputs(
         raise GenerationError("baseline generation must not specify an adapter")
     if role is SystemLabel.CANDIDATE and adapter_path is None:
         raise GenerationError("candidate generation requires an adapter checkpoint")
+    decoding = DecodingSettings(
+        temperature=temperature,
+        top_p=top_p,
+        repetition_penalty=repetition_penalty,
+        max_new_tokens=max_new_tokens,
+        seed=seed,
+    )
 
     config, plan = prepare_lora_plus_run(config_path)
     if config.dataset_manifest_file is None or plan.dataset_manifest_sha256 is None:
         raise GenerationError("the training config must specify a validated dataset manifest")
-    cases = _validate_cases(cases_path)
+    cases = validate_cases(cases_path)
     cases_sha256 = sha256_file(cases_path)
-    adapter_id = _adapter_identifier(adapter_path) if adapter_path is not None else None
+    adapter_id = adapter_identifier(adapter_path) if adapter_path is not None else None
 
     torch = _module("torch")
     transformers = _module("transformers")
     peft = _module("peft") if adapter_path is not None else None
-    _seed_runtime(torch, transformers, seed)
+    seed_runtime(torch, transformers, seed)
 
-    tokenizer = transformers.AutoTokenizer.from_pretrained(
-        config.model_id,
-        revision=config.model_revision,
-        trust_remote_code=config.trust_remote_code,
-    )
-    if tokenizer.chat_template is None:
-        raise GenerationError(f"tokenizer for {config.model_id!r} has no chat template")
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-
-    base_model = transformers.AutoModelForCausalLM.from_pretrained(
-        config.model_id,
-        **_model_kwargs(config, torch, transformers),
-    )
-    resolved_model_revision = (
-        getattr(base_model.config, "_commit_hash", None) or config.model_revision
-    )
-    model = (
-        peft.PeftModel.from_pretrained(base_model, str(adapter_path.resolve()), is_trainable=False)
-        if peft is not None and adapter_path is not None
-        else base_model
-    )
-    model.eval()
+    tokenizer = load_tokenizer(transformers, config)
+    first_messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": cases[0].input},
+    ]
+    try:
+        prefix_sha256 = verify_template_parity(
+            tokenizer, first_messages, config.chat_template_kwargs
+        )
+    except ChatTemplateError as error:
+        raise GenerationError(str(error)) from error
+    model = load_model(config, adapter_path, torch=torch, transformers=transformers, peft=peft)
+    resolved_model_revision = getattr(model.config, "_commit_hash", None) or config.model_revision
 
     outputs: list[ModelOutput] = []
     for index, case in enumerate(cases, start=1):
@@ -166,23 +202,14 @@ def generate_eval_outputs(
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": case.input},
         ]
-        rendered_prompt = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True,
-            enable_thinking=False,
-        )
+        rendered_prompt = render_prompt(tokenizer, messages, config.chat_template_kwargs)
         encoded = tokenizer(rendered_prompt, return_tensors="pt")
         encoded = {name: tensor.to(model.device) for name, tensor in encoded.items()}
         prompt_length = encoded["input_ids"].shape[-1]
+        # Re-seed per case so a single case can be regenerated in isolation.
+        seed_runtime(torch, transformers, seed + index)
         with torch.inference_mode():
-            generated = model.generate(
-                **encoded,
-                do_sample=False,
-                max_new_tokens=max_new_tokens,
-                pad_token_id=tokenizer.pad_token_id,
-                eos_token_id=tokenizer.eos_token_id,
-            )
+            generated = model.generate(**encoded, **generate_kwargs(decoding, tokenizer))
         output = tokenizer.decode(
             generated[0][prompt_length:],
             skip_special_tokens=True,
@@ -192,9 +219,7 @@ def generate_eval_outputs(
         outputs.append(ModelOutput(id=case.id, output=output))
         print(f"generated {index}/{len(cases)}: {case.id}", flush=True)
 
-    resolved_tokenizer_revision = (
-        tokenizer.init_kwargs.get("_commit_hash") or config.model_revision
-    )
+    resolved_tokenizer_revision = tokenizer.init_kwargs.get("_commit_hash") or config.model_revision
     if sha256_file(cases_path) != cases_sha256:
         raise GenerationError("the frozen evaluation cases changed during generation")
     if sha256_file(config.dataset_manifest_file) != plan.dataset_manifest_sha256:
@@ -207,17 +232,13 @@ def generate_eval_outputs(
         base_model_revision=resolved_model_revision,
         tokenizer_revision=resolved_tokenizer_revision,
         adapter_id=adapter_id,
-        prompt_strategy=PROMPT_STRATEGY,
+        prompt_strategy=prompt_strategy(config.chat_template_kwargs),
         chat_template_sha256=hashlib.sha256(tokenizer.chat_template.encode()).hexdigest(),
+        rendered_prompt_prefix_sha256=prefix_sha256,
         system_prompt_sha256=hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest(),
         cases_sha256=cases_sha256,
         dataset_manifest_sha256=plan.dataset_manifest_sha256,
-        decoding=DecodingSettings(
-            temperature=0,
-            top_p=1,
-            max_new_tokens=max_new_tokens,
-            seed=seed,
-        ),
+        decoding=decoding,
     )
     atomic_write(output_path, serialize_jsonl(outputs))
     atomic_write_json(manifest_path, manifest.model_dump(mode="json", exclude_none=True))

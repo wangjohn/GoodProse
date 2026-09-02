@@ -13,6 +13,7 @@ from goodprose.jsonl import atomic_write, load_jsonl, serialize_jsonl
 from goodprose.models import (
     BlogPost,
     ChunkExclusionSpec,
+    ReviewStatus,
     SemanticChunk,
     Split,
     SplitAssignment,
@@ -192,6 +193,76 @@ def semantic_chunks(
     return chunks
 
 
+FULL_POST_SUFFIX = "--full"
+
+
+def full_post_chunks(
+    posts: list[BlogPost],
+    splits: dict[str, Split],
+    kept_chunks: list[SemanticChunk],
+    *,
+    max_tokens: int,
+) -> list[SemanticChunk]:
+    """One post-scale target per training post: the contiguous prefix of kept sections.
+
+    Test cases are whole posts, so training needs whole-post targets too. The span runs
+    from the start of the post to the end of the last default chunk that survived the
+    exclusions, which drops trailing promotional footers while keeping the target an exact
+    contiguous span of the published Markdown.
+    """
+    last_end: dict[str, int] = {}
+    for chunk in kept_chunks:
+        if chunk.id.endswith(FULL_POST_SUFFIX):
+            continue
+        last_end[chunk.post_id] = max(last_end.get(chunk.post_id, 0), chunk.source_end)
+    full: list[SemanticChunk] = []
+    for post in posts:
+        split = splits[post.lineage_id]
+        if split is not Split.TRAIN or post.id not in last_end:
+            continue
+        target = post.body_markdown[: last_end[post.id]]
+        blocks = _blocks(target)
+        token_count = _approx_tokens(target)
+        ordinal = max(chunk.ordinal for chunk in kept_chunks if chunk.post_id == post.id) + 1
+        full.append(
+            SemanticChunk(
+                id=f"{post.id}{FULL_POST_SUFFIX}",
+                post_id=post.id,
+                lineage_id=post.lineage_id,
+                split=split,
+                ordinal=ordinal,
+                headings=tuple(block.heading for block in blocks if block.heading is not None),
+                target=target,
+                source_start=0,
+                source_end=last_end[post.id],
+                word_count=_word_count(target),
+                approx_token_count=token_count,
+                target_sha256=_sha256_text(target),
+                exceeds_target_size=token_count > max_tokens,
+            )
+        )
+    return full
+
+
+def preserve_review_status(
+    chunks: list[SemanticChunk], previous: list[SemanticChunk]
+) -> list[SemanticChunk]:
+    """Carry an existing approval forward when the exact target text is unchanged."""
+    previous_by_id = {chunk.id: chunk for chunk in previous}
+    preserved: list[SemanticChunk] = []
+    for chunk in chunks:
+        earlier = previous_by_id.get(chunk.id)
+        if (
+            earlier is not None
+            and earlier.target_sha256 == chunk.target_sha256
+            and earlier.review_status is not chunk.review_status
+            and chunk.review_status is ReviewStatus.CANDIDATE
+        ):
+            chunk = chunk.model_copy(update={"review_status": earlier.review_status})
+        preserved.append(chunk)
+    return preserved
+
+
 def _supplemental_chunks(
     specs: list[SupplementalChunkSpec],
     posts: list[BlogPost],
@@ -270,9 +341,7 @@ def _apply_exclusions(
     chunks: list[SemanticChunk], exclusions: list[ChunkExclusionSpec]
 ) -> list[SemanticChunk]:
     exclusion_counts = Counter(exclusion.chunk_id for exclusion in exclusions)
-    duplicates = sorted(
-        chunk_id for chunk_id, count in exclusion_counts.items() if count > 1
-    )
+    duplicates = sorted(chunk_id for chunk_id, count in exclusion_counts.items() if count > 1)
     if duplicates:
         raise ChunkBuildError(f"duplicate chunk exclusion(s): {', '.join(duplicates)}")
     chunks_by_id = {chunk.id: chunk for chunk in chunks}
@@ -280,9 +349,7 @@ def _apply_exclusions(
     if missing:
         raise ChunkBuildError(f"chunk exclusion(s) do not exist: {', '.join(missing)}")
     heldout = sorted(
-        chunk_id
-        for chunk_id in exclusion_counts
-        if chunks_by_id[chunk_id].split is not Split.TRAIN
+        chunk_id for chunk_id in exclusion_counts if chunks_by_id[chunk_id].split is not Split.TRAIN
     )
     if heldout:
         raise ChunkBuildError(
@@ -328,8 +395,10 @@ def render_review(posts: list[BlogPost], chunks: list[SemanticChunk]) -> bytes:
         "# Semantic chunk review",
         "",
         "Every target is an exact contiguous span of the imported published post. Default chunks",
-        "begin as candidates; reviewed supplemental spans retain their checked-in status. A target",
-        "becomes an SFT example only after both its chunk and matching prompt are approved.",
+        "begin as candidates; reviewed supplemental spans retain their checked-in status, and",
+        "approvals of unchanged targets are preserved across rebuilds. `--full` chunks are the",
+        "post-scale prefix of each training post up to its last kept section. A target becomes an",
+        "SFT example only after both its chunk and a matching prompt are approved.",
         "",
         f"- Posts: {len(posts)}",
         f"- Chunks: {len(chunks)}",
@@ -372,10 +441,15 @@ def build_chunks(
     max_tokens: int = 700,
     supplemental_targets_path: Path | None = None,
     exclusions_path: Path | None = None,
+    full_posts: bool = False,
+    preserve_status: bool = True,
 ) -> dict[str, int]:
     posts = load_jsonl(posts_path, BlogPost)
     assignments = load_jsonl(splits_path, SplitAssignment)
     splits = _split_map(posts, assignments)
+    previous = (
+        load_jsonl(output_path, SemanticChunk) if preserve_status and output_path.is_file() else []
+    )
 
     chunks = [
         chunk
@@ -392,6 +466,8 @@ def build_chunks(
             chunks,
             load_jsonl(exclusions_path, ChunkExclusionSpec),
         )
+    if full_posts:
+        chunks.extend(full_post_chunks(posts, splits, chunks, max_tokens=max_tokens))
     if supplemental_targets_path is not None:
         specs = load_jsonl(supplemental_targets_path, SupplementalChunkSpec)
         chunks.extend(
@@ -403,6 +479,7 @@ def build_chunks(
                 max_tokens=max_tokens,
             )
         )
+    chunks = preserve_review_status(chunks, previous)
     atomic_write(output_path, serialize_jsonl(chunks))
     atomic_write(review_output_path, render_review(posts, chunks))
     return dict(sorted(Counter(chunk.split.value for chunk in chunks).items()))

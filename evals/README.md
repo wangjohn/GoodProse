@@ -21,29 +21,34 @@ Each output file contains exactly one record per case:
 {"id":"held-out-post","output":"The model's proposed post."}
 ```
 
-Use temperature `0` for the primary pass. If deployment will use sampling, run repeated robustness
-checks afterward; do not mix repeated samples into the primary decision count.
+The primary pass uses the deployment decoding: sampled at temperature 0.7, top-p 0.9, repetition
+penalty 1.05, with a fixed seed re-derived per case so any single case can be regenerated alone.
+Greedy decoding over 1,500-word outputs mostly measures repetition failures, not voice; run it as
+a secondary pass with `--temperature 0` if you want it. Both arms must use identical settings, and
+`eval prepare` rejects manifests that differ.
 
 ## Freeze run provenance
 
 For every output file, save a `GenerationRunManifest` JSON record containing:
 
 - exact base model, model revision, tokenizer revision, and adapter identifier;
-- prompt strategy plus SHA-256 hashes of the system prompt and rendered chat template;
+- prompt strategy (the chat-template kwargs), SHA-256 hashes of the system prompt and chat
+  template, and a hash of the rendered assistant prefix the model was conditioned on;
 - SHA-256 hashes of the frozen case file and training-dataset manifest; and
-- temperature, top-p, maximum new tokens, and seed.
+- temperature, top-p, repetition penalty, maximum new tokens, and seed.
 
 When both manifests are passed to `eval prepare`, the evaluator rejects stale case hashes,
 different base-model revisions, different tokenizers, different prompt/template/dataset hashes,
 or different decoding settings. The run IDs are copied into the final summary. A strong-prompt
 comparison is deliberately separate.
 
-Generate matched outputs directly from the pinned training config. The generator uses greedy
-decoding, the dataset system prompt, and Qwen's non-thinking chat-template path for both roles:
+Generate matched outputs directly from the pinned training config. The generator uses the
+dataset system prompt and the same chat-template kwargs as training (Qwen's non-thinking path)
+for both roles, and verifies the rendered assistant prefix before loading the model:
 
 ```bash
 uv run goodprose eval generate \
-  --config configs/qwen3-8b-lora-plus.json \
+  --config configs/qwen3-8b-lora.json \
   --cases evals/cases.jsonl \
   --role baseline \
   --run-id base \
@@ -51,18 +56,61 @@ uv run goodprose eval generate \
   --manifest evals/results/base-run.json
 
 uv run goodprose eval generate \
-  --config configs/qwen3-8b-lora-plus.json \
+  --config configs/qwen3-8b-lora.json \
   --cases evals/cases.jsonl \
   --role candidate \
-  --adapter runs/qwen3-8b-lora-plus/checkpoint-N \
+  --adapter runs/qwen3-8b-lora/checkpoint-N \
   --run-id checkpoint-N \
   --output evals/results/checkpoint-N.jsonl \
   --manifest evals/results/checkpoint-N-run.json
 ```
 
 Use an actual `checkpoint-N` directory from the training run and repeat for each checkpoint or the
-final adapter you want to compare. Keep `--max-new-tokens` and `--seed` identical if overriding
-their defaults.
+final adapter you want to compare. Keep `--max-new-tokens`, `--seed`, `--temperature`, `--top-p`,
+and `--repetition-penalty` identical if overriding their defaults.
+
+## Inner loop: rank checkpoints without reading
+
+A four-case human review is the shipping gate, not a tuning signal. Three cheaper proxies rank
+checkpoints, data mixes, and model sizes in minutes; calibrate them once against a completed
+blind review and then trust them for the inner loop.
+
+1. **Dev NLL.** `eval nll --records data/sft/dev.jsonl` scores the three authentic dev pairs'
+   completions under a checkpoint with the exact training render. Dev NLL rising while train
+   loss falls is the memorisation signal.
+2. **Stylometric proxy.** `eval proxy` compares each output file with your published training
+   prose: sentence-length distribution, paragraph length, moving-window type-token ratio, and
+   per-thousand-word rates of em dashes, parentheticals, questions, colons, list items,
+   headings, links, bold, contractions, hedges, and first/second person, plus a cosine distance
+   over function-word rates. Per case it also reports the length ratio to the reference, how
+   much of the input was copied through, repeated 4-gram share (looping), and the longest
+   verbatim run against any training post (regurgitation; flagged at 30 words). Lower distance
+   is closer to you. The report ranks the systems it was given.
+3. **Blinded frontier judge.** `eval judge-packet` renders one prompt per case with three of
+   your training posts as the author samples, both responses in random order, and a single
+   question: which is more likely written by this author. Run the prompts with any provider,
+   save one `{"id", "more_like_author": "a"|"b"|"tie", "confidence", "reason"}` record per
+   case, then `eval judge-summarize --verdicts ... --key ...` unblinds the tally.
+
+```bash
+uv run goodprose eval proxy \
+  --cases evals/cases.jsonl \
+  --outputs base=evals/results/base.jsonl \
+  --outputs epoch3=evals/results/checkpoint-75.jsonl \
+  --outputs epoch5=evals/results/checkpoint-125.jsonl \
+  --posts data/posts/posts.jsonl --splits data/splits.jsonl \
+  --output evals/results/proxy.json
+
+uv run goodprose eval judge-packet \
+  --cases evals/cases.jsonl \
+  --baseline evals/results/base.jsonl --candidate evals/results/checkpoint-125.jsonl \
+  --posts data/posts/posts.jsonl --splits data/splits.jsonl \
+  --packet evals/results/judge.jsonl --key evals/results/judge-key.json
+```
+
+Run the strong prompted frontier baseline (three of your posts plus a short style guide) on the
+four test inputs early, not last. It sets the bar, and if it wins it is the natural teacher for a
+later distillation step.
 
 ## Blind review
 

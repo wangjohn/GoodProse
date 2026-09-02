@@ -213,3 +213,102 @@ def test_build_chunks_rejects_supplemental_heldout_target(tmp_path: Path) -> Non
             tmp_path / "review.md",
             supplemental_targets_path=supplemental_path,
         )
+
+
+def _three_posts(tmp_path: Path, train_body: str) -> tuple[Path, Path]:
+    posts = [
+        _post("train", train_body),
+        _post("dev", "Development post."),
+        _post("test", "Test post."),
+    ]
+    assignments = [
+        SplitAssignment(
+            lineage_id=post.id,
+            split=split,
+            frozen_at=date(2026, 9, 1),
+            rationale=f"Frozen {split.value} lineage.",
+        )
+        for post, split in zip(posts, (Split.TRAIN, Split.DEV, Split.TEST), strict=True)
+    ]
+    posts_path = tmp_path / "posts.jsonl"
+    splits_path = tmp_path / "splits.jsonl"
+    posts_path.write_bytes(serialize_jsonl(posts))
+    splits_path.write_bytes(serialize_jsonl(assignments))
+    return posts_path, splits_path
+
+
+def test_full_post_chunk_is_prefix_up_to_last_kept_section(tmp_path: Path) -> None:
+    body = (
+        "Opening paragraph. " * 20
+        + "\n\n# Idea\n\n"
+        + "Idea sentence. " * 40
+        + "\n\n# Hiring\n\nWe're hiring, come join us."
+    )
+    posts_path, splits_path = _three_posts(tmp_path, body)
+    output_path = tmp_path / "chunks.jsonl"
+    chunks = build_chunks(
+        posts_path, splits_path, output_path, tmp_path / "review.md", min_tokens=30, max_tokens=90
+    )
+    assert chunks["train"] >= 3
+    default = [
+        chunk for chunk in load_jsonl(output_path, SemanticChunk) if chunk.post_id == "train"
+    ]
+    footer = default[-1]
+    assert "hiring" in footer.target
+    exclusions_path = tmp_path / "exclusions.jsonl"
+    exclusions_path.write_bytes(
+        serialize_jsonl([ChunkExclusionSpec(chunk_id=footer.id, reason="Hiring footer.")])
+    )
+
+    build_chunks(
+        posts_path,
+        splits_path,
+        output_path,
+        tmp_path / "review.md",
+        min_tokens=30,
+        max_tokens=90,
+        exclusions_path=exclusions_path,
+        full_posts=True,
+    )
+
+    chunks = load_jsonl(output_path, SemanticChunk)
+    full = next(chunk for chunk in chunks if chunk.id == "train--full")
+    assert full.split is Split.TRAIN
+    assert full.source_start == 0
+    assert full.target == body[: full.source_end]
+    assert "hiring" not in full.target
+    assert full.target.rstrip().endswith("Idea sentence.")
+    assert full.headings == ("Idea",)
+    assert full.exceeds_target_size is True
+    assert not any(
+        chunk.id.endswith("--full") for chunk in chunks if chunk.split is not Split.TRAIN
+    )
+    assert "`--full` chunks" in (tmp_path / "review.md").read_text()
+
+
+def test_rebuild_preserves_approval_when_target_is_unchanged(tmp_path: Path) -> None:
+    posts_path, splits_path = _three_posts(tmp_path, "Training post that stays the same.")
+    output_path = tmp_path / "chunks.jsonl"
+    build_chunks(posts_path, splits_path, output_path, tmp_path / "review.md")
+    chunks = load_jsonl(output_path, SemanticChunk)
+    approved = [
+        chunk.model_copy(update={"review_status": ReviewStatus.APPROVED})
+        if chunk.post_id == "train"
+        else chunk
+        for chunk in chunks
+    ]
+    output_path.write_bytes(serialize_jsonl(approved))
+
+    build_chunks(posts_path, splits_path, output_path, tmp_path / "review.md", full_posts=True)
+    rebuilt = {chunk.id: chunk for chunk in load_jsonl(output_path, SemanticChunk)}
+    assert rebuilt["train--001"].review_status is ReviewStatus.APPROVED
+    assert rebuilt["train--full"].review_status is ReviewStatus.CANDIDATE
+    assert rebuilt["dev--001"].review_status is ReviewStatus.CANDIDATE
+
+    build_chunks(
+        posts_path, splits_path, output_path, tmp_path / "review.md", preserve_status=False
+    )
+    assert all(
+        chunk.review_status is ReviewStatus.CANDIDATE
+        for chunk in load_jsonl(output_path, SemanticChunk)
+    )

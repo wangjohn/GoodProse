@@ -2,13 +2,21 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 
 from goodprose.jsonl import atomic_write, atomic_write_json, serialize_jsonl
 from goodprose.models import InputMethod, Split, WritingPair
 from goodprose.sft import build_sft
-from goodprose.training import TrainingError, prepare_lora_plus_run, run_lora_plus
+from goodprose.training import (
+    TrainingError,
+    _load_records,
+    optimizer_steps,
+    prepare_lora_plus_run,
+    run_lora_plus,
+    text_prompt_completion_records,
+)
 
 
 def _pair(identifier: str, split: Split) -> WritingPair:
@@ -69,7 +77,43 @@ def test_prepare_lora_plus_run_validates_data_and_differential_rates(tmp_path: P
     assert plan.learning_rate_b == pytest.approx(0.0008)
     assert len(plan.train_file_sha256) == 64
     assert len(plan.dataset_manifest_sha256 or "") == 64
+    assert plan.optimizer_steps == 3
+    assert plan.prompt_strategy == 'matched-system-prompt:{"enable_thinking":false}'
     assert run_lora_plus(config_path, validate_only=True)["model_id"] == "example/model"
+
+
+class _Tokenizer:
+    eos_token = "<|im_end|>"
+
+    def apply_chat_template(self, messages: list[dict[str, str]], **kwargs: Any) -> str:
+        assert kwargs["enable_thinking"] is False
+        body = "".join(f"<|im_start|>{m['role']}\n{m['content']}<|im_end|>\n" for m in messages)
+        return body + "<|im_start|>assistant\n<think>\n\n</think>\n\n"
+
+
+def test_text_records_carry_the_inference_prefix_and_end_the_turn(tmp_path: Path) -> None:
+    config_path = _config(tmp_path)
+    config, _ = prepare_lora_plus_run(config_path)
+    records = _load_records(config.train_file, kind="training")
+
+    [record] = text_prompt_completion_records(records, _Tokenizer(), config.chat_template_kwargs)
+
+    assert record["prompt"].endswith(
+        "Outline for train<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+    )
+    assert record["completion"] == "Published output for train.<|im_end|>"
+
+
+def test_optimizer_steps_rounds_partial_batches_up(tmp_path: Path) -> None:
+    config, _ = prepare_lora_plus_run(_config(tmp_path))
+
+    assert optimizer_steps(config.model_copy(update={"num_train_epochs": 3}), 68) == 27
+    assert (
+        optimizer_steps(
+            config.model_copy(update={"num_train_epochs": 5, "gradient_accumulation_steps": 4}), 300
+        )
+        == 375
+    )
 
 
 def test_prepare_lora_plus_run_rejects_stale_system_prompt(tmp_path: Path) -> None:

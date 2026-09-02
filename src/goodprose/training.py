@@ -1,4 +1,4 @@
-"""Validate and run a small PEFT/TRL LoRA+ supervised fine-tune."""
+"""Validate and run a small PEFT/TRL LoRA or LoRA+ supervised fine-tune."""
 
 from __future__ import annotations
 
@@ -11,13 +11,20 @@ from typing import Any, Literal
 
 from pydantic import Field, ValidationError, model_validator
 
+from goodprose.chat import (
+    DEFAULT_CHAT_TEMPLATE_KWARGS,
+    ChatTemplateError,
+    prompt_strategy,
+    render_prompt,
+    verify_template_parity,
+)
 from goodprose.jsonl import atomic_write_json, load_jsonl, sha256_file
 from goodprose.models import NonEmptyString, StrictModel
 from goodprose.sft import SYSTEM_PROMPT
 
 
 class TrainingError(ValueError):
-    """A LoRA+ run is unsafe or cannot be configured."""
+    """A fine-tuning run is unsafe or cannot be configured."""
 
 
 class TrainingMessage(StrictModel):
@@ -53,7 +60,11 @@ class LoraPlusConfig(StrictModel):
     per_device_eval_batch_size: int = Field(default=1, ge=1)
     gradient_accumulation_steps: int = Field(default=8, ge=1)
     learning_rate: float = Field(default=5e-5, gt=0)
-    loraplus_lr_ratio: float = Field(default=16, ge=1)
+    loraplus_lr_ratio: float = Field(
+        default=16,
+        ge=1,
+        description="LoRA B/A learning-rate ratio; exactly 1 trains plain LoRA with one rate.",
+    )
     weight_decay: float = Field(default=0, ge=0)
     warmup_ratio: float = Field(default=0.05, ge=0, le=1)
     lr_scheduler_type: NonEmptyString = "cosine"
@@ -68,6 +79,9 @@ class LoraPlusConfig(StrictModel):
     load_in_4bit: bool = False
     gradient_checkpointing: bool = True
     packing: bool = False
+    chat_template_kwargs: dict[str, bool | int | str] = Field(
+        default_factory=lambda: dict(DEFAULT_CHAT_TEMPLATE_KWARGS)
+    )
     eval_strategy: Literal["no", "steps", "epoch"] = "no"
     eval_steps: int | None = Field(default=None, ge=1)
     save_strategy: Literal["no", "steps", "epoch"] = "epoch"
@@ -104,6 +118,8 @@ class LoraPlusPlan(StrictModel):
     learning_rate_a: float
     learning_rate_b: float
     loraplus_lr_ratio: float
+    optimizer_steps: int
+    prompt_strategy: NonEmptyString
 
 
 def _resolved_path(config_path: Path, value: Path | None) -> Path | None:
@@ -175,6 +191,14 @@ def _validate_dataset_manifest(
     return sha256_file(path)
 
 
+def optimizer_steps(config: LoraPlusConfig, train_examples: int) -> int:
+    """Total optimizer updates the schedule will see; tiny counts make cosine meaningless."""
+    per_epoch = -(
+        -train_examples // (config.per_device_train_batch_size * config.gradient_accumulation_steps)
+    )
+    return int(per_epoch * config.num_train_epochs)
+
+
 def prepare_lora_plus_run(config_path: Path) -> tuple[LoraPlusConfig, LoraPlusPlan]:
     """Validate config, conversational data, and the frozen dataset manifest."""
     config = load_lora_plus_config(config_path)
@@ -203,6 +227,8 @@ def prepare_lora_plus_run(config_path: Path) -> tuple[LoraPlusConfig, LoraPlusPl
         learning_rate_a=config.learning_rate,
         learning_rate_b=config.learning_rate * config.loraplus_lr_ratio,
         loraplus_lr_ratio=config.loraplus_lr_ratio,
+        optimizer_steps=optimizer_steps(config, len(train_records)),
+        prompt_strategy=prompt_strategy(config.chat_template_kwargs),
     )
     return config, plan
 
@@ -216,14 +242,28 @@ def _module(name: str) -> Any:
         ) from error
 
 
-def _prompt_completion_records(records: list[TrainingRecord]) -> list[dict[str, Any]]:
-    return [
-        {
-            "prompt": [message.model_dump() for message in record.messages[:-1]],
-            "completion": [record.messages[-1].model_dump()],
-        }
-        for record in records
-    ]
+def text_prompt_completion_records(
+    records: list[TrainingRecord],
+    tokenizer: Any,
+    chat_template_kwargs: dict[str, bool | int | str],
+) -> list[dict[str, str]]:
+    """Render prompts ourselves so training sees exactly the inference prefix.
+
+    TRL's conversational path applies the chat template with its own defaults, which for
+    Qwen3 omits the empty think block that ``enable_thinking=False`` adds at inference.
+    Rendering to text here removes that mismatch. The EOS token is appended explicitly so
+    the completion ends the assistant turn the same way the template does.
+    """
+    eos = tokenizer.eos_token or ""
+    rendered: list[dict[str, str]] = []
+    for record in records:
+        prompt_messages = [message.model_dump() for message in record.messages[:-1]]
+        prompt = render_prompt(tokenizer, prompt_messages, chat_template_kwargs)
+        completion = record.messages[-1].content
+        if eos and not completion.endswith(eos):
+            completion = completion + eos
+        rendered.append({"prompt": prompt, "completion": completion})
+    return rendered
 
 
 def _package_version(package: str) -> str | None:
@@ -233,28 +273,7 @@ def _package_version(package: str) -> str | None:
         return None
 
 
-def run_lora_plus(
-    config_path: Path,
-    *,
-    validate_only: bool = False,
-    resume_from_checkpoint: Path | None = None,
-) -> dict[str, Any]:
-    """Run LoRA+ through PEFT's differential adapter optimizer and TRL's SFT trainer."""
-    config, plan = prepare_lora_plus_run(config_path)
-    if validate_only:
-        return plan.model_dump(mode="json", exclude_none=True)
-
-    torch = _module("torch")
-    datasets = _module("datasets")
-    peft = _module("peft")
-    peft_optimizers = _module("peft.optimizers")
-    transformers = _module("transformers")
-    trl = _module("trl")
-    bitsandbytes = (
-        _module("bitsandbytes") if config.optimizer == "adam8bit" or config.load_in_4bit else None
-    )
-
-    dtype = None if config.precision == "auto" else getattr(torch, config.precision)
+def load_tokenizer(transformers: Any, config: LoraPlusConfig) -> Any:
     tokenizer = transformers.AutoTokenizer.from_pretrained(
         config.model_id,
         revision=config.model_revision,
@@ -267,25 +286,66 @@ def run_lora_plus(
         )
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+    return tokenizer
 
-    model_kwargs: dict[str, Any] = {
+
+def base_model_kwargs(config: LoraPlusConfig, torch: Any, transformers: Any) -> dict[str, Any]:
+    dtype = None if config.precision == "auto" else getattr(torch, config.precision)
+    kwargs: dict[str, Any] = {
         "revision": config.model_revision,
         "trust_remote_code": config.trust_remote_code,
         "low_cpu_mem_usage": True,
     }
     if dtype is not None:
-        model_kwargs["dtype"] = dtype
+        kwargs["dtype"] = dtype
     if config.load_in_4bit:
-        model_kwargs["quantization_config"] = transformers.BitsAndBytesConfig(
+        kwargs["quantization_config"] = transformers.BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_quant_type="nf4",
             bnb_4bit_use_double_quant=True,
             bnb_4bit_compute_dtype=dtype or torch.bfloat16,
         )
-        model_kwargs["device_map"] = "auto"
+        kwargs["device_map"] = "auto"
+    return kwargs
+
+
+def run_lora_plus(
+    config_path: Path,
+    *,
+    validate_only: bool = False,
+    resume_from_checkpoint: Path | None = None,
+) -> dict[str, Any]:
+    """Run LoRA (ratio 1) or LoRA+ through PEFT and TRL's SFT trainer."""
+    config, plan = prepare_lora_plus_run(config_path)
+    if validate_only:
+        return plan.model_dump(mode="json", exclude_none=True)
+
+    torch = _module("torch")
+    datasets = _module("datasets")
+    peft = _module("peft")
+    transformers = _module("transformers")
+    trl = _module("trl")
+    bitsandbytes = (
+        _module("bitsandbytes") if config.optimizer == "adam8bit" or config.load_in_4bit else None
+    )
+
+    tokenizer = load_tokenizer(transformers, config)
+    train_records = _load_records(config.train_file, kind="training")
+    eval_records = (
+        _load_records(config.eval_file, kind="development") if config.eval_file is not None else []
+    )
+    try:
+        prefix_sha256 = verify_template_parity(
+            tokenizer,
+            [message.model_dump() for message in train_records[0].messages[:-1]],
+            config.chat_template_kwargs,
+        )
+    except ChatTemplateError as error:
+        raise TrainingError(str(error)) from error
+
     base_model = transformers.AutoModelForCausalLM.from_pretrained(
         config.model_id,
-        **model_kwargs,
+        **base_model_kwargs(config, torch, transformers),
     )
     if config.load_in_4bit:
         base_model = peft.prepare_model_for_kbit_training(
@@ -313,21 +373,29 @@ def run_lora_plus(
         if config.optimizer == "adam8bit" and bitsandbytes is not None
         else torch.optim.AdamW
     )
-    optimizer = peft_optimizers.create_loraplus_optimizer(
-        model=model,
-        optimizer_cls=optimizer_cls,
-        lr=config.learning_rate,
-        loraplus_lr_ratio=config.loraplus_lr_ratio,
-        loraplus_weight_decay=config.weight_decay,
-    )
+    if config.loraplus_lr_ratio == 1:
+        optimizer = optimizer_cls(
+            [parameter for parameter in model.parameters() if parameter.requires_grad],
+            lr=config.learning_rate,
+            weight_decay=config.weight_decay,
+        )
+    else:
+        peft_optimizers = _module("peft.optimizers")
+        optimizer = peft_optimizers.create_loraplus_optimizer(
+            model=model,
+            optimizer_cls=optimizer_cls,
+            lr=config.learning_rate,
+            loraplus_lr_ratio=config.loraplus_lr_ratio,
+            loraplus_weight_decay=config.weight_decay,
+        )
 
-    train_records = _load_records(config.train_file, kind="training")
-    eval_records = (
-        _load_records(config.eval_file, kind="development") if config.eval_file is not None else []
+    train_dataset = datasets.Dataset.from_list(
+        text_prompt_completion_records(train_records, tokenizer, config.chat_template_kwargs)
     )
-    train_dataset = datasets.Dataset.from_list(_prompt_completion_records(train_records))
     eval_dataset = (
-        datasets.Dataset.from_list(_prompt_completion_records(eval_records))
+        datasets.Dataset.from_list(
+            text_prompt_completion_records(eval_records, tokenizer, config.chat_template_kwargs)
+        )
         if eval_records and config.eval_strategy != "no"
         else None
     )
@@ -383,7 +451,7 @@ def run_lora_plus(
     resolved_model_revision = getattr(model.config, "_commit_hash", None) or config.model_revision
     resolved_tokenizer_revision = tokenizer.init_kwargs.get("_commit_hash") or config.model_revision
     manifest = {
-        "version": 1,
+        "version": 2,
         "status": "complete",
         "completed_at": datetime.now(UTC).isoformat(),
         "config": config.model_dump(mode="json", exclude_none=True),
@@ -391,11 +459,14 @@ def run_lora_plus(
         "resolved_model_revision": resolved_model_revision,
         "resolved_tokenizer_revision": resolved_tokenizer_revision,
         "system_prompt_sha256": hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest(),
+        "chat_template_sha256": hashlib.sha256(tokenizer.chat_template.encode()).hexdigest(),
+        "rendered_prompt_prefix_sha256": prefix_sha256,
         "packages": {
             package: _package_version(package)
             for package in ("torch", "transformers", "peft", "trl", "datasets", "accelerate")
         },
         "metrics": train_result.metrics,
+        "log_history": trainer.state.log_history,
     }
     atomic_write_json(config.output_dir / "training-manifest.json", manifest)
     return manifest

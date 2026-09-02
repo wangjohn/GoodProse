@@ -10,6 +10,7 @@ from pathlib import Path
 from goodprose.chunks import _markdown_fence
 from goodprose.jsonl import atomic_write, load_jsonl, serialize_jsonl
 from goodprose.models import (
+    DRAFT_PROMPT_FORMS,
     BlogPost,
     InputMethod,
     PairTextExclusion,
@@ -21,9 +22,8 @@ from goodprose.models import (
     WritingPair,
 )
 from goodprose.pairs import load_pairs, validate_pairs
+from goodprose.text import URL, longest_shared_word_run
 
-_WORD = re.compile(r"[\w]+(?:[\'\N{RIGHT SINGLE QUOTATION MARK}-][\w]+)*", re.UNICODE)
-_URL = re.compile(r"https?://[^\s)>\]]+")
 _PROMOTIONAL_CTA = re.compile(
     r"(?i)(?:"
     r"we[\N{RIGHT SINGLE QUOTATION MARK}']?re hiring|we are hiring|assembled is hiring|"
@@ -41,22 +41,10 @@ class PromptReviewError(ValueError):
 
 
 def _urls(value: str) -> set[str]:
-    return {match.group(0).rstrip(".,;:") for match in _URL.finditer(value)}
+    return {match.group(0).rstrip(".,;:") for match in URL.finditer(value)}
 
 
-def _longest_shared_word_run(left: str, right: str) -> int:
-    left_words = [word.casefold() for word in _WORD.findall(_URL.sub("", left))]
-    right_words = [word.casefold() for word in _WORD.findall(_URL.sub("", right))]
-    previous = [0] * (len(right_words) + 1)
-    longest = 0
-    for left_word in left_words:
-        current = [0] * (len(right_words) + 1)
-        for index, right_word in enumerate(right_words, start=1):
-            if left_word == right_word:
-                current[index] = previous[index - 1] + 1
-                longest = max(longest, current[index])
-        previous = current
-    return longest
+_longest_shared_word_run = longest_shared_word_run
 
 
 def _candidate_chunk_map(
@@ -76,11 +64,16 @@ def _candidate_chunk_map(
             f"duplicate prompt candidate id(s): {', '.join(duplicate_candidates)}"
         )
 
-    target_counts = Counter(candidate.chunk_id for candidate in candidates)
-    repeated_targets = sorted(chunk_id for chunk_id, count in target_counts.items() if count > 1)
-    if repeated_targets:
+    form_counts = Counter(
+        (candidate.chunk_id, candidate.prompt_form.value) for candidate in candidates
+    )
+    repeated_forms = sorted(
+        f"{chunk_id}:{form}" for (chunk_id, form), count in form_counts.items() if count > 1
+    )
+    if repeated_forms:
         raise PromptReviewError(
-            f"multiple prompt candidates target the same chunk(s): {', '.join(repeated_targets)}"
+            "multiple prompt candidates use the same form for the same chunk: "
+            + ", ".join(repeated_forms)
         )
 
     chunks_by_id = {chunk.id: chunk for chunk in chunks}
@@ -129,10 +122,13 @@ def render_prompt_review(
         "",
         "## Approval rubric",
         "",
-        "- The input resembles notes or instructions you might genuinely have written.",
+        "- The input resembles notes or instructions you might genuinely have written,",
+        "  including the roughness of your real drafts (typos, fragments, bullet dumps).",
         "- It contains the facts needed by the completion without prescribing finished prose.",
         "- Its level of detail matches the requested transformation.",
-        "- Distinctive target phrasing has not leaked into the input unnecessarily.",
+        "- Distinctive target phrasing has not leaked into the input unnecessarily; the",
+        "  `rough_draft` and `near_final_draft` forms are the exception and may share long runs.",
+        "- Several forms may target one chunk; each (chunk, form) pair appears at most once.",
         "- Edit the JSONL candidate directly; approval and canonicalization happen later.",
         "",
         f"Candidates: {len(candidates)}",
@@ -143,7 +139,10 @@ def render_prompt_review(
     for candidate in candidates:
         chunk = chunks_by_id[candidate.chunk_id]
         shared_run = _longest_shared_word_run(candidate.input, chunk.target)
-        leakage_note = " - inspect for copying" if shared_run >= 8 else ""
+        if candidate.prompt_form in DRAFT_PROMPT_FORMS:
+            leakage_note = " - draft form; long shared runs are expected"
+        else:
+            leakage_note = " - inspect for copying" if shared_run >= 8 else ""
         prompt_fence = _markdown_fence(candidate.input)
         target_fence = _markdown_fence(chunk.target)
         lines.extend(
@@ -237,13 +236,16 @@ def build_prompt_candidates(
     unknown_lineages = sorted(requested_lineages - training_lineages)
     if unknown_lineages:
         raise PromptReviewError(
-            "replacement lineage(s) are not in the training chunks: "
-            + ", ".join(unknown_lineages)
+            "replacement lineage(s) are not in the training chunks: " + ", ".join(unknown_lineages)
         )
-    draft_counts = Counter(draft.chunk_id for draft in drafts)
-    duplicates = sorted(chunk_id for chunk_id, count in draft_counts.items() if count > 1)
+    draft_counts = Counter((draft.chunk_id, draft.prompt_form.value) for draft in drafts)
+    duplicates = sorted(
+        f"{chunk_id}:{form}" for (chunk_id, form), count in draft_counts.items() if count > 1
+    )
     if duplicates:
-        raise PromptReviewError(f"duplicate prompt draft chunk id(s): {', '.join(duplicates)}")
+        raise PromptReviewError(
+            f"duplicate prompt draft chunk/form pair(s): {', '.join(duplicates)}"
+        )
 
     generated: list[SyntheticPromptCandidate] = []
     for draft in drafts:
@@ -254,7 +256,7 @@ def build_prompt_candidates(
             raise PromptReviewError(f"prompt draft {draft.chunk_id!r} must target a training chunk")
         generated.append(
             SyntheticPromptCandidate(
-                id=f"{chunk.id}--synthetic",
+                id=f"{chunk.id}--{draft.prompt_form.value}",
                 chunk_id=chunk.id,
                 post_id=chunk.post_id,
                 lineage_id=chunk.lineage_id,
@@ -265,7 +267,7 @@ def build_prompt_candidates(
             )
         )
 
-    replaced_chunk_ids = set(draft_counts)
+    replaced_forms = set(draft_counts)
     base = (
         load_jsonl(base_prompts_path, SyntheticPromptCandidate)
         if base_prompts_path is not None
@@ -274,7 +276,7 @@ def build_prompt_candidates(
     candidates = [
         candidate
         for candidate in base
-        if candidate.chunk_id not in replaced_chunk_ids
+        if (candidate.chunk_id, candidate.prompt_form.value) not in replaced_forms
         and candidate.lineage_id not in requested_lineages
         and candidate.chunk_id in chunks_by_id
         and chunks_by_id[candidate.chunk_id].split is Split.TRAIN
@@ -354,9 +356,7 @@ def _apply_pair_text_exclusions(
     for exclusion in exclusions:
         key = (exclusion.pair_id, exclusion.field, exclusion.text)
         if key in seen:
-            raise PromptReviewError(
-                f"duplicate pair text exclusion for {exclusion.pair_id!r}"
-            )
+            raise PromptReviewError(f"duplicate pair text exclusion for {exclusion.pair_id!r}")
         seen.add(key)
         pair = pairs_by_id.get(exclusion.pair_id)
         if pair is None:

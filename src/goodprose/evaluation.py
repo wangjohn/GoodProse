@@ -163,6 +163,7 @@ def _validate_run_manifests(
         "tokenizer_revision",
         "prompt_strategy",
         "chat_template_sha256",
+        "rendered_prompt_prefix_sha256",
         "system_prompt_sha256",
         "dataset_manifest_sha256",
     ):

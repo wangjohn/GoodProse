@@ -6,7 +6,9 @@ import argparse
 import sys
 from pathlib import Path
 
+from goodprose.chat import ChatTemplateError
 from goodprose.chunks import ChunkBuildError, build_chunks
+from goodprose.dpo import DpoError, run_dpo
 from goodprose.evaluation import EvaluationError, prepare_review, summarize_review
 from goodprose.external import (
     ExternalSourceError,
@@ -16,9 +18,11 @@ from goodprose.external import (
 )
 from goodprose.generation import GenerationError, generate_eval_outputs
 from goodprose.jsonl import JsonlError
+from goodprose.judge import build_judge_packet, summarize_judge_verdicts
 from goodprose.models import SystemLabel
 from goodprose.pairs import PairBuildError, build_pairs
 from goodprose.posts import PostImportError, import_posts
+from goodprose.preference import PreferenceBuildError, build_preference_pairs
 from goodprose.prompts import (
     PromptReviewError,
     approve_prompt_candidates,
@@ -26,12 +30,21 @@ from goodprose.prompts import (
     build_prompt_pairs,
     build_prompt_review,
 )
+from goodprose.proxy import ProxyError, proxy_report
+from goodprose.scoring import ScoringError, score_completions
 from goodprose.sft import build_sft
 from goodprose.training import TrainingError, run_lora_plus
 
 
 def _path(value: str) -> Path:
     return Path(value).expanduser().resolve()
+
+
+def _labelled_path(value: str) -> tuple[str, Path]:
+    label, separator, path = value.partition("=")
+    if not separator or not label.strip() or not path.strip():
+        raise argparse.ArgumentTypeError("expected LABEL=PATH")
+    return label.strip(), _path(path.strip())
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -64,6 +77,16 @@ def build_parser() -> argparse.ArgumentParser:
     chunks_command.add_argument("--exclusions")
     chunks_command.add_argument("--min-tokens", type=int, default=250)
     chunks_command.add_argument("--max-tokens", type=int, default=700)
+    chunks_command.add_argument(
+        "--full-posts",
+        action="store_true",
+        help="Also emit one post-scale target per training post (prefix of kept sections)",
+    )
+    chunks_command.add_argument(
+        "--no-preserve-status",
+        action="store_true",
+        help="Do not carry existing approvals forward from the current output file",
+    )
 
     prompts_command = commands.add_parser(
         "review-prompts", help="Validate and render synthetic prompt candidates"
@@ -142,21 +165,46 @@ def build_parser() -> argparse.ArgumentParser:
     sft_command.add_argument("--pairs", required=True)
     sft_command.add_argument("--output-dir", required=True)
     sft_command.add_argument("--eval-output", required=True)
+    sft_command.add_argument(
+        "--raw-completions",
+        action="store_true",
+        help="Append title-conditioned completions of every distinct training target",
+    )
+    sft_command.add_argument(
+        "--train-cases-output",
+        help="Also write the training inputs as cases for on-policy rejected sampling",
+    )
+
+    preference_command = commands.add_parser(
+        "build-preference",
+        help="Join training pairs to sampled model outputs as DPO chosen/rejected records",
+    )
+    preference_command.add_argument("--pairs", required=True)
+    preference_command.add_argument("--rejected", required=True)
+    preference_command.add_argument("--rejected-manifest")
+    preference_command.add_argument("--rejected-run-id")
+    preference_command.add_argument("--output", required=True)
 
     train_command = commands.add_parser(
         "train-lora-plus",
-        help="Validate or run a PEFT/TRL LoRA+ supervised fine-tune",
+        help="Validate or run a PEFT/TRL LoRA or LoRA+ supervised fine-tune",
     )
     train_command.add_argument("--config", required=True)
     train_command.add_argument("--validate-only", action="store_true")
     train_command.add_argument("--resume-from-checkpoint")
 
-    eval_command = commands.add_parser("eval", help="Prepare or summarize blind comparisons")
+    dpo_command = commands.add_parser(
+        "train-dpo", help="Validate or run a DPO pass on top of a finished SFT adapter"
+    )
+    dpo_command.add_argument("--config", required=True)
+    dpo_command.add_argument("--validate-only", action="store_true")
+
+    eval_command = commands.add_parser("eval", help="Generate, score, and compare outputs")
     eval_commands = eval_command.add_subparsers(dest="eval_command", required=True)
 
     generate = eval_commands.add_parser(
         "generate",
-        help="Generate deterministic base-model or LoRA-checkpoint outputs",
+        help="Generate matched base-model or LoRA-checkpoint outputs",
     )
     generate.add_argument("--config", required=True)
     generate.add_argument("--cases", required=True)
@@ -167,6 +215,58 @@ def build_parser() -> argparse.ArgumentParser:
     generate.add_argument("--manifest", required=True)
     generate.add_argument("--max-new-tokens", type=int, default=8192)
     generate.add_argument("--seed", type=int, default=20260901)
+    generate.add_argument(
+        "--temperature", type=float, default=0.7, help="0 selects greedy decoding"
+    )
+    generate.add_argument("--top-p", type=float, default=0.9)
+    generate.add_argument("--repetition-penalty", type=float, default=1.05)
+
+    nll = eval_commands.add_parser(
+        "nll", help="Score held-out completions' negative log-likelihood under a checkpoint"
+    )
+    nll.add_argument("--config", required=True)
+    nll.add_argument("--records", required=True, help="Chat JSONL such as data/sft/dev.jsonl")
+    nll.add_argument("--adapter")
+    nll.add_argument("--run-id", required=True)
+    nll.add_argument("--output", required=True)
+
+    proxy = eval_commands.add_parser(
+        "proxy", help="Stylometric, repetition, and memorization proxies for output files"
+    )
+    proxy.add_argument("--cases", required=True)
+    proxy.add_argument(
+        "--outputs",
+        action="append",
+        type=_labelled_path,
+        default=[],
+        required=True,
+        help="LABEL=PATH of a model output file; repeat to rank several systems",
+    )
+    proxy.add_argument("--posts", required=True)
+    proxy.add_argument("--splits", required=True)
+    proxy.add_argument("--output", required=True)
+    proxy.add_argument("--memorization-run-threshold", type=int, default=30)
+
+    judge_packet = eval_commands.add_parser(
+        "judge-packet", help="Render blinded pairwise voice prompts for a frontier judge"
+    )
+    judge_packet.add_argument("--cases", required=True)
+    judge_packet.add_argument("--baseline", required=True)
+    judge_packet.add_argument("--candidate", required=True)
+    judge_packet.add_argument("--posts", required=True)
+    judge_packet.add_argument("--splits", required=True)
+    judge_packet.add_argument("--packet", required=True)
+    judge_packet.add_argument("--key", required=True)
+    judge_packet.add_argument("--seed", type=int, default=20260902)
+    judge_packet.add_argument("--sample-count", type=int, default=3)
+    judge_packet.add_argument("--sample-words", type=int, default=400)
+
+    judge_summary = eval_commands.add_parser(
+        "judge-summarize", help="Unblind judge verdicts against the packet key"
+    )
+    judge_summary.add_argument("--verdicts", required=True)
+    judge_summary.add_argument("--key", required=True)
+    judge_summary.add_argument("--output", required=True)
 
     prepare = eval_commands.add_parser("prepare", help="Randomize base and candidate outputs")
     prepare.add_argument("--cases", required=True)
@@ -185,6 +285,10 @@ def build_parser() -> argparse.ArgumentParser:
     summarize.add_argument("--output", required=True)
     summarize.add_argument("--decision-rules")
     return parser
+
+
+def _format_counts(counts: dict[str, int]) -> str:
+    return ", ".join(f"{key}={value}" for key, value in counts.items())
 
 
 def _run(args: argparse.Namespace) -> int:
@@ -213,18 +317,13 @@ def _run(args: argparse.Namespace) -> int:
                 _path(args.supplemental_targets) if args.supplemental_targets else None
             ),
             exclusions_path=_path(args.exclusions) if args.exclusions else None,
+            full_posts=args.full_posts,
+            preserve_status=not args.no_preserve_status,
         )
-        print(
-            "built semantic chunks: "
-            + ", ".join(f"{split}={count}" for split, count in counts.items())
-        )
+        print(f"built semantic chunks: {_format_counts(counts)}")
         return 0
     if args.command == "review-prompts":
-        count = build_prompt_review(
-            _path(args.prompts),
-            _path(args.chunks),
-            _path(args.output),
-        )
+        count = build_prompt_review(_path(args.prompts), _path(args.chunks), _path(args.output))
         print(f"rendered {count} synthetic prompt candidate(s) at {_path(args.output)}")
         return 0
     if args.command == "approve-prompts":
@@ -233,10 +332,7 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.chunks),
             reviewer_note=args.reviewer_note,
         )
-        print(
-            "approved training data: "
-            + ", ".join(f"{kind}={count}" for kind, count in counts.items())
-        )
+        print(f"approved training data: {_format_counts(counts)}")
         return 0
     if args.command == "build-prompt-candidates":
         count = build_prompt_candidates(
@@ -255,14 +351,9 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.posts),
             _path(args.output),
             heldout_pairs_paths=[_path(path) for path in args.heldout_pairs],
-            text_exclusions_path=(
-                _path(args.text_exclusions) if args.text_exclusions else None
-            ),
+            text_exclusions_path=(_path(args.text_exclusions) if args.text_exclusions else None),
         )
-        print(
-            "built canonical prompt pairs: "
-            + ", ".join(f"{split}={count}" for split, count in counts.items())
-        )
+        print(f"built canonical prompt pairs: {_format_counts(counts)}")
         return 0
     if args.command == "build-external-samples":
         counts = build_external_samples(
@@ -271,10 +362,7 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.source_root),
             _path(args.output),
         )
-        print(
-            "built external source samples: "
-            + ", ".join(f"{platform}={count}" for platform, count in counts.items())
-        )
+        print(f"built external source samples: {_format_counts(counts)}")
         return 0
     if args.command == "build-external-posts":
         counts = build_external_posts(
@@ -283,10 +371,7 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.output),
             base_posts_path=_path(args.base_posts) if args.base_posts else None,
         )
-        print(
-            "built canonical post file: "
-            + ", ".join(f"{kind}={count}" for kind, count in counts.items())
-        )
+        print(f"built canonical post file: {_format_counts(counts)}")
         return 0
     if args.command == "build-authentic-eval-briefs":
         counts = build_authentic_eval_briefs(
@@ -295,14 +380,31 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.splits),
             _path(args.output),
         )
-        print(
-            "built authentic eval briefs: "
-            + ", ".join(f"{split}={count}" for split, count in counts.items())
-        )
+        print(f"built authentic eval briefs: {_format_counts(counts)}")
         return 0
     if args.command == "build-sft":
-        counts = build_sft(_path(args.pairs), _path(args.output_dir), _path(args.eval_output))
-        print("built SFT data: " + ", ".join(f"{split}={count}" for split, count in counts.items()))
+        counts = build_sft(
+            _path(args.pairs),
+            _path(args.output_dir),
+            _path(args.eval_output),
+            raw_completions=args.raw_completions,
+            train_cases_output=(
+                _path(args.train_cases_output) if args.train_cases_output else None
+            ),
+        )
+        print(f"built SFT data: {_format_counts(counts)}")
+        return 0
+    if args.command == "build-preference":
+        counts = build_preference_pairs(
+            _path(args.pairs),
+            _path(args.rejected),
+            _path(args.output),
+            rejected_manifest_path=(
+                _path(args.rejected_manifest) if args.rejected_manifest else None
+            ),
+            rejected_run_id=args.rejected_run_id,
+        )
+        print(f"built preference pairs: {_format_counts(counts)}")
         return 0
     if args.command == "train-lora-plus":
         result = run_lora_plus(
@@ -314,12 +416,24 @@ def _run(args: argparse.Namespace) -> int:
         )
         if args.validate_only:
             print(
-                "validated LoRA+ run: "
+                "validated fine-tune run: "
                 f"train={result['train_examples']}, eval={result['eval_examples']}, "
-                f"lr_A={result['learning_rate_a']}, lr_B={result['learning_rate_b']}"
+                f"lr_A={result['learning_rate_a']}, lr_B={result['learning_rate_b']}, "
+                f"optimizer_steps={result['optimizer_steps']}"
             )
         else:
-            print(f"completed LoRA+ run at {result['config']['output_dir']}")
+            print(f"completed fine-tune run at {result['config']['output_dir']}")
+        return 0
+    if args.command == "train-dpo":
+        result = run_dpo(_path(args.config), validate_only=args.validate_only)
+        if args.validate_only:
+            print(
+                "validated DPO run: "
+                f"pairs={result['preference_pairs']}, beta={result['beta']}, "
+                f"optimizer_steps={result['optimizer_steps']}"
+            )
+        else:
+            print(f"completed DPO run at {result['config']['output_dir']}")
         return 0
     if args.command == "eval" and args.eval_command == "generate":
         count = generate_eval_outputs(
@@ -332,8 +446,56 @@ def _run(args: argparse.Namespace) -> int:
             adapter_path=_path(args.adapter) if args.adapter else None,
             max_new_tokens=args.max_new_tokens,
             seed=args.seed,
+            temperature=args.temperature,
+            top_p=args.top_p,
+            repetition_penalty=args.repetition_penalty,
         )
-        print(f"generated {count} deterministic output(s) at {_path(args.output)}")
+        print(f"generated {count} output(s) at {_path(args.output)}")
+        return 0
+    if args.command == "eval" and args.eval_command == "nll":
+        report = score_completions(
+            _path(args.config),
+            _path(args.records),
+            _path(args.output),
+            run_id=args.run_id,
+            adapter_path=_path(args.adapter) if args.adapter else None,
+        )
+        print(f"scored {report['records']} record(s): mean completion NLL {report['mean_nll']:.4f}")
+        return 0
+    if args.command == "eval" and args.eval_command == "proxy":
+        report = proxy_report(
+            _path(args.cases),
+            args.outputs,
+            _path(args.posts),
+            _path(args.splits),
+            _path(args.output),
+            memorization_run_threshold=args.memorization_run_threshold,
+        )
+        print("proxy ranking (closest to author first): " + ", ".join(report["ranking"]))
+        return 0
+    if args.command == "eval" and args.eval_command == "judge-packet":
+        count = build_judge_packet(
+            _path(args.cases),
+            _path(args.baseline),
+            _path(args.candidate),
+            _path(args.posts),
+            _path(args.splits),
+            _path(args.packet),
+            _path(args.key),
+            seed=args.seed,
+            sample_count=args.sample_count,
+            sample_words=args.sample_words,
+        )
+        print(f"rendered {count} blinded judge prompt(s) at {_path(args.packet)}")
+        return 0
+    if args.command == "eval" and args.eval_command == "judge-summarize":
+        summary = summarize_judge_verdicts(
+            _path(args.verdicts), _path(args.key), _path(args.output)
+        )
+        print(
+            f"judge voice wins: {_format_counts(summary['voice_wins'])} "
+            f"(candidate win rate {summary['candidate_win_rate']:.2f})"
+        )
         return 0
     if args.command == "eval" and args.eval_command == "prepare":
         count = prepare_review(
@@ -372,14 +534,19 @@ def main() -> int:
     try:
         return _run(build_parser().parse_args())
     except (
+        ChatTemplateError,
         ChunkBuildError,
+        DpoError,
         EvaluationError,
         ExternalSourceError,
         GenerationError,
         JsonlError,
         PairBuildError,
         PostImportError,
+        PreferenceBuildError,
         PromptReviewError,
+        ProxyError,
+        ScoringError,
         TrainingError,
         OSError,
     ) as error:
