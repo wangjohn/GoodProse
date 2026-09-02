@@ -19,7 +19,7 @@ from goodprose.external import (
 from goodprose.generation import GenerationError, generate_eval_outputs
 from goodprose.jsonl import JsonlError
 from goodprose.judge import build_judge_packet, summarize_judge_verdicts
-from goodprose.models import SystemLabel
+from goodprose.models import InputMethod, SystemLabel
 from goodprose.normalize import NormalizeError, normalize_posts
 from goodprose.pairs import PairBuildError, build_pairs
 from goodprose.posts import PostImportError, import_posts
@@ -31,6 +31,7 @@ from goodprose.prompts import (
     build_prompt_pairs,
     build_prompt_review,
 )
+from goodprose.prospective import ProspectiveError, capture_draft, promote_prospective_cases
 from goodprose.proxy import ProxyError, proxy_report
 from goodprose.roles import RolesError
 from goodprose.scoring import ScoringError, score_completions
@@ -275,7 +276,35 @@ def build_parser() -> argparse.ArgumentParser:
     preference_command.add_argument("--rejected", required=True)
     preference_command.add_argument("--rejected-manifest")
     preference_command.add_argument("--rejected-run-id")
+    preference_command.add_argument("--roles", help="Training roles, for venue notes")
+    preference_command.add_argument("--no-venue-lines", action="store_true")
     preference_command.add_argument("--output", required=True)
+
+    capture_command = commands.add_parser(
+        "capture-draft", help="Freeze a real draft as a prospective test input before polishing"
+    )
+    capture_command.add_argument("draft", help="Markdown file with the draft as it stands now")
+    capture_command.add_argument("--id", required=True, help="Stable id, e.g. the future slug")
+    capture_command.add_argument("--drafts-file", default="data/private/prospective/drafts.jsonl")
+    capture_command.add_argument(
+        "--input-method",
+        type=InputMethod,
+        choices=(InputMethod.ORIGINAL_DRAFT, InputMethod.ORIGINAL_OUTLINE),
+        default=InputMethod.ORIGINAL_DRAFT,
+    )
+    capture_command.add_argument("--intended-venue", default="johnjwang.com")
+    capture_command.add_argument("--notes")
+
+    prospective_command = commands.add_parser(
+        "promote-prospective", help="Write cases for captured drafts whose posts are published"
+    )
+    prospective_command.add_argument(
+        "--drafts-file", default="data/private/prospective/drafts.jsonl"
+    )
+    prospective_command.add_argument("--posts", required=True)
+    prospective_command.add_argument("--roles")
+    prospective_command.add_argument("--no-venue-lines", action="store_true")
+    prospective_command.add_argument("--output", required=True)
 
     train_command = commands.add_parser(
         "train-lora-plus",
@@ -554,8 +583,31 @@ def _run(args: argparse.Namespace) -> int:
                 _path(args.rejected_manifest) if args.rejected_manifest else None
             ),
             rejected_run_id=args.rejected_run_id,
+            roles_path=_path(args.roles) if args.roles else None,
+            venue_lines=not args.no_venue_lines,
         )
         print(f"built preference pairs: {_format_counts(counts)}")
+        return 0
+    if args.command == "capture-draft":
+        draft = capture_draft(
+            _path(args.draft),
+            _path(args.drafts_file),
+            draft_id=args.id,
+            input_method=args.input_method,
+            intended_venue=args.intended_venue,
+            notes=args.notes,
+        )
+        print(f"captured prospective draft {draft.id!r} at {draft.captured_at}")
+        return 0
+    if args.command == "promote-prospective":
+        counts = promote_prospective_cases(
+            _path(args.drafts_file),
+            _path(args.posts),
+            _path(args.output),
+            roles_path=_path(args.roles) if args.roles else None,
+            venue_lines=not args.no_venue_lines,
+        )
+        print(f"promoted prospective cases: {_format_counts(counts)}")
         return 0
     if args.command == "train-lora-plus":
         result = run_lora_plus(
@@ -700,6 +752,7 @@ def main() -> int:
         PostImportError,
         PreferenceBuildError,
         PromptReviewError,
+        ProspectiveError,
         ProxyError,
         RolesError,
         ScoringError,

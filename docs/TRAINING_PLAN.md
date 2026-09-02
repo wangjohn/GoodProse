@@ -59,6 +59,20 @@ held-out posts, then on five fresh real drafts.
 - Then five fresh real drafts, saved before you polish them, against the prompted baseline.
   Ship only on at least four of five wins with no unsupported facts.
 
+## Data decisions taken on 2 September (later)
+
+- Target voice is the personal site. The Assembled posts had an editor's pass: the four without
+  a manuscript are `raw_only` under an `editor-revised` venue note, the one with a manuscript
+  targets the manuscript, and the two Assembled dev pairs are excluded.
+- Every user turn opens with `Venue: host (year)`; ask for `Venue: johnjwang.com (2026)` at
+  inference. Personal-site raw completions are weighted 2x.
+- Canonical posts are normalized to the author's conventions (straight quotes, `*italics*`,
+  `#` sections); em dashes are not auto-replaced but the proxy reports them and decoding can
+  ban them.
+- Flattened code in scraped posts is repaired from manuscripts, with a fencing fallback; briefs
+  must carry a target's code blocks verbatim.
+- New drafts are captured with `capture-draft` before polishing to build the prospective set.
+
 ## Guardrails already in place
 
 - Training, scoring, DPO, and generation render the prompt through one function with

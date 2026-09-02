@@ -16,7 +16,13 @@ from goodprose.jsonl import (
 )
 from goodprose.models import BlogPost, EvalCase, SemanticChunk, Split, WritingPair
 from goodprose.pairs import PairBuildError, load_pairs
-from goodprose.roles import TrainingRole, load_training_roles, role_for, venue_line
+from goodprose.roles import (
+    TrainingRole,
+    load_training_roles,
+    raw_weight_for,
+    role_for,
+    venue_line,
+)
 
 SYSTEM_PROMPT = (
     "Turn the supplied notes, outline, or rough draft into polished blog prose at the scope "
@@ -66,8 +72,9 @@ def raw_completion_records(
     """One title-conditioned completion per distinct training target.
 
     Covers the targets of the supervised pairs plus every training chunk of a ``raw_only``
-    post, each distinct text once, so registers the author does not want imitated directly
-    still teach sentence-level habits under their own venue line.
+    post, each distinct text once per unit of its post's ``raw_weight``, so registers the
+    author does not want imitated directly still teach sentence-level habits under their own
+    venue line, and the personal-site voice can be weighted up.
     """
     seen: set[str] = set()
     records: list[dict[str, Any]] = []
@@ -77,7 +84,10 @@ def raw_completion_records(
             continue
         seen.add(digest)
         venue = _venue(pair, roles) if venue_lines else None
-        records.append(_record(_raw_user(pair.title, venue), pair.output))
+        records.extend(
+            [_record(_raw_user(pair.title, venue), pair.output)]
+            * raw_weight_for(pair.post_id, roles)
+        )
     for chunk, post in raw_only_chunks:
         digest = hashlib.sha256(chunk.target.encode()).hexdigest()
         if digest in seen:
@@ -89,7 +99,9 @@ def raw_completion_records(
             if venue_lines
             else None
         )
-        records.append(_record(_raw_user(post.title, venue), chunk.target))
+        records.extend(
+            [_record(_raw_user(post.title, venue), chunk.target)] * raw_weight_for(post.id, roles)
+        )
     return records
 
 

@@ -187,3 +187,33 @@ def test_build_sft_prepends_venue_lines_and_applies_roles(tmp_path: Path) -> Non
     manifest = json.loads((tmp_path / "sft" / "manifest.json").read_text())
     assert manifest["venue_lines"] is True
     assert manifest["dropped_by_role"] == ["edited"]
+
+
+def test_raw_weight_repeats_a_posts_raw_completions(tmp_path: Path) -> None:
+    pairs_path = tmp_path / "pairs.jsonl"
+    roles_path = tmp_path / "roles.jsonl"
+    atomic_write(
+        pairs_path,
+        serialize_jsonl([_pair("personal", Split.TRAIN), _pair("testpost", Split.TEST)]),
+    )
+    atomic_write(
+        roles_path,
+        serialize_jsonl(
+            [TrainingRole(post_id="personal", role="pairs", raw_weight=2, reason="voice")]
+        ),
+    )
+
+    counts = build_sft(
+        pairs_path,
+        tmp_path / "sft",
+        tmp_path / "cases.jsonl",
+        raw_completions=True,
+        roles_path=roles_path,
+    )
+
+    assert counts["raw_completions"] == 2
+    records = [
+        json.loads(line) for line in (tmp_path / "sft" / "train.jsonl").read_text().splitlines()
+    ]
+    assert len(records) == 3
+    assert records[1] == records[2]

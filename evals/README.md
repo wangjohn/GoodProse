@@ -219,6 +219,23 @@ significance.
 
 ## Prospective check
 
+Capture each new draft the moment you start writing, before any polishing, so the input is a
+real starting point rather than a reconstruction:
+
+```bash
+uv run goodprose capture-draft ~/drafts/next-post.md --id next-post --notes 'first sitting'
+# ... publish the post, import it into data/posts/posts.jsonl, then set "post_id" on the draft
+uv run goodprose promote-prospective \
+  --posts data/posts/posts.jsonl --roles data/training-roles.jsonl \
+  --output evals/prospective-cases.jsonl
+```
+
+Captured drafts live under ignored `data/private/prospective/` with a hash and timestamp; an
+edited draft is refused at promotion. Promoted cases carry the venue line and run through the
+same generate, proxy, judge, and blind-review steps. Keep these posts out of every split: they
+are the only evaluation whose inputs were never seen alongside their targets.
+
+
 After the offline gate passes, use five fresh, real writing requests that were never derived from a
 published target. Blindly compare the full workflow against the strong prompted baseline. Ship the
 adapter only if it wins at least four of five, has no unsupported-fact failures, and actually lowers

@@ -32,7 +32,9 @@ The repository contains no third-party writing corpus and no synthetic training 
    quick blind pass over section-scale cases cut from the held-out drafts (`build-short-cases`),
    then compare base and fine-tuned outputs on the frozen whole-post `test` cases in the final
    blind human review.
-9. Optionally run one DPO pass with your published text as chosen and the SFT model's own
+9. Capture every new draft with `capture-draft` before polishing; those become the prospective
+   test set once the post is published.
+10. Optionally run one DPO pass with your published text as chosen and the SFT model's own
    output as rejected.
 
 ```bash
@@ -268,6 +270,7 @@ uv run goodprose build-preference \
   --pairs data/private/pairs.jsonl \
   --rejected data/private/rejected.jsonl \
   --rejected-manifest data/private/rejected-run.json \
+  --roles data/training-roles.jsonl \
   --output data/sft/preference.jsonl
 
 uv run goodprose train-dpo --config configs/qwen3-8b-dpo.json --validate-only

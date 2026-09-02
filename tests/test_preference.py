@@ -105,3 +105,34 @@ def test_build_preference_pairs_takes_run_id_from_manifest(tmp_path: Path) -> No
 
     assert counts["pairs"] == 1
     assert load_jsonl(tmp_path / "o.jsonl", PreferencePair)[0].rejected_run_id == "checkpoint-9"
+
+
+def test_preference_prompts_match_the_sft_user_turn(tmp_path: Path) -> None:
+    from datetime import date
+
+    from pydantic import AnyUrl
+
+    from goodprose.roles import TrainingRole
+
+    pairs_path = tmp_path / "pairs.jsonl"
+    rejected_path = tmp_path / "rejected.jsonl"
+    roles_path = tmp_path / "roles.jsonl"
+    pair = _pair("a", Split.TRAIN).model_copy(
+        update={
+            "source_url": AnyUrl("https://johnjwang.com/post/2026/01/01/a/"),
+            "published_at": date(2026, 1, 1),
+        }
+    )
+    atomic_write(pairs_path, serialize_jsonl([pair, _pair("t", Split.TEST)]))
+    atomic_write(rejected_path, serialize_jsonl([ModelOutput(id="a", output="attempt")]))
+    atomic_write(
+        roles_path,
+        serialize_jsonl([TrainingRole(post_id="a", role="pairs", venue_note="note", reason="r")]),
+    )
+
+    build_preference_pairs(
+        pairs_path, rejected_path, tmp_path / "o.jsonl", rejected_run_id="r", roles_path=roles_path
+    )
+
+    [record] = load_jsonl(tmp_path / "o.jsonl", PreferencePair)
+    assert record.prompt[1]["content"] == "Venue: johnjwang.com (2026), note\n\nNotes for a"

@@ -1085,6 +1085,8 @@ Note: author-edited input (aligned window had recall 0.06, precision 0.17)
 ```text
 Turn these notes into one section of a blog post; return only that section.
 
+Venue: johnjwang.com (2026)
+
 Blog post: Why we built 143
 
 Opening section, before we get into what we built:
@@ -1121,6 +1123,8 @@ Note: author-edited input (aligned window had recall 0.16, precision 0.39)
 
 ```text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: johnjwang.com (2026)
 
 Blog post: Why we built 143
 
@@ -1164,6 +1168,8 @@ Note: author-edited input (aligned window had recall 0.42, precision 0.37)
 
 ```text
 Turn these notes into one section of a blog post; return only that section.
+
+Venue: johnjwang.com (2026)
 
 Blog post: Why we built 143
 

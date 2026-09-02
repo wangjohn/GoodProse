@@ -8,7 +8,8 @@ from pathlib import Path
 from goodprose.jsonl import atomic_write, load_jsonl, serialize_jsonl
 from goodprose.models import GenerationRunManifest, ModelOutput, PreferencePair, Split
 from goodprose.pairs import load_pairs
-from goodprose.sft import SYSTEM_PROMPT
+from goodprose.roles import load_training_roles
+from goodprose.sft import SYSTEM_PROMPT, user_content
 
 
 class PreferenceBuildError(ValueError):
@@ -22,6 +23,8 @@ def build_preference_pairs(
     *,
     rejected_manifest_path: Path | None = None,
     rejected_run_id: str | None = None,
+    roles_path: Path | None = None,
+    venue_lines: bool = True,
 ) -> dict[str, int]:
     """Join training pairs to sampled model outputs for the same inputs.
 
@@ -40,6 +43,7 @@ def build_preference_pairs(
     if not rejected_run_id:
         raise PreferenceBuildError("provide a rejected run manifest or an explicit run id")
 
+    roles = load_training_roles(roles_path)
     train_pairs = [pair for pair in load_pairs(pairs_path) if pair.split is Split.TRAIN]
     if not train_pairs:
         raise PreferenceBuildError("no training pairs found")
@@ -68,7 +72,10 @@ def build_preference_pairs(
                 lineage_id=pair.lineage_id,
                 prompt=(
                     {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": pair.input},
+                    {
+                        "role": "user",
+                        "content": user_content(pair, roles, venue_lines=venue_lines),
+                    },
                 ),
                 chosen=pair.output,
                 rejected=rejected_text,

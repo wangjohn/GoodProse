@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Literal
 from urllib.parse import urlparse
 
-from pydantic import AnyUrl
+from pydantic import AnyUrl, Field
 
 from goodprose.jsonl import load_jsonl
 from goodprose.models import BlogPost, NonEmptyString, Split, StrictModel
@@ -31,7 +31,17 @@ class TrainingRole(StrictModel):
     post_id: NonEmptyString
     role: TrainingRoleKind
     venue_note: NonEmptyString | None = None
+    raw_weight: int = Field(
+        default=1,
+        ge=0,
+        description="How many times this post's raw completions appear in the mix; 0 skips them.",
+    )
     reason: NonEmptyString
+
+
+def raw_weight_for(post_id: str, roles: dict[str, TrainingRole]) -> int:
+    role = roles.get(post_id)
+    return role.raw_weight if role is not None else 1
 
 
 def load_training_roles(path: Path | None) -> dict[str, TrainingRole]:

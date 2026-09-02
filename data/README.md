@@ -50,7 +50,9 @@ so the four without a recovered manuscript are `raw_only` (title-conditioned raw
 under `Venue: assembled.com (year), editor-revised`, never supervised pairs), the one with a
 manuscript targets the manuscript text instead, and the two Assembled development pairs are
 `excluded` because manuscript-to-edited pairs would measure imitation of the editor. Test posts
-cannot be demoted. Every exported user turn opens with a venue line derived from the post's URL
+cannot be demoted. Each role also carries a `raw_weight`: the six personal-site training posts
+have their raw completions emitted twice so the mix leans toward the target voice. Every
+exported user turn opens with a venue line derived from the post's URL
 and year, so the 2021 Medium register and the 2026 personal-site register are conditions the
 model can tell apart; at inference, ask for `Venue: johnjwang.com (2026)`.
 
