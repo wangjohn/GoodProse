@@ -2,10 +2,10 @@
 
 GoodProse is a deliberately small pipeline for fine-tuning a model on one author's blog
 writing. It turns reviewed outlines, notes, or rough drafts into the author's exact published
-prose and measures whether a fine-tune beats the prompted base model.
+blog prose at the requested scope and measures whether a fine-tune beats the prompted base model.
 
 ```text
-rough draft, outline, or factual brief -> finished blog post
+rough draft, outline, or factual brief -> finished blog sentence, paragraph, section, or post
 ```
 
 The repository contains no third-party writing corpus and no synthetic training targets.
@@ -13,31 +13,89 @@ The repository contains no third-party writing corpus and no synthetic training 
 ## Workflow
 
 1. Export the blog as Markdown and import the posts.
-2. Write or review one input brief for each post and assign its split.
-3. Join briefs to the exact published posts to create canonical pairs.
-4. Export `train` and `dev` pairs in chat-style SFT JSONL.
-5. Compare base and fine-tuned outputs on the frozen `test` cases in a blind review.
+2. Freeze each blog lineage into `train`, `dev`, or `test`.
+3. Generate and review verbatim semantic chunk candidates.
+4. Recover an authentic prompt/draft or review a derived brief for each approved target.
+5. Join reviewed inputs to the exact published targets to create canonical pairs.
+6. Export `train` and `dev` pairs in chat-style SFT JSONL.
+7. Compare base and fine-tuned outputs on the frozen `test` cases in a blind review.
 
 ```bash
 uv sync
 
-uv run goodprose import-posts path/to/markdown \
-  --output data/posts/posts.jsonl \
-  --url-base https://example.com/blog/
+uv run goodprose import-posts data/private/source/personal_website/content/post \
+  --output data/private/posts/johnjwang-posts.jsonl \
+  --url-template 'https://johnjwang.com/post/{year}/{month}/{day}/{slug}/'
 
-uv run goodprose build-pairs \
+uv run goodprose build-external-posts \
+  --catalog data/external/posts.jsonl \
+  --snapshot-root data/private/external/published-raw \
+  --base-posts data/private/posts/johnjwang-posts.jsonl \
+  --output data/posts/posts.jsonl
+
+uv run goodprose build-chunks \
   --posts data/posts/posts.jsonl \
-  --briefs data/briefs.jsonl \
-  --output data/pairs.jsonl
+  --splits data/splits.jsonl \
+  --exclusions data/chunks/exclusions.jsonl \
+  --supplemental-targets data/chunks/supplemental-targets.jsonl \
+  --output data/chunks/candidates.jsonl \
+  --review-output data/chunks/REVIEW.md
+
+uv run goodprose build-prompt-candidates \
+  --drafts data/private/prompts/external-drafts.jsonl \
+  --chunks data/chunks/candidates.jsonl \
+  --base-prompts data/private/prompts/candidates.jsonl \
+  --replace-lineage external-better-rag \
+  --replace-lineage external-blocking-llms \
+  --replace-lineage external-code-review-bottlenecks \
+  --replace-lineage external-product-lessons-dan-robinson \
+  --replace-lineage external-scaling-llms-golang \
+  --replace-lineage external-startup-journey \
+  --replace-lineage external-stripe-customer-support \
+  --replace-lineage external-tests-with-llms \
+  --replace-lineage external-why-i-code-as-a-cto \
+  --output data/private/prompts/candidates.jsonl
+
+uv run goodprose build-prompt-candidates \
+  --drafts data/private/prompts/sentence-drafts.jsonl \
+  --chunks data/chunks/candidates.jsonl \
+  --base-prompts data/private/prompts/candidates.jsonl \
+  --output data/private/prompts/candidates.jsonl
+
+uv run goodprose review-prompts \
+  --prompts data/private/prompts/candidates.jsonl \
+  --chunks data/chunks/candidates.jsonl \
+  --output data/private/prompts/REVIEW.md
+
+uv run goodprose approve-prompts \
+  --prompts data/private/prompts/candidates.jsonl \
+  --chunks data/chunks/candidates.jsonl \
+  --reviewer-note 'Approved by the author after reasonability, provenance, and leakage review.'
+
+uv run goodprose build-prompt-pairs \
+  --prompts data/private/prompts/candidates.jsonl \
+  --chunks data/chunks/candidates.jsonl \
+  --posts data/posts/posts.jsonl \
+  --heldout-pairs data/private/eval/pairs.jsonl \
+  --heldout-pairs data/private/external/eval-pairs.jsonl \
+  --text-exclusions data/pair-text-exclusions.jsonl \
+  --output data/private/pairs.jsonl
 
 uv run goodprose build-sft \
-  --pairs data/pairs.jsonl \
+  --pairs data/private/pairs.jsonl \
   --output-dir data/sft \
   --eval-output evals/cases.jsonl
+
+uv run goodprose build-external-samples \
+  --catalog data/external/posts.jsonl \
+  --source-map data/private/external/source-map.jsonl \
+  --source-root data/private/external/blogposts-source \
+  --output data/private/external/samples.jsonl
 ```
 
 The Markdown importer understands simple front matter keys: `id`, `title`, `url`, `date`, and
-`series`. A first-level heading supplies the title when front matter does not.
+`series`. A first-level heading supplies the title when front matter does not. For sites with
+dated permalinks, `--url-template` accepts `{id}`, `{slug}`, `{year}`, `{month}`, and `{day}`.
 
 ## Canonical pair
 
@@ -69,26 +127,97 @@ uv run goodprose eval prepare \
   --packet evals/results/review.jsonl \
   --key evals/results/review-key.json
 
-# Fill in the five empty review fields in review.jsonl, then:
+# Complete the factuality, instruction, preference, and edit-burden fields, then:
 uv run goodprose eval summarize \
   --packet evals/results/review.jsonl \
   --key evals/results/review-key.json \
+  --decision-rules evals/decision-rules.json \
   --output evals/results/summary.json
 ```
 
-The primary decision is simple: prefer the system that wins more blind comparisons and requires
-less editing, provided it does not introduce more unsupported facts.
+The evaluator applies explicit pass/fail gates, records separate voice and overall preferences,
+counts unsupported claims, compares edit burden, and reports outcomes per case, lineage, and input
+method. See `evals/README.md` for run manifests, the anchored rubric, and the decision rules.
+
+## LoRA+ training
+
+The checked-in starter config uses a pinned Qwen3-8B revision with rank-32 LoRA adapters. PEFT's
+LoRA+ optimizer trains the LoRA A weights at `5e-5` and the B weights at `8e-4` (a 16x ratio). The
+runner validates the exact system prompt, dataset counts, and file hashes before loading the model.
+It converts each conversation into prompt/completion form so TRL computes loss only on the
+author's completion.
+
+Validate the run without installing or loading the model:
+
+```bash
+uv run goodprose train-lora-plus \
+  --config configs/qwen3-8b-lora-plus.json \
+  --validate-only
+```
+
+On a CUDA machine, install the training dependencies and start the run:
+
+```bash
+uv sync --extra train
+uv run goodprose train-lora-plus --config configs/qwen3-8b-lora-plus.json
+```
+
+After training, generate the matched base-model output with greedy decoding and Qwen's thinking
+mode disabled:
+
+```bash
+uv run goodprose eval generate \
+  --config configs/qwen3-8b-lora-plus.json \
+  --cases evals/cases.jsonl \
+  --role baseline \
+  --run-id base \
+  --output evals/results/base.jsonl \
+  --manifest evals/results/base-run.json
+```
+
+Generate a checkpoint with the same prompt, seed, and decoding settings by replacing
+`checkpoint-N` with an actual saved checkpoint directory:
+
+```bash
+uv run goodprose eval generate \
+  --config configs/qwen3-8b-lora-plus.json \
+  --cases evals/cases.jsonl \
+  --role candidate \
+  --adapter runs/qwen3-8b-lora-plus/checkpoint-N \
+  --run-id checkpoint-N \
+  --output evals/results/checkpoint-N.jsonl \
+  --manifest evals/results/checkpoint-N-run.json
+```
+
+Repeat the candidate command for the final adapter directory and any epoch checkpoints worth
+comparing. The command validates the frozen dataset manifest, checks every reference hash, records
+the resolved model/tokenizer/adapter fingerprints, and writes outputs only after every case
+finishes successfully.
+
+For a lower-memory 4-bit run, also install `train-4bit`, then set `load_in_4bit` to `true` and
+`optimizer` to `adam8bit` in a copy of the config. Each completed run saves the adapter, tokenizer,
+trainer state, metrics, resolved model revisions, dependency versions, and input hashes under
+`runs/`. The starter run retains each of its three epoch checkpoints so they can be compared for
+overfitting. Keep the frozen test cases out of training and use the blind evaluator for the actual
+go/no-go decision.
 
 ## Repository map
 
 ```text
 data/posts/             imported canonical blog posts
-data/briefs.jsonl       reviewed inputs and split assignments
-data/pairs.jsonl        canonical source-to-target pairs
+data/external/          approved Assembled and Medium source catalog
+data/splits.jsonl       frozen lineage-level train/dev/test assignments
+data/provenance/        authoring-history coverage without raw private prompts
+data/chunks/            verbatim semantic and reviewed supplemental targets
+data/private/prompts/   synthetic training inputs and local review packet
+data/private/external/  saved pages and authentic held-out inputs
+data/private/eval/      original-site authentic held-out inputs
+data/private/pairs.jsonl generated approved source-to-target pairs
 data/sft/               generated training files
+configs/                validated LoRA+ run configurations
 evals/cases.jsonl       generated frozen test cases
 evals/results/           local model outputs and reviews
-src/goodprose/           importer, pair builder, exporter, and evaluator
+src/goodprose/           importer, pair builder, exporter, trainer, and evaluator
 tests/                   deterministic unit tests
 ```
 

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "require_all_candidate_factuality_passes": true,
+  "require_all_candidate_instruction_passes": true,
+  "require_candidate_overall_case_advantage": true,
+  "require_no_lineage_losses": true,
+  "minimum_lineage_wins": 1,
+  "minimum_mean_edit_burden_improvement": 0.5
+}
