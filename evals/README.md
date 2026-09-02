@@ -112,6 +112,46 @@ Run the strong prompted frontier baseline (three of your posts plus a short styl
 four test inputs early, not last. It sets the bar, and if it wins it is the natural teacher for a
 later distillation step.
 
+## Quick review set: section-scale cases
+
+Reading two whole posts per case is slow, and four cases give a coarse preference count. The
+held-out posts are already split into verbatim sections, and each has an authentic draft, so
+`build-short-cases` cuts every whole-post case into section-scale cases: for each held-out
+section it finds the window of draft paragraphs that produced it (best F1 over word alignment),
+prefixes a one-line scope instruction and the post title, and writes a candidate with recall and
+precision scores. You approve or edit each candidate in `short-cases.candidates.jsonl`, then
+promote the approved ones:
+
+```bash
+uv run goodprose build-short-cases \
+  --cases evals/cases.jsonl \
+  --chunks data/chunks/candidates.jsonl \
+  --posts data/posts/posts.jsonl \
+  --output evals/short-cases.candidates.jsonl \
+  --review-output evals/SHORT_CASES_REVIEW.md
+
+# set "review_status": "approved" on the candidates you accept (edit "input" where needed), then
+uv run goodprose promote-short-cases \
+  --candidates evals/short-cases.candidates.jsonl \
+  --output evals/short-cases.jsonl
+```
+
+`evals/short-cases.jsonl` is an ordinary case file: run `eval generate`, `eval proxy`,
+`eval judge-packet`, `eval prepare`, and `eval summarize` on it exactly as on `cases.jsonl`. Each
+row is a 250-word section instead of a 1,500-word post, so a full blind pass over 18 sections
+takes about as long as one whole-post case, and the preference count is 18 instead of 4.
+Sections still carry their `lineage_id`, so the per-lineage rules apply. Rebuilding keeps your
+edits and decisions for any section whose text is unchanged, and promotion refuses an input that
+contains its reference section verbatim.
+
+Candidates with low recall mean you wrote most of that section fresh rather than from the draft,
+so the aligned window is a weak brief; rewrite the input by hand from the draft or reject it.
+Promotional sections are skipped. The whole-post cases in `cases.jsonl` stay the shipping gate:
+the short set is for choosing between checkpoints, not for the final go/no-go.
+
+`build-sft --dev-cases-output` writes the three development pairs in the same case format so the
+same cut can be made for dev and used to calibrate the proxies.
+
 ## Blind review
 
 Put outputs under ignored `results/`, then prepare a randomized packet and reviewer guide:

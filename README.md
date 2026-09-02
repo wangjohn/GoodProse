@@ -21,8 +21,10 @@ The repository contains no third-party writing corpus and no synthetic training 
 5. Join reviewed inputs to the exact published targets to create canonical pairs.
 6. Export `train` and `dev` pairs in chat-style SFT JSONL, optionally with title-conditioned raw
    completions of every training target (`--raw-completions`) as a continued-pretraining mix.
-7. Rank checkpoints with the cheap proxies (dev NLL, stylometry, a blinded frontier judge), then
-   compare base and fine-tuned outputs on the frozen `test` cases in a blind human review.
+7. Rank checkpoints with the cheap proxies (dev NLL, stylometry, a blinded frontier judge) and a
+   quick blind pass over section-scale cases cut from the held-out drafts (`build-short-cases`),
+   then compare base and fine-tuned outputs on the frozen whole-post `test` cases in the final
+   blind human review.
 8. Optionally run one DPO pass with your published text as chosen and the SFT model's own
    output as rejected.
 
@@ -259,7 +261,8 @@ data/private/eval/      original-site authentic held-out inputs
 data/private/pairs.jsonl generated approved source-to-target pairs
 data/sft/               generated training files
 configs/                validated LoRA, LoRA+, 14B, and DPO run configurations
-evals/cases.jsonl       generated frozen test cases
+evals/cases.jsonl       generated frozen whole-post test cases
+evals/short-cases.*     section-scale review candidates cut from the held-out drafts
 evals/results/           local model outputs, proxy reports, judge packets, and reviews
 docs/                    assessments and program notes
 src/goodprose/           importer, pair builder, exporter, trainers, proxies, and evaluator

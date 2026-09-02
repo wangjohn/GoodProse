@@ -33,6 +33,12 @@ from goodprose.prompts import (
 from goodprose.proxy import ProxyError, proxy_report
 from goodprose.scoring import ScoringError, score_completions
 from goodprose.sft import build_sft
+from goodprose.shortcases import (
+    DEFAULT_SCOPE_LINE,
+    ShortCaseError,
+    build_short_case_candidates,
+    promote_short_cases,
+)
 from goodprose.training import TrainingError, run_lora_plus
 
 
@@ -174,6 +180,31 @@ def build_parser() -> argparse.ArgumentParser:
         "--train-cases-output",
         help="Also write the training inputs as cases for on-policy rejected sampling",
     )
+    sft_command.add_argument(
+        "--dev-cases-output",
+        help="Also write the development pairs as cases for proxy calibration",
+    )
+
+    short_cases_command = commands.add_parser(
+        "build-short-cases",
+        help="Cut held-out whole-post cases into section-scale review candidates",
+    )
+    short_cases_command.add_argument("--cases", required=True)
+    short_cases_command.add_argument("--chunks", required=True)
+    short_cases_command.add_argument("--posts", required=True)
+    short_cases_command.add_argument("--output", required=True)
+    short_cases_command.add_argument("--review-output", required=True)
+    short_cases_command.add_argument("--min-words", type=int, default=60)
+    short_cases_command.add_argument("--max-words", type=int, default=450)
+    short_cases_command.add_argument("--max-paragraphs", type=int, default=8)
+    short_cases_command.add_argument("--min-recall", type=float, default=0.35)
+    short_cases_command.add_argument("--scope-line", default=DEFAULT_SCOPE_LINE)
+
+    promote_short_command = commands.add_parser(
+        "promote-short-cases", help="Write approved short candidates as evaluation cases"
+    )
+    promote_short_command.add_argument("--candidates", required=True)
+    promote_short_command.add_argument("--output", required=True)
 
     preference_command = commands.add_parser(
         "build-preference",
@@ -391,8 +422,28 @@ def _run(args: argparse.Namespace) -> int:
             train_cases_output=(
                 _path(args.train_cases_output) if args.train_cases_output else None
             ),
+            dev_cases_output=_path(args.dev_cases_output) if args.dev_cases_output else None,
         )
         print(f"built SFT data: {_format_counts(counts)}")
+        return 0
+    if args.command == "build-short-cases":
+        counts = build_short_case_candidates(
+            _path(args.cases),
+            _path(args.chunks),
+            _path(args.posts),
+            _path(args.output),
+            _path(args.review_output),
+            min_words=args.min_words,
+            max_words=args.max_words,
+            max_paragraphs=args.max_paragraphs,
+            min_recall=args.min_recall,
+            scope_line=args.scope_line,
+        )
+        print(f"built short case candidates: {_format_counts(counts)}")
+        return 0
+    if args.command == "promote-short-cases":
+        count = promote_short_cases(_path(args.candidates), _path(args.output))
+        print(f"promoted {count} short review case(s) to {_path(args.output)}")
         return 0
     if args.command == "build-preference":
         counts = build_preference_pairs(
@@ -547,6 +598,7 @@ def main() -> int:
         PromptReviewError,
         ProxyError,
         ScoringError,
+        ShortCaseError,
         TrainingError,
         OSError,
     ) as error:

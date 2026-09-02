@@ -79,6 +79,7 @@ def build_sft(
     *,
     raw_completions: bool = False,
     train_cases_output: Path | None = None,
+    dev_cases_output: Path | None = None,
 ) -> dict[str, int]:
     """Write train/dev JSONL, the frozen test cases, and a hash-pinned manifest.
 
@@ -109,6 +110,11 @@ def build_sft(
             train_cases_output,
             serialize_jsonl([_eval_case(pair) for pair in train_pairs]),
         )
+    if dev_cases_output is not None:
+        atomic_write(
+            dev_cases_output,
+            serialize_jsonl([_eval_case(pair) for pair in pairs if pair.split == Split.DEV]),
+        )
     train_path = output_dir / "train.jsonl"
     dev_path = output_dir / "dev.jsonl"
     summary = {
@@ -134,5 +140,8 @@ def build_sft(
     if train_cases_output is not None:
         manifest["train_cases"] = train_cases_output.name
         manifest["train_cases_sha256"] = sha256_file(train_cases_output)
+    if dev_cases_output is not None:
+        manifest["dev_cases"] = dev_cases_output.name
+        manifest["dev_cases_sha256"] = sha256_file(dev_cases_output)
     atomic_write_json(output_dir / "manifest.json", manifest)
     return summary
