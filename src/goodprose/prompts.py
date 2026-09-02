@@ -12,6 +12,7 @@ from goodprose.jsonl import atomic_write, load_jsonl, serialize_jsonl
 from goodprose.models import (
     BlogPost,
     InputMethod,
+    PairTextExclusion,
     ReviewStatus,
     SemanticChunk,
     Split,
@@ -29,7 +30,8 @@ _PROMOTIONAL_CTA = re.compile(
     r"check out our (?:open )?(?:roles|positions)|come join us|"
     r"apply (?:on|through) our careers|interested in joining the team|"
     r"interested in helping us|(?:email|reach out to) me at john@assembled|"
-    r"john@assembled|assembled\.com/careers"
+    r"join(?:ing)? our team|reach out if|john@assembled|assembled\.com/careers|"
+    r"i really hope you like it"
     r")"
 )
 
@@ -328,6 +330,55 @@ def _reject_promotional_training_material(
         )
 
 
+def _reject_promotional_pairs(pairs: list[WritingPair]) -> None:
+    promotional = sorted(
+        pair.id
+        for pair in pairs
+        if _PROMOTIONAL_CTA.search(pair.input) or _PROMOTIONAL_CTA.search(pair.output)
+    )
+    if promotional:
+        raise PromptReviewError(
+            "canonical pair input/target contains a promotional or hiring call to action: "
+            + ", ".join(promotional[:5])
+        )
+
+
+def _apply_pair_text_exclusions(
+    pairs: list[WritingPair], exclusions_path: Path | None
+) -> list[WritingPair]:
+    if exclusions_path is None:
+        return pairs
+    exclusions = load_jsonl(exclusions_path, PairTextExclusion)
+    pairs_by_id = {pair.id: pair for pair in pairs}
+    seen: set[tuple[str, str, str]] = set()
+    for exclusion in exclusions:
+        key = (exclusion.pair_id, exclusion.field, exclusion.text)
+        if key in seen:
+            raise PromptReviewError(
+                f"duplicate pair text exclusion for {exclusion.pair_id!r}"
+            )
+        seen.add(key)
+        pair = pairs_by_id.get(exclusion.pair_id)
+        if pair is None:
+            raise PromptReviewError(
+                f"pair text exclusion references missing pair {exclusion.pair_id!r}"
+            )
+        value = getattr(pair, exclusion.field)
+        occurrences = value.count(exclusion.text)
+        if occurrences != 1:
+            raise PromptReviewError(
+                f"pair text exclusion for {exclusion.pair_id!r} field "
+                f"{exclusion.field!r} matched {occurrences} times instead of exactly once"
+            )
+        updated = value.replace(exclusion.text, "", 1)
+        if not updated.strip():
+            raise PromptReviewError(
+                f"pair text exclusion emptied {exclusion.pair_id!r} field {exclusion.field!r}"
+            )
+        pairs_by_id[pair.id] = pair.model_copy(update={exclusion.field: updated})
+    return [pairs_by_id[pair.id] for pair in pairs]
+
+
 def build_prompt_pairs(
     prompts_path: Path,
     chunks_path: Path,
@@ -335,6 +386,7 @@ def build_prompt_pairs(
     output_path: Path,
     *,
     heldout_pairs_paths: Sequence[Path] = (),
+    text_exclusions_path: Path | None = None,
 ) -> dict[str, int]:
     """Promote approved training prompts and exact chunks into canonical pairs."""
     candidates = load_jsonl(prompts_path, SyntheticPromptCandidate)
@@ -386,6 +438,8 @@ def build_prompt_pairs(
             )
         pairs.extend(heldout)
 
+    pairs = _apply_pair_text_exclusions(pairs, text_exclusions_path)
+    _reject_promotional_pairs(pairs)
     validate_pairs(pairs)
     pairs.sort(key=lambda pair: pair.id)
     atomic_write(output_path, serialize_jsonl(pairs))

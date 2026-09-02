@@ -78,6 +78,7 @@ uv run goodprose build-prompt-pairs \
   --posts data/posts/posts.jsonl \
   --heldout-pairs data/private/eval/pairs.jsonl \
   --heldout-pairs data/private/external/eval-pairs.jsonl \
+  --text-exclusions data/pair-text-exclusions.jsonl \
   --output data/private/pairs.jsonl
 
 uv run goodprose build-sft \

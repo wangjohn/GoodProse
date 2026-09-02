@@ -237,6 +237,16 @@ class WritingPair(StrictModel):
     published_at: datetime | date | None = None
 
 
+class PairTextExclusion(StrictModel):
+    """An exact reviewed span removed when assembling the canonical SFT pairs."""
+
+    version: Literal[1] = 1
+    pair_id: NonEmptyString
+    field: Literal["input", "output"]
+    text: NonEmptyString
+    reason: NonEmptyString
+
+
 class EvalCase(StrictModel):
     version: Literal[1] = 1
     id: NonEmptyString

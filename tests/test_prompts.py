@@ -11,6 +11,7 @@ from goodprose.jsonl import atomic_write, load_jsonl, serialize_jsonl
 from goodprose.models import (
     BlogPost,
     InputMethod,
+    PairTextExclusion,
     PromptForm,
     ReviewStatus,
     SemanticChunk,
@@ -346,3 +347,105 @@ def test_build_prompt_pairs_rejects_promotional_hiring_calls(tmp_path: Path) -> 
 
     with pytest.raises(PromptReviewError, match="promotional or hiring call"):
         build_prompt_pairs(prompts_path, chunks_path, posts_path, tmp_path / "pairs.jsonl")
+
+
+@pytest.mark.parametrize("field", ["input", "output"])
+def test_build_prompt_pairs_rejects_promotional_heldout_material(
+    tmp_path: Path, field: str
+) -> None:
+    chunk = _chunk().model_copy(update={"review_status": ReviewStatus.APPROVED})
+    candidate = _candidate(chunk).model_copy(update={"review_status": ReviewStatus.APPROVED})
+    post = BlogPost(
+        id="post",
+        lineage_id="post",
+        title="Post title",
+        body_markdown=chunk.target,
+        source_path="post.md",
+    )
+    heldout = WritingPair(
+        id="heldout-test",
+        post_id="heldout-test",
+        lineage_id="heldout-test",
+        split=Split.TEST,
+        input="Authentic test outline.",
+        input_method=InputMethod.ORIGINAL_OUTLINE,
+        title="Test post",
+        output="Published test post.",
+    ).model_copy(update={field: "Useful prose. I really hope you like it!"})
+    prompts_path = tmp_path / "prompts.jsonl"
+    chunks_path = tmp_path / "chunks.jsonl"
+    posts_path = tmp_path / "posts.jsonl"
+    heldout_path = tmp_path / "heldout.jsonl"
+    atomic_write(prompts_path, serialize_jsonl([candidate]))
+    atomic_write(chunks_path, serialize_jsonl([chunk]))
+    atomic_write(posts_path, serialize_jsonl([post]))
+    atomic_write(heldout_path, serialize_jsonl([heldout]))
+
+    with pytest.raises(PromptReviewError, match="canonical pair input/target"):
+        build_prompt_pairs(
+            prompts_path,
+            chunks_path,
+            posts_path,
+            tmp_path / "pairs.jsonl",
+            heldout_pairs_paths=[heldout_path],
+        )
+
+
+def test_build_prompt_pairs_applies_reviewed_exact_text_exclusion(tmp_path: Path) -> None:
+    chunk = _chunk().model_copy(update={"review_status": ReviewStatus.APPROVED})
+    candidate = _candidate(chunk).model_copy(update={"review_status": ReviewStatus.APPROVED})
+    post = BlogPost(
+        id="post",
+        lineage_id="post",
+        title="Post title",
+        body_markdown=chunk.target,
+        source_path="post.md",
+    )
+    call_to_action = " I really hope you like it!"
+    heldout = WritingPair(
+        id="heldout-test",
+        post_id="heldout-test",
+        lineage_id="heldout-test",
+        split=Split.TEST,
+        input="Authentic test outline." + call_to_action,
+        input_method=InputMethod.ORIGINAL_OUTLINE,
+        title="Test post",
+        output="Published test post.",
+    )
+    prompts_path = tmp_path / "prompts.jsonl"
+    chunks_path = tmp_path / "chunks.jsonl"
+    posts_path = tmp_path / "posts.jsonl"
+    heldout_path = tmp_path / "heldout.jsonl"
+    exclusions_path = tmp_path / "exclusions.jsonl"
+    output_path = tmp_path / "pairs.jsonl"
+    atomic_write(prompts_path, serialize_jsonl([candidate]))
+    atomic_write(chunks_path, serialize_jsonl([chunk]))
+    atomic_write(posts_path, serialize_jsonl([post]))
+    atomic_write(heldout_path, serialize_jsonl([heldout]))
+    atomic_write(
+        exclusions_path,
+        serialize_jsonl(
+            [
+                PairTextExclusion(
+                    pair_id=heldout.id,
+                    field="input",
+                    text=call_to_action,
+                    reason="Promotional sign-off.",
+                )
+            ]
+        ),
+    )
+
+    build_prompt_pairs(
+        prompts_path,
+        chunks_path,
+        posts_path,
+        output_path,
+        heldout_pairs_paths=[heldout_path],
+        text_exclusions_path=exclusions_path,
+    )
+
+    cleaned = next(
+        pair for pair in load_jsonl(output_path, WritingPair) if pair.id == heldout.id
+    )
+    assert cleaned.input == "Authentic test outline."

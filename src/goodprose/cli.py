@@ -107,6 +107,10 @@ def build_parser() -> argparse.ArgumentParser:
         default=[],
         help="Held-out canonical pair file; repeat for multiple files",
     )
+    prompt_pairs_command.add_argument(
+        "--text-exclusions",
+        help="Reviewed exact input/target spans to remove from the assembled pairs",
+    )
     prompt_pairs_command.add_argument("--output", required=True)
 
     external_command = commands.add_parser(
@@ -251,6 +255,9 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.posts),
             _path(args.output),
             heldout_pairs_paths=[_path(path) for path in args.heldout_pairs],
+            text_exclusions_path=(
+                _path(args.text_exclusions) if args.text_exclusions else None
+            ),
         )
         print(
             "built canonical prompt pairs: "
