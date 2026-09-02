@@ -18,7 +18,7 @@ from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field
+from pydantic import AnyUrl, Field
 
 from goodprose.chunks import _markdown_fence
 from goodprose.jsonl import atomic_write, load_jsonl, serialize_jsonl
@@ -290,7 +290,7 @@ def promote_short_cases(candidates_path: Path, output_path: Path) -> int:
                 input_method=candidate.input_method,
                 reference_output=candidate.reference_output,
                 target_sha256=candidate.target_sha256,
-                source_url=candidate.source_url,
+                source_url=AnyUrl(candidate.source_url) if candidate.source_url else None,
             )
         )
     atomic_write(output_path, serialize_jsonl(cases))

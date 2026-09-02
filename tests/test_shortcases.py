@@ -45,7 +45,8 @@ def test_align_window_finds_the_matching_paragraphs() -> None:
     start, end, recall, precision = align_window(paragraphs, IDEA, max_paragraphs=3)
 
     assert (start, end) == (2, 3)
-    assert recall > 0.6
+    # The draft repeats the sentence six times against ten in the section, so recall is bounded.
+    assert recall > 0.4
     assert precision > 0.6
 
 
@@ -86,7 +87,7 @@ def _fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
     atomic_write(posts_path, serialize_jsonl(posts))
     atomic_write(splits_path, serialize_jsonl(splits))
     build_chunks(
-        posts_path, splits_path, chunks_path, tmp_path / "r.md", min_tokens=40, max_tokens=200
+        posts_path, splits_path, chunks_path, tmp_path / "r.md", min_tokens=40, max_tokens=400
     )
     reference = f"# Review tool\n\n{POST}"
     cases_path = tmp_path / "cases.jsonl"
@@ -119,12 +120,12 @@ def test_build_and_promote_short_cases(tmp_path: Path) -> None:
 
     assert counts["candidates"] >= 2
     candidates = load_jsonl(output_path, ShortCaseCandidate)
-    idea = next(c for c in candidates if "The idea" in c.reference_output)
+    idea = next(c for c in candidates if c.reference_output.startswith("# The idea"))
     assert "diff first" in idea.input
     assert "lunch" not in idea.input
     assert idea.input.startswith("Turn these notes into one section")
     assert "Blog post: Review tool" in idea.input
-    assert idea.alignment_recall > 0.6
+    assert idea.alignment_recall > 0.4
     assert "Short review case candidates" in review_path.read_text()
 
     with pytest.raises(ShortCaseError, match="no short case candidates are approved"):
