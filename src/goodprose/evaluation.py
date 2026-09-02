@@ -148,11 +148,24 @@ def _validate_run_manifests(
         raise EvaluationError("baseline run manifest must use the baseline role")
     if candidate.role is not SystemLabel.CANDIDATE:
         raise EvaluationError("candidate run manifest must use the candidate role")
+    if baseline.adapter_id is not None:
+        raise EvaluationError("baseline run manifest must not identify an adapter")
+    if candidate.adapter_id is None:
+        raise EvaluationError("candidate run manifest must identify its adapter checkpoint")
     cases_hash = sha256_file(cases_path)
     for manifest in (baseline, candidate):
         if manifest.cases_sha256 != cases_hash:
             raise EvaluationError(f"run {manifest.run_id!r} does not match the frozen case file")
-    for attribute in ("base_model_id", "base_model_revision", "tokenizer_revision"):
+    for attribute in (
+        "base_model_id",
+        "model_id",
+        "base_model_revision",
+        "tokenizer_revision",
+        "prompt_strategy",
+        "chat_template_sha256",
+        "system_prompt_sha256",
+        "dataset_manifest_sha256",
+    ):
         if getattr(baseline, attribute) != getattr(candidate, attribute):
             raise EvaluationError(f"run manifests differ on {attribute}")
     if baseline.decoding != candidate.decoding:

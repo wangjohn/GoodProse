@@ -5,7 +5,7 @@ writing. It turns reviewed outlines, notes, or rough drafts into the author's ex
 blog prose at the requested scope and measures whether a fine-tune beats the prompted base model.
 
 ```text
-rough draft, outline, or factual brief -> finished blog paragraph, section, or post
+rough draft, outline, or factual brief -> finished blog sentence, paragraph, section, or post
 ```
 
 The repository contains no third-party writing corpus and no synthetic training targets.
@@ -36,11 +36,28 @@ uv run goodprose build-external-posts \
 uv run goodprose build-chunks \
   --posts data/posts/posts.jsonl \
   --splits data/splits.jsonl \
+  --exclusions data/chunks/exclusions.jsonl \
+  --supplemental-targets data/chunks/supplemental-targets.jsonl \
   --output data/chunks/candidates.jsonl \
   --review-output data/chunks/REVIEW.md
 
 uv run goodprose build-prompt-candidates \
   --drafts data/private/prompts/external-drafts.jsonl \
+  --chunks data/chunks/candidates.jsonl \
+  --base-prompts data/private/prompts/candidates.jsonl \
+  --replace-lineage external-better-rag \
+  --replace-lineage external-blocking-llms \
+  --replace-lineage external-code-review-bottlenecks \
+  --replace-lineage external-product-lessons-dan-robinson \
+  --replace-lineage external-scaling-llms-golang \
+  --replace-lineage external-startup-journey \
+  --replace-lineage external-stripe-customer-support \
+  --replace-lineage external-tests-with-llms \
+  --replace-lineage external-why-i-code-as-a-cto \
+  --output data/private/prompts/candidates.jsonl
+
+uv run goodprose build-prompt-candidates \
+  --drafts data/private/prompts/sentence-drafts.jsonl \
   --chunks data/chunks/candidates.jsonl \
   --base-prompts data/private/prompts/candidates.jsonl \
   --output data/private/prompts/candidates.jsonl
@@ -144,6 +161,38 @@ uv sync --extra train
 uv run goodprose train-lora-plus --config configs/qwen3-8b-lora-plus.json
 ```
 
+After training, generate the matched base-model output with greedy decoding and Qwen's thinking
+mode disabled:
+
+```bash
+uv run goodprose eval generate \
+  --config configs/qwen3-8b-lora-plus.json \
+  --cases evals/cases.jsonl \
+  --role baseline \
+  --run-id base \
+  --output evals/results/base.jsonl \
+  --manifest evals/results/base-run.json
+```
+
+Generate a checkpoint with the same prompt, seed, and decoding settings by replacing
+`checkpoint-N` with an actual saved checkpoint directory:
+
+```bash
+uv run goodprose eval generate \
+  --config configs/qwen3-8b-lora-plus.json \
+  --cases evals/cases.jsonl \
+  --role candidate \
+  --adapter runs/qwen3-8b-lora-plus/checkpoint-N \
+  --run-id checkpoint-N \
+  --output evals/results/checkpoint-N.jsonl \
+  --manifest evals/results/checkpoint-N-run.json
+```
+
+Repeat the candidate command for the final adapter directory and any epoch checkpoints worth
+comparing. The command validates the frozen dataset manifest, checks every reference hash, records
+the resolved model/tokenizer/adapter fingerprints, and writes outputs only after every case
+finishes successfully.
+
 For a lower-memory 4-bit run, also install `train-4bit`, then set `load_in_4bit` to `true` and
 `optimizer` to `adam8bit` in a copy of the config. Each completed run saves the adapter, tokenizer,
 trainer state, metrics, resolved model revisions, dependency versions, and input hashes under
@@ -158,7 +207,7 @@ data/posts/             imported canonical blog posts
 data/external/          approved Assembled and Medium source catalog
 data/splits.jsonl       frozen lineage-level train/dev/test assignments
 data/provenance/        authoring-history coverage without raw private prompts
-data/chunks/            verbatim semantic chunk candidates and review packet
+data/chunks/            verbatim semantic and reviewed supplemental targets
 data/private/prompts/   synthetic training inputs and local review packet
 data/private/external/  saved pages and authentic held-out inputs
 data/private/eval/      original-site authentic held-out inputs

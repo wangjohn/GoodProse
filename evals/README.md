@@ -34,9 +34,35 @@ For every output file, save a `GenerationRunManifest` JSON record containing:
 - temperature, top-p, maximum new tokens, and seed.
 
 When both manifests are passed to `eval prepare`, the evaluator rejects stale case hashes,
-different base-model revisions, different tokenizers, or different decoding settings. The run IDs
-are copied into the final summary. For a matched comparison, also verify that the prompt strategy
-and prompt/template hashes are equal. A strong-prompt comparison is deliberately separate.
+different base-model revisions, different tokenizers, different prompt/template/dataset hashes,
+or different decoding settings. The run IDs are copied into the final summary. A strong-prompt
+comparison is deliberately separate.
+
+Generate matched outputs directly from the pinned training config. The generator uses greedy
+decoding, the dataset system prompt, and Qwen's non-thinking chat-template path for both roles:
+
+```bash
+uv run goodprose eval generate \
+  --config configs/qwen3-8b-lora-plus.json \
+  --cases evals/cases.jsonl \
+  --role baseline \
+  --run-id base \
+  --output evals/results/base.jsonl \
+  --manifest evals/results/base-run.json
+
+uv run goodprose eval generate \
+  --config configs/qwen3-8b-lora-plus.json \
+  --cases evals/cases.jsonl \
+  --role candidate \
+  --adapter runs/qwen3-8b-lora-plus/checkpoint-N \
+  --run-id checkpoint-N \
+  --output evals/results/checkpoint-N.jsonl \
+  --manifest evals/results/checkpoint-N-run.json
+```
+
+Use an actual `checkpoint-N` directory from the training run and repeat for each checkpoint or the
+final adapter you want to compare. Keep `--max-new-tokens` and `--seed` identical if overriding
+their defaults.
 
 ## Blind review
 

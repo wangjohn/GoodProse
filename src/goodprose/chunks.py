@@ -10,7 +10,14 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from goodprose.jsonl import atomic_write, load_jsonl, serialize_jsonl
-from goodprose.models import BlogPost, SemanticChunk, Split, SplitAssignment
+from goodprose.models import (
+    BlogPost,
+    ChunkExclusionSpec,
+    SemanticChunk,
+    Split,
+    SplitAssignment,
+    SupplementalChunkSpec,
+)
 
 _HEADING = re.compile(r"^(#{1,6})[ \t]+(.+?)[ \t]*#*[ \t]*$")
 _WORD = re.compile(r"[\w]+(?:[\'\N{RIGHT SINGLE QUOTATION MARK}-][\w]+)*", re.UNICODE)
@@ -185,6 +192,105 @@ def semantic_chunks(
     return chunks
 
 
+def _supplemental_chunks(
+    specs: list[SupplementalChunkSpec],
+    posts: list[BlogPost],
+    splits: dict[str, Split],
+    base_chunks: list[SemanticChunk],
+    *,
+    max_tokens: int,
+) -> list[SemanticChunk]:
+    spec_counts = Counter(spec.id for spec in specs)
+    duplicate_specs = sorted(spec_id for spec_id, count in spec_counts.items() if count > 1)
+    if duplicate_specs:
+        raise ChunkBuildError(f"duplicate supplemental target ID(s): {', '.join(duplicate_specs)}")
+
+    posts_by_id = {post.id: post for post in posts}
+    if len(posts_by_id) != len(posts):
+        raise ChunkBuildError("canonical post file contains duplicate post IDs")
+    existing_ids = {chunk.id for chunk in base_chunks}
+    collisions = sorted(existing_ids.intersection(spec_counts))
+    if collisions:
+        raise ChunkBuildError(
+            f"supplemental target ID(s) collide with semantic chunks: {', '.join(collisions)}"
+        )
+
+    next_ordinal: dict[str, int] = {}
+    for chunk in base_chunks:
+        next_ordinal[chunk.post_id] = max(next_ordinal.get(chunk.post_id, 0), chunk.ordinal)
+
+    supplemental: list[SemanticChunk] = []
+    for spec in specs:
+        post = posts_by_id.get(spec.post_id)
+        if post is None:
+            raise ChunkBuildError(
+                f"supplemental target {spec.id!r} references missing post {spec.post_id!r}"
+            )
+        split = splits[post.lineage_id]
+        if split is not Split.TRAIN:
+            raise ChunkBuildError(
+                f"supplemental target {spec.id!r} must belong to a training lineage"
+            )
+        occurrence_count = post.body_markdown.count(spec.target)
+        if occurrence_count != 1:
+            raise ChunkBuildError(
+                f"supplemental target {spec.id!r} must occur exactly once in its post; "
+                f"found {occurrence_count} occurrences"
+            )
+        source_start = post.body_markdown.index(spec.target)
+        source_end = source_start + len(spec.target)
+        ordinal = next_ordinal.get(post.id, 0) + 1
+        next_ordinal[post.id] = ordinal
+        target_blocks = _blocks(spec.target)
+        token_count = _approx_tokens(spec.target)
+        supplemental.append(
+            SemanticChunk(
+                id=spec.id,
+                post_id=post.id,
+                lineage_id=post.lineage_id,
+                split=split,
+                ordinal=ordinal,
+                headings=tuple(
+                    block.heading for block in target_blocks if block.heading is not None
+                ),
+                target=spec.target,
+                source_start=source_start,
+                source_end=source_end,
+                word_count=_word_count(spec.target),
+                approx_token_count=token_count,
+                target_sha256=_sha256_text(spec.target),
+                exceeds_target_size=token_count > max_tokens,
+                review_status=spec.review_status,
+            )
+        )
+    return supplemental
+
+
+def _apply_exclusions(
+    chunks: list[SemanticChunk], exclusions: list[ChunkExclusionSpec]
+) -> list[SemanticChunk]:
+    exclusion_counts = Counter(exclusion.chunk_id for exclusion in exclusions)
+    duplicates = sorted(
+        chunk_id for chunk_id, count in exclusion_counts.items() if count > 1
+    )
+    if duplicates:
+        raise ChunkBuildError(f"duplicate chunk exclusion(s): {', '.join(duplicates)}")
+    chunks_by_id = {chunk.id: chunk for chunk in chunks}
+    missing = sorted(set(exclusion_counts) - set(chunks_by_id))
+    if missing:
+        raise ChunkBuildError(f"chunk exclusion(s) do not exist: {', '.join(missing)}")
+    heldout = sorted(
+        chunk_id
+        for chunk_id in exclusion_counts
+        if chunks_by_id[chunk_id].split is not Split.TRAIN
+    )
+    if heldout:
+        raise ChunkBuildError(
+            f"chunk exclusion(s) must belong to training lineages: {', '.join(heldout)}"
+        )
+    return [chunk for chunk in chunks if chunk.id not in exclusion_counts]
+
+
 def _split_map(posts: list[BlogPost], assignments: list[SplitAssignment]) -> dict[str, Split]:
     counts = Counter(assignment.lineage_id for assignment in assignments)
     duplicates = sorted(lineage_id for lineage_id, count in counts.items() if count > 1)
@@ -221,8 +327,9 @@ def render_review(posts: list[BlogPost], chunks: list[SemanticChunk]) -> bytes:
     lines = [
         "# Semantic chunk review",
         "",
-        "These are deterministic candidates. Every target is an exact contiguous span of the",
-        "imported published post. Approval happens later; no candidate is an SFT example yet.",
+        "Every target is an exact contiguous span of the imported published post. Default chunks",
+        "begin as candidates; reviewed supplemental spans retain their checked-in status. A target",
+        "becomes an SFT example only after both its chunk and matching prompt are approved.",
         "",
         f"- Posts: {len(posts)}",
         f"- Chunks: {len(chunks)}",
@@ -240,7 +347,8 @@ def render_review(posts: list[BlogPost], chunks: list[SemanticChunk]) -> bytes:
                 [
                     f"### {chunk.id}",
                     "",
-                    f"`{chunk.split.value}` - {chunk.approx_token_count} approximate tokens - "
+                    f"`{chunk.split.value}` - `{chunk.review_status.value}` - "
+                    f"{chunk.approx_token_count} approximate tokens - "
                     f"{chunk.word_count} words{size_note}",
                     "",
                     f"Headings: {headings}",
@@ -262,6 +370,8 @@ def build_chunks(
     *,
     min_tokens: int = 250,
     max_tokens: int = 700,
+    supplemental_targets_path: Path | None = None,
+    exclusions_path: Path | None = None,
 ) -> dict[str, int]:
     posts = load_jsonl(posts_path, BlogPost)
     assignments = load_jsonl(splits_path, SplitAssignment)
@@ -277,6 +387,22 @@ def build_chunks(
             max_tokens=max_tokens,
         )
     ]
+    if exclusions_path is not None:
+        chunks = _apply_exclusions(
+            chunks,
+            load_jsonl(exclusions_path, ChunkExclusionSpec),
+        )
+    if supplemental_targets_path is not None:
+        specs = load_jsonl(supplemental_targets_path, SupplementalChunkSpec)
+        chunks.extend(
+            _supplemental_chunks(
+                specs,
+                posts,
+                splits,
+                chunks,
+                max_tokens=max_tokens,
+            )
+        )
     atomic_write(output_path, serialize_jsonl(chunks))
     atomic_write(review_output_path, render_review(posts, chunks))
     return dict(sorted(Counter(chunk.split.value for chunk in chunks).items()))

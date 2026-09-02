@@ -23,6 +23,15 @@ from goodprose.pairs import load_pairs, validate_pairs
 
 _WORD = re.compile(r"[\w]+(?:[\'\N{RIGHT SINGLE QUOTATION MARK}-][\w]+)*", re.UNICODE)
 _URL = re.compile(r"https?://[^\s)>\]]+")
+_PROMOTIONAL_CTA = re.compile(
+    r"(?i)(?:"
+    r"we[\N{RIGHT SINGLE QUOTATION MARK}']?re hiring|we are hiring|assembled is hiring|"
+    r"check out our (?:open )?(?:roles|positions)|come join us|"
+    r"apply (?:on|through) our careers|interested in joining the team|"
+    r"interested in helping us|(?:email|reach out to) me at john@assembled|"
+    r"john@assembled|assembled\.com/careers"
+    r")"
+)
 
 
 class PromptReviewError(ValueError):
@@ -215,11 +224,20 @@ def build_prompt_candidates(
     output_path: Path,
     *,
     base_prompts_path: Path | None = None,
+    replace_lineages: Sequence[str] = (),
 ) -> int:
     """Attach frozen chunk metadata to compact, human-authored prompt drafts."""
     drafts = load_jsonl(drafts_path, SyntheticPromptDraft)
     chunks = load_jsonl(chunks_path, SemanticChunk)
     chunks_by_id = {chunk.id: chunk for chunk in chunks}
+    training_lineages = {chunk.lineage_id for chunk in chunks if chunk.split is Split.TRAIN}
+    requested_lineages = set(replace_lineages)
+    unknown_lineages = sorted(requested_lineages - training_lineages)
+    if unknown_lineages:
+        raise PromptReviewError(
+            "replacement lineage(s) are not in the training chunks: "
+            + ", ".join(unknown_lineages)
+        )
     draft_counts = Counter(draft.chunk_id for draft in drafts)
     duplicates = sorted(chunk_id for chunk_id, count in draft_counts.items() if count > 1)
     if duplicates:
@@ -255,6 +273,7 @@ def build_prompt_candidates(
         candidate
         for candidate in base
         if candidate.chunk_id not in replaced_chunk_ids
+        and candidate.lineage_id not in requested_lineages
         and candidate.chunk_id in chunks_by_id
         and chunks_by_id[candidate.chunk_id].split is Split.TRAIN
     ]
@@ -293,6 +312,22 @@ def _require_approved(
         raise PromptReviewError("; ".join(findings))
 
 
+def _reject_promotional_training_material(
+    candidates: list[SyntheticPromptCandidate], chunks_by_id: dict[str, SemanticChunk]
+) -> None:
+    promotional = sorted(
+        candidate.id
+        for candidate in candidates
+        if _PROMOTIONAL_CTA.search(candidate.input)
+        or _PROMOTIONAL_CTA.search(chunks_by_id[candidate.chunk_id].target)
+    )
+    if promotional:
+        raise PromptReviewError(
+            "training prompt/target contains a promotional or hiring call to action: "
+            + ", ".join(promotional[:5])
+        )
+
+
 def build_prompt_pairs(
     prompts_path: Path,
     chunks_path: Path,
@@ -307,6 +342,7 @@ def build_prompt_pairs(
         raise PromptReviewError("prompt candidate dataset is empty")
     chunks = load_jsonl(chunks_path, SemanticChunk)
     chunks_by_id = _candidate_chunk_map(candidates, chunks)
+    _reject_promotional_training_material(candidates, chunks_by_id)
     _require_approved(candidates, chunks_by_id)
 
     posts = load_jsonl(posts_path, BlogPost)

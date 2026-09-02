@@ -14,7 +14,9 @@ from goodprose.external import (
     build_external_posts,
     build_external_samples,
 )
+from goodprose.generation import GenerationError, generate_eval_outputs
 from goodprose.jsonl import JsonlError
+from goodprose.models import SystemLabel
 from goodprose.pairs import PairBuildError, build_pairs
 from goodprose.posts import PostImportError, import_posts
 from goodprose.prompts import (
@@ -58,6 +60,8 @@ def build_parser() -> argparse.ArgumentParser:
     chunks_command.add_argument("--splits", required=True)
     chunks_command.add_argument("--output", required=True)
     chunks_command.add_argument("--review-output", required=True)
+    chunks_command.add_argument("--supplemental-targets")
+    chunks_command.add_argument("--exclusions")
     chunks_command.add_argument("--min-tokens", type=int, default=250)
     chunks_command.add_argument("--max-tokens", type=int, default=700)
 
@@ -82,6 +86,12 @@ def build_parser() -> argparse.ArgumentParser:
     prompt_candidates_command.add_argument("--drafts", required=True)
     prompt_candidates_command.add_argument("--chunks", required=True)
     prompt_candidates_command.add_argument("--base-prompts")
+    prompt_candidates_command.add_argument(
+        "--replace-lineage",
+        action="append",
+        default=[],
+        help="Drop base prompts from this lineage before merging; repeat as needed",
+    )
     prompt_candidates_command.add_argument("--output", required=True)
 
     prompt_pairs_command = commands.add_parser(
@@ -140,6 +150,20 @@ def build_parser() -> argparse.ArgumentParser:
     eval_command = commands.add_parser("eval", help="Prepare or summarize blind comparisons")
     eval_commands = eval_command.add_subparsers(dest="eval_command", required=True)
 
+    generate = eval_commands.add_parser(
+        "generate",
+        help="Generate deterministic base-model or LoRA-checkpoint outputs",
+    )
+    generate.add_argument("--config", required=True)
+    generate.add_argument("--cases", required=True)
+    generate.add_argument("--role", type=SystemLabel, choices=tuple(SystemLabel), required=True)
+    generate.add_argument("--adapter")
+    generate.add_argument("--run-id", required=True)
+    generate.add_argument("--output", required=True)
+    generate.add_argument("--manifest", required=True)
+    generate.add_argument("--max-new-tokens", type=int, default=8192)
+    generate.add_argument("--seed", type=int, default=20260901)
+
     prepare = eval_commands.add_parser("prepare", help="Randomize base and candidate outputs")
     prepare.add_argument("--cases", required=True)
     prepare.add_argument("--baseline", required=True)
@@ -181,6 +205,10 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.review_output),
             min_tokens=args.min_tokens,
             max_tokens=args.max_tokens,
+            supplemental_targets_path=(
+                _path(args.supplemental_targets) if args.supplemental_targets else None
+            ),
+            exclusions_path=_path(args.exclusions) if args.exclusions else None,
         )
         print(
             "built semantic chunks: "
@@ -212,6 +240,7 @@ def _run(args: argparse.Namespace) -> int:
             _path(args.chunks),
             _path(args.output),
             base_prompts_path=_path(args.base_prompts) if args.base_prompts else None,
+            replace_lineages=args.replace_lineage,
         )
         print(f"built {count} synthetic prompt candidate(s) at {_path(args.output)}")
         return 0
@@ -285,6 +314,20 @@ def _run(args: argparse.Namespace) -> int:
         else:
             print(f"completed LoRA+ run at {result['config']['output_dir']}")
         return 0
+    if args.command == "eval" and args.eval_command == "generate":
+        count = generate_eval_outputs(
+            _path(args.config),
+            _path(args.cases),
+            _path(args.output),
+            _path(args.manifest),
+            role=args.role,
+            run_id=args.run_id,
+            adapter_path=_path(args.adapter) if args.adapter else None,
+            max_new_tokens=args.max_new_tokens,
+            seed=args.seed,
+        )
+        print(f"generated {count} deterministic output(s) at {_path(args.output)}")
+        return 0
     if args.command == "eval" and args.eval_command == "prepare":
         count = prepare_review(
             _path(args.cases),
@@ -325,6 +368,7 @@ def main() -> int:
         ChunkBuildError,
         EvaluationError,
         ExternalSourceError,
+        GenerationError,
         JsonlError,
         PairBuildError,
         PostImportError,

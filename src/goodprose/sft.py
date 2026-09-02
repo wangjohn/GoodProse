@@ -13,9 +13,9 @@ from goodprose.pairs import PairBuildError, load_pairs
 
 SYSTEM_PROMPT = (
     "Turn the supplied notes, outline, or rough draft into polished blog prose at the scope "
-    "requested by the user: a paragraph, section, or complete post. Preserve supported facts "
-    "and uncertainty, do not invent details, honor the requested structure and length, and "
-    "return only the finished prose."
+    "requested by the user: a sentence, paragraph, section, or complete post. Preserve supported "
+    "facts and uncertainty, do not invent details, honor the requested structure and length, "
+    "and return only the finished prose."
 )
 
 

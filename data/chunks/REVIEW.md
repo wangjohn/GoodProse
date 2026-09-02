@@ -1,17 +1,18 @@
 # Semantic chunk review
 
-These are deterministic candidates. Every target is an exact contiguous span of the
-imported published post. Approval happens later; no candidate is an SFT example yet.
+Every target is an exact contiguous span of the imported published post. Default chunks
+begin as candidates; reviewed supplemental spans retain their checked-in status. A target
+becomes an SFT example only after both its chunk and matching prompt are approved.
 
 - Posts: 22
-- Chunks: 107
-- Splits: dev=19, test=20, train=68
+- Chunks: 114
+- Splits: dev=19, test=20, train=75
 
 ## Cheap software won't make engineering cheap
 
 ### cheap-software-wont-make-engineering-cheap--001
 
-`train` - 159 approximate tokens - 120 words
+`train` - `candidate` - 159 approximate tokens - 120 words
 
 Headings: (intro or continuation)
 
@@ -25,7 +26,7 @@ Two things seem likely to me, and both are already visible if you look at how ot
 
 ### cheap-software-wont-make-engineering-cheap--002
 
-`train` - 690 approximate tokens - 466 words
+`train` - `candidate` - 690 approximate tokens - 466 words
 
 Headings: Software will follow Jevons paradox
 
@@ -46,7 +47,7 @@ I think software engineering will play out the same way. You'll have a lot more 
 
 ### cheap-software-wont-make-engineering-cheap--003
 
-`train` - 619 approximate tokens - 390 words
+`train` - `candidate` - 619 approximate tokens - 390 words
 
 Headings: Engineers will orchestrate more
 
@@ -68,7 +69,7 @@ I think the generalist engineer is about to go through a similar morph, just poi
 
 ### cheap-software-wont-make-engineering-cheap--004
 
-`train` - 366 approximate tokens - 252 words
+`train` - `candidate` - 366 approximate tokens - 252 words
 
 Headings: So will the future be good?
 
@@ -84,11 +85,21 @@ At the same time, the future might not be as fun because I think we'll keep seei
 So, the future will see a lot of change. I think the base layer of life will keep getting better and more customizable, while the scarce, positional stuff will keep getting harder to reach.
 ```
 
+### cheap-software-wont-make-engineering-cheap--sentence-001
+
+`train` - `approved` - 49 approximate tokens - 35 words
+
+Headings: (intro or continuation)
+
+```markdown
+But if you're an engineer (or whatever the future version of the job ends up being called) and you know how to build high-quality systems that solve real needs, you're going to be very valuable.
+```
+
 ## How we learned to stop worrying and love the AI in coding interviews
 
 ### external-ai-coding-interviews--001
 
-`dev` - 271 approximate tokens - 159 words
+`dev` - `candidate` - 271 approximate tokens - 159 words
 
 Headings: (intro or continuation)
 
@@ -104,7 +115,7 @@ To be clear, we haven't abandoned traditional interviews entirely — we still h
 
 ### external-ai-coding-interviews--002
 
-`dev` - 356 approximate tokens - 224 words
+`dev` - `candidate` - 356 approximate tokens - 224 words
 
 Headings: The reality of modern engineering / New types of interviews
 
@@ -126,7 +137,7 @@ We’ve redesigned our interviews to better reflect the qualities we care about.
 
 ### external-ai-coding-interviews--003
 
-`dev` - 621 approximate tokens - 365 words
+`dev` - `candidate` - 621 approximate tokens - 365 words
 
 Headings: Finding great engineers
 
@@ -147,7 +158,7 @@ On the other end of the spectrum, weaker candidates reveal consistent patterns t
 
 ### external-ai-coding-interviews--004
 
-`dev` - 299 approximate tokens - 177 words
+`dev` - `candidate` - 299 approximate tokens - 177 words
 
 Headings: Raising the bar
 
@@ -167,7 +178,7 @@ _If you're interested in a technical role at Assembled where we're building AI s
 
 ### external-better-rag--001
 
-`train` - 374 approximate tokens - 209 words
+`train` - `candidate` - 374 approximate tokens - 209 words
 
 Headings: The problem with vector-only search
 
@@ -185,7 +196,7 @@ For example, if a user asked “what features are included in a premium plan?”
 
 ### external-better-rag--002
 
-`train` - 510 approximate tokens - 309 words
+`train` - `candidate` - 510 approximate tokens - 309 words
 
 Headings: The solution: Hybrid Search with Reciprocal Rank Fusion / Document store abstraction
 
@@ -205,7 +216,7 @@ The interesting part is that our hybrid search store itself implements the **`Do
 
 ### external-better-rag--003
 
-`train` - 362 approximate tokens - 210 words
+`train` - `candidate` - 362 approximate tokens - 210 words
 
 Headings: Syncing documents across stores
 
@@ -221,7 +232,7 @@ Enabling multiple document stores introduced technical challenges, especially ar
 
 ### external-better-rag--004
 
-`train` - 512 approximate tokens - 295 words
+`train` - `candidate` - 512 approximate tokens - 295 words
 
 Headings: Combining results across multiple search engines / Weighting-based fusion / Rank fusion
 
@@ -247,7 +258,7 @@ Next, we turned to rank fusion algorithms, inspired by literature reviews and th
 
 ### external-better-rag--005
 
-`train` - 602 approximate tokens - 326 words
+`train` - `candidate` - 602 approximate tokens - 326 words
 
 Headings: Why we chose RRF / Optimizing our search infrastructure
 
@@ -272,23 +283,21 @@ Using B2B solutions like [Pinecone](https://www.pinecone.io/customers/assembled/
 *   **Performance:** Algolia in particular provides low-latency responses, a robust API, and highly optimized search outputs which would likely outperform anything we could build on Elasticsearch.
 ```
 
-### external-better-rag--006
+### external-better-rag--sentence-001
 
-`train` - 107 approximate tokens - 63 words
+`train` - `approved` - 31 approximate tokens - 17 words
 
-Headings: We’re hiring!
+Headings: (intro or continuation)
 
 ```markdown
-## We’re hiring!
-
-We’re seeing exciting results, but there’s always a lot more to do. Since implementing this framework, there have been a lot of developments in RAG-based techniques, such as fine tuning of embedding models, applying matrix transformations on vector results, HyDE, etc. If you’re interested in helping us solve these problems, [check out our open roles](https://www.assembled.com/careers-at-assembled#openings).
+To optimize search performance, we explored several algorithms for merging the results from our different document stores.
 ```
 
 ## Why blocking LLMs from your website is dumb
 
 ### external-blocking-llms--001
 
-`train` - 400 approximate tokens - 257 words
+`train` - `candidate` - 400 approximate tokens - 257 words
 
 Headings: (intro or continuation)
 
@@ -312,7 +321,7 @@ Providing high quality content that LLMs will actually cite is the new game in t
 
 ### external-code-review-bottlenecks--001
 
-`train` - 291 approximate tokens - 198 words
+`train` - `candidate` - 291 approximate tokens - 198 words
 
 Headings: (intro or continuation)
 
@@ -326,7 +335,7 @@ This post covers how we found the bottleneck, how we built the auto-reviewer, an
 
 ### external-code-review-bottlenecks--002
 
-`train` - 434 approximate tokens - 285 words
+`train` - `candidate` - 434 approximate tokens - 285 words
 
 Headings: Reviewers couldn't keep up with agent-generated code
 
@@ -349,7 +358,7 @@ Every property of coding agents points toward more code, but we were still routi
 
 ### external-code-review-bottlenecks--003
 
-`train` - 431 approximate tokens - 261 words
+`train` - `candidate` - 431 approximate tokens - 261 words
 
 Headings: Setting up an automated reviewer for low-risk PRs
 
@@ -375,7 +384,7 @@ We spent a large amount of time tuning the policy that we use, landing on someth
 
 ### external-code-review-bottlenecks--004
 
-`train` - 289 approximate tokens - 196 words
+`train` - `candidate` - 289 approximate tokens - 196 words
 
 Headings: Iterating on the policy
 
@@ -396,7 +405,7 @@ So the job was to hold a narrow ridge between the two cliffs.
 
 ### external-code-review-bottlenecks--005
 
-`train` - 538 approximate tokens - 345 words
+`train` - `candidate` - 538 approximate tokens - 345 words
 
 Headings: Rolling out safely
 
@@ -418,7 +427,7 @@ The goal was to begin with a narrow set of changes where we could establish trus
 
 ### external-code-review-bottlenecks--006
 
-`train` - 682 approximate tokens - 455 words
+`train` - `candidate` - 682 approximate tokens - 454 words
 
 Headings: Results: 2.4× more PRs merged
 
@@ -438,12 +447,12 @@ These are observational results from a rollout, not a randomized trial, and we d
 
 **Fast, predictable review changed which work people attempted.** The median auto-review takes eight minutes, and just as importantly, you know roughly when it's coming and what bar you have to clear. Before, an engineer who noticed a minor refactor or a missing test had to decide whether it was worth consuming a human reviewer's attention. These PRs were easy to deprioritize because they weren’t urgent. With a reliable fast lane, engineers became much more willing to spin off small improvements. If you're in an area of the codebase and see something small worth fixing, it's now easy to kick off a separate job and get it reviewed quickly. This is a big part of why refactoring grew 7.5x while overall output grew 2.4x.
 
-**Much of the new speed centered on bug-fixes and performance work. I**nstead of unleashing a bevy of bad PRs, the auto-reviewer has actually encouraged better code because of the ease at which smaller bugfixes and targeted performance work move through the system. We’ve seen our primary database CPU usage decrease by 20% as teams set up automations to improve slow queries they owned.
+**Much of the new speed centered on bug-fixes and performance work.** Instead of unleashing a bevy of bad PRs, the auto-reviewer has actually encouraged better code because of the ease at which smaller bugfixes and targeted performance work move through the system. We’ve seen our primary database CPU usage decrease by 20% as teams set up automations to improve slow queries they owned.
 ```
 
 ### external-code-review-bottlenecks--007
 
-`train` - 280 approximate tokens - 183 words
+`train` - `candidate` - 280 approximate tokens - 183 words
 
 Headings: (intro or continuation)
 
@@ -453,9 +462,9 @@ Headings: (intro or continuation)
 **Removing small PRs from the queue helped the large ones.** This was the most counterintuitive result, since large PRs sat outside the fast lane of auto-approvals. Our best explanation is that review capacity is about concentration as much as hours. Reviewers were no longer being bombarded by small, conventional PRs all day, so when a PR did land in their queue, they knew it actually needed their attention and could spend real time on it. That freed-up attention showed up as 3.5× more throughput on the PRs that still required human judgment.
 ```
 
-### external-code-review-bottlenecks--008
+### external-code-review-bottlenecks--clean-close
 
-`train` - 512 approximate tokens - 325 words
+`train` - `approved` - 337 approximate tokens - 211 words
 
 Headings: Costs / What's next
 
@@ -473,19 +482,23 @@ The results are early, so we still need to understand how these auto-reviews aff
 We're continuing to tune the auto-reviewer: categorizing the reviews coming in, identifying common failure patterns, and feeding our recurring failure patterns back into the policy automatically.
 
 Speeding up one stage of a pipeline tends to move the constraint to the next stage. As agents make implementation and review faster, we expect the constraint to move again, maybe to specification, testing, or deciding what's worth building. When it does, we'll continue hill climbing there.
+```
 
-If you're interested in helping us build self-improving coding agents, [we're hiring](https://www.assembled.com/careers)!
+### external-code-review-bottlenecks--sentence-001
 
-_Thank you to Alec Rodgers, Chasen Stark, and Paul Hager for reading drafts of this post._
+`train` - `approved` - 21 approximate tokens - 16 words
 
-[0] Why didn't we use a commercially available reviewer? There were 3 main reasons a) our own system has really good price to performance characteristics because we can choose exactly what models we want to run, especially frontier models without paying extra premiums b) we also liked the control: our team has found that Codex and Claude Code together catch bugs better than a single reviewer and c) owning the system lets us adjust our approval policies automatically over time.
+Headings: (intro or continuation)
+
+```markdown
+Speeding up one stage of a pipeline tends to move the constraint to the next stage.
 ```
 
 ## Database abstractions for Golang
 
 ### external-database-abstractions-golang--001
 
-`test` - 659 approximate tokens - 420 words
+`test` - `candidate` - 659 approximate tokens - 420 words
 
 Headings: Challenge 1: Writing performant, reusable SQL queries / The problem: Sharing code between single and multi-row getters
 
@@ -588,7 +601,7 @@ The problem with the above is that you’re now making `O(# of orders)`queries. 
 
 ### external-database-abstractions-golang--002
 
-`test` - 556 approximate tokens - 341 words
+`test` - `candidate` - 556 approximate tokens - 341 words
 
 Headings: The solution: Create an abstraction for scanning a database row
 
@@ -682,7 +695,7 @@ Now the total time to run `GetOrders` is just a single roundtrip time to your da
 
 ### external-database-abstractions-golang--003
 
-`test` - 614 approximate tokens - 371 words
+`test` - `candidate` - 614 approximate tokens - 371 words
 
 Headings: Challenge 2: Remembering to close a set of rows / The problem: At some point, you’re going to forget to close your rows / The solution: A helper method where you can’t forget
 
@@ -810,7 +823,7 @@ return orders, nil
 
 ### external-database-abstractions-golang--004
 
-`test` - 680 approximate tokens - 418 words
+`test` - `candidate` - 680 approximate tokens - 418 words
 
 Headings: Challenge 3: Reusing queries inside of transactions / The problem: Sharing SQL between transactions and non-transactions
 
@@ -947,7 +960,7 @@ This is a lot of unfortunate code copying, and if you change any attribute in `O
 
 ### external-database-abstractions-golang--005
 
-`test` - 452 approximate tokens - 258 words
+`test` - `candidate` - 452 approximate tokens - 258 words
 
 Headings: The solution: Interface for database-like objects and a helper for transactions
 
@@ -1045,7 +1058,7 @@ The `Database` abstraction allows you to create methods for storing and getting 
 
 ### external-database-abstractions-golang--006
 
-`test` - 370 approximate tokens - 244 words
+`test` - `candidate` - 370 approximate tokens - 244 words
 
 Headings: Conclusion
 
@@ -1065,7 +1078,7 @@ Many thanks to Anthony Duong and Ryan Wang for reading drafts of this.
 
 ### external-llm-provider-fallbacks--001
 
-`dev` - 472 approximate tokens - 274 words
+`dev` - `candidate` - 472 approximate tokens - 274 words
 
 Headings: Manual switchovers (and why they don’t work)
 
@@ -1091,7 +1104,7 @@ The manual approach taught us that we needed automation, but it also revealed th
 
 ### external-llm-provider-fallbacks--002
 
-`dev` - 251 approximate tokens - 107 words
+`dev` - `candidate` - 251 approximate tokens - 107 words
 
 Headings: Building automated fallbacks / Model categories
 
@@ -1134,7 +1147,7 @@ return ModelTypeGPT_4_1// sensible default
 
 ### external-llm-provider-fallbacks--003
 
-`dev` - 402 approximate tokens - 206 words
+`dev` - `candidate` - 402 approximate tokens - 206 words
 
 Headings: Provider ordering and fallback logic
 
@@ -1181,7 +1194,7 @@ return nil, fmt.Errorf("all models failed: %w", lastError)
 
 ### external-llm-provider-fallbacks--004
 
-`dev` - 551 approximate tokens - 313 words
+`dev` - `candidate` - 551 approximate tokens - 313 words
 
 Headings: Handling streaming responses / Benefits of our simple fallback approach
 
@@ -1222,7 +1235,7 @@ During a recent multi-hour LLM provider outage, customers experienced near-zero 
 
 ### external-llm-provider-fallbacks--005
 
-`dev` - 570 approximate tokens - 331 words
+`dev` - `candidate` - 570 approximate tokens - 331 words
 
 Headings: The cost of redundancy: More evals / Results and lessons learned
 
@@ -1254,7 +1267,7 @@ _We're always working on making our systems more robust and our customer experie
 
 ### external-new-products-team--001
 
-`test` - 647 approximate tokens - 436 words
+`test` - `candidate` - 647 approximate tokens - 436 words
 
 Headings: Talk to users
 
@@ -1280,7 +1293,7 @@ The team talking to users: we’re very heavy on our usage of hand gestures and 
 
 ### external-new-products-team--002
 
-`test` - 491 approximate tokens - 337 words
+`test` - `candidate` - 491 approximate tokens - 337 words
 
 Headings: One room, one team
 
@@ -1300,7 +1313,7 @@ Jason and Nelson discussing data science techniques. More keyboards mean we can 
 
 ### external-new-products-team--003
 
-`test` - 496 approximate tokens - 342 words
+`test` - `candidate` - 496 approximate tokens - 342 words
 
 Headings: Existential crisis? That’s a feature, not a bug
 
@@ -1318,7 +1331,7 @@ We continued to have many more existential crises. In fact, if we went a week or
 
 ### external-new-products-team--004
 
-`test` - 509 approximate tokens - 343 words
+`test` - `candidate` - 509 approximate tokens - 343 words
 
 Headings: Tuesday dinners
 
@@ -1340,7 +1353,7 @@ Thanks to Anthony Duong, Brian Sze, Kaytlin Louton, and Ryan Wang for reading dr
 
 ### external-product-lessons-dan-robinson--001
 
-`train` - 258 approximate tokens - 174 words
+`train` - `candidate` - 258 approximate tokens - 174 words
 
 Headings: (intro or continuation)
 
@@ -1351,14 +1364,14 @@ Dan was one of the first engineers at [Heap](https://www.heap.io/) and served as
 
 Here were some of the top takeaways from the discussion:
 
-*   **Execution, execution, execution:**Most businesses come down to how well you can make a product that matches your user’s needs
+*   **Execution, execution, execution:** Most businesses come down to how well you can make a product that matches your user’s needs
 *   **Talk to your users with intellectual honesty**: Be careful with leading questions that can bias your users
-*   **Taste the soup:**Try out your own product as often as you can
+*   **Taste the soup:** Try out your own product as often as you can
 ```
 
 ### external-product-lessons-dan-robinson--002
 
-`train` - 294 approximate tokens - 209 words
+`train` - `candidate` - 294 approximate tokens - 209 words
 
 Headings: The Burnt Pizza Problem
 
@@ -1376,7 +1389,7 @@ What I found most interesting about this paradigm is that often many of the best
 
 ### external-product-lessons-dan-robinson--003
 
-`train` - 464 approximate tokens - 329 words
+`train` - `candidate` - 464 approximate tokens - 329 words
 
 Headings: Talk to users, but in a specific way
 
@@ -1394,9 +1407,9 @@ For Heap’s next product launch (which was much more successful), Dan ensured t
 Ultimately, Dan said this all came down to **intellectual honesty**. The best way to build a useless product for months is by letting your excitement influence the conversations you have with users. Instead, you should focus on trying to be as unbiased as possible on the most important problems that users are actually facing.
 ```
 
-### external-product-lessons-dan-robinson--004
+### external-product-lessons-dan-robinson--clean-close
 
-`train` - 363 approximate tokens - 247 words
+`train` - `approved` - 299 approximate tokens - 205 words
 
 Headings: Create a culture of product learning and product focus
 
@@ -1408,15 +1421,13 @@ Dan recounted a story of Heap’s goal to have every single employee “taste th
 I found that anecdote fascinating: here’s a CTO of a 200+ person company going out of his way to create a culture of product focus. When asked why, Dan pointed out that it’s relatively easy for the entire team to have a deep understanding of the product in the early days of a startup. However, as Heap expanded, maintaining this depth of knowledge and empathy with users became harder and harder. Therefore, a sustained focus on the product became even more crucial — it was the only way to get everyone aligned on how to create a great product.
 
 Dan closed with this: startups ultimately have to build something that people find valuable enough to pay money for. It’s one of the most basic observations, but often the basic things are the most important.
-
-If you’d like to join in discussions like these (or help build something that’s valuable enough to have companies like Stripe, Etsy, Zoom paying for it), feel free to email me at john@assembled.com — Assembled is hiring engineers and engineering managers.
 ```
 
 ## Scaling LLMs with Golang: How we serve millions of LLM requests
 
 ### external-scaling-llms-golang--001
 
-`train` - 689 approximate tokens - 353 words
+`train` - `candidate` - 689 approximate tokens - 353 words
 
 Headings: Type safety and structured outputs
 
@@ -1472,7 +1483,7 @@ Notice that because Golang has a type system built in, you don’t have to spend
 
 ### external-scaling-llms-golang--002
 
-`train` - 399 approximate tokens - 212 words
+`train` - `candidate` - 399 approximate tokens - 212 words
 
 Headings: Parallel processing and latency
 
@@ -1521,7 +1532,7 @@ This pattern reduces our total latency to that of the slowest backend, with a co
 
 ### external-scaling-llms-golang--003
 
-`train` - 496 approximate tokens - 275 words
+`train` - `candidate` - 496 approximate tokens - 275 words
 
 Headings: Response processing pipeline
 
@@ -1576,7 +1587,7 @@ The cleaner will parse the sources and pass them to the frontend as response det
 
 ### external-scaling-llms-golang--004
 
-`train` - 425 approximate tokens - 227 words
+`train` - `candidate` - 425 approximate tokens - 227 words
 
 Headings: Complementing with Python / Conclusion
 
@@ -1602,7 +1613,7 @@ Go's strengths in type safety, concurrency, and building interfaces have made it
 
 ### external-startup-journey--001
 
-`train` - 201 approximate tokens - 134 words
+`train` - `candidate` - 201 approximate tokens - 134 words
 
 Headings: How I “failed” at a YC startup, worked at early Stripe, and then raised $20M
 
@@ -1622,7 +1633,7 @@ Headings: How I “failed” at a YC startup, worked at early Stripe, and then r
 
 ### external-startup-journey--002
 
-`train` - 519 approximate tokens - 363 words
+`train` - `candidate` - 519 approximate tokens - 363 words
 
 Headings: **Contributing to Ruby on Rails**
 
@@ -1646,7 +1657,7 @@ However, I persisted and kept making smaller patches. As the summer came to a cl
 
 ### external-startup-journey--003
 
-`train` - 590 approximate tokens - 414 words
+`train` - `candidate` - 590 approximate tokens - 414 words
 
 Headings: Looking for a job in Silicon Valley
 
@@ -1670,7 +1681,7 @@ Stripe was ever so slightly different because it had intelligent people doing th
 
 ### external-startup-journey--004
 
-`train` - 170 approximate tokens - 111 words
+`train` - `candidate` - 170 approximate tokens - 111 words
 
 Headings: (intro or continuation)
 
@@ -1682,7 +1693,7 @@ In the end, it was the thoughtfulness and drive in Stripe’s culture that set i
 
 ### external-startup-journey--005
 
-`train` - 616 approximate tokens - 453 words
+`train` - `candidate` - 616 approximate tokens - 453 words
 
 Headings: Starting a YC company
 
@@ -1706,7 +1717,7 @@ These were hard lessons that I’d carry into the future. As we shut down our pr
 
 ### external-startup-journey--006
 
-`train` - 455 approximate tokens - 317 words
+`train` - `candidate` - 455 approximate tokens - 317 words
 
 Headings: Working at early Stripe
 
@@ -1728,7 +1739,7 @@ Michelle also taught me that there are different flavors of great engineers. Som
 
 ### external-startup-journey--007
 
-`train` - 423 approximate tokens - 286 words
+`train` - `candidate` - 423 approximate tokens - 286 words
 
 Headings: Building a profitable, (mostly) bootstrapped business
 
@@ -1746,7 +1757,7 @@ I loved being at Zinc because the feedback loop was extremely fast. We could see
 
 ### external-startup-journey--008
 
-`train` - 499 approximate tokens - 317 words
+`train` - `candidate` - 499 approximate tokens - 317 words
 
 Headings: Applying lessons and learning new ones at Assembled
 
@@ -1764,31 +1775,21 @@ Seeing these types of struggles across the industry led Brian, Ryan, and I to st
 **Left**: Assembled’s office in 2018 (e.g. my living room). **Right**: Assembled’s first career fair where we couldn’t even give away free pizza (recruiting is hard).
 ```
 
-### external-startup-journey--009
+### external-startup-journey--sentence-001
 
-`train` - 696 approximate tokens - 466 words
+`train` - `approved` - 35 approximate tokens - 23 words
 
 Headings: (intro or continuation)
 
 ```markdown
-*   **Figure out what great looks like.** For the first couple of years of Assembled, we didn’t have a clue about how to market ourselves. So we talked to a few dozen experts who showed us what the best of the business did. This made it really easy for us to determine what we needed. We interviewed quite a few marketers with amazing resumes, but when we met [Megha Narayan](https://www.linkedin.com/in/meghanarayan/), we knew immediately she was someone who had the skills and temperament to overhaul our marketing organization. All the pre-work we did allowed us to quickly identify Megha’s talent and switch to sell mode much sooner than we would have. Luckily, Megha joined us and is now building the future of marketing at Assembled.
-*   **You have to get lucky, but you also have to capitalize on the lucky opportunities.** When we started Assembled, we had little product and even fewer customers. When we were introduced to [Casper](https://casper.com/) by a potential investor, our point of contact [Amanda Kwasniewicz](https://www.linkedin.com/in/amanda-kwasniewicz/) mentioned that she would be in San Francisco. We invited her over to our (nonexistent) office and she miraculously agreed to come see a demo. We scrambled to find a temporary office space and worked nonstop to address all of the product issues we foresaw. Luckily, Amanda took a bet on us and we eventually were able to build something valuable for Casper.
-*   **Great engineers aren’t defined by years of experience. Great engineers need to care deeply about the product and have the technical prowess to build a great experience.** My Stripe experience taught me that 10x engineers exist and that they have a special combination of skills. For Assembled, it’s not sufficient for our engineers to simply meet the technical hiring bar. We’re looking for people who can change the course of our company with a combination of technical skills, user centric-ness, great communication, and practical mindedness. Looking for these attributes has helped us build a [world class product team](http://www.assembled.com/about) that’s been able to scale a multi-million dollar business with just 5 engineers.
-
-Looking back, I’ve had many ebbs and flows along my journey, but I wouldn’t trade the lows for anything. I’ve learned the most from the worst times and they’ve helped concentrate my focus. I’m forever grateful for all of the amazing people I’ve met and the people who have taken bets on me.
-
-Here’s to the future.
-
-P.S. If you’re excited about the things we’re doing at Assembled, I’d love to chat. Reach out to me at john@assembled.com.
-
-Thanks to Doug Feigelson, Megha Narayan, Michael Zhao, Michelle Bu, Neel Kapse, Ryan Wang, Sherwin Wu, Taylor Milliman, Vikas Velagapudi for reading drafts of this.
+I learned that making big changes in heavily used code usually leads to bad outcomes (especially when you don’t fully understand a system).
 ```
 
 ## Applying the Lessons of Stripe to Customer Support
 
 ### external-stripe-customer-support--001
 
-`train` - 211 approximate tokens - 151 words
+`train` - `candidate` - 211 approximate tokens - 151 words
 
 Headings: Why support is the next payments
 
@@ -1804,7 +1805,7 @@ I strongly believe there’s a new wave of change coming to the customer support
 
 ### external-stripe-customer-support--002
 
-`train` - 657 approximate tokens - 382 words
+`train` - `candidate` - 658 approximate tokens - 382 words
 
 Headings: A massive, growing market
 
@@ -1817,17 +1818,17 @@ Headings: A massive, growing market
 
 Customer support is a massive, growing market and a differentiator for the world’s best businesses. Much like payments in 2010, a confluence of macro factors today have led to the growing importance of customer support:
 
-*   **Consumer expectations have shifted.**Amazon changed the way people shop online by opening people’s eyes to what outstanding customer support looks like. Consumers now expect to receive refunds for damaged items, get tracking updates, and have missing items taken care of. Consumers also make purchasing decisions based on the quality of support they receive. In 2020, [Microsoft found](https://clouddamcdnprodep.azureedge.net/gdc/gdcPiLLQw/original?ocid=mkto_eml_EM582302A1LA1) that 90% of consumers use customer support as a factor in whether or not to do business with a company. A decade ago, customer support was hardly a factor in purchasing decisions, but it has now become one of the dominant inputs.
-*   **The world is moving online.**The COVID-19 pandemic accelerated the push to drive life online. Online transactions have been trending upwards for years and now account for over 20% of all retail transactions. Anecdotally, the best brands are advancing with online commerce squarely at the forefront of their minds. [Nike met its goal](https://fortune.com/2020/09/23/nike-q1-ecommerce-results-covid-19/) of moving 30% of its total sales online almost 3 years ahead of time.
+*   **Consumer expectations have shifted.** Amazon changed the way people shop online by opening people’s eyes to what outstanding customer support looks like. Consumers now expect to receive refunds for damaged items, get tracking updates, and have missing items taken care of. Consumers also make purchasing decisions based on the quality of support they receive. In 2020, [Microsoft found](https://clouddamcdnprodep.azureedge.net/gdc/gdcPiLLQw/original?ocid=mkto_eml_EM582302A1LA1) that 90% of consumers use customer support as a factor in whether or not to do business with a company. A decade ago, customer support was hardly a factor in purchasing decisions, but it has now become one of the dominant inputs.
+*   **The world is moving online.** The COVID-19 pandemic accelerated the push to drive life online. Online transactions have been trending upwards for years and now account for over 20% of all retail transactions. Anecdotally, the best brands are advancing with online commerce squarely at the forefront of their minds. [Nike met its goal](https://fortune.com/2020/09/23/nike-q1-ecommerce-results-covid-19/) of moving 30% of its total sales online almost 3 years ahead of time.
 
 Graph from From [https://www.digitalcommerce360.com/article/us-ecommerce-sales/](https://www.digitalcommerce360.com/article/us-ecommerce-sales/)
 
-*   **Companies have budget to spend.**There’s a massive amount of money in customer support. In the United States, there are twice as many [customer support agents](https://www.bls.gov/ooh/office-and-administrative-support/customer-service-representatives.htm) as [truck drivers](https://www.bls.gov/oes/current/oes533032.htm). It’s a $105 billion market in the United States alone, and a lot of global spending occurs in Asia and South America. The software industry for customer support is also growing, evidenced by the fact that Salesforce’s customer support product now [brings in more revenue](https://www.saastr.com/5-interesting-learnings-from-salesforce-at-24b-arr/) than its namesake sales product.
+*   **Companies have budget to spend.** There’s a massive amount of money in customer support. In the United States, there are twice as many [customer support agents](https://www.bls.gov/ooh/office-and-administrative-support/customer-service-representatives.htm) as [truck drivers](https://www.bls.gov/oes/current/oes533032.htm). It’s a $105 billion market in the United States alone, and a lot of global spending occurs in Asia and South America. The software industry for customer support is also growing, evidenced by the fact that Salesforce’s customer support product now [brings in more revenue](https://www.saastr.com/5-interesting-learnings-from-salesforce-at-24b-arr/) than its namesake sales product.
 ```
 
 ### external-stripe-customer-support--003
 
-`train` - 696 approximate tokens - 418 words
+`train` - `candidate` - 696 approximate tokens - 418 words
 
 Headings: Complex, outdated tools and processes
 
@@ -1855,7 +1856,7 @@ Most industry-leading customer support tools were built for use in call centers,
 
 ### external-stripe-customer-support--004
 
-`train` - 548 approximate tokens - 337 words
+`train` - `candidate` - 549 approximate tokens - 337 words
 
 Headings: Fundamental infrastructure for the internet
 
@@ -1871,12 +1872,12 @@ Many modern support teams want to scale their operations up, but not by setting 
 Payments and customer support are both areas that are fundamental to operating an online business. They are both necessary and a driver of differentiation among companies:
 
 *   **Foundational**. Every single online business needs to accept payments and support its’ customers, there’s no way around it. Imagine buying something online and not having the ability to contact the company about a lost package or a defective product. The concept is very much akin to sending a check through the mail for an online purchase: it may have worked for mail order catalogs in the 1990s, but having no support today would lead to a quick death.
-*   **All companies face the same problems.**Everyone uses the same credit card network because payments systems aren’t created for a specific industry. A company selling balloons can use the same system as a company selling enterprise software. Likewise, customer support remains largely the same across different companies. Whether you’re Glossier selling lipstick or Monzo providing banking services, you must forecast incoming support requests, portion it out to the right people, and solve those requests as quickly and accurately as possible. Some requests may take longer or require multiple steps, but the concept of putting people in the right place at the right time remains the same for all businesses.
+*   **All companies face the same problems.** Everyone uses the same credit card network because payments systems aren’t created for a specific industry. A company selling balloons can use the same system as a company selling enterprise software. Likewise, customer support remains largely the same across different companies. Whether you’re Glossier selling lipstick or Monzo providing banking services, you must forecast incoming support requests, portion it out to the right people, and solve those requests as quickly and accurately as possible. Some requests may take longer or require multiple steps, but the concept of putting people in the right place at the right time remains the same for all businesses.
 ```
 
 ### external-stripe-customer-support--005
 
-`train` - 431 approximate tokens - 277 words
+`train` - `candidate` - 431 approximate tokens - 277 words
 
 Headings: A hard, non-obvious problem
 
@@ -1894,33 +1895,11 @@ In the same vein, few people in Silicon Valley have expertise in customer suppor
 But if you‘ve ever seen a large support team run, you’ll realize that support is both important and ripe for innovation. My cofounders at [Assembled](https://www.assembled.com/) built out the support tools team at Stripe and found massive gains from targeted changes. At first, people laughed at them for working on support tools, but towards the end of their tenure, their small team of 2 people was replaced by a full team of dozens of product managers, engineers, and business people.
 ```
 
-### external-stripe-customer-support--006
-
-`train` - 330 approximate tokens - 209 words
-
-Headings: So what’s one to do?
-
-```markdown
-## So what’s one to do?
-
-> “Change will not come if we wait for some other person, or if we wait for some other time. We are the ones we’ve been waiting for. We are the change that we seek.”
->
->  — Barack Obama
-
-At [Assembled](https://www.assembled.com/), we’re building the intelligence layer for customer support. We’re rethinking the way that modern companies scale out their customer support teams. Instead of starting with a hierarchical call center approach where thousands of people have their every move directed to the minute, we’re starting with the belief that capable, autonomous humans given the right information will provide great customer experiences. We’re building software that helps forecast tickets and optimize schedules to where and when agents are most needed.
-
-My cofounders and I spent years at Stripe seeing support problems firsthand. We’ve talked to hundreds of different companies about how they think about customer experience and we’re now applying our knowledge by building the best software for any company that is scaling their support team.
-
-If you’re excited about the customer support revolution, [come join us](https://www.assembled.com/careers) or email me at john@assembled.com.
-
-Thanks to Megha Narayan, Nimalan Mahendran, and Olivier Godement for feedback on drafts of this.
-```
-
 ## How we saved hundreds of engineering hours by writing tests with LLMs
 
 ### external-tests-with-llms--001
 
-`train` - 353 approximate tokens - 213 words
+`train` - `candidate` - 353 approximate tokens - 213 words
 
 Headings: (intro or continuation)
 
@@ -1943,7 +1922,7 @@ In this blog post, we'll explore how we’ve used LLMs to enhance our testing pr
 
 ### external-tests-with-llms--002
 
-`train` - 564 approximate tokens - 343 words
+`train` - `candidate` - 564 approximate tokens - 343 words
 
 Headings: Leveraging LLMs for testing
 
@@ -1991,7 +1970,7 @@ If you have an AI-assisted code editor like Copilot or Cursor, the principles re
 
 ### external-tests-with-llms--003
 
-`train` - 523 approximate tokens - 263 words
+`train` - `candidate` - 522 approximate tokens - 263 words
 
 Headings: Example in action
 
@@ -2041,7 +2020,7 @@ func CalculateOrderSummary(items []OrderItem) OrderSummary {
 }
 ```
 
-Using the suggested prompt, we fed this code into ChatGPT o1-preview and, in **just 48 seconds**, it generated a comprehensive test suite that was ready to use straight out of the box. [Here’s the full prompt and results from ChatGPT](https://chatgpt.com/share/671576aa-c914-8000-9458-798e847e3c2c)**.**
+Using the suggested prompt, we fed this code into ChatGPT o1-preview and, in **just 48 seconds**, it generated a comprehensive test suite that was ready to use straight out of the box. [Here’s the full prompt and results from ChatGPT](https://chatgpt.com/share/671576aa-c914-8000-9458-798e847e3c2c).
 
 You’ll notice that the resulting tests are both comprehensive and well written:
 
@@ -2051,7 +2030,7 @@ You’ll notice that the resulting tests are both comprehensive and well written
 
 ### external-tests-with-llms--004
 
-`train` - 301 approximate tokens - 123 words
+`train` - `candidate` - 301 approximate tokens - 123 words
 
 Headings: (intro or continuation)
 
@@ -2114,7 +2093,7 @@ func TestCalculateOrderSummary(t *testing.T) {
 
 ### external-tests-with-llms--005
 
-`train` - 335 approximate tokens - 178 words
+`train` - `candidate` - 335 approximate tokens - 178 words
 
 Headings: Extending to more complex scenarios
 
@@ -2135,7 +2114,7 @@ The same approach can be applied to more complex testing scenarios. By adjusting
 
 ### external-tests-with-llms--006
 
-`train` - 673 approximate tokens - 431 words
+`train` - `candidate` - 673 approximate tokens - 431 words
 
 Headings: Considerations
 
@@ -2153,29 +2132,33 @@ At Assembled, we’ve been using LLMs to write tests for a few months now and ha
 *   **Don’t overdo testing**: You generally want to test the functions that have clear input / output and which contain the most important pieces of logic. You don’t need to test that a checkbox is working correctly (unless you’re the maintainer of a component library). Likewise, glue code is tough to test, and writing tests for some pretty straightforward glue code may not be worth it — though you should check on a case-by-case basis (e.g., if that glue code is a very hot codepath).
 ```
 
-### external-tests-with-llms--007
+### external-tests-with-llms--clean-conclusion
 
-`train` - 160 approximate tokens - 102 words
+`train` - `approved` - 81 approximate tokens - 51 words
 
-Headings: Conclusion / We’re hiring
+Headings: Conclusion
 
 ```markdown
 ## Conclusion
 
 Using LLMs to generate comprehensive test suites in minutes has been a game changer at Assembled. It reduces the activation energy to write tests and makes it less likely that engineers skip tests due to time constraints. This has resulted in a cleaner, safer codebase that has increased development velocity.
+```
 
-## We’re hiring
+### external-tests-with-llms--sentence-001
 
-We’ve got a lot of features to build and tests to write. If you’re interested in helping us transform customer support, [check out our open roles](https://www.assembled.com/careers-at-assembled#openings).
+`train` - `approved` - 25 approximate tokens - 19 words
 
-_Thanks to Jake Chao, Mae Cromwell, and Whitney Rose for helping with drafts of this post._
+Headings: (intro or continuation)
+
+```markdown
+Remember that your examples are often your most important way to drive the LLM to do what you want.
 ```
 
 ## Why I code as a CTO
 
 ### external-why-i-code-as-a-cto--001
 
-`train` - 528 approximate tokens - 356 words
+`train` - `candidate` - 528 approximate tokens - 356 words
 
 Headings: What I actually build / Long-horizon experimental projects
 
@@ -2203,7 +2186,7 @@ I've had my share of duds, but I've also had some huge hits. A recent example: w
 
 ### external-why-i-code-as-a-cto--002
 
-`train` - 395 approximate tokens - 263 words
+`train` - `candidate` - 395 approximate tokens - 263 words
 
 Headings: Critical customer asks that needed to be done yesterday / Bugfixes (the surprising one)
 
@@ -2225,7 +2208,7 @@ When you're hunting down why pagination breaks on the third page of search resul
 
 ### external-why-i-code-as-a-cto--003
 
-`train` - 294 approximate tokens - 210 words
+`train` - `candidate` - 294 approximate tokens - 210 words
 
 Headings: Why I code / It keeps me up to date with what actually works
 
@@ -2245,7 +2228,7 @@ Being in the code also lets me know when to push and when to let off the gas. I 
 
 ### external-why-i-code-as-a-cto--004
 
-`train` - 471 approximate tokens - 319 words
+`train` - `candidate` - 471 approximate tokens - 319 words
 
 Headings: Because it’s what I love and what I’m good at / AI tools have changed the leverage I have
 
@@ -2269,9 +2252,9 @@ I can tell an AI tool, “Build a data export that matches the format of our exi
 The job has shifted from “writing every line of code” to “providing context, making decisions, and evaluating solutions.” And luckily, I have a lot of context.
 ```
 
-### external-why-i-code-as-a-cto--005
+### external-why-i-code-as-a-cto--clean-conclusion
 
-`train` - 420 approximate tokens - 267 words
+`train` - `approved` - 315 approximate tokens - 195 words
 
 Headings: Figuring out what works for you
 
@@ -2285,17 +2268,23 @@ For me, that’s meant writing a lot of code. It works because of my particular 
 But this is my particular path, not a prescription. The CTO role is remarkably flexible. Whether building orgs, or developing product strategy, or something else — technical leadership varies depending on your strengths, what energizes you, and what your company needs.
 
 If you’re an engineer worried that leadership means abandoning technical work, know that there are many paths. The key is figuring out where you’re uniquely great.
+```
 
-_We’re building AI-powered tools to transform customer support, and we need technical folks who aren’t afraid to get their hands dirty. If this sounds like your kind of environment,_[_check out our open roles_](https://www.assembled.com/careers)_._
+### external-why-i-code-as-a-cto--sentence-001
 
-_Thanks to Calvin French-Owen, Dan Robinson, Dave Story, and Cai Wangwilt for helping me hone my thoughts on this topic and to Whitney Beyer for reading drafts of this._
+`train` - `approved` - 31 approximate tokens - 18 words
+
+Headings: (intro or continuation)
+
+```markdown
+The job has shifted from “writing every line of code” to “providing context, making decisions, and evaluating solutions.”
 ```
 
 ## Five opinions on building things well
 
 ### five-opinions-on-building-things-well--001
 
-`train` - 613 approximate tokens - 416 words
+`train` - `candidate` - 613 approximate tokens - 416 words
 
 Headings: Stay somewhere long enough to see legacy code / Creativity should go to the right place
 
@@ -2323,7 +2312,7 @@ Likewise, I believe the key to building timeless software is to build the bones 
 
 ### five-opinions-on-building-things-well--002
 
-`train` - 569 approximate tokens - 375 words
+`train` - `candidate` - 569 approximate tokens - 375 words
 
 Headings: It's not "Speed vs. Quality", it's "Speed + Quality"
 
@@ -2346,7 +2335,7 @@ All this is to say: build lots of stuff and continuously improve as you build. T
 
 ### five-opinions-on-building-things-well--003
 
-`train` - 379 approximate tokens - 268 words
+`train` - `candidate` - 379 approximate tokens - 268 words
 
 Headings: Beta fast, launch slow / If no one is ever mad at you, you're probably a bit too risk averse
 
@@ -2373,7 +2362,7 @@ If they’re mad at my actions, there’s usually something I should fix, apolog
 
 ### how-claude-watermarking-probably-works--001
 
-`dev` - 414 approximate tokens - 228 words
+`dev` - `candidate` - 414 approximate tokens - 228 words
 
 Headings: (intro or continuation)
 
@@ -2395,7 +2384,7 @@ This helps us narrow down the possibilities quite a bit.
 
 ### how-claude-watermarking-probably-works--002
 
-`dev` - 479 approximate tokens - 302 words
+`dev` - `candidate` - 479 approximate tokens - 302 words
 
 Headings: Setup / No hidden unicode or whitespace
 
@@ -2425,7 +2414,7 @@ This evidence, combined with the fact that the watermarking is imperceptible and
 
 ### how-claude-watermarking-probably-works--003
 
-`dev` - 609 approximate tokens - 414 words
+`dev` - `candidate` - 609 approximate tokens - 414 words
 
 Headings: Statistical watermarking schemes / Green/red lists
 
@@ -2465,7 +2454,7 @@ That being said, I don't believe Green/red lists are used in practice because th
 
 ### how-claude-watermarking-probably-works--004
 
-`dev` - 621 approximate tokens - 410 words
+`dev` - `candidate` - 621 approximate tokens - 410 words
 
 Headings: SynthID-Text
 
@@ -2504,7 +2493,7 @@ crisp vs. quiet (layer 2) | 0.35 vs. 0.83 | quiet
 
 ### how-claude-watermarking-probably-works--005
 
-`dev` - 497 approximate tokens - 324 words
+`dev` - `candidate` - 497 approximate tokens - 324 words
 
 Headings: Experimental results / Green/red list detection
 
@@ -2543,7 +2532,7 @@ All three were clear negative results. The Sonnet test was strong enough to rule
 
 ### how-claude-watermarking-probably-works--006
 
-`dev` - 671 approximate tokens - 465 words
+`dev` - `candidate` - 671 approximate tokens - 465 words
 
 Headings: SynthID detection
 
@@ -2597,7 +2586,7 @@ The full scan used 20,736 Sonnet 5 responses, with 2,592 at each value of $H$. T
 
 ### how-claude-watermarking-probably-works--007
 
-`dev` - 466 approximate tokens - 323 words
+`dev` - `candidate` - 466 approximate tokens - 323 words
 
 Headings: Conclusions
 
@@ -2619,7 +2608,7 @@ Note that I'm not actually sure whether the watermarking rollout is fully comple
 
 ### how-claude-watermarking-probably-works--008
 
-`dev` - 603 approximate tokens - 367 words
+`dev` - `candidate` - 603 approximate tokens - 367 words
 
 Headings: UPDATE (2026-08-20): Anthropic confirms it's SynthID-Text
 
@@ -2641,7 +2630,7 @@ I also went ahead and re-ran the completed Sonnet 5 experiments on August 20, co
 
 ### how-claude-watermarking-probably-works--009
 
-`dev` - 348 approximate tokens - 214 words
+`dev` - `candidate` - 348 approximate tokens - 214 words
 
 Headings: (intro or continuation)
 
@@ -2660,7 +2649,7 @@ So something in Sonnet 5's serving, sampling, tokenization, or surrounding confi
 
 ### how-claude-watermarking-probably-works--010
 
-`dev` - 473 approximate tokens - 332 words
+`dev` - `candidate` - 473 approximate tokens - 332 words
 
 Headings: A note on the future of watermarking / Footnotes
 
@@ -2682,7 +2671,7 @@ Thankfully, sidestepping this kid of watermarking is fairly easy with a paraphra
 
 ### learnings-from-the-codex-repo--001
 
-`test` - 458 approximate tokens - 341 words
+`test` - `candidate` - 458 approximate tokens - 341 words
 
 Headings: (intro or continuation)
 
@@ -2702,7 +2691,7 @@ My immediate observation is that Codex has seen a step change increase in PRs pe
 
 ### learnings-from-the-codex-repo--002
 
-`test` - 457 approximate tokens - 289 words
+`test` - `candidate` - 457 approximate tokens - 289 words
 
 Headings: Graduating from small team / handwritten-ish code to large team with agents
 
@@ -2730,7 +2719,7 @@ With that many more people and agents changing the code at the same time, the ru
 
 ### learnings-from-the-codex-repo--003
 
-`test` - 645 approximate tokens - 391 words
+`test` - `candidate` - 645 approximate tokens - 391 words
 
 Headings: Agent guardrails and rules
 
@@ -2752,7 +2741,7 @@ There are five rules in particular that I found interesting:
 
 ### learnings-from-the-codex-repo--004
 
-`test` - 479 approximate tokens - 320 words
+`test` - `candidate` - 479 approximate tokens - 320 words
 
 Headings: Lint rules
 
@@ -2786,7 +2775,7 @@ Codex has 38 lint rules, and I think it's part of what makes the repo easier to 
 
 ### learnings-from-the-codex-repo--005
 
-`test` - 585 approximate tokens - 391 words
+`test` - `candidate` - 585 approximate tokens - 391 words
 
 Headings: Investing in an integration test harness
 
@@ -2806,7 +2795,7 @@ Basically, Codex has set up their environment so only relevant tests are run whi
 
 ### learnings-from-the-codex-repo--006
 
-`test` - 400 approximate tokens - 235 words
+`test` - `candidate` - 400 approximate tokens - 235 words
 
 Headings: Migrations with linting and feature flags
 
@@ -2822,7 +2811,7 @@ Two weeks later, they added a [CI rule preventing the TUI from importing `codex-
 
 ### learnings-from-the-codex-repo--007
 
-`test` - 270 approximate tokens - 175 words
+`test` - `candidate` - 270 approximate tokens - 175 words
 
 Headings: Conclusion: speed == testing, boundaries, lint, hiring
 
@@ -2838,7 +2827,7 @@ The interesting thing is that at least for the Codex team, as implementation got
 
 ### mamba-3--001
 
-`train` - 689 approximate tokens - 463 words
+`train` - `candidate` - 689 approximate tokens - 463 words
 
 Headings: (intro or continuation)
 
@@ -2866,7 +2855,7 @@ There's a few magical things about state space models:
 
 ### mamba-3--002
 
-`train` - 523 approximate tokens - 348 words
+`train` - `candidate` - 523 approximate tokens - 348 words
 
 Headings: (intro or continuation)
 
@@ -2886,11 +2875,21 @@ Mamba-3 has a few optimizations for this:
 It seems like the big labs are still mostly optimizing transformers, but hybrid models like AI21's Jamba and Google's Griffin already exist, and I bet that the next wave of models combining Mamba blocks and transformer blocks will be just around the corner.
 ```
 
+### mamba-3--sentence-001
+
+`train` - `approved` - 21 approximate tokens - 13 words
+
+Headings: (intro or continuation)
+
+```markdown
+This means that Mamba-3 has the ability to track cycles, oscillatory patterns, etc.
+```
+
 ## Time
 
 ### time--001
 
-`train` - 144 approximate tokens - 104 words
+`train` - `candidate` - 144 approximate tokens - 104 words
 
 Headings: (intro or continuation)
 
@@ -2900,7 +2899,7 @@ I've been thinking about time lately, especially how much of it is available. Th
 
 ### time--002
 
-`train` - 578 approximate tokens - 374 words
+`train` - `candidate` - 578 approximate tokens - 374 words
 
 Headings: Life is long
 
@@ -2922,7 +2921,7 @@ My takeaway from this view is simple: keep learning and keep building. The runwa
 
 ### time--003
 
-`train` - 699 approximate tokens - 503 words
+`train` - `candidate` - 699 approximate tokens - 503 words
 
 Headings: Life is short / Enjoy it
 
@@ -2946,11 +2945,21 @@ So life is both long and short, depending on the angle. Long enough that it's ne
 For me, I'm focusing on working on building things / working on problems I genuinely enjoy and continuing to learn from incredible people. I just hope to stop to smell the flowers every now and then.
 ```
 
+### time--sentence-001
+
+`train` - `approved` - 11 approximate tokens - 9 words
+
+Headings: (intro or continuation)
+
+```markdown
+Both things can be true at the same time.
+```
+
 ## Number of tokens shouldn't be the only metric
 
 ### tokens-shouldnt-be-the-only-metric--001
 
-`train` - 481 approximate tokens - 343 words
+`train` - `candidate` - 481 approximate tokens - 343 words
 
 Headings: (intro or continuation)
 
@@ -2969,7 +2978,7 @@ As I'm sure some companies have found out by now, there are a number of reasons 
 
 ### tokens-shouldnt-be-the-only-metric--002
 
-`train` - 489 approximate tokens - 335 words
+`train` - `candidate` - 489 approximate tokens - 335 words
 
 Headings: But I want people to use AI and to change their behavior! / So what should we actually look at?
 
@@ -2998,11 +3007,21 @@ Tokens are an input, and the metrics that matter are almost always outputs. Opti
 Should you watch token usage? Definitely! Use it for cost forecasting, for understanding adoption curves, for spotting people who might benefit from a nudge or some coaching. Just don't make it the only thing that matters.
 ```
 
+### tokens-shouldnt-be-the-only-metric--sentence-001
+
+`train` - `approved` - 19 approximate tokens - 13 words
+
+Headings: (intro or continuation)
+
+```markdown
+Tokens are an input, and the metrics that matter are almost always outputs.
+```
+
 ## Why are executives enamored with AI but ICs aren't?
 
 ### why-are-executives-enamored-with-ai-but-ics-arent--001
 
-`train` - 166 approximate tokens - 104 words
+`train` - `candidate` - 166 approximate tokens - 104 words
 
 Headings: (intro or continuation)
 
@@ -3014,7 +3033,7 @@ Here's my current posit for why there's such a big divide: executives have alway
 
 ### why-are-executives-enamored-with-ai-but-ics-arent--002
 
-`train` - 586 approximate tokens - 381 words
+`train` - `candidate` - 586 approximate tokens - 381 words
 
 Headings: Managing non-deterministic systems
 
@@ -3045,7 +3064,7 @@ Many of these properties are more deterministic than large human systems, which 
 
 ### why-are-executives-enamored-with-ai-but-ics-arent--003
 
-`train` - 647 approximate tokens - 431 words
+`train` - `candidate` - 647 approximate tokens - 431 words
 
 Headings: ICs live in a more deterministic world
 
@@ -3067,7 +3086,7 @@ One note: organizations that bias towards speed over quality tend to see more IC
 
 ### why-are-executives-enamored-with-ai-but-ics-arent--004
 
-`train` - 156 approximate tokens - 103 words
+`train` - `candidate` - 156 approximate tokens - 103 words
 
 Headings: So where does the friction come from?
 
@@ -3079,11 +3098,21 @@ The difference in AI perception comes down to what work looks like at different 
 I think this framing explains a lot of the friction that shows up when companies try to roll out AI adoption broadly. The same tool looks fundamentally different depending on what your job actually asks of you.
 ```
 
+### why-are-executives-enamored-with-ai-but-ics-arent--sentence-001
+
+`train` - `approved` - 41 approximate tokens - 27 words
+
+Headings: (intro or continuation)
+
+```markdown
+A manager's job is to create a model of the world and align everyone's utility functions, knowing that there's a large amount of non-determinism in complex systems.
+```
+
 ## Why we built 143
 
 ### why-we-built-143--001
 
-`test` - 305 approximate tokens - 205 words
+`test` - `candidate` - 305 approximate tokens - 205 words
 
 Headings: Where it started
 
@@ -3101,7 +3130,7 @@ At Assembled, we saw this firsthand: our support and product teams kept surfacin
 
 ### why-we-built-143--002
 
-`test` - 343 approximate tokens - 227 words
+`test` - `candidate` - 343 approximate tokens - 227 words
 
 Headings: What we built
 
@@ -3123,7 +3152,7 @@ We built 143 so the person who spots the bug doesn't need to become an engineer 
 
 ### why-we-built-143--003
 
-`test` - 258 approximate tokens - 184 words
+`test` - `candidate` - 258 approximate tokens - 184 words
 
 Headings: Open source for everyone
 

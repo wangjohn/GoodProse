@@ -145,6 +145,55 @@ def test_build_prompt_candidates_attaches_frozen_chunk_metadata(tmp_path: Path) 
     assert candidate.prompt_form is PromptForm.ROUGH_SENTENCES
 
 
+def test_build_prompt_candidates_can_replace_a_complete_lineage(tmp_path: Path) -> None:
+    first = _chunk().model_copy(
+        update={"id": "post-a--001", "post_id": "post-a", "lineage_id": "post-a"}
+    )
+    second = first.model_copy(update={"id": "post-a--002", "ordinal": 2})
+    retained = first.model_copy(
+        update={"id": "post-b--001", "post_id": "post-b", "lineage_id": "post-b"}
+    )
+    chunks = [first, second, retained]
+    base = [
+        _candidate(chunk).model_copy(
+            update={"id": f"{chunk.id}--synthetic", "chunk_id": chunk.id}
+        )
+        for chunk in chunks
+    ]
+    chunks_path = tmp_path / "chunks.jsonl"
+    drafts_path = tmp_path / "drafts.jsonl"
+    base_path = tmp_path / "base.jsonl"
+    output_path = tmp_path / "prompts.jsonl"
+    atomic_write(chunks_path, serialize_jsonl(chunks))
+    atomic_write(base_path, serialize_jsonl(base))
+    atomic_write(
+        drafts_path,
+        serialize_jsonl(
+            [
+                SyntheticPromptDraft(
+                    chunk_id=first.id,
+                    prompt_form=PromptForm.SENTENCE_REWRITE,
+                    input="Rewrite this as a single polished sentence.",
+                )
+            ]
+        ),
+    )
+
+    assert (
+        build_prompt_candidates(
+            drafts_path,
+            chunks_path,
+            output_path,
+            base_prompts_path=base_path,
+            replace_lineages=["post-a"],
+        )
+        == 2
+    )
+    candidates = load_jsonl(output_path, SyntheticPromptCandidate)
+    assert [candidate.chunk_id for candidate in candidates] == [first.id, retained.id]
+    assert candidates[0].prompt_form is PromptForm.SENTENCE_REWRITE
+
+
 def test_approve_prompt_candidates_only_approves_referenced_training_chunks(
     tmp_path: Path,
 ) -> None:
@@ -268,4 +317,32 @@ def test_build_prompt_pairs_rejects_unreviewed_candidates(tmp_path: Path) -> Non
     )
 
     with pytest.raises(PromptReviewError, match=r"prompt candidate.*not approved"):
+        build_prompt_pairs(prompts_path, chunks_path, posts_path, tmp_path / "pairs.jsonl")
+
+
+def test_build_prompt_pairs_rejects_promotional_hiring_calls(tmp_path: Path) -> None:
+    target = "Useful conclusion. If you're interested in helping us build it, we're hiring!"
+    chunk = _chunk().model_copy(
+        update={
+            "target": target,
+            "target_sha256": hashlib.sha256(target.encode()).hexdigest(),
+            "review_status": ReviewStatus.APPROVED,
+        }
+    )
+    candidate = _candidate(chunk).model_copy(update={"review_status": ReviewStatus.APPROVED})
+    post = BlogPost(
+        id="post",
+        lineage_id="post",
+        title="Post title",
+        body_markdown=target,
+        source_path="post.md",
+    )
+    prompts_path = tmp_path / "prompts.jsonl"
+    chunks_path = tmp_path / "chunks.jsonl"
+    posts_path = tmp_path / "posts.jsonl"
+    atomic_write(prompts_path, serialize_jsonl([candidate]))
+    atomic_write(chunks_path, serialize_jsonl([chunk]))
+    atomic_write(posts_path, serialize_jsonl([post]))
+
+    with pytest.raises(PromptReviewError, match="promotional or hiring call"):
         build_prompt_pairs(prompts_path, chunks_path, posts_path, tmp_path / "pairs.jsonl")

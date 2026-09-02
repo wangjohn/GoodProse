@@ -7,7 +7,15 @@ import pytest
 
 from goodprose.chunks import ChunkBuildError, build_chunks, semantic_chunks
 from goodprose.jsonl import load_jsonl, serialize_jsonl
-from goodprose.models import BlogPost, SemanticChunk, Split, SplitAssignment
+from goodprose.models import (
+    BlogPost,
+    ChunkExclusionSpec,
+    ReviewStatus,
+    SemanticChunk,
+    Split,
+    SplitAssignment,
+    SupplementalChunkSpec,
+)
 
 
 def _post(post_id: str, body: str, *, lineage_id: str | None = None) -> BlogPost:
@@ -102,3 +110,106 @@ def test_build_chunks_writes_candidates_and_review(tmp_path: Path) -> None:
     chunks = load_jsonl(output_path, SemanticChunk)
     assert all(chunk.target in posts[index].body_markdown for index, chunk in enumerate(chunks))
     assert "Every target is an exact contiguous span" in review_path.read_text()
+
+
+def test_build_chunks_adds_reviewed_exact_supplemental_training_spans(tmp_path: Path) -> None:
+    posts = [
+        _post("train", "Opening sentence. Second exact sentence."),
+        _post("dev", "Development post."),
+        _post("test", "Test post."),
+    ]
+    assignments = [
+        SplitAssignment(
+            lineage_id=post.id,
+            split=split,
+            frozen_at=date(2026, 9, 1),
+            rationale=f"Frozen {split.value} lineage.",
+        )
+        for post, split in zip(posts, (Split.TRAIN, Split.DEV, Split.TEST), strict=True)
+    ]
+    posts_path = tmp_path / "posts.jsonl"
+    splits_path = tmp_path / "splits.jsonl"
+    supplemental_path = tmp_path / "supplemental.jsonl"
+    exclusions_path = tmp_path / "exclusions.jsonl"
+    output_path = tmp_path / "chunks.jsonl"
+    atomic_spec = SupplementalChunkSpec(
+        id="train--sentence-001",
+        post_id="train",
+        target="Second exact sentence.",
+        review_status=ReviewStatus.APPROVED,
+    )
+    posts_path.write_bytes(serialize_jsonl(posts))
+    splits_path.write_bytes(serialize_jsonl(assignments))
+    supplemental_path.write_bytes(serialize_jsonl([atomic_spec]))
+    exclusions_path.write_bytes(
+        serialize_jsonl(
+            [
+                ChunkExclusionSpec(
+                    chunk_id="train--001",
+                    reason="Replace the default span with the sentence target.",
+                )
+            ]
+        )
+    )
+
+    counts = build_chunks(
+        posts_path,
+        splits_path,
+        output_path,
+        tmp_path / "review.md",
+        supplemental_targets_path=supplemental_path,
+        exclusions_path=exclusions_path,
+    )
+
+    assert counts == {"dev": 1, "test": 1, "train": 1}
+    supplemental = next(
+        chunk for chunk in load_jsonl(output_path, SemanticChunk) if chunk.id == atomic_spec.id
+    )
+    assert supplemental.target == atomic_spec.target
+    assert supplemental.review_status is ReviewStatus.APPROVED
+    assert (
+        posts[0].body_markdown[supplemental.source_start : supplemental.source_end]
+        == atomic_spec.target
+    )
+
+
+def test_build_chunks_rejects_supplemental_heldout_target(tmp_path: Path) -> None:
+    posts = [
+        _post("train", "Training post."),
+        _post("dev", "Development post."),
+        _post("test", "Frozen sentence."),
+    ]
+    assignments = [
+        SplitAssignment(
+            lineage_id=post.id,
+            split=split,
+            frozen_at=date(2026, 9, 1),
+            rationale=f"Frozen {split.value} lineage.",
+        )
+        for post, split in zip(posts, (Split.TRAIN, Split.DEV, Split.TEST), strict=True)
+    ]
+    posts_path = tmp_path / "posts.jsonl"
+    splits_path = tmp_path / "splits.jsonl"
+    supplemental_path = tmp_path / "supplemental.jsonl"
+    posts_path.write_bytes(serialize_jsonl(posts))
+    splits_path.write_bytes(serialize_jsonl(assignments))
+    supplemental_path.write_bytes(
+        serialize_jsonl(
+            [
+                SupplementalChunkSpec(
+                    id="test--sentence-001",
+                    post_id="test",
+                    target="Frozen sentence.",
+                )
+            ]
+        )
+    )
+
+    with pytest.raises(ChunkBuildError, match="must belong to a training lineage"):
+        build_chunks(
+            posts_path,
+            splits_path,
+            tmp_path / "chunks.jsonl",
+            tmp_path / "review.md",
+            supplemental_targets_path=supplemental_path,
+        )

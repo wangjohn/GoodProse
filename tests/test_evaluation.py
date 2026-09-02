@@ -167,3 +167,16 @@ def test_prepare_review_validates_run_manifests(tmp_path: Path) -> None:
             baseline_manifest_path=baseline_manifest_path,
             candidate_manifest_path=candidate_manifest_path,
         )
+
+    bad_manifest = candidate_manifest.model_copy(update={"system_prompt_sha256": "4" * 64})
+    candidate_manifest_path.write_text(bad_manifest.model_dump_json())
+    with pytest.raises(EvaluationError, match="differ on system_prompt_sha256"):
+        prepare_review(
+            cases_path,
+            baseline_path,
+            candidate_path,
+            tmp_path / "review.jsonl",
+            tmp_path / "key.json",
+            baseline_manifest_path=baseline_manifest_path,
+            candidate_manifest_path=candidate_manifest_path,
+        )

@@ -41,7 +41,7 @@ def test_builds_train_dev_and_frozen_test_cases(tmp_path: Path) -> None:
     assert counts == {"train": 1, "dev": 1, "test": 1}
     train_record = json.loads((output_dir / "train.jsonl").read_text().strip())
     assert train_record["messages"][0]["content"] == SYSTEM_PROMPT
-    assert "paragraph, section, or complete post" in SYSTEM_PROMPT
+    assert "sentence, paragraph, section, or complete post" in SYSTEM_PROMPT
     assert "do not invent details" in SYSTEM_PROMPT
     assert "test-post" not in (output_dir / "train.jsonl").read_text()
     assert "test-post" not in (output_dir / "dev.jsonl").read_text()

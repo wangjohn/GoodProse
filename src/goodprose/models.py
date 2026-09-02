@@ -36,6 +36,7 @@ class ReviewStatus(StrEnum):
 
 
 class PromptForm(StrEnum):
+    SENTENCE_REWRITE = "sentence_rewrite"
     BULLET_NOTES = "bullet_notes"
     ROUGH_SENTENCES = "rough_sentences"
     PHRASES_AND_THOUGHTS = "phrases_and_thoughts"
@@ -105,6 +106,24 @@ class SemanticChunk(StrictModel):
         if self.source_end <= self.source_start:
             raise ValueError("source_end must be greater than source_start")
         return self
+
+
+class SupplementalChunkSpec(StrictModel):
+    """A reviewed exact post span that supplements the default semantic chunks."""
+
+    version: Literal[1] = 1
+    id: NonEmptyString
+    post_id: NonEmptyString
+    target: NonEmptyString
+    review_status: ReviewStatus = ReviewStatus.CANDIDATE
+
+
+class ChunkExclusionSpec(StrictModel):
+    """A reviewed default chunk that must not enter the candidate inventory."""
+
+    version: Literal[1] = 1
+    chunk_id: NonEmptyString
+    reason: NonEmptyString
 
 
 class SyntheticPromptCandidate(StrictModel):
