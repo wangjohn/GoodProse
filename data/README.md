@@ -42,6 +42,12 @@ public snapshots, line-range maps, authentic held-out inputs, and generated pair
 ignored `private/external/`. The two development and two test posts have authentic drafts or
 outlines; synthetic inputs are generated only for training chunks.
 
+Approval covers the whole training conversation, not the brief alone. The review packet quotes
+the exact system prompt and its hash, `approve-prompts` records that hash on every approved
+candidate, and `build-prompt-pairs` rejects any candidate approved against a different system
+prompt. Editing `SYSTEM_PROMPT` therefore invalidates existing approvals until they are
+re-reviewed and re-approved.
+
 `build-prompt-pairs` is the promotion gate for section-level training data. It verifies frozen
 metadata and target hashes, rejects any prompt or chunk that is not explicitly approved, and can
 merge the resulting training sections with authentic held-out pairs for `build-sft`.

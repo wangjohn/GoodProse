@@ -26,7 +26,9 @@ from goodprose.prompts import (
     build_prompt_candidates,
     build_prompt_pairs,
     render_prompt_review,
+    system_prompt_sha256,
 )
+from goodprose.sft import SYSTEM_PROMPT
 
 
 def _chunk(*, split: Split = Split.TRAIN) -> SemanticChunk:
@@ -222,7 +224,12 @@ def test_build_prompt_pairs_requires_approval_and_preserves_exact_target(
     tmp_path: Path,
 ) -> None:
     chunk = _chunk().model_copy(update={"review_status": ReviewStatus.APPROVED})
-    candidate = _candidate(chunk).model_copy(update={"review_status": ReviewStatus.APPROVED})
+    candidate = _candidate(chunk).model_copy(
+        update={
+            "review_status": ReviewStatus.APPROVED,
+            "approved_system_prompt_sha256": system_prompt_sha256(),
+        }
+    )
     post = BlogPost(
         id="post",
         lineage_id="post",
@@ -328,7 +335,12 @@ def test_build_prompt_pairs_rejects_promotional_hiring_calls(tmp_path: Path) -> 
             "review_status": ReviewStatus.APPROVED,
         }
     )
-    candidate = _candidate(chunk).model_copy(update={"review_status": ReviewStatus.APPROVED})
+    candidate = _candidate(chunk).model_copy(
+        update={
+            "review_status": ReviewStatus.APPROVED,
+            "approved_system_prompt_sha256": system_prompt_sha256(),
+        }
+    )
     post = BlogPost(
         id="post",
         lineage_id="post",
@@ -352,7 +364,12 @@ def test_build_prompt_pairs_rejects_promotional_heldout_material(
     tmp_path: Path, field: str
 ) -> None:
     chunk = _chunk().model_copy(update={"review_status": ReviewStatus.APPROVED})
-    candidate = _candidate(chunk).model_copy(update={"review_status": ReviewStatus.APPROVED})
+    candidate = _candidate(chunk).model_copy(
+        update={
+            "review_status": ReviewStatus.APPROVED,
+            "approved_system_prompt_sha256": system_prompt_sha256(),
+        }
+    )
     post = BlogPost(
         id="post",
         lineage_id="post",
@@ -391,7 +408,12 @@ def test_build_prompt_pairs_rejects_promotional_heldout_material(
 
 def test_build_prompt_pairs_applies_reviewed_exact_text_exclusion(tmp_path: Path) -> None:
     chunk = _chunk().model_copy(update={"review_status": ReviewStatus.APPROVED})
-    candidate = _candidate(chunk).model_copy(update={"review_status": ReviewStatus.APPROVED})
+    candidate = _candidate(chunk).model_copy(
+        update={
+            "review_status": ReviewStatus.APPROVED,
+            "approved_system_prompt_sha256": system_prompt_sha256(),
+        }
+    )
     post = BlogPost(
         id="post",
         lineage_id="post",
@@ -513,3 +535,48 @@ def test_build_prompt_candidates_keeps_other_forms_for_the_same_chunk(tmp_path: 
         "post--001--phrases_and_thoughts",
         "post--001--synthetic",
     ]
+
+
+def test_prompt_approval_records_and_enforces_the_system_prompt(tmp_path: Path) -> None:
+    chunk = _chunk()
+    prompts_path = tmp_path / "prompts.jsonl"
+    chunks_path = tmp_path / "chunks.jsonl"
+    atomic_write(prompts_path, serialize_jsonl([_candidate(chunk)]))
+    atomic_write(chunks_path, serialize_jsonl([chunk]))
+
+    approve_prompt_candidates(prompts_path, chunks_path, reviewer_note="Approved by the author.")
+
+    approved = load_jsonl(prompts_path, SyntheticPromptCandidate)[0]
+    assert approved.approved_system_prompt_sha256 == system_prompt_sha256()
+
+    stale = approved.model_copy(update={"approved_system_prompt_sha256": "0" * 64})
+    atomic_write(prompts_path, serialize_jsonl([stale]))
+    posts_path = tmp_path / "posts.jsonl"
+    atomic_write(
+        posts_path,
+        serialize_jsonl(
+            [
+                BlogPost(
+                    id="post",
+                    lineage_id="post",
+                    title="Post",
+                    body_markdown=chunk.target,
+                    source_path="post.md",
+                )
+            ]
+        ),
+    )
+
+    with pytest.raises(PromptReviewError, match="approved against a different system prompt"):
+        build_prompt_pairs(prompts_path, chunks_path, posts_path, tmp_path / "pairs.jsonl")
+
+
+def test_prompt_review_quotes_the_system_prompt_it_binds_approval_to() -> None:
+    chunk = _chunk()
+
+    review = render_prompt_review([_candidate(chunk)], [chunk]).decode()
+
+    assert "## System prompt" in review
+    assert SYSTEM_PROMPT in review
+    assert system_prompt_sha256() in review
+    assert f"System prompt: `{system_prompt_sha256()[:12]}`" in review

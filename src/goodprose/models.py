@@ -147,6 +147,11 @@ class SyntheticPromptCandidate(StrictModel):
     target_sha256: Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
     review_status: ReviewStatus = ReviewStatus.CANDIDATE
     reviewer_notes: tuple[NonEmptyString, ...] = ()
+    approved_system_prompt_sha256: (
+        Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")] | None
+    ) = None
+    """The system prompt this record was approved against; a training example is the whole
+    conversation, so changing the system prompt invalidates the approval."""
 
 
 class SyntheticPromptDraft(StrictModel):

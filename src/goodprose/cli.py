@@ -36,6 +36,7 @@ from goodprose.sft import build_sft
 from goodprose.shortcases import (
     DEFAULT_SCOPE_LINE,
     ShortCaseError,
+    approve_short_cases,
     build_short_case_candidates,
     promote_short_cases,
 )
@@ -205,6 +206,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Keep at most this many near-verbatim polish cases; auto-reject the rest",
     )
     short_cases_command.add_argument("--scope-line", default=DEFAULT_SCOPE_LINE)
+
+    approve_short_command = commands.add_parser(
+        "approve-short-cases",
+        help="Stamp the reviewed system prompt onto short cases marked approved",
+    )
+    approve_short_command.add_argument("--candidates", required=True)
+    approve_short_command.add_argument("--reviewer-note", required=True)
 
     promote_short_command = commands.add_parser(
         "promote-short-cases", help="Write approved short candidates as evaluation cases"
@@ -447,6 +455,10 @@ def _run(args: argparse.Namespace) -> int:
             scope_line=args.scope_line,
         )
         print(f"built short case candidates: {_format_counts(counts)}")
+        return 0
+    if args.command == "approve-short-cases":
+        counts = approve_short_cases(_path(args.candidates), reviewer_note=args.reviewer_note)
+        print(f"approved short review cases: {_format_counts(counts)}")
         return 0
     if args.command == "promote-short-cases":
         count = promote_short_cases(_path(args.candidates), _path(args.output))

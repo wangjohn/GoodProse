@@ -17,10 +17,12 @@ from goodprose.models import (
     Split,
     SplitAssignment,
 )
+from goodprose.sft import SYSTEM_PROMPT
 from goodprose.shortcases import (
     ShortCaseCandidate,
     ShortCaseError,
     align_window,
+    approve_short_cases,
     build_short_case_candidates,
     promote_short_cases,
 )
@@ -150,6 +152,10 @@ def test_build_and_promote_short_cases(tmp_path: Path) -> None:
     assert kept.input.endswith("keep it tight")
     assert kept.notes is not None and kept.notes.startswith("author-edited input (aligned")
 
+    with pytest.raises(ShortCaseError, match="carry no system prompt approval"):
+        promote_short_cases(output_path, tmp_path / "short.jsonl")
+    approve_short_cases(output_path, reviewer_note="Read with the system prompt on 2026-09-02.")
+
     promoted = promote_short_cases(output_path, tmp_path / "short.jsonl")
     assert promoted == 1
     [case] = load_jsonl(tmp_path / "short.jsonl", EvalCase)
@@ -177,6 +183,7 @@ def test_promote_rejects_input_that_contains_the_reference(tmp_path: Path) -> No
         for c in candidates[:1]
     ]
     atomic_write(output_path, serialize_jsonl(leaked))
+    approve_short_cases(output_path, reviewer_note="Reviewed.")
 
     with pytest.raises(ShortCaseError, match="contains the reference section verbatim"):
         promote_short_cases(output_path, tmp_path / "short.jsonl")
@@ -280,3 +287,69 @@ def test_near_verbatim_cases_are_capped_and_explicit_approvals_survive(tmp_path:
     again = {c.id: c for c in load_jsonl(output_path, ShortCaseCandidate)}
     assert again[rejected.id].review_status is ReviewStatus.APPROVED
     assert sum(c.review_status is ReviewStatus.REJECTED for c in again.values()) == 2
+
+
+def test_approval_is_bound_to_the_system_prompt_it_was_read_against(tmp_path: Path) -> None:
+    cases_path, chunks_path, posts_path = _fixture(tmp_path)
+    output_path = tmp_path / "short.candidates.jsonl"
+    build_short_case_candidates(
+        cases_path,
+        chunks_path,
+        posts_path,
+        output_path,
+        tmp_path / "S.md",
+        min_words=20,
+        max_words=400,
+    )
+    candidates = load_jsonl(output_path, ShortCaseCandidate)
+    idea = next(c for c in candidates if c.reference_output.startswith("# The idea"))
+    atomic_write(
+        output_path,
+        serialize_jsonl(
+            [
+                c.model_copy(update={"review_status": ReviewStatus.APPROVED})
+                if c.id == idea.id
+                else c
+                for c in candidates
+            ]
+        ),
+    )
+
+    counts = approve_short_cases(output_path, reviewer_note="Approved with the system prompt.")
+
+    assert counts["approved"] == 1
+    stamped = next(c for c in load_jsonl(output_path, ShortCaseCandidate) if c.id == idea.id)
+    assert (
+        stamped.approved_system_prompt_sha256 == hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest()
+    )
+    assert stamped.reviewer_notes == ("Approved with the system prompt.",)
+    assert promote_short_cases(output_path, tmp_path / "short.jsonl") == 1
+
+    # A system prompt change invalidates the approval rather than silently shipping it.
+    atomic_write(
+        output_path,
+        serialize_jsonl(
+            [
+                c.model_copy(update={"approved_system_prompt_sha256": "0" * 64})
+                if c.id == idea.id
+                else c
+                for c in load_jsonl(output_path, ShortCaseCandidate)
+            ]
+        ),
+    )
+    with pytest.raises(ShortCaseError, match="approved against a different system prompt"):
+        promote_short_cases(output_path, tmp_path / "short.jsonl")
+
+    # The stamp survives a rebuild of an unchanged section.
+    build_short_case_candidates(
+        cases_path,
+        chunks_path,
+        posts_path,
+        output_path,
+        tmp_path / "S.md",
+        min_words=20,
+        max_words=400,
+    )
+    kept = next(c for c in load_jsonl(output_path, ShortCaseCandidate) if c.id == idea.id)
+    assert kept.approved_system_prompt_sha256 == "0" * 64
+    assert "System prompt" in (tmp_path / "S.md").read_text()

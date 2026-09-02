@@ -32,7 +32,7 @@ from goodprose.models import (
     Split,
     StrictModel,
 )
-from goodprose.prompts import _PROMOTIONAL_CTA
+from goodprose.prompts import _PROMOTIONAL_CTA, _system_prompt_section, system_prompt_sha256
 from goodprose.text import words
 
 DEFAULT_SCOPE_LINE = "Turn these notes into one section of a blog post; return only that section."
@@ -61,6 +61,12 @@ class ShortCaseCandidate(StrictModel):
     window_words: int = Field(ge=0)
     review_status: ReviewStatus = ReviewStatus.CANDIDATE
     notes: str | None = None
+    reviewer_notes: tuple[NonEmptyString, ...] = ()
+    approved_system_prompt_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[0-9a-f]{64}$",
+        description="System prompt this case was approved against; promotion rejects a mismatch.",
+    )
     source_url: str | None = None
 
 
@@ -211,7 +217,11 @@ def build_short_case_candidates(
             )
             earlier = previous.get(candidate.id)
             if earlier is not None and earlier.target_sha256 == candidate.target_sha256:
-                updates: dict[str, object] = {"review_status": earlier.review_status}
+                updates: dict[str, object] = {
+                    "review_status": earlier.review_status,
+                    "reviewer_notes": earlier.reviewer_notes,
+                    "approved_system_prompt_sha256": earlier.approved_system_prompt_sha256,
+                }
                 if earlier.input != generated_input and earlier.draft_window == draft_window:
                     # The alignment is unchanged, so a differing input is the author's edit.
                     updates["input"] = earlier.input
@@ -282,10 +292,12 @@ def render_short_case_review(candidates: list[ShortCaseCandidate]) -> bytes:
         "Each candidate pairs a window of your authentic draft with the exact published section",
         "it became. Approve the ones whose input is a fair brief for the section (set",
         '`"review_status": "approved"` in the JSONL, editing `input` if needed), reject the rest,',
-        "then run `promote-short-cases`. Recall is the share of the section's words found in the",
-        "draft window; precision is the share of the window that matched. Low recall means you",
-        "wrote most of the section fresh, so the window is a weak brief unless you edit it.",
+        "then run `approve-short-cases` and `promote-short-cases`. Recall is the share of the",
+        "section's words found in the draft window; precision is the share of the window that",
+        "matched. Low recall means you wrote most of the section fresh, so the window is a weak",
+        "brief unless you edit it.",
         "",
+        *_system_prompt_section(),
         f"Candidates: {len(candidates)}",
         "",
     ]
@@ -297,6 +309,8 @@ def render_short_case_review(candidates: list[ShortCaseCandidate]) -> bytes:
         lines.extend(
             [
                 f"## {candidate.id}",
+                "",
+                f"System prompt: `{system_prompt_sha256()[:12]}` (the one quoted above)",
                 "",
                 f"`{status}` - recall {candidate.alignment_recall:.2f} - precision "
                 f"{candidate.alignment_precision:.2f} - window {candidate.window_words} words -> "
@@ -320,12 +334,61 @@ def render_short_case_review(candidates: list[ShortCaseCandidate]) -> bytes:
     return ("\n".join(lines).rstrip() + "\n").encode()
 
 
+def approve_short_cases(candidates_path: Path, *, reviewer_note: str) -> dict[str, int]:
+    """Stamp the reviewed system prompt onto every candidate marked approved.
+
+    The reviewer approves a whole conversation, so the approval carries the system prompt it
+    was read against. Promotion refuses an approval stamped with a different one.
+    """
+    note = reviewer_note.strip()
+    if not note:
+        raise ShortCaseError("reviewer note must not be empty")
+    candidates = load_jsonl(candidates_path, ShortCaseCandidate)
+    approved = [c for c in candidates if c.review_status is ReviewStatus.APPROVED]
+    if not approved:
+        raise ShortCaseError(
+            'no short case candidates are marked approved; set "review_status": "approved" on '
+            "the ones you accept first"
+        )
+    digest = system_prompt_sha256()
+    stamped = [
+        candidate.model_copy(
+            update={
+                "approved_system_prompt_sha256": digest,
+                "reviewer_notes": (
+                    candidate.reviewer_notes
+                    if note in candidate.reviewer_notes
+                    else (*candidate.reviewer_notes, note)
+                ),
+            }
+        )
+        if candidate.review_status is ReviewStatus.APPROVED
+        else candidate
+        for candidate in candidates
+    ]
+    atomic_write(candidates_path, serialize_jsonl(stamped))
+    return {"approved": len(approved), "candidates": len(candidates)}
+
+
 def promote_short_cases(candidates_path: Path, output_path: Path) -> int:
     """Write approved candidates as evaluation cases."""
     candidates = load_jsonl(candidates_path, ShortCaseCandidate)
     approved = [c for c in candidates if c.review_status is ReviewStatus.APPROVED]
     if not approved:
         raise ShortCaseError("no short case candidates are approved")
+    digest = system_prompt_sha256()
+    unstamped = sorted(c.id for c in approved if c.approved_system_prompt_sha256 is None)
+    if unstamped:
+        raise ShortCaseError(
+            f"{len(unstamped)} approved case(s) carry no system prompt approval; run "
+            "approve-short-cases: " + ", ".join(unstamped[:3])
+        )
+    stale = sorted(c.id for c in approved if c.approved_system_prompt_sha256 != digest)
+    if stale:
+        raise ShortCaseError(
+            f"{len(stale)} case(s) were approved against a different system prompt; re-review "
+            "and re-run approve-short-cases: " + ", ".join(stale[:3])
+        )
     cases: list[EvalCase] = []
     seen: set[str] = set()
     for candidate in approved:

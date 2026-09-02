@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import re
 from collections import Counter
 from collections.abc import Sequence
@@ -22,6 +23,7 @@ from goodprose.models import (
     WritingPair,
 )
 from goodprose.pairs import load_pairs, validate_pairs
+from goodprose.sft import SYSTEM_PROMPT
 from goodprose.text import URL, longest_shared_word_run
 
 _PROMOTIONAL_CTA = re.compile(
@@ -38,6 +40,28 @@ _PROMOTIONAL_CTA = re.compile(
 
 class PromptReviewError(ValueError):
     """Synthetic prompts do not safely match the frozen training chunks."""
+
+
+def system_prompt_sha256() -> str:
+    """Hash of the system prompt every approved example is trained and evaluated with."""
+    return hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest()
+
+
+def _system_prompt_section() -> list[str]:
+    """The exact system turn, quoted once, so approval covers the whole conversation."""
+    return [
+        "## System prompt",
+        "",
+        "Every record below is trained as this system turn, then the input, then the exact",
+        "completion. Approving a record approves the whole conversation, not the input alone.",
+        "",
+        "```text",
+        SYSTEM_PROMPT,
+        "```",
+        "",
+        f"SHA-256: `{system_prompt_sha256()}`",
+        "",
+    ]
 
 
 def _urls(value: str) -> set[str]:
@@ -120,6 +144,7 @@ def render_prompt_review(
         "unreviewed derived briefs, not canonical SFT examples. No development or test target",
         "was used. Every completion below remains the author's exact published text.",
         "",
+        *_system_prompt_section(),
         "## Approval rubric",
         "",
         "- The input resembles notes or instructions you might genuinely have written,",
@@ -129,6 +154,8 @@ def render_prompt_review(
         "- Distinctive target phrasing has not leaked into the input unnecessarily; the",
         "  `rough_draft` and `near_final_draft` forms are the exception and may share long runs.",
         "- Several forms may target one chunk; each (chunk, form) pair appears at most once.",
+        "- The system prompt above is part of every example: judge the input as the user turn",
+        "  that follows it, and re-review if that system prompt ever changes.",
         "- Edit the JSONL candidate directly; approval and canonicalization happen later.",
         "",
         f"Candidates: {len(candidates)}",
@@ -151,6 +178,7 @@ def render_prompt_review(
                 "",
                 f"Form: `{candidate.prompt_form.value}`  ",
                 f"Chunk: `{candidate.chunk_id}`  ",
+                f"System prompt: `{system_prompt_sha256()[:12]}` (the one quoted above)  ",
                 f"Longest exact shared word run (URLs excluded): {shared_run}{leakage_note}",
                 "",
                 "### Synthetic input",
@@ -195,6 +223,7 @@ def approve_prompt_candidates(
         candidate.model_copy(
             update={
                 "review_status": ReviewStatus.APPROVED,
+                "approved_system_prompt_sha256": system_prompt_sha256(),
                 "reviewer_notes": (
                     candidate.reviewer_notes
                     if note in candidate.reviewer_notes
@@ -301,7 +330,19 @@ def _require_approved(
         for candidate in candidates
         if chunks_by_id[candidate.chunk_id].review_status is not ReviewStatus.APPROVED
     )
+    stale_system_prompt = sorted(
+        candidate.id
+        for candidate in candidates
+        if candidate.review_status is ReviewStatus.APPROVED
+        and candidate.approved_system_prompt_sha256 != system_prompt_sha256()
+    )
     findings: list[str] = []
+    if stale_system_prompt:
+        findings.append(
+            f"{len(stale_system_prompt)} prompt candidate(s) were approved against a different "
+            "system prompt; re-review and re-run approve-prompts: "
+            + ", ".join(stale_system_prompt[:3])
+        )
     if pending_prompts:
         findings.append(
             f"{len(pending_prompts)} prompt candidate(s) are not approved: "

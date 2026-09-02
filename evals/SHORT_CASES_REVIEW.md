@@ -3,13 +3,27 @@
 Each candidate pairs a window of your authentic draft with the exact published section
 it became. Approve the ones whose input is a fair brief for the section (set
 `"review_status": "approved"` in the JSONL, editing `input` if needed), reject the rest,
-then run `promote-short-cases`. Recall is the share of the section's words found in the
-draft window; precision is the share of the window that matched. Low recall means you
-wrote most of the section fresh, so the window is a weak brief unless you edit it.
+then run `approve-short-cases` and `promote-short-cases`. Recall is the share of the
+section's words found in the draft window; precision is the share of the window that
+matched. Low recall means you wrote most of the section fresh, so the window is a weak
+brief unless you edit it.
+
+## System prompt
+
+Every record below is trained as this system turn, then the input, then the exact
+completion. Approving a record approves the whole conversation, not the input alone.
+
+```text
+Turn the supplied notes, outline, or rough draft into polished blog prose at the scope requested by the user: a sentence, paragraph, section, or complete post. Preserve supported facts and uncertainty, do not invent details, honor the requested structure and length, and return only the finished prose.
+```
+
+SHA-256: `1795d08ccae9d870746ad8f3f6277033d5352ab94e8be1a6923c9ae1ab20b70b`
 
 Candidates: 18
 
 ## external-database-abstractions-golang--001--short
+
+System prompt: `1795d08ccae9` (the one quoted above)
 
 `candidate` - recall 0.39 - precision 0.66 - window 246 words -> section 420 words - draft paragraphs 1..9
 
@@ -143,6 +157,8 @@ The problem with the above is that you’re now making `O(# of orders)`queries. 
 
 ## external-database-abstractions-golang--002--short
 
+System prompt: `1795d08ccae9` (the one quoted above)
+
 `candidate` - recall 0.61 - precision 0.90 - window 230 words -> section 341 words - draft paragraphs 13..21
 
 ### Input
@@ -271,6 +287,8 @@ Now the total time to run `GetOrders` is just a single roundtrip time to your da
 ```
 
 ## external-database-abstractions-golang--003--short
+
+System prompt: `1795d08ccae9` (the one quoted above)
 
 `candidate` - recall 0.38 - precision 0.70 - window 200 words -> section 371 words - draft paragraphs 27..35
 
@@ -440,6 +458,8 @@ return orders, nil
 ```
 
 ## external-database-abstractions-golang--004--short
+
+System prompt: `1795d08ccae9` (the one quoted above)
 
 `candidate` - recall 0.33 - precision 0.60 - window 229 words -> section 418 words - draft paragraphs 38..46  
 Note: weak alignment (recall 0.33); rewrite the input by hand from the draft or reject
@@ -618,6 +638,8 @@ This is a lot of unfortunate code copying, and if you change any attribute in `O
 
 ## external-database-abstractions-golang--005--short
 
+System prompt: `1795d08ccae9` (the one quoted above)
+
 `candidate` - recall 0.12 - precision 0.20 - window 152 words -> section 258 words - draft paragraphs 28..35  
 Note: weak alignment (recall 0.12); rewrite the input by hand from the draft or reject
 
@@ -756,6 +778,8 @@ The `Database` abstraction allows you to create methods for storing and getting 
 
 ## external-new-products-team--001--short
 
+System prompt: `1795d08ccae9` (the one quoted above)
+
 `candidate` - recall 0.85 - precision 0.82 - window 432 words -> section 436 words - draft paragraphs 1..8
 
 ### Input
@@ -805,6 +829,8 @@ The team talking to users: we’re very heavy on our usage of hand gestures and 
 
 ## external-new-products-team--002--short
 
+System prompt: `1795d08ccae9` (the one quoted above)
+
 `candidate` - recall 0.96 - precision 0.90 - window 357 words -> section 337 words - draft paragraphs 8..12
 
 ### Input
@@ -843,6 +869,8 @@ Jason and Nelson discussing data science techniques. More keyboards mean we can 
 
 ## external-new-products-team--003--short
 
+System prompt: `1795d08ccae9` (the one quoted above)
+
 `rejected` - recall 1.00 - precision 1.00 - window 343 words -> section 342 words - draft paragraphs 12..17  
 Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
 
@@ -879,6 +907,8 @@ We continued to have many more existential crises. In fact, if we went a week or
 ```
 
 ## learnings-from-the-codex-repo--001--short
+
+System prompt: `1795d08ccae9` (the one quoted above)
 
 `rejected` - recall 1.00 - precision 1.00 - window 336 words -> section 341 words - draft paragraphs 0..5  
 Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
@@ -920,6 +950,8 @@ My immediate observation is that Codex has seen a step change increase in PRs pe
 ```
 
 ## learnings-from-the-codex-repo--002--short
+
+System prompt: `1795d08ccae9` (the one quoted above)
 
 `candidate` - recall 0.91 - precision 0.92 - window 274 words -> section 289 words - draft paragraphs 27..33
 
@@ -976,6 +1008,8 @@ With that many more people and agents changing the code at the same time, the ru
 
 ## learnings-from-the-codex-repo--003--short
 
+System prompt: `1795d08ccae9` (the one quoted above)
+
 `candidate` - recall 1.00 - precision 1.00 - window 339 words -> section 391 words - draft paragraphs 5..12  
 Note: near-verbatim draft; this is a polish case that tests leaving good prose alone, not voice
 
@@ -1020,6 +1054,8 @@ There are five rules in particular that I found interesting:
 ```
 
 ## learnings-from-the-codex-repo--004--short
+
+System prompt: `1795d08ccae9` (the one quoted above)
 
 `candidate` - recall 0.99 - precision 1.00 - window 311 words -> section 320 words - draft paragraphs 13..21  
 Note: near-verbatim draft; this is a polish case that tests leaving good prose alone, not voice
@@ -1088,6 +1124,8 @@ Codex has 38 lint rules, and I think it's part of what makes the repo easier to 
 
 ## learnings-from-the-codex-repo--005--short
 
+System prompt: `1795d08ccae9` (the one quoted above)
+
 `rejected` - recall 1.00 - precision 1.00 - window 391 words -> section 391 words - draft paragraphs 21..27  
 Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
 
@@ -1129,6 +1167,8 @@ Basically, Codex has set up their environment so only relevant tests are run whi
 
 ## learnings-from-the-codex-repo--006--short
 
+System prompt: `1795d08ccae9` (the one quoted above)
+
 `rejected` - recall 1.00 - precision 1.00 - window 207 words -> section 235 words - draft paragraphs 33..37  
 Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
 
@@ -1162,6 +1202,8 @@ Two weeks later, they added a [CI rule preventing the TUI from importing `codex-
 
 ## learnings-from-the-codex-repo--007--short
 
+System prompt: `1795d08ccae9` (the one quoted above)
+
 `candidate` - recall 0.91 - precision 0.64 - window 247 words -> section 175 words - draft paragraphs 37..41
 
 ### Input
@@ -1191,6 +1233,8 @@ The interesting thing is that at least for the Codex team, as implementation got
 ```
 
 ## why-we-built-143--001--short
+
+System prompt: `1795d08ccae9` (the one quoted above)
 
 `candidate` - recall 0.06 - precision 0.17 - window 65 words -> section 205 words - draft paragraphs 4..5  
 Note: author-edited input (aligned window had recall 0.06, precision 0.17)
@@ -1226,6 +1270,8 @@ At Assembled, we saw this firsthand: our support and product teams kept surfacin
 ```
 
 ## why-we-built-143--002--short
+
+System prompt: `1795d08ccae9` (the one quoted above)
 
 `candidate` - recall 0.16 - precision 0.39 - window 96 words -> section 227 words - draft paragraphs 2..3  
 Note: author-edited input (aligned window had recall 0.16, precision 0.39)
@@ -1267,6 +1313,8 @@ We built 143 so the person who spots the bug doesn't need to become an engineer 
 ```
 
 ## why-we-built-143--003--short
+
+System prompt: `1795d08ccae9` (the one quoted above)
 
 `candidate` - recall 0.42 - precision 0.37 - window 203 words -> section 184 words - draft paragraphs 3..4  
 Note: author-edited input (aligned window had recall 0.42, precision 0.37)

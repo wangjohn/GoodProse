@@ -131,10 +131,20 @@ uv run goodprose build-short-cases \
   --review-output evals/SHORT_CASES_REVIEW.md
 
 # set "review_status": "approved" on the candidates you accept (edit "input" where needed), then
+uv run goodprose approve-short-cases \
+  --candidates evals/short-cases.candidates.jsonl \
+  --reviewer-note 'Read against the current system prompt and approved by the author.'
+
 uv run goodprose promote-short-cases \
   --candidates evals/short-cases.candidates.jsonl \
   --output evals/short-cases.jsonl
 ```
+
+The review packet quotes the exact system prompt with its hash, because a case is the whole
+conversation: system turn, then the brief, then the section. `approve-short-cases` stamps that
+hash onto every approved row, and `promote-short-cases` refuses a row approved against a
+different system prompt, so changing the prompt forces a re-read rather than silently shipping
+stale approvals. The blind review guide quotes the same system prompt for the same reason.
 
 `evals/short-cases.jsonl` is an ordinary case file: run `eval generate`, `eval proxy`,
 `eval judge-packet`, `eval prepare`, and `eval summarize` on it exactly as on `cases.jsonl`. Each

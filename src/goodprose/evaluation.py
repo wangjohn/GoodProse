@@ -29,6 +29,7 @@ from goodprose.models import (
     ReviewRow,
     SystemLabel,
 )
+from goodprose.sft import SYSTEM_PROMPT
 
 
 class EvaluationError(ValueError):
@@ -175,10 +176,16 @@ def _validate_run_manifests(
 
 
 def render_review_guide() -> bytes:
-    return b"""# Blind writing evaluation
+    return f"""# Blind writing evaluation
 
 Do not open the published reference or the unblinding key until this packet is complete.
 Evaluate both responses only against the supplied input and any sources it contains.
+
+Both responses were produced from this system turn, followed by the case input:
+
+```text
+{SYSTEM_PROMPT}
+```
 
 For each response:
 
@@ -195,7 +202,7 @@ For each response:
    - 5: unusable or complete rewrite
 
 Use `a`, `b`, or `tie` for both preference fields. Keep concrete reasons in `notes`.
-"""
+""".encode()
 
 
 def _load_key(path: Path) -> ReviewKey:
