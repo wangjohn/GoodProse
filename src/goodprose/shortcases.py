@@ -130,13 +130,23 @@ def build_short_case_candidates(
     max_words: int = 450,
     max_paragraphs: int = 8,
     min_recall: float = 0.35,
+    max_near_verbatim: int = 2,
     scope_line: str = DEFAULT_SCOPE_LINE,
 ) -> dict[str, int]:
-    """Propose one section-scale case per held-out section, with alignment scores."""
+    """Propose one section-scale case per held-out section, with alignment scores.
+
+    Sections whose draft window is already the published text (recall and precision at or
+    above 0.95) test leaving good prose alone rather than voice, so only the
+    ``max_near_verbatim`` most-edited of them stay candidates; the rest are auto-rejected.
+    Rebuilds keep the author's review status and any edited input for unchanged sections
+    while recomputing scores and notes.
+    """
     if min_words < 1 or max_words < min_words:
         raise ShortCaseError("word bounds must satisfy 1 <= min_words <= max_words")
     if max_paragraphs < 1:
         raise ShortCaseError("max_paragraphs must be at least 1")
+    if max_near_verbatim < 0:
+        raise ShortCaseError("max_near_verbatim must be zero or more")
     cases = load_jsonl(cases_path, EvalCase)
     if not cases:
         raise ShortCaseError("case file is empty")
@@ -172,19 +182,23 @@ def build_short_case_candidates(
                     f"weak alignment (recall {recall:.2f}); rewrite the input by hand from the "
                     "draft or reject"
                 )
-            elif recall >= 0.95 and precision >= 0.95:
+            elif _near_verbatim(recall, precision):
                 notes = (
                     "near-verbatim draft; this is a polish case that tests leaving good prose "
                     "alone, not voice"
                 )
             title = posts[chunk.post_id].title if chunk.post_id in posts else case.lineage_id
+            draft_window = window or "(no aligned draft text)"
+            generated_input = (
+                f"{scope_line}\n\nBlog post: {title}\n\n{window}" if window else scope_line
+            )
             candidate = ShortCaseCandidate(
                 id=f"{chunk.id}--short",
                 lineage_id=case.lineage_id,
                 source_case_id=case.id,
                 chunk_id=chunk.id,
-                input=f"{scope_line}\n\nBlog post: {title}\n\n{window}" if window else scope_line,
-                draft_window=window or "(no aligned draft text)",
+                input=generated_input,
+                draft_window=draft_window,
                 reference_output=chunk.target,
                 target_sha256=chunk.target_sha256,
                 alignment_recall=recall,
@@ -197,25 +211,68 @@ def build_short_case_candidates(
             )
             earlier = previous.get(candidate.id)
             if earlier is not None and earlier.target_sha256 == candidate.target_sha256:
-                # Keep the author's edits and decision when the section is unchanged.
-                candidate = earlier
+                updates: dict[str, object] = {"review_status": earlier.review_status}
+                if earlier.input != generated_input and earlier.draft_window == draft_window:
+                    # The alignment is unchanged, so a differing input is the author's edit.
+                    updates["input"] = earlier.input
+                    updates["notes"] = (
+                        f"author-edited input (aligned window had recall {recall:.2f}, "
+                        f"precision {precision:.2f})"
+                    )
+                candidate = candidate.model_copy(update=updates)
             candidates.append(candidate)
     if not candidates:
         raise ShortCaseError("no held-out sections satisfied the size and reference checks")
+    candidates = _cap_near_verbatim(candidates, max_near_verbatim)
     atomic_write(output_path, serialize_jsonl(candidates))
     atomic_write(review_output_path, render_short_case_review(candidates))
     return {
         "candidates": len(candidates),
         "weak_alignment": sum(candidate.alignment_recall < min_recall for candidate in candidates),
         "near_verbatim": sum(
-            candidate.alignment_recall >= 0.95 and candidate.alignment_precision >= 0.95
+            _near_verbatim(candidate.alignment_recall, candidate.alignment_precision)
             for candidate in candidates
+        ),
+        "auto_rejected": sum(
+            candidate.review_status is ReviewStatus.REJECTED for candidate in candidates
         ),
         "approved": sum(
             candidate.review_status is ReviewStatus.APPROVED for candidate in candidates
         ),
         **{f"skipped_{key}": value for key, value in skipped.items()},
     }
+
+
+def _near_verbatim(recall: float, precision: float) -> bool:
+    return recall >= 0.95 and precision >= 0.95
+
+
+def _cap_near_verbatim(
+    candidates: list[ShortCaseCandidate], max_near_verbatim: int
+) -> list[ShortCaseCandidate]:
+    """Auto-reject all but the most-edited near-verbatim candidates the author has not approved."""
+    near = [
+        candidate
+        for candidate in candidates
+        if _near_verbatim(candidate.alignment_recall, candidate.alignment_precision)
+        and candidate.review_status is not ReviewStatus.APPROVED
+    ]
+    near.sort(key=lambda c: (c.alignment_recall + c.alignment_precision, c.id))
+    to_reject = {candidate.id for candidate in near[max_near_verbatim:]}
+    return [
+        candidate.model_copy(
+            update={
+                "review_status": ReviewStatus.REJECTED,
+                "notes": (
+                    f"auto-rejected: near-verbatim polish case beyond the cap of "
+                    f"{max_near_verbatim}; approve explicitly to keep"
+                ),
+            }
+        )
+        if candidate.id in to_reject
+        else candidate
+        for candidate in candidates
+    ]
 
 
 def render_short_case_review(candidates: list[ShortCaseCandidate]) -> bytes:

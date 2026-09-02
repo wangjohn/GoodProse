@@ -198,6 +198,12 @@ def build_parser() -> argparse.ArgumentParser:
     short_cases_command.add_argument("--max-words", type=int, default=450)
     short_cases_command.add_argument("--max-paragraphs", type=int, default=8)
     short_cases_command.add_argument("--min-recall", type=float, default=0.35)
+    short_cases_command.add_argument(
+        "--max-near-verbatim",
+        type=int,
+        default=2,
+        help="Keep at most this many near-verbatim polish cases; auto-reject the rest",
+    )
     short_cases_command.add_argument("--scope-line", default=DEFAULT_SCOPE_LINE)
 
     promote_short_command = commands.add_parser(
@@ -437,6 +443,7 @@ def _run(args: argparse.Namespace) -> int:
             max_words=args.max_words,
             max_paragraphs=args.max_paragraphs,
             min_recall=args.min_recall,
+            max_near_verbatim=args.max_near_verbatim,
             scope_line=args.scope_line,
         )
         print(f"built short case candidates: {_format_counts(counts)}")

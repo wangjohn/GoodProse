@@ -843,7 +843,8 @@ Jason and Nelson discussing data science techniques. More keyboards mean we can 
 
 ## external-new-products-team--003--short
 
-`candidate` - recall 1.00 - precision 1.00 - window 343 words -> section 342 words - draft paragraphs 12..17
+`rejected` - recall 1.00 - precision 1.00 - window 343 words -> section 342 words - draft paragraphs 12..17  
+Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
 
 ### Input
 
@@ -879,7 +880,8 @@ We continued to have many more existential crises. In fact, if we went a week or
 
 ## learnings-from-the-codex-repo--001--short
 
-`candidate` - recall 1.00 - precision 1.00 - window 336 words -> section 341 words - draft paragraphs 0..5
+`rejected` - recall 1.00 - precision 1.00 - window 336 words -> section 341 words - draft paragraphs 0..5  
+Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
 
 ### Input
 
@@ -974,7 +976,8 @@ With that many more people and agents changing the code at the same time, the ru
 
 ## learnings-from-the-codex-repo--003--short
 
-`candidate` - recall 1.00 - precision 1.00 - window 339 words -> section 391 words - draft paragraphs 5..12
+`candidate` - recall 1.00 - precision 1.00 - window 339 words -> section 391 words - draft paragraphs 5..12  
+Note: near-verbatim draft; this is a polish case that tests leaving good prose alone, not voice
 
 ### Input
 
@@ -1018,7 +1021,8 @@ There are five rules in particular that I found interesting:
 
 ## learnings-from-the-codex-repo--004--short
 
-`candidate` - recall 0.99 - precision 1.00 - window 311 words -> section 320 words - draft paragraphs 13..21
+`candidate` - recall 0.99 - precision 1.00 - window 311 words -> section 320 words - draft paragraphs 13..21  
+Note: near-verbatim draft; this is a polish case that tests leaving good prose alone, not voice
 
 ### Input
 
@@ -1084,7 +1088,8 @@ Codex has 38 lint rules, and I think it's part of what makes the repo easier to 
 
 ## learnings-from-the-codex-repo--005--short
 
-`candidate` - recall 1.00 - precision 1.00 - window 391 words -> section 391 words - draft paragraphs 21..27
+`rejected` - recall 1.00 - precision 1.00 - window 391 words -> section 391 words - draft paragraphs 21..27  
+Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
 
 ### Input
 
@@ -1124,7 +1129,8 @@ Basically, Codex has set up their environment so only relevant tests are run whi
 
 ## learnings-from-the-codex-repo--006--short
 
-`candidate` - recall 1.00 - precision 1.00 - window 207 words -> section 235 words - draft paragraphs 33..37
+`rejected` - recall 1.00 - precision 1.00 - window 207 words -> section 235 words - draft paragraphs 33..37  
+Note: auto-rejected: near-verbatim polish case beyond the cap of 2; approve explicitly to keep
 
 ### Input
 
@@ -1187,7 +1193,7 @@ The interesting thing is that at least for the Codex team, as implementation got
 ## why-we-built-143--001--short
 
 `candidate` - recall 0.06 - precision 0.17 - window 65 words -> section 205 words - draft paragraphs 4..5  
-Note: weak alignment (recall 0.06); rewrite the input by hand from the draft or reject
+Note: author-edited input (aligned window had recall 0.06, precision 0.17)
 
 ### Input
 
@@ -1196,7 +1202,13 @@ Turn these notes into one section of a blog post; return only that section.
 
 Blog post: Why we built 143
 
-With 143, i also wanted to make something that harkens back to the old days before the AI bonanza, when pricing was simple, and companies weren’t really out to get you as much. That’s why for our hosted version, we’re charging just for the containers you run. You can use whatever LLM provider you’d like, we just want you to help pay for the servers.
+Opening section, before we get into what we built:
+
+At Assembled, we wanted a way to improve our ability to take advantage of coding agents. For a long time even into 2026, we hadn’t been seeing significant increases in velocity from coding agent adoption, and that was frustrating. It seemed like people with completely new repos (individual vibe coders and ai native startups) were reaping huge rewards, but people with production ready, complex systems like ourselves weren’t getting the same levels of change. We felt a lot of FOMO and were trying to figure out what we were doing wrong. After talking to many other teams, We realized we needed to put a lot of effort into shared systems.
+
+- vibe coding isn’t the right word: you want productionalized coding. No one cares about one off apps, everyone cares about making professional coders who are focused on a key problem work faster and more efficiently, while also enabling domain experts who might not have the coding skills to be able to have a clearer way to build for themselves in production.
+- The current set of tools helps with the first one, but makes the second part hard. What’s more, the current set of tools largely aren’t focused on how to make teams more productive: they’re focused on individual engineers.
+- And why would they be, they’re built by engineers. But as our time running engineering teams, we noticed a bunch of primitives at the wrong level:
 ```
 
 ### Reference section
@@ -1216,7 +1228,7 @@ At Assembled, we saw this firsthand: our support and product teams kept surfacin
 ## why-we-built-143--002--short
 
 `candidate` - recall 0.16 - precision 0.39 - window 96 words -> section 227 words - draft paragraphs 2..3  
-Note: weak alignment (recall 0.16); rewrite the input by hand from the draft or reject
+Note: author-edited input (aligned window had recall 0.16, precision 0.39)
 
 ### Input
 
@@ -1225,7 +1237,15 @@ Turn these notes into one section of a blog post; return only that section.
 
 Blog post: Why we built 143
 
+Section on what we built:
+
 So we started by creating a tiger team to improve our shared infrastructure (enhancing agents.md, investing in ci/cd, building out agent hooks, etc). Eventually, we ran into the fact that we needed to build some system to collect all these things together that was at a team level, not an individual engineer level. We were inspired by stripe minions, ramp inspect, but their systems were internal and not available to the public. So we went and built 143.dev. But we intentionally wanted to build something open source that everyone can take advantage of.
+
+- Automations should be built with team visibility, not for individual engineers. When you’ve got agents running every day to improve your test coverage, identify security vulnerabilities, etc: you want a group of people to be able to monitor those similar to how you handle on call rotations.
+- Any intelligence: You should be able to swap out intelligence and coding agents easily. There’s a ton of great coding agents out there. You should be able to use whatever you’d like and switch between them seamlessly. Both agent harnesses and llms themselves are increasingly rapidly, so you want to be able to use whatever is the latest and greatest at any given time without switching out your workflow.
+- Usage should be tracked easily across all your users, and ideally not at the token level. You generally want to be able to slice and dice LLM token usage across PRs, linear issues, automations, etc. so that you have a thorough understanding of how each person is using AI and what your top people are doing.
+- Hooks that run things on demand. A central concept of programming is event driven architecture and it should be easy for you to run a coding agent or llm when something happens (e.g. someone opens a pull request, when a sentry error appears, when a linear issue gets added, etc.). These should happen automatically without an engineer needing to do something.
+- Set up a great environment once for everyone. If you’re working with a team, you don’t want or need everyone to set up their own connections to MCP servers, logging systems, etc. You should set it up once across your entire team, and have everyone leverage the tools that you have set up.
 ```
 
 ### Reference section
@@ -1248,7 +1268,8 @@ We built 143 so the person who spots the bug doesn't need to become an engineer 
 
 ## why-we-built-143--003--short
 
-`candidate` - recall 0.42 - precision 0.37 - window 203 words -> section 184 words - draft paragraphs 3..4
+`candidate` - recall 0.42 - precision 0.37 - window 203 words -> section 184 words - draft paragraphs 3..4  
+Note: author-edited input (aligned window had recall 0.42, precision 0.37)
 
 ### Input
 
@@ -1256,6 +1277,10 @@ We built 143 so the person who spots the bug doesn't need to become an engineer 
 Turn these notes into one section of a blog post; return only that section.
 
 Blog post: Why we built 143
+
+Section on why it's open source:
+
+But we intentionally wanted to build something open source that everyone can take advantage of.
 
 Why? Well I owe my career to my early open source work on Ruby on Rails. That’s where I learned about great software fundamentals from people like tenderlove, Santiago pastorino, Jose Valim, Jeremy doerr. Their PR reviews, welcoming attitude, and design pairing was really what I think open source (and software engineering more broadly) is all about. I was just a college stufent, but the rails core team didn’t care who you were: they welcomed contributors from anywhere as long as the PR was good and well intentioned. And they built something that was used by millions of people for the love of the game. This initial early work in open source is what helped me hone my skills. I started by writing tests and little tiny refactors, and I gradually learned more about the rails codebase and started fixing activerecord bugs. The experience was what got me my job at Stripe as one of the first 100 employees (stripe was a big ruby shop), and was the launching pad for the rest of my career. So needless to say, I want this software to be available to the world and hopefully help others, just like how Ruby on Rails changed my life.
 ```

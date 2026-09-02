@@ -145,8 +145,11 @@ edits and decisions for any section whose text is unchanged, and promotion refus
 contains its reference section verbatim.
 
 Candidates with low recall mean you wrote most of that section fresh rather than from the draft,
-so the aligned window is a weak brief; rewrite the input by hand from the draft or reject it.
-Promotional sections are skipped. The whole-post cases in `cases.jsonl` stay the shipping gate:
+so the aligned window is a weak brief; rewrite the input by hand from the draft (reassembling the
+draft's own paragraphs and bullets for that section is usually enough) or reject it. Candidates
+with recall and precision at or above 0.95 are near-verbatim polish cases; only the two most
+edited stay candidates and the rest are auto-rejected (`--max-near-verbatim`), though an explicit
+approval always survives a rebuild. Promotional sections are skipped. The whole-post cases in `cases.jsonl` stay the shipping gate:
 the short set is for choosing between checkpoints, not for the final go/no-go.
 
 `build-sft --dev-cases-output` writes the three development pairs in the same case format so the

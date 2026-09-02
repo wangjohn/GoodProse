@@ -148,6 +148,7 @@ def test_build_and_promote_short_cases(tmp_path: Path) -> None:
     kept = next(c for c in load_jsonl(output_path, ShortCaseCandidate) if c.id == idea.id)
     assert kept.review_status is ReviewStatus.APPROVED
     assert kept.input.endswith("keep it tight")
+    assert kept.notes is not None and kept.notes.startswith("author-edited input (aligned")
 
     promoted = promote_short_cases(output_path, tmp_path / "short.jsonl")
     assert promoted == 1
@@ -179,3 +180,103 @@ def test_promote_rejects_input_that_contains_the_reference(tmp_path: Path) -> No
 
     with pytest.raises(ShortCaseError, match="contains the reference section verbatim"):
         promote_short_cases(output_path, tmp_path / "short.jsonl")
+
+
+def test_near_verbatim_cases_are_capped_and_explicit_approvals_survive(tmp_path: Path) -> None:
+    body = "\n\n".join(
+        f"# Part {index}\n\n" + f"Sentence {index} stays exactly the same. " * 12
+        for index in range(4)
+    )
+    posts = [
+        BlogPost(
+            id="test", lineage_id="test", title="Same", body_markdown=body, source_path="s.md"
+        ),
+        BlogPost(
+            id="train",
+            lineage_id="train",
+            title="Train",
+            body_markdown="Train post.",
+            source_path="a.md",
+        ),
+        BlogPost(
+            id="dev", lineage_id="dev", title="Dev", body_markdown="Dev post.", source_path="d.md"
+        ),
+    ]
+    splits = [
+        SplitAssignment(
+            lineage_id="test", split=Split.TEST, frozen_at=date(2026, 9, 1), rationale="t"
+        ),
+        SplitAssignment(
+            lineage_id="train", split=Split.TRAIN, frozen_at=date(2026, 9, 1), rationale="a"
+        ),
+        SplitAssignment(
+            lineage_id="dev", split=Split.DEV, frozen_at=date(2026, 9, 1), rationale="d"
+        ),
+    ]
+    posts_path, splits_path, chunks_path = (tmp_path / n for n in ("p.jsonl", "s.jsonl", "c.jsonl"))
+    atomic_write(posts_path, serialize_jsonl(posts))
+    atomic_write(splits_path, serialize_jsonl(splits))
+    build_chunks(
+        posts_path, splits_path, chunks_path, tmp_path / "r.md", min_tokens=40, max_tokens=400
+    )
+    reference = f"# Same\n\n{body}"
+    cases_path = tmp_path / "cases.jsonl"
+    atomic_write(
+        cases_path,
+        serialize_jsonl(
+            [
+                EvalCase(
+                    id="test",
+                    lineage_id="test",
+                    input=body,  # the draft already is the post
+                    input_method=InputMethod.ORIGINAL_DRAFT,
+                    reference_output=reference,
+                    target_sha256=hashlib.sha256(reference.encode()).hexdigest(),
+                )
+            ]
+        ),
+    )
+    output_path = tmp_path / "short.candidates.jsonl"
+
+    counts = build_short_case_candidates(
+        cases_path,
+        chunks_path,
+        posts_path,
+        output_path,
+        tmp_path / "S.md",
+        min_words=20,
+        max_words=400,
+        max_near_verbatim=1,
+    )
+
+    assert counts["near_verbatim"] == 4
+    assert counts["auto_rejected"] == 3
+    candidates = load_jsonl(output_path, ShortCaseCandidate)
+    kept = [c for c in candidates if c.review_status is ReviewStatus.CANDIDATE]
+    assert len(kept) == 1
+
+    rejected = next(c for c in candidates if c.review_status is ReviewStatus.REJECTED)
+    atomic_write(
+        output_path,
+        serialize_jsonl(
+            [
+                c.model_copy(update={"review_status": ReviewStatus.APPROVED})
+                if c.id == rejected.id
+                else c
+                for c in candidates
+            ]
+        ),
+    )
+    build_short_case_candidates(
+        cases_path,
+        chunks_path,
+        posts_path,
+        output_path,
+        tmp_path / "S.md",
+        min_words=20,
+        max_words=400,
+        max_near_verbatim=1,
+    )
+    again = {c.id: c for c in load_jsonl(output_path, ShortCaseCandidate)}
+    assert again[rejected.id].review_status is ReviewStatus.APPROVED
+    assert sum(c.review_status is ReviewStatus.REJECTED for c in again.values()) == 2
