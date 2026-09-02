@@ -90,7 +90,11 @@ infrastructure 5 percent. Infrastructure is done; stop investing there.
 
 - Pin `Qwen/Qwen3-14B` to a commit hash before a run you intend to keep.
 - Drop `max_length` from 6144 to 4096 on a 24 GB GPU.
-- Confirm the Assembled and Medium snapshots used as targets are your prose, not an editor's;
-  where a private manuscript exists, diff it against the published text.
+- Run `scripts/rebuild-data.sh` on the machine with `data/private/`, read the review packet,
+  approve, then build pairs and export. The whole-post briefs in `data/prompts/full-post-drafts.jsonl`
+  cover ten of the eleven `--full` chunks; the scaling-llms post waits on its repaired target.
+- Keep the watermarking post as the development set. Dev NLL is the memorization detector and
+  the checkpoint selector; without it, selection would fall to the test short cases and weaken
+  the blind gate. The configs evaluate every epoch, so `data/sft/dev.jsonl` must exist.
 - First GPU run of `train-lora-plus`, `eval nll`, and `train-dpo` is a smoke test; the
   validate-only paths are unit-tested, the training paths are not.

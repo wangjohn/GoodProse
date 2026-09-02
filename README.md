@@ -37,6 +37,9 @@ The repository contains no third-party writing corpus and no synthetic training 
 10. Optionally run one DPO pass with your published text as chosen and the SFT model's own
    output as rejected.
 
+`scripts/rebuild-data.sh` runs the import, normalization, chunking, brief refresh, and review
+steps below in order on a machine that has `data/private/`, then stops at approval.
+
 ```bash
 uv sync
 
@@ -87,6 +90,22 @@ uv run goodprose build-prompt-candidates \
 
 uv run goodprose build-prompt-candidates \
   --drafts data/private/prompts/sentence-drafts.jsonl \
+  --chunks data/chunks/candidates.jsonl \
+  --base-prompts data/private/prompts/candidates.jsonl \
+  --output data/private/prompts/candidates.jsonl
+
+# After a rebuild of posts or chunks, align the existing briefs before adding new ones:
+# drops briefs on demoted posts, rehashes formatting-only changes, resets material changes.
+uv run goodprose refresh-prompts \
+  --prompts data/private/prompts/candidates.jsonl \
+  --chunks data/chunks/candidates.jsonl \
+  --roles data/training-roles.jsonl \
+  --normalization data/posts/normalization.json
+
+# Whole-post briefs for the `--full` chunks are drafted in the repository (they contain no
+# target text) and attach like any other draft file.
+uv run goodprose build-prompt-candidates \
+  --drafts data/prompts/full-post-drafts.jsonl \
   --chunks data/chunks/candidates.jsonl \
   --base-prompts data/private/prompts/candidates.jsonl \
   --output data/private/prompts/candidates.jsonl

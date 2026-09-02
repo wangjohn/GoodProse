@@ -30,6 +30,7 @@ from goodprose.prompts import (
     build_prompt_candidates,
     build_prompt_pairs,
     build_prompt_review,
+    refresh_prompt_candidates,
 )
 from goodprose.prospective import ProspectiveError, capture_draft, promote_prospective_cases
 from goodprose.proxy import ProxyError, proxy_report
@@ -118,6 +119,15 @@ def build_parser() -> argparse.ArgumentParser:
     prompts_command.add_argument("--posts", help="Show the venue line each record trains with")
     prompts_command.add_argument("--roles", help="Training roles for venue notes")
     prompts_command.add_argument("--output", required=True)
+
+    refresh_prompts_command = commands.add_parser(
+        "refresh-prompts",
+        help="Align an existing candidate file with rebuilt chunks and training roles",
+    )
+    refresh_prompts_command.add_argument("--prompts", required=True)
+    refresh_prompts_command.add_argument("--chunks", required=True)
+    refresh_prompts_command.add_argument("--roles")
+    refresh_prompts_command.add_argument("--normalization")
 
     approve_prompts_command = commands.add_parser(
         "approve-prompts",
@@ -468,6 +478,15 @@ def _run(args: argparse.Namespace) -> int:
             roles_path=_path(args.roles) if args.roles else None,
         )
         print(f"rendered {count} synthetic prompt candidate(s) at {_path(args.output)}")
+        return 0
+    if args.command == "refresh-prompts":
+        counts = refresh_prompt_candidates(
+            _path(args.prompts),
+            _path(args.chunks),
+            roles_path=_path(args.roles) if args.roles else None,
+            normalization_path=_path(args.normalization) if args.normalization else None,
+        )
+        print(f"refreshed prompt candidates: {_format_counts(counts)}")
         return 0
     if args.command == "approve-prompts":
         counts = approve_prompt_candidates(

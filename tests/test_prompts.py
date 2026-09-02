@@ -630,10 +630,139 @@ def test_briefs_must_carry_target_code_blocks_verbatim() -> None:
     )
     without_code = _candidate(chunk).model_copy(update={"input": "Explain the main function."})
 
-    with pytest.raises(PromptReviewError, match="must carry the target's code block"):
-        render_prompt_review([without_code], [chunk])
+    assert "Missing 1 code block(s)" in render_prompt_review([without_code], [chunk]).decode()
 
     with_code = without_code.model_copy(
         update={"input": f"Explain this, include the code as-is:\n\n```go\n{code}\n```"}
     )
     assert chunk.target in render_prompt_review([with_code], [chunk]).decode()
+
+
+def test_refresh_prompts_drops_demoted_posts_and_rehashes_formatting_changes(
+    tmp_path: Path,
+) -> None:
+    from goodprose.prompts import refresh_prompt_candidates
+    from goodprose.roles import TrainingRole
+
+    raw_target = "# Finished section\n\nThis is the author\u2019s exact finished prose."
+    chunk_raw = _chunk().model_copy(
+        update={
+            "target": raw_target,
+            "target_sha256": hashlib.sha256(raw_target.encode()).hexdigest(),
+        }
+    )
+    approved = _candidate(chunk_raw).model_copy(
+        update={
+            "review_status": ReviewStatus.APPROVED,
+            "approved_system_prompt_sha256": system_prompt_sha256(),
+        }
+    )
+    demoted_chunk = chunk_raw.model_copy(
+        update={"id": "edited--001", "post_id": "edited", "lineage_id": "edited"}
+    )
+    demoted = approved.model_copy(
+        update={
+            "id": "edited--001--synthetic",
+            "chunk_id": "edited--001",
+            "post_id": "edited",
+            "lineage_id": "edited",
+        }
+    )
+    changed_chunk = chunk_raw.model_copy(update={"id": "post--002", "ordinal": 2})
+    changed = approved.model_copy(update={"id": "post--002--synthetic", "chunk_id": "post--002"})
+    prompts_path, chunks_path, roles_path, config_path = (
+        tmp_path / n for n in ("p.jsonl", "c.jsonl", "roles.jsonl", "normalization.json")
+    )
+    atomic_write(prompts_path, serialize_jsonl([approved, demoted, changed]))
+    # Rebuilt chunks: post--001 normalized (straight quote) only; post--002 materially rewritten.
+    normalized_target = "# Finished section\n\nThis is the author's exact finished prose."
+    rewritten = "# Finished section\n\nCompletely different prose now."
+    atomic_write(
+        chunks_path,
+        serialize_jsonl(
+            [
+                chunk_raw.model_copy(
+                    update={
+                        "target": normalized_target,
+                        "target_sha256": hashlib.sha256(normalized_target.encode()).hexdigest(),
+                        "review_status": ReviewStatus.APPROVED,
+                    }
+                ),
+                changed_chunk.model_copy(
+                    update={
+                        "target": rewritten,
+                        "target_sha256": hashlib.sha256(rewritten.encode()).hexdigest(),
+                    }
+                ),
+                demoted_chunk,
+            ]
+        ),
+    )
+    atomic_write(
+        roles_path,
+        serialize_jsonl([TrainingRole(post_id="edited", role="raw_only", reason="editor")]),
+    )
+    config_path.write_text('{"version": 1}')
+
+    counts = refresh_prompt_candidates(
+        prompts_path, chunks_path, roles_path=roles_path, normalization_path=config_path
+    )
+
+    assert counts == {
+        "dropped_by_role": 1,
+        "kept": 2,
+        "rehashed_formatting_only": 1,
+        "reset_target_changed": 1,
+    }
+    refreshed = {c.id: c for c in load_jsonl(prompts_path, SyntheticPromptCandidate)}
+    kept = refreshed["post--001--synthetic"]
+    assert kept.review_status is ReviewStatus.APPROVED
+    assert kept.target_sha256 == hashlib.sha256(normalized_target.encode()).hexdigest()
+    reset = refreshed["post--002--synthetic"]
+    assert reset.review_status is ReviewStatus.CANDIDATE
+    assert reset.approved_system_prompt_sha256 is None
+    assert reset.reviewer_notes[-1].startswith("target text changed")
+
+
+def test_missing_code_is_a_warning_at_review_and_an_error_at_promotion(tmp_path: Path) -> None:
+    code = "func main() {}"
+    target = f"Intro.\n\n```go\n{code}\n```"
+    chunk = _chunk().model_copy(
+        update={
+            "target": target,
+            "target_sha256": hashlib.sha256(target.encode()).hexdigest(),
+            "review_status": ReviewStatus.APPROVED,
+        }
+    )
+    without_code = _candidate(chunk).model_copy(
+        update={
+            "input": "Explain main.",
+            "review_status": ReviewStatus.APPROVED,
+            "approved_system_prompt_sha256": system_prompt_sha256(),
+        }
+    )
+
+    review = render_prompt_review([without_code], [chunk]).decode()
+    assert "Missing 1 code block(s)" in review
+
+    prompts_path, chunks_path, posts_path = (
+        tmp_path / n for n in ("p.jsonl", "c.jsonl", "posts.jsonl")
+    )
+    atomic_write(prompts_path, serialize_jsonl([without_code]))
+    atomic_write(chunks_path, serialize_jsonl([chunk]))
+    atomic_write(
+        posts_path,
+        serialize_jsonl(
+            [
+                BlogPost(
+                    id="post",
+                    lineage_id="post",
+                    title="Post",
+                    body_markdown=target,
+                    source_path="p.md",
+                )
+            ]
+        ),
+    )
+    with pytest.raises(PromptReviewError, match="must carry the target's code block"):
+        build_prompt_pairs(prompts_path, chunks_path, posts_path, tmp_path / "pairs.jsonl")

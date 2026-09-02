@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import re
 from collections import Counter
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from pathlib import Path
 
 from goodprose.chunks import _markdown_fence
@@ -73,8 +73,17 @@ _longest_shared_word_run = longest_shared_word_run
 
 
 def _candidate_chunk_map(
-    candidates: list[SyntheticPromptCandidate], chunks: list[SemanticChunk]
+    candidates: list[SyntheticPromptCandidate],
+    chunks: list[SemanticChunk],
+    *,
+    require_code: bool = False,
 ) -> dict[str, SemanticChunk]:
+    """Validate candidates against frozen chunks.
+
+    Code pass-through (a brief must carry its target's fenced code verbatim) is reported in the
+    review packet and enforced only when ``require_code`` is set, at promotion, so one brief
+    that still needs its code block does not block reading the rest of the packet.
+    """
     chunk_counts = Counter(chunk.id for chunk in chunks)
     duplicate_chunks = sorted(chunk_id for chunk_id, count in chunk_counts.items() if count > 1)
     if duplicate_chunks:
@@ -129,10 +138,8 @@ def _candidate_chunk_map(
                 f"prompt candidate {candidate.id!r} is missing target source URL(s): "
                 + ", ".join(missing_urls)
             )
-        missing_code = [
-            block for block in _fenced_code(chunk.target) if block not in candidate.input
-        ]
-        if missing_code:
+        missing_code = missing_code_blocks(candidate, chunk)
+        if missing_code and require_code:
             raise PromptReviewError(
                 f"prompt candidate {candidate.id!r} must carry the target's code block(s) "
                 f"verbatim so the model copies code rather than composing it; missing "
@@ -147,6 +154,10 @@ _FENCED = re.compile(r"^(`{3,}|~{3,})[^\n]*\n(.*?)\n\1[ \t]*$", re.MULTILINE | r
 def _fenced_code(target: str) -> list[str]:
     """The inner text of every fenced block in a target."""
     return [match.group(2).strip() for match in _FENCED.finditer(target) if match.group(2).strip()]
+
+
+def missing_code_blocks(candidate: SyntheticPromptCandidate, chunk: SemanticChunk) -> list[str]:
+    return [block for block in _fenced_code(chunk.target) if block not in candidate.input]
 
 
 def render_prompt_review(
@@ -188,6 +199,7 @@ def render_prompt_review(
     ]
     for candidate in candidates:
         chunk = chunks_by_id[candidate.chunk_id]
+        missing_code = missing_code_blocks(candidate, chunk)
         shared_run = _longest_shared_word_run(candidate.input, chunk.target)
         if candidate.prompt_form in DRAFT_PROMPT_FORMS:
             leakage_note = " - draft form; long shared runs are expected"
@@ -211,6 +223,14 @@ def render_prompt_review(
                     else []
                 ),
                 f"Longest exact shared word run (URLs excluded): {shared_run}{leakage_note}",
+                *(
+                    [
+                        f"**Missing {len(missing_code)} code block(s)**: paste the target's fenced "
+                        "code into the input verbatim; promotion refuses this brief until then.",
+                    ]
+                    if missing_code
+                    else []
+                ),
                 "",
                 "### Synthetic input",
                 "",
@@ -492,7 +512,7 @@ def build_prompt_pairs(
             "'pairs'; drop them from the candidate file: " + ", ".join(demoted[:3])
         )
     chunks = load_jsonl(chunks_path, SemanticChunk)
-    chunks_by_id = _candidate_chunk_map(candidates, chunks)
+    chunks_by_id = _candidate_chunk_map(candidates, chunks, require_code=True)
     _reject_promotional_training_material(candidates, chunks_by_id)
     _require_approved(candidates, chunks_by_id)
 
@@ -546,3 +566,83 @@ def build_prompt_pairs(
     pairs.sort(key=lambda pair: pair.id)
     atomic_write(output_path, serialize_jsonl(pairs))
     return {split.value: sum(pair.split is split for pair in pairs) for split in Split}
+
+
+def refresh_prompt_candidates(
+    prompts_path: Path,
+    chunks_path: Path,
+    *,
+    roles_path: Path | None = None,
+    normalization_path: Path | None = None,
+) -> dict[str, int]:
+    """Bring an existing candidate file in line with rebuilt chunks and training roles.
+
+    - Drops candidates whose post's role is not ``pairs`` (they can no longer train).
+    - Drops candidates whose chunk no longer exists.
+    - Where a chunk's target hash changed but ``build-chunks`` carried the chunk's approval
+      forward (the change was the configured normalization), updates the candidate's hash and
+      keeps its review status.
+    - Where the target changed materially (the chunk lost its approval), updates the hash but
+      resets the candidate to ``candidate`` with a reviewer note, so it is read again before it
+      can train.
+    Approvals still need the system-prompt stamp from ``approve-prompts`` to promote.
+    """
+    candidates = load_jsonl(prompts_path, SyntheticPromptCandidate)
+    chunks_by_id = {chunk.id: chunk for chunk in load_jsonl(chunks_path, SemanticChunk)}
+    roles = load_training_roles(roles_path)
+    normalize: Callable[[str], str] | None = None
+    if normalization_path is not None:
+        from goodprose.normalize import load_normalization_config, normalize_markdown
+
+        config = load_normalization_config(normalization_path)
+
+        def _normalize(text: str) -> str:
+            return normalize_markdown(text, config, strict_substitutions=False)[0]
+
+        normalize = _normalize
+
+    counts = Counter()
+    refreshed: list[SyntheticPromptCandidate] = []
+    for candidate in candidates:
+        if role_for(candidate.post_id, roles) != "pairs":
+            counts["dropped_by_role"] += 1
+            continue
+        chunk = chunks_by_id.get(candidate.chunk_id)
+        if chunk is None:
+            counts["dropped_missing_chunk"] += 1
+            continue
+        if candidate.target_sha256 == chunk.target_sha256:
+            counts["unchanged"] += 1
+            refreshed.append(candidate)
+            continue
+        # The candidate holds no copy of the old target, so it cannot compare texts itself.
+        # build-chunks did: it keeps a chunk approved only when the new target is the old one
+        # under the recorded normalization. A chunk that is still approved therefore changed
+        # by formatting alone; one reset to candidate changed materially. The normalization
+        # config, when given, is a second guard: a formatting pass leaves its output fixed.
+        formatting_only = chunk.review_status is ReviewStatus.APPROVED and (
+            normalize is None or normalize(chunk.target) == chunk.target
+        )
+        updates: dict[str, object] = {
+            "target_sha256": chunk.target_sha256,
+            "split": chunk.split,
+            "lineage_id": chunk.lineage_id,
+        }
+        if formatting_only and not missing_code_blocks(candidate, chunk):
+            counts["rehashed_formatting_only"] += 1
+        else:
+            counts["reset_target_changed"] += 1
+            updates["review_status"] = ReviewStatus.CANDIDATE
+            updates["approved_system_prompt_sha256"] = None
+            updates["reviewer_notes"] = (
+                *candidate.reviewer_notes,
+                "target text changed after approval; re-review before approving again",
+            )
+        refreshed.append(candidate.model_copy(update=updates))
+    if not refreshed:
+        raise PromptReviewError("no prompt candidates survive the refresh")
+    refreshed.sort(key=lambda candidate: candidate.id)
+    _candidate_chunk_map(refreshed, list(chunks_by_id.values()))
+    atomic_write(prompts_path, serialize_jsonl(refreshed))
+    counts["kept"] = len(refreshed)
+    return dict(sorted(counts.items()))

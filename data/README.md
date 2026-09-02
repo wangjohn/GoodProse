@@ -70,4 +70,18 @@ re-reviewed and re-approved.
 
 `build-prompt-pairs` is the promotion gate for section-level training data. It verifies frozen
 metadata and target hashes, rejects any prompt or chunk that is not explicitly approved, and can
-merge the resulting training sections with authentic held-out pairs for `build-sft`.
+merge the resulting training sections with authentic held-out pairs for `build-sft`. A target's
+fenced code blocks must appear verbatim in its brief: the review packet flags a missing block
+as a warning to fix, and promotion refuses the pair.
+
+When posts or chunks are rebuilt, `refresh-prompts` brings the private candidate file back in
+line before any new drafts are attached. It drops briefs whose post is no longer `pairs`, drops
+briefs whose chunk vanished, and re-hashes the rest. A brief keeps its approval only when
+`build-chunks` kept the chunk's approval (the target changed by normalization alone); when the
+chunk lost its approval the brief goes back to `candidate` with a reviewer note. The refreshed
+approvals still carry their old system-prompt stamp, so they promote as long as the system
+prompt is unchanged.
+
+`prompts/full-post-drafts.jsonl` holds the whole-post briefs for the `<post>--full` chunks. They
+are committed because they are the author's notes and contain no target text; the review packet
+still checks each one for copied runs and included URLs before approval.
