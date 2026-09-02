@@ -2561,7 +2561,7 @@ Here's an actual example of the experiment I ran:
 | 3 | 1 | `I ate red green green green cherries` |
 | 3 | 2 | `I ate red green green green plums` |
 
-At larger scale, I calculated $Z(H)$, which measures how strongly changing the perturbation word changes Claude's fruit choice. A value near zero would mean no detectable effect. $Z(1)=87.25$, which I saw in the experimental runs, means the test statistic was 87.25 (!!) standard deviations above what you would expect to see in randomized data: 
+At larger scale, I calculated $Z(H)$, which measures how strongly changing the perturbation word changes Claude's fruit choice. A value near zero would mean no detectable effect. $Z(1)=87.25$, which I saw in the experimental runs, means the test statistic was 87.25 (!!) standard deviations above what you would expect to see in randomized data:
 
 | $H$ | Context form | Standardized perturbation effect $Z(H)$ |
 |---:|---|---:|
