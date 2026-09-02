@@ -1,7 +1,7 @@
 # GoodProse training plan
 
-Executive summary as of 2 September 2026. The long-form reasoning is in
-`docs/fine-tuning-assessment-2026-09-02.md`; the mechanics are in `README.md` and `evals/README.md`.
+State and plan as of 2 September 2026. The mechanics are in `README.md`, `data/README.md`, and
+`evals/README.md`; this file says where the project stands and what happens next.
 
 ## Goal
 
@@ -12,25 +12,53 @@ held-out posts, then on five fresh real drafts.
 ## Where we are
 
 - 22 published posts, about 30k words, frozen by lineage into 15 train, 3 dev, 4 test posts.
-- Every training target is John's verbatim published text. No synthetic completions.
-- The pipeline is complete: import, chunk, brief, review, approve, pair, export, train, generate,
-  proxy-score, blind-review, preference-build, DPO. Hash-checked end to end.
-- The dataset is the constraint. It has 68 section-level briefs and no whole-post training pairs,
-  while the test asks for whole posts from real drafts.
+  Canonical text is normalized to the author's conventions (straight quotes, `*italics*`,
+  `#` sections), with what fired recorded per post.
+- Target voice is the personal site. The Assembled posts had an editor's pass, so the four
+  without a manuscript are `raw_only`, the one with a manuscript targets the manuscript, the two
+  Assembled dev posts are excluded, and every user turn opens with a venue line.
+- Chunks: 129, of which 70 are approved. Supervised training material on `pairs`-role posts is
+  41 approved section and sentence targets (about 10.5k words), 11 whole-post `--full` chunks
+  (about 11.8k words) with briefs drafted for 10, and 5 sections that need re-review after their
+  targets changed. 33 Assembled chunks feed raw completions only.
+- Development set: the watermarking post alone (about 3.4k words). Test: four posts, unchanged.
+- Briefs: 68 section-level briefs under `data/private/prompts/`, to be refreshed against the
+  rebuilt chunks. Short cases: 14 candidates and 4 rejected, none approved yet.
+- The pipeline is complete and hash-checked end to end: import, normalize, chunk, brief,
+  refresh, review, approve, pair, export, train, generate, dev NLL, stylometric proxy, judge
+  packet, blind review, preference build, DPO. Training itself has not run on the new data.
+
+## Before the next training run
+
+On the machine that has `data/private/`, in this order:
+
+1. `scripts/rebuild-data.sh`. It imports with code repair from the manuscripts, normalizes,
+   rebuilds chunks, refreshes the existing briefs (drops demoted posts, re-hashes formatting-only
+   changes, resets material changes), attaches the whole-post briefs from
+   `data/prompts/full-post-drafts.jsonl`, and renders `data/private/prompts/REVIEW.md`.
+2. Read the packet. Fix briefs flagged for missing code blocks or copied runs, edit the ten
+   whole-post briefs until they read like your notes, and write the eleventh for the scaling-llms
+   post once its repaired target is in place.
+3. `approve-prompts` with a dated reviewer note. Approval binds the system prompt hash.
+4. `build-prompt-pairs`, then `build-sft --raw-completions` with the roles, chunks, and posts
+   files. Confirm `data/sft/dev.jsonl` exists; the configs evaluate every epoch.
+5. `train-lora-plus --config configs/qwen3-8b-lora.json --validate-only`, then the run.
+
+Keep the watermarking post as the development set. Dev NLL is the memorization detector and the
+checkpoint selector; without it, selection would fall to the test short cases and weaken the
+blind gate.
 
 ## Plan
 
-### 1. Rebuild the training set at the scope of the test (John's time, highest value)
+### 1. Grow the training set at the scope of the test (John's time, highest value)
 
-- Write one realistic whole-post brief or messy draft for each of the 15 training posts,
-  targeting the 15 new `--full` chunks. Match how you actually hand notes to an assistant.
-- Add two to four more prompt forms per section chunk (bullets, rough sentences, phrases,
-  near-final draft), roughened to look like your real drafts. Review and approve in the existing
-  packet.
-- Bring in other writing you own (memos, RFCs, long Slack posts, PR descriptions, talk scripts)
-  under `data/private/` for the raw-completion mix.
-- Target: roughly 300 supervised pairs plus 15 whole-post pairs plus raw completions of every
-  target, up from 68 pairs.
+- Whole-post briefs for every `--full` chunk (ten drafted, one pending).
+- Two to four more prompt forms per section chunk (bullets, rough sentences, phrases, near-final
+  draft), roughened to look like real drafts, on the personal-site posts first.
+- More of your own writing (memos, RFCs, long Slack posts, PR descriptions, talk scripts) under
+  `data/private/` for the raw-completion mix.
+- Capture every new draft with `capture-draft` before polishing; five of those become the
+  prospective test set.
 
 ### 2. Run the recipe grid, picked by cheap proxies
 
@@ -38,12 +66,13 @@ held-out posts, then on five fresh real drafts.
   LoRA at 2e-4. Rank 32 on all linear layers, effective batch 4, 5 epochs, every epoch saved,
   dev loss every epoch.
 - Decoding for every comparison is the deployment setting: sampled at 0.7 / top-p 0.9 /
-  repetition penalty 1.05, fixed per-case seed, identical for both arms.
+  repetition penalty 1.05, fixed per-case seed, identical for both arms, with
+  `Venue: johnjwang.com (2026)` on the user turn and `--ban-string` for em dashes if needed.
 - For each checkpoint run `eval nll` on dev, `eval generate` on the test cases, `eval proxy`
-  against the published training prose, and the blinded frontier judge packet. Choose the
+  with `--reference-url-substring johnjwang.com`, and the blinded judge packet. Choose the
   checkpoint these agree on. Calibrate them once against the first blind review.
-- Also generate the strong prompted frontier baseline (three of your posts plus a style guide)
-  on the test cases early. It is the bar, and the fallback teacher.
+- Generate the strong prompted frontier baseline (three of your posts plus a style guide) on the
+  test cases early. It is the bar, and the fallback teacher.
 
 ### 3. One preference pass
 
@@ -53,48 +82,41 @@ held-out posts, then on five fresh real drafts.
 
 ### 4. Ship gate
 
-- Blind human review on the four frozen test cases with the existing decision rules: every
-  candidate output passes factuality and instruction following, more overall wins than the
-  baseline, no held-out lineage lost, mean edit burden better by at least 0.5.
-- Then five fresh real drafts, saved before you polish them, against the prompted baseline.
-  Ship only on at least four of five wins with no unsupported facts.
+- Short-case blind pass first (`build-short-cases`, approve, then review), then the blind human
+  review on the four frozen test cases with the existing decision rules: every candidate output
+  passes factuality and instruction following, more overall wins than the baseline, no held-out
+  lineage lost, mean edit burden better by at least 0.5.
+- Then five fresh real drafts against the prompted baseline. Ship only on at least four of five
+  wins with no unsupported facts.
 
-## Data decisions taken on 2 September (later)
+## Checks before a run you intend to keep
 
-- Target voice is the personal site. The Assembled posts had an editor's pass: the four without
-  a manuscript are `raw_only` under an `editor-revised` venue note, the one with a manuscript
-  targets the manuscript, and the two Assembled dev pairs are excluded.
-- Every user turn opens with `Venue: host (year)`; ask for `Venue: johnjwang.com (2026)` at
-  inference. Personal-site raw completions are weighted 2x.
-- Canonical posts are normalized to the author's conventions (straight quotes, `*italics*`,
-  `#` sections); em dashes are not auto-replaced but the proxy reports them and decoding can
-  ban them.
-- Flattened code in scraped posts is repaired from manuscripts, with a fencing fallback; briefs
-  must carry a target's code blocks verbatim.
-- New drafts are captured with `capture-draft` before polishing to build the prospective set.
+- Train prompt prefix byte-identical to the generation prompt (the manifests record the hash).
+- No dev or test chunk text in any training record, including raw completions.
+- Dev NLL logged per epoch; rising after epoch 2 means memorizing.
+- Sampled dev outputs contain no 30-word verbatim runs from other published posts.
+- Strong prompted frontier baseline generated for the four test cases.
+- Pin `Qwen/Qwen3-14B` to a commit hash; drop `max_length` to 4096 on a 24 GB GPU.
+- The first GPU run of `train-lora-plus`, `eval nll`, and `train-dpo` is a smoke test; the
+  validate-only paths are unit-tested, the training paths are not.
 
 ## Guardrails already in place
 
 - Training, scoring, DPO, and generation render the prompt through one function with
   `enable_thinking: false`; the assistant-prefix hash is recorded and compared across runs.
-- Held-out chunks can never become training inputs; rebuilds preserve approvals only for
-  unchanged targets.
-- Promotional footers are excluded from targets; the pair builder rejects hiring CTAs.
+- Held-out chunks can never become training inputs; rebuilds preserve approvals only when a
+  target is unchanged up to the recorded normalization; approvals are bound to the system prompt.
+- Briefs must carry a target's code blocks verbatim; promotional footers are excluded; the pair
+  builder rejects hiring CTAs and posts whose role is not `pairs`.
 
 ## Time split
 
 Data 60 percent, proxy calibration 20 percent, recipe and model size 15 percent,
 infrastructure 5 percent. Infrastructure is done; stop investing there.
 
-## Open items
+## Sources
 
-- Pin `Qwen/Qwen3-14B` to a commit hash before a run you intend to keep.
-- Drop `max_length` from 6144 to 4096 on a 24 GB GPU.
-- Run `scripts/rebuild-data.sh` on the machine with `data/private/`, read the review packet,
-  approve, then build pairs and export. The whole-post briefs in `data/prompts/full-post-drafts.jsonl`
-  cover ten of the eleven `--full` chunks; the scaling-llms post waits on its repaired target.
-- Keep the watermarking post as the development set. Dev NLL is the memorization detector and
-  the checkpoint selector; without it, selection would fall to the test short cases and weaken
-  the blind gate. The configs evaluate every epoch, so `data/sft/dev.jsonl` must exist.
-- First GPU run of `train-lora-plus`, `eval nll`, and `train-dpo` is a smoke test; the
-  validate-only paths are unit-tested, the training paths are not.
+- LoRA Without Regret (Thinking Machines): https://thinkingmachines.ai/blog/lora/
+- TRL summary: https://huggingface.co/docs/trl/en/lora_without_regret
+- Qwen3 chat template deep dive: https://huggingface.co/blog/qwen-3-chat-template-deep-dive
+- On-Policy Distillation (Thinking Machines): https://thinkingmachines.ai/blog/on-policy-distillation/
