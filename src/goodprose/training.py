@@ -340,7 +340,8 @@ def run_lora_plus(
         "gradient_accumulation_steps": config.gradient_accumulation_steps,
         "learning_rate": config.learning_rate,
         "lr_scheduler_type": config.lr_scheduler_type,
-        "warmup_ratio": config.warmup_ratio,
+        # Transformers 5 accepts a float in [0, 1) here as a ratio of total steps.
+        "warmup_steps": config.warmup_ratio,
         "weight_decay": config.weight_decay,
         "max_grad_norm": config.max_grad_norm,
         "max_length": config.max_length,
