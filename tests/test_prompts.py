@@ -469,6 +469,86 @@ def test_build_prompt_pairs_applies_reviewed_exact_text_exclusion(tmp_path: Path
     assert cleaned.input == "Authentic test outline."
 
 
+def test_pair_exclusions_are_validated_before_an_excluded_dev_pair_is_dropped(
+    tmp_path: Path,
+) -> None:
+    from goodprose.roles import TrainingRole
+
+    chunk = _chunk().model_copy(update={"review_status": ReviewStatus.APPROVED})
+    candidate = _candidate(chunk).model_copy(
+        update={
+            "review_status": ReviewStatus.APPROVED,
+            "approved_system_prompt_sha256": system_prompt_sha256(),
+        }
+    )
+    post = BlogPost(
+        id="post",
+        lineage_id="post",
+        title="Post title",
+        body_markdown=chunk.target,
+        source_path="post.md",
+    )
+    call_to_action = " I really hope you like it!"
+    heldout = WritingPair(
+        id="excluded-dev",
+        post_id="excluded-dev",
+        lineage_id="excluded-dev",
+        split=Split.DEV,
+        input="Authentic development draft." + call_to_action,
+        input_method=InputMethod.ORIGINAL_DRAFT,
+        title="Development post",
+        output="Published development post.",
+    )
+    prompts_path, chunks_path, posts_path, heldout_path, exclusions_path, roles_path = (
+        tmp_path / name
+        for name in (
+            "prompts.jsonl",
+            "chunks.jsonl",
+            "posts.jsonl",
+            "heldout.jsonl",
+            "exclusions.jsonl",
+            "roles.jsonl",
+        )
+    )
+    atomic_write(prompts_path, serialize_jsonl([candidate]))
+    atomic_write(chunks_path, serialize_jsonl([chunk]))
+    atomic_write(posts_path, serialize_jsonl([post]))
+    atomic_write(heldout_path, serialize_jsonl([heldout]))
+    atomic_write(
+        exclusions_path,
+        serialize_jsonl(
+            [
+                PairTextExclusion(
+                    pair_id=heldout.id,
+                    field="input",
+                    text=call_to_action,
+                    reason="Promotional sign-off.",
+                )
+            ]
+        ),
+    )
+    atomic_write(
+        roles_path,
+        serialize_jsonl(
+            [TrainingRole(post_id=heldout.post_id, role="excluded", reason="editor pass")]
+        ),
+    )
+
+    counts = build_prompt_pairs(
+        prompts_path,
+        chunks_path,
+        posts_path,
+        tmp_path / "pairs.jsonl",
+        heldout_pairs_paths=[heldout_path],
+        text_exclusions_path=exclusions_path,
+        roles_path=roles_path,
+    )
+
+    assert counts == {"train": 1, "dev": 0, "test": 0}
+    pairs = load_jsonl(tmp_path / "pairs.jsonl", WritingPair)
+    assert [pair.id for pair in pairs] == [candidate.id]
+
+
 def test_several_prompt_forms_may_target_one_chunk_but_not_the_same_form_twice() -> None:
     chunk = _chunk()
     bullets = _candidate(chunk)

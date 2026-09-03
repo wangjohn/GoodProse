@@ -43,6 +43,8 @@ whose whitespace-stripped tokens match exactly, reporting blocks it could not pl
 them removed) as a fallback for blocks the manuscript did not match exactly; it cannot restore
 whitespace the snapshot dropped, so exact repair runs first. `--target-from-manuscript POST_ID`
 uses the manuscript body itself as the canonical target for posts where the published text
-carries an editor's pass. Catalog approval, snapshot presence, duplicate IDs, and base/external ID
-collisions are checked before output. The published snapshot is the exact completion source; the
-private manuscript is used only as an authentic input where a frozen held-out mapping selects it.
+carries an editor's pass. A source-map record may set `target_end_marker` to exclude material such
+as archived drafts or outlines that follows the finished post; the marker must occur exactly once.
+Catalog approval, snapshot presence, duplicate IDs, and base/external ID collisions are checked
+before output. The published snapshot is the exact completion source; the private manuscript is
+used only as an authentic input where a frozen held-out mapping selects it.

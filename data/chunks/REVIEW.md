@@ -7,8 +7,8 @@ post-scale prefix of each training post up to its last kept section. A target be
 SFT example only after both its chunk and a matching prompt are approved.
 
 - Posts: 22
-- Chunks: 129
-- Splits: dev=19, test=20, train=90
+- Chunks: 131
+- Splits: dev=20, test=20, train=91
 
 ## Cheap software won't make engineering cheap
 
@@ -89,7 +89,7 @@ So, the future will see a lot of change. I think the base layer of life will kee
 
 ### cheap-software-wont-make-engineering-cheap--full
 
-`train` - `candidate` - 1827 approximate tokens - 1224 words - exceeds target size
+`train` - `approved` - 1827 approximate tokens - 1224 words - exceeds target size
 
 Headings: Software will follow Jevons paradox / Engineers will orchestrate more / So will the future be good?
 
@@ -425,12 +425,12 @@ To optimize search performance, we explored several algorithms for merging the r
 
 ### external-blocking-llms--001
 
-`train` - `approved` - 400 approximate tokens - 257 words
+`train` - `approved` - 399 approximate tokens - 256 words
 
 Headings: (intro or continuation)
 
 ```markdown
-Perplexity was recently accused of [scraping sites that had explicitly disallowed LLM crawlers](https://techcrunch.com/2025/08/04/perplexity-accused-of-scraping-websites-that-explicitly-blocked-ai-scraping/) in their robots.txt files. In the wake of that revelation, a wave of how-to guides for blocking large-language-model scraping has surfaced [0]. They're generally highly vitriolic, with people opposing this on both moral grounds ("AI is stealing your content") as well as displaying a general distaste for AI.
+Perplexity was recently accused of [scraping sites that had explicitly disallowed LLM crawlers](https://techcrunch.com/2025/08/04/perplexity-accused-of-scraping-websites-that-explicitly-blocked-ai-scraping/) in their robots.txt files. In the wake of that revelation, a wave of how-to guides for blocking large-language-model scraping has surfaced. They're generally highly vitriolic, with people opposing this on both moral grounds ("AI is stealing your content") as well as displaying a general distaste for AI.
 
 **But how many of you wouldn't hook up your website to Google?**
 
@@ -447,12 +447,12 @@ Providing high quality content that LLMs will actually cite is the new game in t
 
 ### external-blocking-llms--full
 
-`train` - `candidate` - 400 approximate tokens - 257 words
+`train` - `approved` - 399 approximate tokens - 256 words
 
 Headings: (intro or continuation)
 
 ```markdown
-Perplexity was recently accused of [scraping sites that had explicitly disallowed LLM crawlers](https://techcrunch.com/2025/08/04/perplexity-accused-of-scraping-websites-that-explicitly-blocked-ai-scraping/) in their robots.txt files. In the wake of that revelation, a wave of how-to guides for blocking large-language-model scraping has surfaced [0]. They're generally highly vitriolic, with people opposing this on both moral grounds ("AI is stealing your content") as well as displaying a general distaste for AI.
+Perplexity was recently accused of [scraping sites that had explicitly disallowed LLM crawlers](https://techcrunch.com/2025/08/04/perplexity-accused-of-scraping-websites-that-explicitly-blocked-ai-scraping/) in their robots.txt files. In the wake of that revelation, a wave of how-to guides for blocking large-language-model scraping has surfaced. They're generally highly vitriolic, with people opposing this on both moral grounds ("AI is stealing your content") as well as displaying a general distaste for AI.
 
 **But how many of you wouldn't hook up your website to Google?**
 
@@ -1160,7 +1160,7 @@ The manual approach taught us that we needed automation, but it also revealed th
 
 ### external-llm-provider-fallbacks--002
 
-`dev` - `candidate` - 252 approximate tokens - 108 words
+`dev` - `candidate` - 290 approximate tokens - 108 words
 
 Headings: Building automated fallbacks / Model categories
 
@@ -1173,38 +1173,40 @@ To combat these problems, we designed a very simple automated fallback system th
 
 First, we organized our models into categories based on their intended use cases.
 
+```go
 type ModelCategory string
 
 const (
-Fast ModelCategory="fast"
-Smart ModelCategory="smart"
-Reasoning ModelCategory="reasoning"
-```go
+    Fast      ModelCategory = "fast"
+    Smart     ModelCategory = "smart"
+    Reasoning ModelCategory = "reasoning"
 )
+
 func GetModelForCategory(category ModelCategory, platform ModelPlatform) ModelType {
-switch platform {
-case ModelPlatformOpenAI:
-switch category {
-case Fast: return ModelTypeGPT4_1_Mini
-case Smart: return ModelTypeGPT4_1
-case Reasoning: return ModelTypeO_3
+    switch platform {
+    case ModelPlatformOpenAI:
+        switch category {
+        case Fast:      return ModelTypeGPT4_1_Mini
+        case Smart:     return ModelTypeGPT4_1
+        case Reasoning: return ModelTypeO_3
+        }
+    case ModelPlatformAnthropic:
+        switch category {
+        case Fast:      return ModelTypeClaude3_5_Haiku
+        case Smart:     return ModelTypeClaude4_Sonnet
+        case Reasoning: return ModelTypeClaude4_Opus
+        }
+    // ... additional platforms
+    }
+    return ModelTypeGPT_4_1 // sensible default
 }
-case ModelPlatformAnthropic:
-switch category {
-case Fast: return ModelTypeClaude3_5_Haiku
-case Smart: return ModelTypeClaude4_Sonnet
-case Reasoning: return ModelTypeClaude4_Opus
-}
-// ... additional platforms
-}
-return ModelTypeGPT_4_1// sensible default
-}
+
 ```
 ````
 
 ### external-llm-provider-fallbacks--003
 
-`dev` - `candidate` - 406 approximate tokens - 208 words
+`dev` - `candidate` - 444 approximate tokens - 208 words
 
 Headings: Provider ordering and fallback logic
 
@@ -1214,10 +1216,10 @@ Headings: Provider ordering and fallback logic
 Then we established a global provider ordering that determines our fallback sequence when the primary model fails:
 
 ```go
-var GlobalFallbackOrder= []ModelPlatform{
-ModelPlatformOpenAI, // Primary choice
-ModelPlatformAnthropic, // Secondary
-ModelPlatformGemini, // Tertiary
+var GlobalFallbackOrder = []ModelPlatform{
+    ModelPlatformOpenAI, // Primary choice
+    ModelPlatformAnthropic, // Secondary
+    ModelPlatformGemini, // Tertiary
 }
 ```
 
@@ -1228,34 +1230,36 @@ We also provided configurable timeouts for each LLM request to cancel a request 
 Once we established fallback ordering and categories, the implementation was relatively straightforward: listen for an error or a timeout, then try the next model in that category.
 
 ```go
-func (agent*LLMAgent) CreateCompletion(ctx context.Context, request*CompletionRequest) (*Response, error) {
-// Build list of primary model + fallbacks for same category
-modelsToTry:= []ModelType{agent.primaryModel}
-for _, platform:=range GlobalFallbackOrder {
-if platform!=agent.primaryPlatform {
-fallbackModel:=GetModelForCategory(agent.category, platform)
-modelsToTry=append(modelsToTry, fallbackModel)
-}
-}
-// Try each model in order until one succeeds
-var lastError error
-for i, model:=range modelsToTry {
-response, err:=agent.callSingleModel(ctx, request, model, agent.getModelTimeout())
-if err==nil {
-return response, nil
-}
-lastError=err
-}
-return nil, fmt.Errorf("all models failed: %w", lastError)
+func (agent *LLMAgent) CreateCompletion(ctx context.Context, request *CompletionRequest) (*Response, error) {
+    // Build list of primary model + fallbacks for same category
+    modelsToTry := []ModelType{agent.primaryModel}
+    for _, platform := range GlobalFallbackOrder {
+        if platform != agent.primaryPlatform {
+            fallbackModel := GetModelForCategory(agent.category, platform)
+            modelsToTry = append(modelsToTry, fallbackModel)
+        }
+    }
+
+    // Try each model in order until one succeeds
+    var lastError error
+    for i, model := range modelsToTry {
+        response, err := agent.callSingleModel(ctx, request, model, agent.getModelTimeout())
+        if err == nil {
+            return response, nil
+        }
+        lastError = err
+    }
+
+    return nil, fmt.Errorf("all models failed: %w", lastError)
 }
 ```
 ````
 
 ### external-llm-provider-fallbacks--004
 
-`dev` - `candidate` - 552 approximate tokens - 314 words
+`dev` - `candidate` - 257 approximate tokens - 131 words
 
-Headings: Handling streaming responses / Benefits of our simple fallback approach
+Headings: Handling streaming responses
 
 ````markdown
 ## Handling streaming responses
@@ -1263,22 +1267,35 @@ Headings: Handling streaming responses / Benefits of our simple fallback approac
 Streaming adds one key complexity: once we start sending tokens to a user, we can't easily retry with a different model since you may be in the middle of a response (and restarting the stream would cause awkward end user results). Luckily, we found that most outages happen before the first token is returned, so we only attempt a fallback if streaming hasn't yet begun:
 
 ```go
-func (agent*LLMAgent) StreamCompletion(ctx context.Context, request*CompletionRequest, tokens chan<-Token) error {
-modelsToTry:=agent.getModelsToTry()
-for i, model:=range modelsToTry {
-hasReceivedFirstToken, err:=agent.tryStreamSingleModel(ctx, request, model, tokens, agent.getModelTimeout())
-if err==nil {
-return nil// Success
-}
-// Only retry if we haven't started streaming and have more models to try
-if!hasReceivedFirstToken&&i<len(modelsToTry)-1 {
-continue// Try next model
-}
-return err
-}
-}
-```
+func (agent *LLMAgent) StreamCompletion(ctx context.Context, request *CompletionRequest, tokens chan<- Token) error {
+    modelsToTry := agent.getModelsToTry()
 
+    for i, model := range modelsToTry {
+        hasReceivedFirstToken, err := agent.tryStreamSingleModel(ctx, request, model, tokens, agent.getModelTimeout())
+
+        if err == nil {
+            return nil // Success
+        }
+
+        // Only retry if we haven't started streaming and have more models to try
+        if !hasReceivedFirstToken && i < len(modelsToTry)-1 {
+            continue // Try next model
+        }
+
+        return err
+    }
+}
+
+```
+````
+
+### external-llm-provider-fallbacks--005
+
+`dev` - `candidate` - 324 approximate tokens - 183 words
+
+Headings: Benefits of our simple fallback approach
+
+```markdown
 # Benefits of our simple fallback approach
 
 **Instant failover**: Our system detects failures and switches providers within milliseconds, eliminating the 5+ minute manual switchover delays that previously caused customer-visible outages.
@@ -1288,9 +1305,9 @@ return err
 **Hybrid approach for optimization**: We still have the ability to perform manual switchovers of our main model provider, but now it's more of a latency or quality optimization rather than an emergency response to keep us operational.
 
 During a recent multi-hour LLM provider outage, customers experienced near-zero impact with request failure rates below 0.001% — all thanks to automated failover. More importantly, we've eliminated the stress and urgency of emergency manual failovers. Our on-call engineers can focus on building new features rather than frantically switching configurations during outages.
-````
+```
 
-### external-llm-provider-fallbacks--005
+### external-llm-provider-fallbacks--006
 
 `dev` - `candidate` - 569 approximate tokens - 328 words
 
@@ -1466,7 +1483,7 @@ Ultimately, Dan said this all came down to **intellectual honesty**. The best wa
 
 ### external-product-lessons-dan-robinson--full
 
-`train` - `candidate` - 1016 approximate tokens - 712 words - exceeds target size
+`train` - `approved` - 1016 approximate tokens - 712 words - exceeds target size
 
 Headings: The Burnt Pizza Problem / Talk to users, but in a specific way
 
@@ -1524,67 +1541,89 @@ Dan closed with this: startups ultimately have to build something that people fi
 
 ### external-scaling-llms-golang--001
 
-`train` - `candidate` - 691 approximate tokens - 354 words
+`train` - `approved` - 215 approximate tokens - 121 words
+
+Headings: Blog Post: Scaling LLMs with Golang: How we serve millions of LLM requests / Scaling LLMs with Golang: How we serve millions of LLM requests
+
+```markdown
+# Blog Post: Scaling LLMs with Golang: How we serve millions of LLM requests
+
+Type: Blog post
+Owner: John Wang
+
+# Scaling LLMs with Golang: How we serve millions of LLM requests
+
+John Wang
+
+While the LLM ecosystem is overwhelmingly Python-first, we've found Go to be exceptionally well-suited for production deployments. Our Go-based infrastructure handles millions of monthly LLM requests with minimal performance tuning. Beyond Go's well-documented advantages (see Rob Pike's excellent [distillation of Go's benefits](https://go.dev/talks/2012/splash.article)), three capabilities have proven particularly valuable for LLM workloads: static type checking for handling model outputs, goroutines for managing concurrent API calls, and interfaces for building composable response pipelines. Here's how we've implemented each of these in our production stack.
+```
+
+### external-scaling-llms-golang--002
+
+`train` - `approved` - 564 approximate tokens - 271 words
 
 Headings: Type safety and structured outputs
 
 ````markdown
-While the LLM ecosystem is overwhelmingly Python-first, we've found Go to be exceptionally well-suited for production deployments. Our Go-based infrastructure handles millions of monthly LLM requests with minimal performance tuning. Beyond Go's well-documented advantages (see Rob Pike's excellent [distillation of Go's benefits](https://go.dev/talks/2012/splash.article)), three capabilities have proven particularly valuable for LLM workloads: static type checking for handling model outputs, goroutines for managing concurrent API calls, and interfaces for building composable response pipelines. Here's how we've implemented each of these in our production stack.
-
-# Type safety and structured outputs
+## Type safety and structured outputs
 
 One of the main challenges with LLMs is handling their unstructured outputs. OpenAI's [structured output support](https://platform.openai.com/docs/guides/structured-outputs) has been a significant advancement for us, and Go's type system makes it particularly elegant to implement. Rather than writing separate schema definitions, we can leverage Go's struct tags and reflection to generate well defined schemas. Here's an example where we automatically convert a `SupportResponse` into OpenAI's JSON schema format using the [go-openai](https://github.com/sashabaranov/go-openai) library:
 
-import (
-"github.com/sashabaranov/go-openai"
-"github.com/sashabaranov/go-openai/jsonschema"
 ```go
+import (
+    "github.com/sashabaranov/go-openai"
+    "github.com/sashabaranov/go-openai/jsonschema"
 )
+
 type SupportResponse struct {
-Answer string`json:"answer"`
-RelatedDocs []string`json:"related_docs"`
+    Answer      string   `json:"answer"`
+    RelatedDocs []string `json:"related_docs"`
 }
+
 func GetSupportResponse(messages []openai.ChatCompletionMessage) (*SupportResponse, error) {
-var supportResponse SupportResponse
-schema, err:=jsonschema.GenerateSchemaForType(supportResponse)
-if err!=nil {
-return nil, err
-}
-resp, err:=client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
-Messages: messages,
-ResponseFormat: &openai.ChatCompletionResponseFormat{
-Type: openai.ChatCompletionResponseFormatTypeJSONSchema,
-JSONSchema: &openai.ChatCompletionResponseFormatJSONSchema{
-Name: "support_response",
-Schema: schema,
-Strict: true,
-},
-},
-})
-if err!=nil {
-return nil, err
-}
-err=schema.Unmarshal(resp.Choices[0].Message.Content, &supportResponse)
-if err!=nil {
-return nil, err
-}
-return&supportResponse, nil
+  var supportResponse SupportResponse
+  schema, err := jsonschema.GenerateSchemaForType(supportResponse)
+  if err != nil {
+	  return nil, err
+  }
+
+	resp, err := client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
+		Messages: messages,
+		ResponseFormat: &openai.ChatCompletionResponseFormat{
+			Type: openai.ChatCompletionResponseFormatTypeJSONSchema,
+			JSONSchema: &openai.ChatCompletionResponseFormatJSONSchema{
+				Name:   "support_response",
+				Schema: schema,
+				Strict: true,
+			},
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	err = schema.Unmarshal(resp.Choices[0].Message.Content, &supportResponse)
+	if err != nil {
+		return nil, err
+	}
+	return &supportResponse, nil
 }
 ```
+
+https://gist.github.com/wangjohn/8f0658898597924119efd96a1ebc6951
 
 The above code will provide us with `Answer` and `RelatedDocs` populated directly from an LLM call. Now, the `SupportResponse` can be easily passed to our frontend or saved in our database.
 
 Notice that because Golang has a type system built in, you don't have to spend any extra time defining the object structure ([like you would in Python](https://platform.openai.com/docs/guides/structured-outputs#how-to-use)) — it's already available via reflection and you can spend more of your time on prompting, inputs, and outputs of the LLM.
 ````
 
-### external-scaling-llms-golang--002
+### external-scaling-llms-golang--003
 
-`train` - `candidate` - 400 approximate tokens - 213 words
+`train` - `approved` - 470 approximate tokens - 219 words
 
 Headings: Parallel processing and latency
 
 ````markdown
-# Parallel processing and latency
+## Parallel processing and latency
 
 LLM applications often require concurrent API calls and complex orchestration. Go's goroutines and channels make this remarkably straightforward.
 
@@ -1592,171 +1631,206 @@ For instance, suppose we're running a Retrieval Augmented Generation (RAG) pipel
 
 ```go
 func ParallelSearch(query string) []SearchResult {
-ctx, cancel:=context.WithTimeout(context.Background(), 750*time.Millisecond)
-defer cancel()
-resultsChan:=make(chan []SearchResult, len(backends))
-var wg sync.WaitGroup
-for _, backend:=range backends {
-wg.Add(1)
-go func(backend func(string) ([]SearchResult, error)) {
-defer wg.Done()
-results, err:=backend(query)
-if err!=nil {
-return
-}
-select {
-case resultsChan<-results:
-case<-ctx.Done():
-}
-}(backend)
-}
-wg.Wait()
-close(resultsChan)
-var combined []SearchResult
-for res:=range resultsChan {
-combined=append(combined, res...)
-}
-return combined
+    ctx, cancel := context.WithTimeout(context.Background(), 750*time.Millisecond)
+    defer cancel()
+
+    resultsChan := make(chan []SearchResult, len(backends))
+    var wg sync.WaitGroup
+
+    for _, backend := range backends {
+        wg.Add(1)
+        go func(backend func(string) ([]SearchResult, error)) {
+            defer wg.Done()
+            results, err := backend(query)
+            if err != nil {
+                return
+            }
+            select {
+            case resultsChan <- results:
+            case <-ctx.Done():
+            }
+        }(backend)
+    }
+
+    wg.Wait()
+    close(resultsChan)
+
+    var combined []SearchResult
+    for res := range resultsChan {
+        combined = append(combined, res...)
+    }
+
+    return combined
 }
 ```
+
+https://gist.github.com/wangjohn/a30ff7d0068535d576f7696616d5b92d
 
 This pattern reduces our total latency to that of the slowest backend, with a configurable timeout to prevent any single slow backend from bottlenecking the entire system. The results are collected via a Go channel and combined after all the Goroutines have completed or timed out.
 ````
 
-### external-scaling-llms-golang--003
+### external-scaling-llms-golang--004
 
-`train` - `candidate` - 500 approximate tokens - 277 words
+`train` - `approved` - 586 approximate tokens - 281 words
 
 Headings: Response processing pipeline
 
 ````markdown
-# Response processing pipeline
+## Response processing pipeline
 
-LLM outputs often need multiple transformations before they're ready for end users. For example, if you're using an LLM provider with great reasoning ability but doesn't yet have structured outputs (e.g. Claude 3.5 Sonnet), you'll likely want to structure the output in your prompt and parse the output before passing it to an end user.
-
-We've built a composable pipeline that makes these transformations both maintainable and testable:
+LLM outputs often need multiple transformations before they're ready for end users. We've built a composable pipeline that makes these transformations both maintainable and testable:
 
 ```go
 type ResponseCleaner interface {
-Clean(context.Context, string) (string, []ResponseDetails, error)
+	Clean(context.Context, string) (string, []ResponseDetails, error)
 }
+
 type ResponseDetails struct {
-DetailType string`json:"detail_type"`
-Content interface{} `json:"content"`
+  DetailType string `json:"detail_type"`
+  Content interface{} `json:"content"`
 }
 ```
+
+https://gist.github.com/wangjohn/b692ccad121346e4bd4e6337160eb95b
 
 Each cleaner is a discrete unit that handles one specific transformation. This separation of concerns makes testing straightforward and allows us to modify individual transformations without touching the rest of the pipeline. Here's how we handle source citations:
 
 ```go
 type CitedSourceCleaner struct{}
+
 func (c CitedSourceCleaner) Clean(ctx context.Context, message string) (string, []ResponseDetails, error) {
-sourceRegex:=regexp.MustCompile(`\[(Source|Ref):\s*([^\]]+)\]`)
-var citations []ResponseDetails
-matches:=sourceRegex.FindAllStringSubmatch(message, -1)
-for i, match:=range matches {
-citations=append(citations, ResponseDetails{
-DetailType: "citation",
-Content: map[string]interface{}{
-"number": i+1,
-"source": match[2],
-},
-})
-message=strings.Replace(message, match[0],
-fmt.Sprintf("[%d]", i+1), 1)
-}
-return message, citations, nil
+    sourceRegex := regexp.MustCompile(`\[(Source|Ref):\s*([^\]]+)\]`)
+    var citations []ResponseDetails
+
+    matches := sourceRegex.FindAllStringSubmatch(message, -1)
+    for i, match := range matches {
+        citations = append(citations, ResponseDetails{
+            DetailType: "citation",
+            Content: map[string]interface{}{
+                "number": i + 1,
+                "source": match[2],
+            },
+        })
+        message = strings.Replace(message, match[0],
+            fmt.Sprintf("[%d]", i + 1), 1)
+    }
+
+    return message, citations, nil
 }
 ```
 
+[https://gist.github.com/wangjohn/eda173e20c1825f1b2ece854e3606cc4](https://gist.github.com/wangjohn/eda173e20c1825f1b2ece854e3606cc4)
+
 Using the above cleaner, when an LLM responds with:
 
-> According to [Source: docs/onboarding.pdf] and [Source: kb/troubleshooting.md], the API rate limit is 100 requests per minute for [Source: pricing.pdf] premium accounts.
+```
+According to [Source: docs/onboarding.pdf] and [Source: kb/troubleshooting.md],
+the API rate limit is 100 requests per minute for [Source: pricing.pdf] premium accounts.
 
-The cleaner will parse the sources and pass them to the frontend as response details. It will also transform the raw LLM output into:
+```
 
-> According to [1] and [2], the API rate limit is 100 requests per minute for [3] premium accounts.
+The cleaner will transform the LLM output into:
+
+```
+According to [1] and [2], the API rate limit is 100 requests per minute for [3] premium accounts.
+```
+
+These cleaners can be chained together to form a complete pipeline of multiple cleaners. This approach means that each cleaner can be unit tested in isolation and new transformations can be added without modifying existing code. Also, the metadata from each transformation is preserved for downstream use.
 ````
 
-### external-scaling-llms-golang--004
+### external-scaling-llms-golang--005
 
-`train` - `approved` - 424 approximate tokens - 227 words
+`train` - `approved` - 423 approximate tokens - 227 words
 
 Headings: Complementing with Python / Conclusion
 
 ```markdown
-# Complementing with Python
+## Complementing with Python
 
 While Go powers our production infrastructure, Python remains essential for ML experimentation and rapid prototyping. The Python ecosystem excels at tasks like:
 
-*   Support ticket clustering with [scikit-learn](https://scikit-learn.org/stable/modules/clustering.html) (for example with [AgglomerativeClustering](https://scikit-learn.org/stable/modules/clustering.html#hierarchical-clustering))
-*   Fine-tuning LLMs with transformers (especially [open source models like Llama](https://www.llama.com/docs/how-to-guides/fine-tuning/)), especially for customizing models on our support data
-*   RAG prototyping with sentence-transformers to test embedding models and chunking strategies
+- Support ticket clustering with [scikit-learn](https://scikit-learn.org/stable/modules/clustering.html) (for example with [AgglomerativeClustering](https://scikit-learn.org/stable/modules/clustering.html#hierarchical-clustering))
+- Fine-tuning LLMs with transformers (especially [open source models like Llama](https://www.llama.com/docs/how-to-guides/fine-tuning/)), especially for customizing models on our support data
+- RAG prototyping with sentence-transformers to test embedding models and chunking strategies
 
 These tasks would be significantly more complex in Go, where ML libraries are either non-existent or far less mature.
 
 To bridge the Go / Python gap, we maintain a lightweight Python service that our Go infrastructure calls. This service handles computationally intensive ML tasks (like generating embeddings or clustering) while keeping our core infrastructure in Go. In practice, we often prototype features entirely in Python, then gradually port performance-critical components to Go once they're proven. This approach lets us ship improvements incrementally without waiting for a complete Go implementation.
 
-# Conclusion
+## Conclusion
 
 Go's strengths in type safety, concurrency, and building interfaces have made it an excellent choice for our LLM infrastructure. While Python remains our go-to language for ML development, Go provides the performance and reliability we need in production. The combination of both languages lets us move fast while maintaining a robust, scalable system.
 ```
 
 ### external-scaling-llms-golang--full
 
-`train` - `candidate` - 2015 approximate tokens - 1071 words - exceeds target size
+`train` - `candidate` - 2259 approximate tokens - 1119 words - exceeds target size
 
-Headings: Type safety and structured outputs / Parallel processing and latency / Response processing pipeline / Complementing with Python / Conclusion
+Headings: Blog Post: Scaling LLMs with Golang: How we serve millions of LLM requests / Scaling LLMs with Golang: How we serve millions of LLM requests / Type safety and structured outputs / Parallel processing and latency / Response processing pipeline / Complementing with Python / Conclusion
 
 ````markdown
+# Blog Post: Scaling LLMs with Golang: How we serve millions of LLM requests
+
+Type: Blog post
+Owner: John Wang
+
+# Scaling LLMs with Golang: How we serve millions of LLM requests
+
+John Wang
+
 While the LLM ecosystem is overwhelmingly Python-first, we've found Go to be exceptionally well-suited for production deployments. Our Go-based infrastructure handles millions of monthly LLM requests with minimal performance tuning. Beyond Go's well-documented advantages (see Rob Pike's excellent [distillation of Go's benefits](https://go.dev/talks/2012/splash.article)), three capabilities have proven particularly valuable for LLM workloads: static type checking for handling model outputs, goroutines for managing concurrent API calls, and interfaces for building composable response pipelines. Here's how we've implemented each of these in our production stack.
 
-# Type safety and structured outputs
+## Type safety and structured outputs
 
 One of the main challenges with LLMs is handling their unstructured outputs. OpenAI's [structured output support](https://platform.openai.com/docs/guides/structured-outputs) has been a significant advancement for us, and Go's type system makes it particularly elegant to implement. Rather than writing separate schema definitions, we can leverage Go's struct tags and reflection to generate well defined schemas. Here's an example where we automatically convert a `SupportResponse` into OpenAI's JSON schema format using the [go-openai](https://github.com/sashabaranov/go-openai) library:
 
-import (
-"github.com/sashabaranov/go-openai"
-"github.com/sashabaranov/go-openai/jsonschema"
 ```go
+import (
+    "github.com/sashabaranov/go-openai"
+    "github.com/sashabaranov/go-openai/jsonschema"
 )
+
 type SupportResponse struct {
-Answer string`json:"answer"`
-RelatedDocs []string`json:"related_docs"`
+    Answer      string   `json:"answer"`
+    RelatedDocs []string `json:"related_docs"`
 }
+
 func GetSupportResponse(messages []openai.ChatCompletionMessage) (*SupportResponse, error) {
-var supportResponse SupportResponse
-schema, err:=jsonschema.GenerateSchemaForType(supportResponse)
-if err!=nil {
-return nil, err
-}
-resp, err:=client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
-Messages: messages,
-ResponseFormat: &openai.ChatCompletionResponseFormat{
-Type: openai.ChatCompletionResponseFormatTypeJSONSchema,
-JSONSchema: &openai.ChatCompletionResponseFormatJSONSchema{
-Name: "support_response",
-Schema: schema,
-Strict: true,
-},
-},
-})
-if err!=nil {
-return nil, err
-}
-err=schema.Unmarshal(resp.Choices[0].Message.Content, &supportResponse)
-if err!=nil {
-return nil, err
-}
-return&supportResponse, nil
+  var supportResponse SupportResponse
+  schema, err := jsonschema.GenerateSchemaForType(supportResponse)
+  if err != nil {
+	  return nil, err
+  }
+
+	resp, err := client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
+		Messages: messages,
+		ResponseFormat: &openai.ChatCompletionResponseFormat{
+			Type: openai.ChatCompletionResponseFormatTypeJSONSchema,
+			JSONSchema: &openai.ChatCompletionResponseFormatJSONSchema{
+				Name:   "support_response",
+				Schema: schema,
+				Strict: true,
+			},
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	err = schema.Unmarshal(resp.Choices[0].Message.Content, &supportResponse)
+	if err != nil {
+		return nil, err
+	}
+	return &supportResponse, nil
 }
 ```
+
+https://gist.github.com/wangjohn/8f0658898597924119efd96a1ebc6951
 
 The above code will provide us with `Answer` and `RelatedDocs` populated directly from an LLM call. Now, the `SupportResponse` can be easily passed to our frontend or saved in our database.
 
 Notice that because Golang has a type system built in, you don't have to spend any extra time defining the object structure ([like you would in Python](https://platform.openai.com/docs/guides/structured-outputs#how-to-use)) — it's already available via reflection and you can spend more of your time on prompting, inputs, and outputs of the LLM.
 
-# Parallel processing and latency
+## Parallel processing and latency
 
 LLM applications often require concurrent API calls and complex orchestration. Go's goroutines and channels make this remarkably straightforward.
 
@@ -1764,96 +1838,117 @@ For instance, suppose we're running a Retrieval Augmented Generation (RAG) pipel
 
 ```go
 func ParallelSearch(query string) []SearchResult {
-ctx, cancel:=context.WithTimeout(context.Background(), 750*time.Millisecond)
-defer cancel()
-resultsChan:=make(chan []SearchResult, len(backends))
-var wg sync.WaitGroup
-for _, backend:=range backends {
-wg.Add(1)
-go func(backend func(string) ([]SearchResult, error)) {
-defer wg.Done()
-results, err:=backend(query)
-if err!=nil {
-return
-}
-select {
-case resultsChan<-results:
-case<-ctx.Done():
-}
-}(backend)
-}
-wg.Wait()
-close(resultsChan)
-var combined []SearchResult
-for res:=range resultsChan {
-combined=append(combined, res...)
-}
-return combined
+    ctx, cancel := context.WithTimeout(context.Background(), 750*time.Millisecond)
+    defer cancel()
+
+    resultsChan := make(chan []SearchResult, len(backends))
+    var wg sync.WaitGroup
+
+    for _, backend := range backends {
+        wg.Add(1)
+        go func(backend func(string) ([]SearchResult, error)) {
+            defer wg.Done()
+            results, err := backend(query)
+            if err != nil {
+                return
+            }
+            select {
+            case resultsChan <- results:
+            case <-ctx.Done():
+            }
+        }(backend)
+    }
+
+    wg.Wait()
+    close(resultsChan)
+
+    var combined []SearchResult
+    for res := range resultsChan {
+        combined = append(combined, res...)
+    }
+
+    return combined
 }
 ```
+
+https://gist.github.com/wangjohn/a30ff7d0068535d576f7696616d5b92d
 
 This pattern reduces our total latency to that of the slowest backend, with a configurable timeout to prevent any single slow backend from bottlenecking the entire system. The results are collected via a Go channel and combined after all the Goroutines have completed or timed out.
 
-# Response processing pipeline
+## Response processing pipeline
 
-LLM outputs often need multiple transformations before they're ready for end users. For example, if you're using an LLM provider with great reasoning ability but doesn't yet have structured outputs (e.g. Claude 3.5 Sonnet), you'll likely want to structure the output in your prompt and parse the output before passing it to an end user.
-
-We've built a composable pipeline that makes these transformations both maintainable and testable:
+LLM outputs often need multiple transformations before they're ready for end users. We've built a composable pipeline that makes these transformations both maintainable and testable:
 
 ```go
 type ResponseCleaner interface {
-Clean(context.Context, string) (string, []ResponseDetails, error)
+	Clean(context.Context, string) (string, []ResponseDetails, error)
 }
+
 type ResponseDetails struct {
-DetailType string`json:"detail_type"`
-Content interface{} `json:"content"`
+  DetailType string `json:"detail_type"`
+  Content interface{} `json:"content"`
 }
 ```
+
+https://gist.github.com/wangjohn/b692ccad121346e4bd4e6337160eb95b
 
 Each cleaner is a discrete unit that handles one specific transformation. This separation of concerns makes testing straightforward and allows us to modify individual transformations without touching the rest of the pipeline. Here's how we handle source citations:
 
 ```go
 type CitedSourceCleaner struct{}
+
 func (c CitedSourceCleaner) Clean(ctx context.Context, message string) (string, []ResponseDetails, error) {
-sourceRegex:=regexp.MustCompile(`\[(Source|Ref):\s*([^\]]+)\]`)
-var citations []ResponseDetails
-matches:=sourceRegex.FindAllStringSubmatch(message, -1)
-for i, match:=range matches {
-citations=append(citations, ResponseDetails{
-DetailType: "citation",
-Content: map[string]interface{}{
-"number": i+1,
-"source": match[2],
-},
-})
-message=strings.Replace(message, match[0],
-fmt.Sprintf("[%d]", i+1), 1)
-}
-return message, citations, nil
+    sourceRegex := regexp.MustCompile(`\[(Source|Ref):\s*([^\]]+)\]`)
+    var citations []ResponseDetails
+
+    matches := sourceRegex.FindAllStringSubmatch(message, -1)
+    for i, match := range matches {
+        citations = append(citations, ResponseDetails{
+            DetailType: "citation",
+            Content: map[string]interface{}{
+                "number": i + 1,
+                "source": match[2],
+            },
+        })
+        message = strings.Replace(message, match[0],
+            fmt.Sprintf("[%d]", i + 1), 1)
+    }
+
+    return message, citations, nil
 }
 ```
 
+[https://gist.github.com/wangjohn/eda173e20c1825f1b2ece854e3606cc4](https://gist.github.com/wangjohn/eda173e20c1825f1b2ece854e3606cc4)
+
 Using the above cleaner, when an LLM responds with:
 
-> According to [Source: docs/onboarding.pdf] and [Source: kb/troubleshooting.md], the API rate limit is 100 requests per minute for [Source: pricing.pdf] premium accounts.
+```
+According to [Source: docs/onboarding.pdf] and [Source: kb/troubleshooting.md],
+the API rate limit is 100 requests per minute for [Source: pricing.pdf] premium accounts.
 
-The cleaner will parse the sources and pass them to the frontend as response details. It will also transform the raw LLM output into:
+```
 
-> According to [1] and [2], the API rate limit is 100 requests per minute for [3] premium accounts.
+The cleaner will transform the LLM output into:
 
-# Complementing with Python
+```
+According to [1] and [2], the API rate limit is 100 requests per minute for [3] premium accounts.
+```
+
+These cleaners can be chained together to form a complete pipeline of multiple cleaners. This approach means that each cleaner can be unit tested in isolation and new transformations can be added without modifying existing code. Also, the metadata from each transformation is preserved for downstream use.
+
+## Complementing with Python
 
 While Go powers our production infrastructure, Python remains essential for ML experimentation and rapid prototyping. The Python ecosystem excels at tasks like:
 
-*   Support ticket clustering with [scikit-learn](https://scikit-learn.org/stable/modules/clustering.html) (for example with [AgglomerativeClustering](https://scikit-learn.org/stable/modules/clustering.html#hierarchical-clustering))
-*   Fine-tuning LLMs with transformers (especially [open source models like Llama](https://www.llama.com/docs/how-to-guides/fine-tuning/)), especially for customizing models on our support data
-*   RAG prototyping with sentence-transformers to test embedding models and chunking strategies
+- Support ticket clustering with [scikit-learn](https://scikit-learn.org/stable/modules/clustering.html) (for example with [AgglomerativeClustering](https://scikit-learn.org/stable/modules/clustering.html#hierarchical-clustering))
+- Fine-tuning LLMs with transformers (especially [open source models like Llama](https://www.llama.com/docs/how-to-guides/fine-tuning/)), especially for customizing models on our support data
+- RAG prototyping with sentence-transformers to test embedding models and chunking strategies
 
 These tasks would be significantly more complex in Go, where ML libraries are either non-existent or far less mature.
 
 To bridge the Go / Python gap, we maintain a lightweight Python service that our Go infrastructure calls. This service handles computationally intensive ML tasks (like generating embeddings or clustering) while keeping our core infrastructure in Go. In practice, we often prototype features entirely in Python, then gradually port performance-critical components to Go once they're proven. This approach lets us ship improvements incrementally without waiting for a complete Go implementation.
 
-# Conclusion
+## Conclusion
 
 Go's strengths in type safety, concurrency, and building interfaces have made it an excellent choice for our LLM infrastructure. While Python remains our go-to language for ML development, Go provides the performance and reliability we need in production. The combination of both languages lets us move fast while maintaining a robust, scalable system.
 ````
@@ -2026,7 +2121,7 @@ Seeing these types of struggles across the industry led Brian, Ryan, and I to st
 
 ### external-startup-journey--full
 
-`train` - `candidate` - 3471 approximate tokens - 2395 words - exceeds target size
+`train` - `approved` - 3471 approximate tokens - 2395 words - exceeds target size
 
 Headings: How I "failed" at a YC startup, worked at early Stripe, and then raised $20M / **Contributing to Ruby on Rails** / Looking for a job in Silicon Valley / Starting a YC company / Working at early Stripe / Building a profitable, (mostly) bootstrapped business / Applying lessons and learning new ones at Assembled
 
@@ -2162,7 +2257,7 @@ I strongly believe there's a new wave of change coming to the customer support i
 
 ### external-stripe-customer-support--002
 
-`train` - `candidate` - 678 approximate tokens - 402 words
+`train` - `approved` - 678 approximate tokens - 402 words
 
 Headings: A massive, growing market
 
@@ -2185,7 +2280,7 @@ In 2010, the world was becoming more digital and Stripe rode on the coattails of
 
 ### external-stripe-customer-support--003
 
-`train` - `candidate` - 639 approximate tokens - 383 words
+`train` - `approved` - 639 approximate tokens - 383 words
 
 Headings: Complex, outdated tools and processes
 
@@ -2252,7 +2347,7 @@ But if you've ever seen a large support team run, you'll realize that support is
 
 ### external-stripe-customer-support--full
 
-`train` - `candidate` - 2507 approximate tokens - 1549 words - exceeds target size
+`train` - `approved` - 2507 approximate tokens - 1549 words - exceeds target size
 
 Headings: Why support is the next payments / A massive, growing market / Complex, outdated tools and processes / Fundamental infrastructure for the internet / A hard, non-obvious problem
 
@@ -3056,7 +3151,7 @@ If they're mad at my actions, there's usually something I should fix, apologize 
 
 ### five-opinions-on-building-things-well--full
 
-`train` - `candidate` - 1561 approximate tokens - 1059 words - exceeds target size
+`train` - `approved` - 1561 approximate tokens - 1059 words - exceeds target size
 
 Headings: Stay somewhere long enough to see legacy code / Creativity should go to the right place / It's not "Speed vs. Quality", it's "Speed + Quality" / Beta fast, launch slow / If no one is ever mad at you, you're probably a bit too risk averse
 
@@ -3317,7 +3412,7 @@ Here's an actual example of the experiment I ran:
 | 3 | 1 | `I ate red green green green cherries` |
 | 3 | 2 | `I ate red green green green plums` |
 
-At larger scale, I calculated $Z(H)$, which measures how strongly changing the perturbation word changes Claude's fruit choice. A value near zero would mean no detectable effect. $Z(1)=87.25$, which I saw in the experimental runs, means the test statistic was 87.25 (!!) standard deviations above what you would expect to see in randomized data: 
+At larger scale, I calculated $Z(H)$, which measures how strongly changing the perturbation word changes Claude's fruit choice. A value near zero would mean no detectable effect. $Z(1)=87.25$, which I saw in the experimental runs, means the test statistic was 87.25 (!!) standard deviations above what you would expect to see in randomized data:
 
 | $H$ | Context form | Standardized perturbation effect $Z(H)$ |
 |---:|---|---:|
@@ -3633,7 +3728,7 @@ It seems like the big labs are still mostly optimizing transformers, but hybrid 
 
 ### mamba-3--full
 
-`train` - `candidate` - 1212 approximate tokens - 811 words - exceeds target size
+`train` - `approved` - 1212 approximate tokens - 811 words - exceeds target size
 
 Headings: (intro or continuation)
 
@@ -3745,7 +3840,7 @@ For me, I'm focusing on working on building things / working on problems I genui
 
 ### time--full
 
-`train` - `candidate` - 1421 approximate tokens - 981 words - exceeds target size
+`train` - `approved` - 1421 approximate tokens - 981 words - exceeds target size
 
 Headings: Life is long / Life is short / Enjoy it
 
@@ -3849,7 +3944,7 @@ Should you watch token usage? Definitely! Use it for cost forecasting, for under
 
 ### tokens-shouldnt-be-the-only-metric--full
 
-`train` - `candidate` - 970 approximate tokens - 678 words - exceeds target size
+`train` - `approved` - 970 approximate tokens - 678 words - exceeds target size
 
 Headings: But I want people to use AI and to change their behavior! / So what should we actually look at?
 
@@ -3982,7 +4077,7 @@ I think this framing explains a lot of the friction that shows up when companies
 
 ### why-are-executives-enamored-with-ai-but-ics-arent--full
 
-`train` - `candidate` - 1556 approximate tokens - 1019 words - exceeds target size
+`train` - `approved` - 1556 approximate tokens - 1019 words - exceeds target size
 
 Headings: Managing non-deterministic systems / ICs live in a more deterministic world / So where does the friction come from?
 

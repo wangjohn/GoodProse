@@ -136,7 +136,7 @@ def test_build_sft_prepends_venue_lines_and_applies_roles(tmp_path: Path) -> Non
             json.dumps(
                 {
                     "version": 1,
-                    "id": f"edited--{n:03d}",
+                    "id": chunk_id,
                     "post_id": "edited",
                     "lineage_id": "edited",
                     "split": "train",
@@ -149,7 +149,11 @@ def test_build_sft_prepends_venue_lines_and_applies_roles(tmp_path: Path) -> Non
                     "target_sha256": "0" * 64,
                 }
             )
-            for n, target in ((1, "Edited text."), (2, "# Second\n\nMore edited text."))
+            for chunk_id, n, target in (
+                ("edited--001", 1, "Edited text."),
+                ("edited--002", 2, "# Second\n\nMore edited text."),
+                ("edited--full", 3, "Edited text.\n\n# Second\n\nMore edited text."),
+            )
         )
         + "\n"
     )
@@ -166,18 +170,21 @@ def test_build_sft_prepends_venue_lines_and_applies_roles(tmp_path: Path) -> Non
 
     assert counts["dropped_by_role"] == 1
     assert counts["train_pairs"] == 1
-    assert counts["raw_only_chunks"] == 2
+    assert counts["raw_only_chunks"] == 3
     records = [
         json.loads(line) for line in (tmp_path / "sft" / "train.jsonl").read_text().splitlines()
     ]
     users = [record["messages"][1]["content"] for record in records]
     assert users[0] == "Venue: johnjwang.com (2026)\n\nNotes for personal"
-    # Raw completion of the personal target, then the two raw-only chunks under their own venue.
+    # Raw completion of the personal target, then all raw-only chunks under their own venue.
     raw_prompt = RAW_COMPLETION_PROMPT.format(title="Title personal")
     assert users[1] == f"Venue: johnjwang.com (2026)\n\n{raw_prompt}"
     assert users[2].startswith("Venue: assembled.com (2026), editor-revised\n\n")
     assert records[2]["messages"][2]["content"] == "Edited text."
     assert records[3]["messages"][2]["content"] == "# Second\n\nMore edited text."
+    assert records[4]["messages"][2]["content"] == (
+        "Edited text.\n\n# Second\n\nMore edited text."
+    )
     # The edited post's supervised pair is gone; its text survives only as a raw completion.
     assert not any(
         record["messages"][1]["content"].endswith("Notes for edited") for record in records

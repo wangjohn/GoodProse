@@ -17,6 +17,13 @@
       "text": "\n\nGraph from From [https://www.digitalcommerce360.com/article/us-ecommerce-sales/](https://www.digitalcommerce360.com/article/us-ecommerce-sales/)",
       "replacement": "",
       "reason": "Image caption remnant left by the page snapshot, with a typo."
+    },
+    {
+      "version": 1,
+      "post_id": "external-blocking-llms",
+      "text": "a wave of how-to guides for blocking large-language-model scraping has surfaced [0].",
+      "replacement": "a wave of how-to guides for blocking large-language-model scraping has surfaced.",
+      "reason": "Orphaned Medium footnote marker with no corresponding footnote in the saved article."
     }
   ]
 }

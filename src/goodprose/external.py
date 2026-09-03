@@ -174,9 +174,11 @@ def build_external_posts(
     With ``repair_code`` and a source map, fenced code the page snapshot flattened into prose
     is restored from the author's manuscript wherever the tokens match exactly. Posts named in
     ``manuscript_target_ids`` use the manuscript body itself as the canonical target, which is
-    the author's own text before any editor's pass. ``fence_heuristic="go"`` then fences any
-    remaining run of code-looking lines with that language tag; it is a fallback for blocks the
-    manuscript did not match exactly and cannot restore dropped whitespace.
+    the author's own text before any editor's pass. A mapping's optional ``target_end_marker``
+    excludes manuscript-only material after the finished post, such as archived drafts or an
+    outline. ``fence_heuristic="go"`` then fences any remaining run of code-looking lines with
+    that language tag; it is a fallback for blocks the manuscript did not match exactly and
+    cannot restore dropped whitespace.
     """
     from goodprose.normalize import fence_code_runs, manuscript_body, repair_code_blocks
 
@@ -187,6 +189,7 @@ def build_external_posts(
     if unapproved:
         raise ExternalSourceError(f"external post(s) are not approved: {unapproved}")
     manuscripts: dict[str, str] = {}
+    mappings: dict[str, ExternalSourceMapping] = {}
     if (repair_code or manuscript_target_ids) and (source_map_path is None or source_root is None):
         raise ExternalSourceError(
             "code repair and manuscript targets need --source-map and --source-root"
@@ -205,6 +208,7 @@ def build_external_posts(
     external_posts: list[BlogPost] = []
     repaired_blocks = 0
     heuristic_runs = 0
+    trimmed_manuscript_targets = 0
     unmatched_blocks: list[str] = []
     for post_id in sorted(catalog):
         catalog_post = catalog[post_id]
@@ -213,6 +217,16 @@ def build_external_posts(
             body = manuscript_body(manuscripts[post_id])
             if not body:
                 raise ExternalSourceError(f"manuscript for {post_id!r} has no body")
+            marker = mappings[post_id].target_end_marker
+            if marker is not None:
+                marker_count = body.count(marker)
+                if marker_count != 1:
+                    raise ExternalSourceError(
+                        f"manuscript target end marker for {post_id!r} matched "
+                        f"{marker_count} times instead of exactly once"
+                    )
+                body = body.split(marker, 1)[0].rstrip()
+                trimmed_manuscript_targets += 1
             source_path = f"external/blogposts-source/{post_id}.md"
         else:
             snapshot_path = _safe_source_path(snapshot_root, snapshot_filename)
@@ -255,6 +269,7 @@ def build_external_posts(
         "base": len(merged) - len(external_posts),
         "external": len(external_posts),
         "manuscript_targets": len(manuscript_target_ids),
+        "trimmed_manuscript_targets": trimmed_manuscript_targets,
         "repaired_code_blocks": repaired_blocks,
         "unmatched_code_blocks": len(unmatched_blocks),
         "heuristic_code_runs": heuristic_runs,

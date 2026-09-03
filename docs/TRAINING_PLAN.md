@@ -17,32 +17,31 @@ held-out posts, then on five fresh real drafts.
 - Target voice is the personal site. The Assembled posts had an editor's pass, so the four
   without a manuscript are `raw_only`, the one with a manuscript targets the manuscript, the two
   Assembled dev posts are excluded, and every user turn opens with a venue line.
-- Chunks: 129, of which 70 are approved. Supervised training material on `pairs`-role posts is
-  41 approved section and sentence targets (about 10.5k words), 11 whole-post `--full` chunks
-  (about 11.8k words) with briefs drafted for 10, and 5 sections that need re-review after their
-  targets changed. 33 Assembled chunks feed raw completions only.
+- Chunks: 131 total. The supervised training material is 57 reviewed targets: 41 sections, 6
+  sentence rewrites, and 10 whole-post `--full` chunks. Another 33 Assembled chunks feed raw
+  completions only; their four full-post chunks remain eligible because they have no supervised
+  pair.
 - Development set: the watermarking post alone (about 3.4k words). Test: four posts, unchanged.
-- Briefs: 68 section-level briefs under `data/private/prompts/`, to be refreshed against the
-  rebuilt chunks. Short cases: 14 candidates and 4 rejected, none approved yet.
+- All 57 prompts are approved against the current system prompt and match their current target
+  hashes. Short cases: 14 candidates and 4 rejected, none approved yet.
+- The current export has 57 supervised and 103 raw-completion records (160 total), 1 development
+  case, and 4 frozen test cases. It contains 71,110 exact Qwen completion tokens; the longest
+  rendered record is 5,138 tokens against a 6,144-token limit.
 - The pipeline is complete and hash-checked end to end: import, normalize, chunk, brief,
   refresh, review, approve, pair, export, train, generate, dev NLL, stylometric proxy, judge
   packet, blind review, preference build, DPO. Training itself has not run on the new data.
 
 ## Before the next training run
 
-On the machine that has `data/private/`, in this order:
+The local promotion and validation gates are complete. On the RunPod machine, in this order:
 
-1. `scripts/rebuild-data.sh`. It imports with code repair from the manuscripts, normalizes,
-   rebuilds chunks, refreshes the existing briefs (drops demoted posts, re-hashes formatting-only
-   changes, resets material changes), attaches the whole-post briefs from
-   `data/prompts/full-post-drafts.jsonl`, and renders `data/private/prompts/REVIEW.md`.
-2. Read the packet. Fix briefs flagged for missing code blocks or copied runs, edit the ten
-   whole-post briefs until they read like your notes, and write the eleventh for the scaling-llms
-   post once its repaired target is in place.
-3. `approve-prompts` with a dated reviewer note. Approval binds the system prompt hash.
-4. `build-prompt-pairs`, then `build-sft --raw-completions` with the roles, chunks, and posts
-   files. Confirm `data/sft/dev.jsonl` exists; the configs evaluate every epoch.
-5. `train-lora-plus --config configs/qwen3-8b-lora.json --validate-only`, then the run.
+1. Pull the repository and transfer the ignored generated/private artifacts needed by the run,
+   especially `data/sft/`, or rebuild them from `data/private/` on the pod.
+2. Install the GPU dependencies with `uv sync --extra train`.
+3. Re-run `train-lora-plus --config configs/qwen3-8b-lora-plus.json --validate-only` on the pod.
+4. Start the LoRA+ run. The validated recipe uses Qwen3-8B, learning rates 5e-5 for LoRA A and
+   8e-4 for LoRA B, five epochs, and 200 optimizer steps.
+5. Score development NLL and generate the deterministic checkpoint outputs before human review.
 
 Keep the watermarking post as the development set. Dev NLL is the memorization detector and the
 checkpoint selector; without it, selection would fall to the test short cases and weaken the

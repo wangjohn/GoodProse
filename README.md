@@ -26,8 +26,9 @@ The repository contains no third-party writing corpus and no synthetic training 
    carry any code block in the target verbatim so the model copies code rather than composing it.
 6. Join reviewed inputs to the exact published targets to create canonical pairs.
 7. Export `train` and `dev` pairs in chat-style SFT JSONL. Every user turn opens with a venue
-   line such as `Venue: johnjwang.com (2026)`; raw completions of every training target and of
-   every `raw_only` chunk join the mix with `--raw-completions`.
+   line such as `Venue: johnjwang.com (2026)`; raw completions of sentence- and section-scale
+   paired targets and every `raw_only` chunk join the mix with `--raw-completions`. Reviewed
+   full-post pairs are not duplicated under a weak title-only prompt.
 8. Rank checkpoints with the cheap proxies (dev NLL, stylometry, a blinded frontier judge) and a
    quick blind pass over section-scale cases cut from the held-out drafts (`build-short-cases`),
    then compare base and fine-tuned outputs on the frozen whole-post `test` cases in the final

@@ -137,6 +137,7 @@ def test_build_external_posts_requires_approval_and_merges_base_posts(tmp_path: 
         "base": 0,
         "external": 1,
         "manuscript_targets": 0,
+        "trimmed_manuscript_targets": 0,
         "repaired_code_blocks": 0,
         "unmatched_code_blocks": 0,
         "heuristic_code_runs": 0,
@@ -232,13 +233,19 @@ def test_build_external_posts_repairs_code_and_uses_manuscript_targets(tmp_path:
     (source_root / "repair.md").write_text(
         "Intro prose.\n\n```go\ntype T struct {\n    A int\n}\n```\n\nOutro.\n"
     )
-    (source_root / "manuscript.md").write_text("---\ntitle: M\n---\n\nThe author's own words.\n")
+    (source_root / "manuscript.md").write_text(
+        "---\ntitle: M\n---\n\nThe author's own words.\n\n- Archive\n\nOld draft.\n"
+    )
     atomic_write(
         source_map,
         serialize_jsonl(
             [
                 ExternalSourceMapping(post_id="external-repair", source_path="repair.md"),
-                ExternalSourceMapping(post_id="external-manuscript", source_path="manuscript.md"),
+                ExternalSourceMapping(
+                    post_id="external-manuscript",
+                    source_path="manuscript.md",
+                    target_end_marker="\n- Archive\n",
+                ),
             ]
         ),
     )
@@ -258,6 +265,7 @@ def test_build_external_posts_repairs_code_and_uses_manuscript_targets(tmp_path:
     assert counts["unmatched_code_blocks"] == 0
     assert counts["heuristic_code_runs"] == 0
     assert counts["manuscript_targets"] == 1
+    assert counts["trimmed_manuscript_targets"] == 1
     posts = {post.id: post for post in load_jsonl(output, BlogPost)}
     assert posts["external-repair"].body_markdown == (
         "Intro prose.\n\n```go\ntype T struct {\n    A int\n}\n```\n\nOutro."

@@ -555,12 +555,17 @@ def build_prompt_pairs(
             raise PromptReviewError(
                 "held-out pair file contains training records: " + ", ".join(training_heldout[:3])
             )
-        for pair in heldout:
-            if pair.split is Split.DEV and role_for(pair.post_id, roles) == "excluded":
-                continue
-            pairs.extend([pair])
+        pairs.extend(heldout)
 
+    # Validate and apply the shared exclusions while every referenced held-out pair is still
+    # present. Some development pairs are intentionally dropped by role, but their reviewed
+    # exclusions remain in the canonical exclusions file and must not look like dangling IDs.
     pairs = _apply_pair_text_exclusions(pairs, text_exclusions_path)
+    pairs = [
+        pair
+        for pair in pairs
+        if not (pair.split is Split.DEV and role_for(pair.post_id, roles) == "excluded")
+    ]
     _reject_promotional_pairs(pairs)
     validate_pairs(pairs)
     pairs.sort(key=lambda pair: pair.id)

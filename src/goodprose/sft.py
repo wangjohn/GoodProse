@@ -62,6 +62,16 @@ def _raw_user(title: str, venue: str | None) -> str:
     return f"{venue}\n\n{prompt}" if venue else prompt
 
 
+def _is_full_post_pair(pair: WritingPair) -> bool:
+    """Whether a promoted prompt pair targets the deterministic ``--full`` chunk.
+
+    Prompt-pair IDs inherit their chunk ID as a prefix during promotion. Keeping this check on
+    the pair, rather than its target hash, lets a section with text identical to a short full post
+    retain its raw-completion record.
+    """
+    return pair.id.startswith(f"{pair.post_id}--full--")
+
+
 def raw_completion_records(
     train_pairs: list[WritingPair],
     roles: dict[str, TrainingRole],
@@ -69,16 +79,21 @@ def raw_completion_records(
     venue_lines: bool,
     raw_only_chunks: list[tuple[SemanticChunk, BlogPost]] = (),  # type: ignore[assignment]
 ) -> list[dict[str, Any]]:
-    """One title-conditioned completion per distinct training target.
+    """One title-conditioned completion per distinct eligible training target.
 
-    Covers the targets of the supervised pairs plus every training chunk of a ``raw_only``
-    post, each distinct text once per unit of its post's ``raw_weight``, so registers the
-    author does not want imitated directly still teach sentence-level habits under their own
-    venue line, and the personal-site voice can be weighted up.
+    Covers section- and sentence-scale supervised targets plus every training chunk of a
+    ``raw_only`` post, each distinct text once per unit of its post's ``raw_weight``. Full-post
+    supervised pairs are omitted because their long target is already present under a reviewed
+    brief; full-post chunks from ``raw_only`` posts remain eligible because they have no supervised
+    pair. This lets editor-revised registers still teach sentence-level habits under their own
+    venue line and allows the personal-site voice to be weighted up without duplicating its full
+    posts under a weak title-only prompt.
     """
     seen: set[str] = set()
     records: list[dict[str, Any]] = []
     for pair in train_pairs:
+        if _is_full_post_pair(pair):
+            continue
         digest = hashlib.sha256(pair.output.encode()).hexdigest()
         if digest in seen:
             continue
@@ -132,11 +147,13 @@ def build_sft(
 ) -> dict[str, int]:
     """Write train/dev JSONL, the frozen test cases, and a hash-pinned manifest.
 
-    ``raw_completions`` appends promptless-style completions of every distinct training
-    target, and with ``chunks_path``/``posts_path``/``roles_path`` also of every training chunk
-    of a ``raw_only`` post. ``venue_lines`` prepends ``Venue: host (year)`` to every user turn
-    so register is a condition the model learns, not an average. ``train_cases_output`` writes
-    the training inputs in the evaluation case format for on-policy rejected sampling.
+    ``raw_completions`` appends promptless-style completions of every distinct sentence- or
+    section-scale supervised training target, and with
+    ``chunks_path``/``posts_path``/``roles_path`` also of every training chunk (including full
+    posts) of a ``raw_only`` post. Reviewed supervised full-post targets are not duplicated under
+    a title-only prompt. ``venue_lines`` prepends ``Venue: host (year)`` to every user turn so
+    register is a condition the model learns, not an average. ``train_cases_output`` writes the
+    training inputs in the evaluation case format for on-policy rejected sampling.
     """
     pairs = load_pairs(pair_path)
     roles = load_training_roles(roles_path)
@@ -222,6 +239,7 @@ def build_sft(
         "system_prompt": SYSTEM_PROMPT,
         "system_prompt_sha256": hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest(),
         "raw_completion_prompt": RAW_COMPLETION_PROMPT,
+        "raw_completion_policy": "non-full-pairs-plus-all-raw-only-chunks",
         "venue_lines": venue_lines,
         "training_roles_sha256": sha256_file(roles_path) if roles_path is not None else None,
         "dropped_by_role": dropped,

@@ -203,6 +203,7 @@ class ExternalSourceMapping(StrictModel):
     version: Literal[1] = 1
     post_id: NonEmptyString
     source_path: NonEmptyString
+    target_end_marker: NonEmptyString | None = None
 
 
 class AuthenticInputMapping(StrictModel):

@@ -103,3 +103,38 @@ def test_raw_completions_add_one_record_per_distinct_training_target(tmp_path: P
     manifest = json.loads((output_dir / "manifest.json").read_text())
     assert manifest["counts"]["train"] == 3
     assert len(manifest["train_cases_sha256"]) == 64
+
+
+def test_raw_completions_skip_supervised_full_posts_but_keep_sections(tmp_path: Path) -> None:
+    pair_path = tmp_path / "pairs.jsonl"
+    output_dir = tmp_path / "sft"
+    section = _pair("article--001--bullet_notes", Split.TRAIN).model_copy(
+        update={"post_id": "article", "lineage_id": "article", "output": "Section text."}
+    )
+    full = _pair("article--full--post_brief", Split.TRAIN).model_copy(
+        update={"post_id": "article", "lineage_id": "article", "output": "Complete article."}
+    )
+    atomic_write(
+        pair_path,
+        serialize_jsonl([section, full, _pair("test-post", Split.TEST)]),
+    )
+
+    counts = build_sft(
+        pair_path,
+        output_dir,
+        tmp_path / "cases.jsonl",
+        raw_completions=True,
+    )
+
+    assert counts["train_pairs"] == 2
+    assert counts["raw_completions"] == 1
+    assert counts["train"] == 3
+    records = [json.loads(line) for line in (output_dir / "train.jsonl").read_text().splitlines()]
+    assert records[-1]["messages"][2]["content"] == "Section text."
+    assert not any(
+        record["messages"][1]["content"].startswith("Write a passage")
+        and record["messages"][2]["content"] == "Complete article."
+        for record in records
+    )
+    manifest = json.loads((output_dir / "manifest.json").read_text())
+    assert manifest["raw_completion_policy"] == "non-full-pairs-plus-all-raw-only-chunks"

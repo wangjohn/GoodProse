@@ -223,7 +223,10 @@ def build_parser() -> argparse.ArgumentParser:
     sft_command.add_argument(
         "--raw-completions",
         action="store_true",
-        help="Append title-conditioned completions of every distinct training target",
+        help=(
+            "Append title-conditioned completions of non-full paired targets and every "
+            "raw_only chunk"
+        ),
     )
     sft_command.add_argument(
         "--train-cases-output",

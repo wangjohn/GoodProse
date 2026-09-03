@@ -51,8 +51,11 @@ under `Venue: assembled.com (year), editor-revised`, never supervised pairs), th
 manuscript targets the manuscript text instead, and the two Assembled development pairs are
 `excluded` because manuscript-to-edited pairs would measure imitation of the editor. Test posts
 cannot be demoted. Each role also carries a `raw_weight`: the six personal-site training posts
-have their raw completions emitted twice so the mix leans toward the target voice. Every
-exported user turn opens with a venue line derived from the post's URL
+have their eligible raw completions emitted twice so the mix leans toward the target voice.
+Sentence- and section-scale paired targets are eligible, but a reviewed `<post>--full` pair is
+not copied again under a weak title-only prompt. Every `raw_only` chunk remains eligible,
+including a full-post chunk, because those posts have no supervised pairs. Every exported user
+turn opens with a venue line derived from the post's URL
 and year, so the 2021 Medium register and the 2026 personal-site register are conditions the
 model can tell apart; at inference, ask for `Venue: johnjwang.com (2026)`.
 
