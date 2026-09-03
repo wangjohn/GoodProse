@@ -29,23 +29,46 @@ held-out posts, then on five fresh real drafts.
   rendered record is 5,138 tokens against a 6,144-token limit.
 - The pipeline is complete and hash-checked end to end: import, normalize, chunk, brief,
   refresh, review, approve, pair, export, train, generate, dev NLL, stylometric proxy, judge
-  packet, blind review, preference build, DPO. Training itself has not run on the new data.
+  packet, blind review, preference build, DPO. The first 8B LoRA+ run has completed; blind review,
+  preference construction, and DPO have not.
 
-## Before the next training run
+## First 8B LoRA+ run
 
-The local promotion and validation gates are complete. On the RunPod machine, in this order:
+Commit `8c9af86` was trained on 2 September 2026 on one secure-cloud RunPod A40 (48 GB) using
+`configs/qwen3-8b-lora-plus.json`. The run completed all 200 optimizer steps in 616 seconds and
+saved checkpoints 40, 80, 120, 160, and 200. Peak observed memory was about 42 GB.
 
-1. Pull the repository and transfer the ignored generated/private artifacts needed by the run,
-   especially `data/sft/`, or rebuild them from `data/private/` on the pod.
-2. Install the GPU dependencies with `uv sync --extra train`.
-3. Re-run `train-lora-plus --config configs/qwen3-8b-lora-plus.json --validate-only` on the pod.
-4. Start the LoRA+ run. The validated recipe uses Qwen3-8B, learning rates 5e-5 for LoRA A and
-   8e-4 for LoRA B, five epochs, and 200 optimizer steps.
-5. Score development NLL and generate the deterministic checkpoint outputs before human review.
+- Trainer dev loss was best after epoch 1: 1.0838 at step 40, then 1.2606, 1.4721, 1.5269, and
+  1.5392. The independent completion scorer agreed. Base dev NLL was 1.3848; checkpoint 40 was
+  1.3261; later checkpoints worsened to 1.5399, 1.7935, 1.8583, and 1.8768.
+- Checkpoint 40 also won the author-style proxy: style distance 0.5108 versus 0.8594 for base,
+  mean reference-length ratio 0.8335 versus 0.6433, and no training-post memorization flags.
+  Its repeated 4-gram share was higher (0.0296 versus 0.0046), and three cases copied long spans
+  from their supplied authentic drafts. Blind review must decide whether that is useful fidelity
+  or insufficient transformation.
+- Checkpoints 80 through 200 had unstable length control as well as worse dev NLL. Checkpoint 40
+  is the sole candidate for human review; do not spend on another model arm or DPO until it passes
+  that gate.
+- The full resumable checkpoint 40 is under `runs/qwen3-8b-lora-plus-8c9af86/`. Matched base and
+  all five checkpoint outputs, NLL reports, proxy reports, and the blinded packet are under the
+  ignored `evals/results/` directory. The source transfer and selected run archive are retained
+  under `data/private/runpod/`. The paid pod was terminated after the artifacts were verified.
 
 Keep the watermarking post as the development set. Dev NLL is the memorization detector and the
 checkpoint selector; without it, selection would fall to the test short cases and weaken the
 blind gate.
+
+## Immediate next gate
+
+1. Complete `evals/results/qwen3-8b-lora-plus-40-review.jsonl` in the browser-local review app.
+2. Summarize it with the matching key and `evals/decision-rules.json`. If factuality or
+   instruction following fails, stop and diagnose the data/recipe before another run.
+3. Approve and promote the 14 pending section-scale short cases, then run a second blind pass on
+   checkpoint 40. These cases are cheaper confirmation; the four whole-post results remain the
+   shipping gate.
+4. Only after those reviews decide whether the next experiment is the plain 8B LoRA control, a
+   lower-learning-rate/shorter LoRA+ run, or preference tuning. The 14B arm is for evidence of a
+   capacity ceiling, not the default next spend.
 
 ## Plan
 
